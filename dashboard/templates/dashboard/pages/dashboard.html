@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaimono Game Store Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #E2E7EE;
+    }
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+    .carousel-slide {
+      display: none;
+    }
+    .carousel-slide.active {
+      display: flex;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+
+  <!-- ==================== TOPBAR & HEADER AREA ==================== -->
+  <div class="pt-5 pb-3 px-6 relative w-full shrink-0">
+    <header class="bg-[#323446] text-slate-300 px-6 py-4 flex justify-between items-center shadow-md rounded-xl border border-slate-700/60">
+      
+      <!-- LEFT SECTION -->
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <i data-lucide="user" class="w-4 h-4 text-white"></i>
+          <span class="font-bold text-white tracking-widest uppercase text-sm">@NAWSPHIC</span>
+        </div>
+
+        <div class="px-3 py-1 text-slate-300 font-serif italic text-sm tracking-wider opacity-90">
+          LazyStudio
+        </div>
+
+        <span class="text-slate-500">|</span>
+
+        <div class="flex items-center gap-3 text-slate-400 tracking-wider">
+          <span class="text-xs bg-slate-800/80 px-3 py-1 rounded text-slate-300 font-mono">CURRENT PROJECT</span>
+          <span class="text-slate-500">|</span>
+          <span class="font-semibold text-slate-200 text-sm">ANIME MERCH E-COMMERCE DASHBOARD</span>
+          <span class="text-slate-500">//</span>
+          <span class="text-slate-300 text-xs">PROJECT SEKAI STYLE</span>
+        </div>
+      </div>
+
+      <!-- RIGHT SECTION -->
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-0 opacity-70">
+          <div class="w-48 bg-slate-500/50 h-[2px] rounded-l-full relative">
+            <div class="absolute right-0 -top-1 w-2.5 h-3 bg-white shadow-sm"></div>
+          </div>
+          <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white rotate-180 -ml-1"></i>
+        </div>
+
+        <div class="flex items-center gap-4 pl-4">
+          <span class="font-bold text-white tracking-widest text-sm">HOSHINO ICHIKA</span>
+          <button class="p-1 transition-colors text-white">
+            <i data-lucide="list" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+
+    <!-- COLLAPSIBLE FLOATING SIDEBAR (WARNA ABU-ABU TERANG & KONTRAS) -->
+    <aside id="sidebar" class="w-64 bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-4 shadow-sm border border-white shrink-0 h-full transition-all duration-300">
+      <div class="flex flex-col gap-5 w-full">
+        
+        <!-- Profile Header -->
+        <div class="flex items-center gap-3.5 pb-3 border-b border-slate-200/80 px-1">
+          <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0">
+            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
+          </div>
+          <div class="sidebar-text overflow-hidden">
+            <h4 class="font-bold text-slate-800 truncate text-xs">Hoshino Ichika</h4>
+            <p class="text-[10px] text-slate-400 font-medium truncate">Premium Member</p>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="flex flex-col gap-1.5 w-full">
+          <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl bg-slate-200/80 text-slate-900 font-bold transition-all shadow-sm group">
+            <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap">Dashboard</span>
+          </a>
+          <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="message-square" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap">Messages</span>
+          </a>
+          <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="user" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap">Profile</span>
+          </a>
+          <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="phone" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap">Support</span>
+          </a>
+          <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all justify-between group">
+            <div class="flex items-center gap-3.5">
+              <i data-lucide="heart" class="w-5 h-5 shrink-0"></i>
+              <span class="sidebar-text text-xs whitespace-nowrap">Wishlist</span>
+            </div>
+            <span class="sidebar-text text-[10px] font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full">12</span>
+          </a>
+          <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="inbox" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap">Library</span>
+          </a>
+          <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="settings" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap">Settings</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- BOTTOM ACTIONS SECTION -->
+      <div class="flex flex-col gap-1.5 w-full pt-4 border-t border-slate-200/80">
+        
+        <!-- Collapse Button -->
+        <button id="toggle-sidebar" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all w-full text-left">
+          <i data-lucide="panel-left-close" id="toggle-icon" class="w-5 h-5 shrink-0"></i>
+          <span id="collapse-label" class="sidebar-text text-xs whitespace-nowrap">Collapse</span>
+        </button>
+
+        <!-- Logout Button -->
+        <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all">
+          <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
+          <span class="sidebar-text text-xs whitespace-nowrap">Log Out</span>
+        </a>
+
+      </div>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <main class="flex-1 flex flex-col gap-6 overflow-y-auto pr-1 pb-4">
+
+      <!-- BREADCRUMB & DATE -->
+      <div class="flex justify-between items-center px-2 pt-1 pb-1">
+        <div class="flex items-baseline gap-1">
+          <h1 class="text-base font-medium text-slate-600 tracking-wide">ANIME MERCH E-COMMERCE <span class="font-bold text-slate-800">DASHBOARD</span> / <span class="font-bold text-slate-800">HOSHINO ICHIKA</span></h1>
+        </div>
+        <div class="text-xs font-semibold text-slate-600 flex items-center gap-2 bg-[#F7F9FC] px-4 py-2 rounded-full border border-white shadow-sm">
+          <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i> August 11, 2026 <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
+        </div>
+      </div>
+
+      <!-- 2 COLUMN GRID LAYOUT -->
+      <div class="grid grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)] gap-6 flex-1 h-full">
+
+        <!-- ==================== COLUMN 1 (LEFT / MAIN CONTENT) ==================== -->
+        <div class="flex flex-col gap-6 justify-between">
+          
+          <!-- SEARCH BAR (WARNA ABU-ABU TERANG) -->
+          <div class="relative w-full shadow-sm rounded-full">
+            <input type="text" placeholder="Search games, figures, apparel..."
+                   class="w-full bg-[#F7F9FC] text-slate-800 pl-6 pr-12 py-4 rounded-full text-sm focus:outline-none border border-white font-medium placeholder:text-slate-400">
+            <i data-lucide="search" class="w-5 h-5 absolute right-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+
+          <!-- FEATURED & RECOMMENDATIONS CAROUSEL -->
+          <div class="bg-[#F7F9FC] rounded-[2.2rem] p-7 relative overflow-hidden shadow-sm border border-white flex-1 min-h-[220px]">
+            
+            <!-- Slide 1 -->
+            <div class="carousel-slide active transition-opacity duration-500 h-full flex-col justify-between">
+              <div class="z-10 max-w-[320px] relative">
+                <span class="text-sm font-semibold text-slate-500 tracking-wide">Featured & Recommendations</span>
+                <h2 class="text-2xl font-bold mt-2 text-slate-800 leading-snug">Project Sekai:<br>Colorful Stage! Collectibles</h2>
+                <button class="mt-6 bg-[#323446] hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
+                  Explore Collection <i data-lucide="play-circle" class="w-4 h-4 fill-white text-[#323446]"></i>
+                </button>
+              </div>
+              <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80"
+                   alt="Featured 1" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
+              <div class="absolute right-0 top-0 h-full w-[58%] bg-gradient-to-r from-[#F7F9FC] via-[#F7F9FC]/80 to-transparent z-0"></div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-slide transition-opacity duration-500 h-full flex-col justify-between">
+              <div class="z-10 max-w-[320px] relative">
+                <span class="text-sm font-semibold text-slate-500 tracking-wide">Featured & Recommendations</span>
+                <h2 class="text-2xl font-bold mt-2 text-slate-800 leading-snug">Genshin Impact:<br>Exclusive Figure Drop</h2>
+                <button class="mt-6 bg-[#323446] hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
+                  Shop Pre-Order <i data-lucide="play-circle" class="w-4 h-4 fill-white text-[#323446]"></i>
+                </button>
+              </div>
+              <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80"
+                   alt="Featured 2" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
+              <div class="absolute right-0 top-0 h-full w-[58%] bg-gradient-to-r from-[#F7F9FC] via-[#F7F9FC]/80 to-transparent z-0"></div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-slide transition-opacity duration-500 h-full flex-col justify-between">
+              <div class="z-10 max-w-[320px] relative">
+                <span class="text-sm font-semibold text-slate-500 tracking-wide">Featured & Recommendations</span>
+                <h2 class="text-2xl font-bold mt-2 text-slate-800 leading-snug">Persona 5 Royal:<br>Digital OST & Game Bundle</h2>
+                <button class="mt-6 bg-[#323446] hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
+                  Buy Bundle <i data-lucide="play-circle" class="w-4 h-4 fill-white text-[#323446]"></i>
+                </button>
+              </div>
+              <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80"
+                   alt="Featured 3" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
+              <div class="absolute right-0 top-0 h-full w-[58%] bg-gradient-to-r from-[#F7F9FC] via-[#F7F9FC]/80 to-transparent z-0"></div>
+            </div>
+
+            <!-- Carousel Indicators -->
+            <div class="absolute bottom-4 left-7 flex gap-1.5 z-20">
+              <span class="dot w-2.5 h-2.5 rounded-full bg-slate-800 transition-all"></span>
+              <span class="dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all"></span>
+              <span class="dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all"></span>
+            </div>
+          </div>
+
+          <!-- TOTAL SPEND -->
+          <div class="bg-[#F7F9FC] p-6 rounded-[2.2rem] border border-white shadow-sm flex flex-col justify-between h-[210px]">
+            <div class="flex justify-between items-start w-full">
+              <div>
+                <h3 class="text-base font-semibold text-slate-800">Total Spend</h3>
+                <p class="text-xs text-slate-400 font-medium mt-0.5">Lifetime Purchases</p>
+              </div>
+              <div class="text-right">
+                <span class="font-bold text-slate-800 text-2xl">$1,450.00</span>
+                <span class="block text-[10px] text-slate-600 font-bold bg-slate-200 px-2 py-0.5 rounded-full mt-1 inline-block">+14.2% this month</span>
+              </div>
+            </div>
+            
+            <!-- BAR CHART VISUALIZATION -->
+            <div class="flex items-end justify-between gap-3 h-[90px] pt-4 px-2 border-b border-slate-200/60 pb-1">
+              <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                <div class="w-full bg-slate-200 rounded-t-md h-[40%] hover:bg-slate-300 transition-colors"></div>
+                <span class="text-[10px] font-semibold text-slate-400">Apr</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                <div class="w-full bg-slate-200 rounded-t-md h-[65%] hover:bg-slate-300 transition-colors"></div>
+                <span class="text-[10px] font-semibold text-slate-400">May</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                <div class="w-full bg-slate-200 rounded-t-md h-[50%] hover:bg-slate-300 transition-colors"></div>
+                <span class="text-[10px] font-semibold text-slate-400">Jun</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                <div class="w-full bg-slate-200 rounded-t-md h-[80%] hover:bg-slate-300 transition-colors"></div>
+                <span class="text-[10px] font-semibold text-slate-400">Jul</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                <div class="w-full bg-slate-200 rounded-t-md h-[60%] hover:bg-slate-300 transition-colors"></div>
+                <span class="text-[10px] font-semibold text-slate-400">Aug</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                <div class="w-full bg-[#323446] rounded-t-md h-[100%] shadow-sm"></div>
+                <span class="text-[10px] font-bold text-slate-800">Sep</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ==================== COLUMN 2 (RIGHT) ==================== -->
+        <div class="flex flex-col gap-4 justify-between h-full overflow-hidden">
+          
+          <!-- DISCOUNT & EVENTS -->
+          <div class="flex flex-col shrink-0">
+            <div class="flex justify-between items-end mb-2.5 px-1 shrink-0">
+              <h3 class="text-base font-semibold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="tag" class="w-4 h-4 text-slate-600"></i> Discounts & Events
+              </h3>
+              <a href="#" class="text-xs text-slate-400 font-medium hover:text-slate-600">view all</a>
+            </div>
+            
+            <div class="flex flex-col gap-2.5 overflow-y-auto">
+              <!-- Item 1 -->
+              <div class="bg-[#F7F9FC] p-3 rounded-[1.3rem] border border-white shadow-sm flex items-center justify-between hover:border-slate-300 transition-all shrink-0">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div class="w-[52px] h-[52px] rounded-xl overflow-hidden bg-slate-200 shrink-0 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=200&q=80" alt="Nier" class="w-full h-full object-cover">
+                  </div>
+                  <div class="truncate">
+                    <h5 class="text-xs font-bold text-slate-800 truncate">NieR:Automata™</h5>
+                    <p class="text-[10px] text-slate-400 font-medium truncate mt-0.5">Square Enix</p>
+                    <span class="inline-block bg-slate-200 text-slate-700 text-[9px] font-bold px-2 py-0.5 rounded mt-1">50% OFF</span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0 ml-2">
+                  <span class="text-[10px] text-slate-400 line-through block">$39.99</span>
+                  <span class="text-sm font-bold text-slate-800">$19.99</span>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="bg-[#F7F9FC] p-3 rounded-[1.3rem] border border-white shadow-sm flex items-center justify-between hover:border-slate-300 transition-all shrink-0">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div class="w-[52px] h-[52px] rounded-xl overflow-hidden bg-slate-200 shrink-0 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=200&q=80" alt="Honkai" class="w-full h-full object-cover">
+                  </div>
+                  <div class="truncate">
+                    <h5 class="text-xs font-bold text-slate-800 truncate">Honkai: Star Rail</h5>
+                    <p class="text-[10px] text-slate-400 font-medium truncate mt-0.5">HoYoverse</p>
+                    <span class="inline-block bg-slate-200 text-slate-700 text-[9px] font-bold px-2 py-0.5 rounded mt-1">Anniversary</span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0 ml-2">
+                  <span class="text-xs font-bold text-slate-800 bg-slate-200 px-2 py-1 rounded-lg">Free Drops</span>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="bg-[#F7F9FC] p-3 rounded-[1.3rem] border border-white shadow-sm flex items-center justify-between hover:border-slate-300 transition-all shrink-0">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div class="w-[52px] h-[52px] rounded-xl overflow-hidden bg-slate-200 shrink-0 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="Monster Hunter" class="w-full h-full object-cover">
+                  </div>
+                  <div class="truncate">
+                    <h5 class="text-xs font-bold text-slate-800 truncate">Monster Hunter World</h5>
+                    <p class="text-[10px] text-slate-400 font-medium truncate mt-0.5">CAPCOM</p>
+                    <span class="inline-block bg-slate-200 text-slate-700 text-[9px] font-bold px-2 py-0.5 rounded mt-1">67% OFF</span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0 ml-2">
+                  <span class="text-[10px] text-slate-400 line-through block">$29.99</span>
+                  <span class="text-sm font-bold text-slate-800">$9.89</span>
+                </div>
+              </div>
+
+              <!-- Item 4 -->
+              <div class="bg-[#F7F9FC] p-3 rounded-[1.3rem] border border-white shadow-sm flex items-center justify-between hover:border-slate-300 transition-all shrink-0">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div class="w-[52px] h-[52px] rounded-xl overflow-hidden bg-slate-200 shrink-0 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=200&q=80" alt="Persona 3 Reload" class="w-full h-full object-cover">
+                  </div>
+                  <div class="truncate">
+                    <h5 class="text-xs font-bold text-slate-800 truncate">Persona 3 Reload</h5>
+                    <p class="text-[10px] text-slate-400 font-medium truncate mt-0.5">ATLUS</p>
+                    <span class="inline-block bg-slate-200 text-slate-700 text-[9px] font-bold px-2 py-0.5 rounded mt-1">30% OFF</span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0 ml-2">
+                  <span class="text-[10px] text-slate-400 line-through block">$69.99</span>
+                  <span class="text-sm font-bold text-slate-800">$48.99</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- GAME OF THE DAY -->
+          <div class="flex flex-col justify-between flex-1 min-h-0 overflow-hidden">
+             <h3 class="text-base font-semibold text-slate-800 mb-2 px-1 flex items-center gap-1.5 shrink-0">
+               <i data-lucide="trophy" class="w-4 h-4 text-slate-600"></i> Game of the Day
+             </h3>
+             <div class="bg-[#F7F9FC] p-4 rounded-[1.8rem] border border-white shadow-sm flex flex-col justify-between relative overflow-hidden group flex-1">
+               
+               <!-- Top Mini Banner -->
+               <div class="relative h-32 rounded-2xl overflow-hidden mb-3 shrink-0">
+                 <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=80" alt="Featured Game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/20 to-transparent"></div>
+                 <span class="absolute top-2.5 left-2.5 bg-[#323446] text-white font-extrabold text-[8px] px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
+                   Editor's Choice
+                 </span>
+                 <div class="absolute bottom-2.5 left-3 right-3 flex justify-between items-end text-white">
+                   <div>
+                     <h4 class="font-extrabold text-sm leading-tight">Elden Ring: Shadow</h4>
+                     <p class="text-[10px] text-slate-300 font-medium">FromSoftware</p>
+                   </div>
+                   <span class="font-bold text-xs bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20">$39.99</span>
+                 </div>
+               </div>
+
+               <!-- Game Stats -->
+               <div class="grid grid-cols-2 gap-2 my-auto">
+                 <div class="bg-white/80 p-2.5 rounded-xl border border-slate-100 flex items-center gap-2">
+                   <div class="p-1.5 bg-slate-100 rounded-lg text-slate-600 shrink-0">
+                     <i data-lucide="star" class="w-4 h-4"></i>
+                   </div>
+                   <div>
+                     <span class="text-[8px] text-slate-400 font-bold block leading-none">RATING</span>
+                     <span class="text-xs font-extrabold text-slate-800">4.9 / 5.0</span>
+                   </div>
+                 </div>
+                 <div class="bg-white/80 p-2.5 rounded-xl border border-slate-100 flex items-center gap-2">
+                   <div class="p-1.5 bg-slate-100 rounded-lg text-slate-600 shrink-0">
+                     <i data-lucide="users" class="w-4 h-4"></i>
+                   </div>
+                   <div>
+                     <span class="text-[8px] text-slate-400 font-bold block leading-none">ACTIVE</span>
+                     <span class="text-xs font-extrabold text-slate-800">240K+</span>
+                   </div>
+                 </div>
+               </div>
+
+               <!-- Action Button (WARNA HEADBAR) -->
+               <button class="w-full bg-[#323446] text-white font-semibold py-2.5 rounded-full text-xs hover:bg-slate-800 transition-colors shadow-sm flex items-center justify-center gap-1.5 shrink-0 mt-2">
+                 Get Game <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+               </button>
+             </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Automatic Carousel Script
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        dots[i].classList.replace('bg-slate-800', 'bg-slate-300');
+      });
+      slides[index].classList.add('active');
+      dots[index].classList.replace('bg-slate-300', 'bg-slate-800');
+    }
+
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }, 4000);
+
+    // Sidebar Toggle Script
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-sidebar');
+    const toggleIcon = document.getElementById('toggle-icon');
+    const collapseLabel = document.getElementById('collapse-label');
+    const sidebarTexts = document.querySelectorAll('.sidebar-text');
+    let isCollapsed = false;
+
+    toggleBtn.addEventListener('click', () => {
+      isCollapsed = !isCollapsed;
+
+      if (isCollapsed) {
+        sidebar.classList.remove('w-64', 'px-4');
+        sidebar.classList.add('w-20', 'px-2.5', 'items-center');
+        
+        sidebarTexts.forEach(el => el.classList.add('hidden'));
+
+        toggleIcon.setAttribute('data-lucide', 'panel-left-open');
+        collapseLabel.textContent = 'Expand';
+      } else {
+        sidebar.classList.remove('w-20', 'px-2.5', 'items-center');
+        sidebar.classList.add('w-64', 'px-4');
+
+        sidebarTexts.forEach(el => el.classList.remove('hidden'));
+
+        toggleIcon.setAttribute('data-lucide', 'panel-left-close');
+        collapseLabel.textContent = 'Collapse';
+      }
+
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
