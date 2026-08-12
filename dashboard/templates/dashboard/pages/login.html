@@ -35,11 +35,17 @@
     .slider { transition: transform 680ms cubic-bezier(0.65,0,0.35,1); will-change: transform; }
     .slide-right { transform: translateX(100%); }
     .slide-left  { transform: translateX(0%); }
+
+    /* Login -> dashboard exit fade (fade shell and body to white so it flows into the splash overlay) */
+    #app-shell { transition: opacity 360ms ease, transform 360ms ease; }
+    #app-shell.fade-out { opacity: 0; transform: scale(0.985); }
+    body { transition: background-color 360ms ease; }
+    body.fade-out { background-color: #ffffff; }
   </style>
 </head>
 <body class="min-h-screen p-3 sm:p-6 lg:p-8 flex items-center justify-center antialiased">
 
-  <div class="w-full max-w-7xl h-[calc(100svh-24px)] sm:h-[85vh] sm:min-h-[600px] sm:max-h-[900px] bg-gradient-to-br from-[#F5F4E8] via-[#EBFBFA] to-[#FAF1D6] rounded-[24px] shadow-2xl border border-white/60 relative overflow-hidden flex flex-col">
+  <div id="app-shell" class="w-full max-w-7xl h-[calc(100svh-24px)] sm:h-[85vh] sm:min-h-[600px] sm:max-h-[900px] bg-gradient-to-br from-[#F5F4E8] via-[#EBFBFA] to-[#FAF1D6] rounded-[24px] shadow-2xl border border-white/60 relative overflow-hidden flex flex-col">
     <div class="flex-1 w-full h-full relative overflow-hidden rounded-[24px] bg-white/40 backdrop-blur-xl border border-white/60">
 
       <!-- ==================== MOBILE VIEW ==================== -->
@@ -469,7 +475,11 @@
     document.querySelectorAll('form[data-submit]').forEach(function (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        window.location.href = '/dashboard/';
+        document.body.classList.add('fade-out');
+        document.getElementById('app-shell').classList.add('fade-out');
+        setTimeout(function () {
+          window.location.href = '/dashboard/';
+        }, 400);
       });
     });
   </script>

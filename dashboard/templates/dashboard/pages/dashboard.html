@@ -22,9 +22,125 @@
     .carousel-slide.active {
       display: flex;
     }
+
+    /* ===== Splash overlay (plays on load, then reveals dashboard) ===== */
+    /* Keep the dashboard hidden until the splash runs, so it never flashes. */
+    body.splash-active > :not(#splash-screen) { visibility: hidden; }
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: radial-gradient(circle at center, #ffffff 0%, #f7f7f7 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.9s ease, visibility 0.9s ease;
+    }
+    #splash-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .glow-bg {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.8);
+      filter: blur(150px);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    .kaimono-brand {
+      font-weight: 800;
+      letter-spacing: 0.45em;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #a3a3a3;
+      margin-bottom: 28px;
+    }
+    .greeting-container {
+      position: relative;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px;
+    }
+    .greeting-text {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
+      opacity: 0;
+      transform: translateY(10px) rotateX(-15deg) translateZ(-20px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      white-space: nowrap;
+    }
+    .greeting-text.active {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg) translateZ(0);
+    }
+    .progress-bar-container {
+      position: absolute;
+      bottom: 60px;
+      width: 180px;
+      height: 2px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #808080;
+      transition: width 0.05s linear;
+    }
+    .loading-hint {
+      position: absolute;
+      bottom: 96px;
+      width: 260px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+    .loading-hint span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #c9c9c9;
+      animation: bounce 1s ease-in-out infinite;
+    }
+    .loading-hint span:nth-child(2) { animation-delay: 0.12s; }
+    .loading-hint span:nth-child(3) { animation-delay: 0.24s; }
+    .loading-hint span:nth-child(4) { animation-delay: 0.36s; }
+    .loading-hint span:nth-child(5) { animation-delay: 0.48s; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50%      { transform: translateY(-5px); opacity: 1; }
+    }
   </style>
 </head>
-<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm splash-active">
+
+  <!-- ===== SPLASH OVERLAY (plays on load, then reveals dashboard) ===== -->
+  <div id="splash-screen">
+    <div class="glow-bg"></div>
+    <div class="kaimono-brand">@Kaimono</div>
+    <div class="greeting-container">
+      <span id="greeting" class="greeting-text">Halo</span>
+    </div>
+    <div class="loading-hint">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="progress-bar-container">
+      <div id="progress" class="progress-bar"></div>
+    </div>
+  </div>
 
   <!-- ==================== TOPBAR & HEADER AREA ==================== -->
   <div class="pt-5 pb-3 px-6 relative w-full shrink-0">
@@ -413,6 +529,59 @@
 
   <script>
     lucide.createIcons();
+
+    // ===== Splash overlay: play on load, then reveal the dashboard (no page navigation) =====
+    (function () {
+      var greetings = ["Halo", "Hello", "Bonjour", "Ciao", "你好", "नमस्ते", "안녕하세요", "こんにちは", "مرحبا", "Selamat Datang"];
+      var greetingEl = document.getElementById("greeting");
+      var progressEl = document.getElementById("progress");
+      var splashScreen = document.getElementById("splash-screen");
+
+      var displayDuration = 500;
+      var totalDuration = greetings.length * displayDuration;
+      var currentIndex = 0;
+      var startTime = null;
+
+      function changeGreeting() {
+        if (currentIndex >= greetings.length) return;
+        greetingEl.classList.remove("active");
+        setTimeout(function () {
+          greetingEl.textContent = greetings[currentIndex];
+          greetingEl.classList.add("active");
+          currentIndex++;
+        }, 100);
+      }
+
+      function updateProgress(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var elapsed = timestamp - startTime;
+        var pct = Math.min((elapsed / totalDuration) * 100, 100);
+        progressEl.style.width = pct + "%";
+        if (elapsed < totalDuration) requestAnimationFrame(updateProgress);
+      }
+
+      function finishSplash() {
+        setTimeout(function () {
+          splashScreen.classList.add("hidden");
+          document.body.classList.remove("splash-active");
+        }, 400);
+      }
+
+      function startSplash() {
+        changeGreeting();
+        var interval = setInterval(function () {
+          if (currentIndex < greetings.length) {
+            changeGreeting();
+          } else {
+            clearInterval(interval);
+            finishSplash();
+          }
+        }, displayDuration);
+        requestAnimationFrame(updateProgress);
+      }
+
+      if (splashScreen) startSplash();
+    })();
 
     // Automatic Carousel Script
     let currentSlide = 0;
