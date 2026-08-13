@@ -191,7 +191,7 @@
   <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
 
     <!-- COLLAPSIBLE FLOATING SIDEBAR (WARNA ABU-ABU TERANG & KONTRAS) -->
-    <aside id="sidebar" class="w-64 bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-4 shadow-sm border border-white shrink-0 h-full transition-all duration-300">
+    <aside id="sidebar" class="w-20 items-center bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-2.5 shadow-sm border border-white shrink-0 h-full transition-all duration-300">
       <div class="flex flex-col gap-5 w-full">
         
         <!-- Profile Header -->
@@ -199,7 +199,7 @@
           <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0">
             <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
           </div>
-          <div class="sidebar-text overflow-hidden">
+          <div class="sidebar-text overflow-hidden hidden">
             <h4 class="font-bold text-slate-800 truncate text-xs">Hoshino Ichika</h4>
             <p class="text-[10px] text-slate-400 font-medium truncate">Premium Member</p>
           </div>
@@ -209,34 +209,34 @@
         <nav class="flex flex-col gap-1.5 w-full">
           <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl bg-slate-200/80 text-slate-900 font-bold transition-all shadow-sm group">
             <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
-            <span class="sidebar-text text-xs whitespace-nowrap">Dashboard</span>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Dashboard</span>
           </a>
           <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
             <i data-lucide="message-square" class="w-5 h-5 shrink-0"></i>
-            <span class="sidebar-text text-xs whitespace-nowrap">Messages</span>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Messages</span>
           </a>
           <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
             <i data-lucide="user" class="w-5 h-5 shrink-0"></i>
-            <span class="sidebar-text text-xs whitespace-nowrap">Profile</span>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Profile</span>
           </a>
           <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
             <i data-lucide="phone" class="w-5 h-5 shrink-0"></i>
-            <span class="sidebar-text text-xs whitespace-nowrap">Support</span>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Support</span>
           </a>
           <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all justify-between group">
             <div class="flex items-center gap-3.5">
               <i data-lucide="heart" class="w-5 h-5 shrink-0"></i>
-              <span class="sidebar-text text-xs whitespace-nowrap">Wishlist</span>
+              <span class="sidebar-text text-xs whitespace-nowrap hidden">Wishlist</span>
             </div>
-            <span class="sidebar-text text-[10px] font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full">12</span>
+            <span class="sidebar-text text-[10px] font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full hidden">12</span>
           </a>
           <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
             <i data-lucide="inbox" class="w-5 h-5 shrink-0"></i>
-            <span class="sidebar-text text-xs whitespace-nowrap">Library</span>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Library</span>
           </a>
           <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
             <i data-lucide="settings" class="w-5 h-5 shrink-0"></i>
-            <span class="sidebar-text text-xs whitespace-nowrap">Settings</span>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Settings</span>
           </a>
         </nav>
       </div>
@@ -246,14 +246,14 @@
         
         <!-- Collapse Button -->
         <button id="toggle-sidebar" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all w-full text-left">
-          <i data-lucide="panel-left-close" id="toggle-icon" class="w-5 h-5 shrink-0"></i>
-          <span id="collapse-label" class="sidebar-text text-xs whitespace-nowrap">Collapse</span>
+          <i data-lucide="panel-left-open" id="toggle-icon" class="w-5 h-5 shrink-0"></i>
+          <span id="collapse-label" class="sidebar-text text-xs whitespace-nowrap hidden">Expand</span>
         </button>
 
         <!-- Logout Button -->
         <a href="/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all">
           <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
-          <span class="sidebar-text text-xs whitespace-nowrap">Log Out</span>
+          <span class="sidebar-text text-xs whitespace-nowrap hidden">Log Out</span>
         </a>
 
       </div>
@@ -608,7 +608,7 @@
     const toggleIcon = document.getElementById('toggle-icon');
     const collapseLabel = document.getElementById('collapse-label');
     const sidebarTexts = document.querySelectorAll('.sidebar-text');
-    let isCollapsed = false;
+    let isCollapsed = true;
 
     toggleBtn.addEventListener('click', () => {
       isCollapsed = !isCollapsed;
