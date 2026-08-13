@@ -16,6 +16,49 @@
       width: 0px;
       background: transparent;
     }
+    #sidebar {
+      align-items: stretch !important;
+    }
+    #sidebar a,
+    #sidebar button {
+      padding-left: 20px !important;
+      padding-right: 0 !important;
+      justify-content: flex-start !important;
+      transition: padding 300ms, background-color 200ms, color 200ms;
+    }
+    #sidebar .sidebar-text {
+      transition: opacity 300ms;
+    }
+    .library-tab.active {
+      background-color: #323446;
+      color: white;
+    }
+    .game-card {
+      transition: all 300ms ease;
+    }
+    .game-card:hover {
+      transform: translateY(-4px);
+    }
+    .game-card:hover .game-image {
+      transform: scale(1.06);
+    }
+    .game-card:hover .play-overlay {
+      opacity: 1;
+    }
+    .play-overlay {
+      opacity: 0;
+      transition: opacity 250ms ease;
+    }
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+    .pulse-dot {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
   </style>
 </head>
 <body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
@@ -69,12 +112,12 @@
   <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
 
     <!-- COLLAPSIBLE FLOATING SIDEBAR -->
-    <aside id="sidebar" class="w-20 items-center bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-2.5 shadow-sm border border-white shrink-0 h-full transition-all duration-300">
-      <div class="flex flex-col gap-5 w-full">
+    <aside id="sidebar" class="w-20 items-center bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-2.5 shadow-sm border border-white shrink-0 h-full overflow-hidden transition-all duration-300">
+      <div class="flex flex-col gap-5 w-full flex-1 min-h-0">
 
         <!-- Profile Header -->
         <a href="/profile/" class="flex items-center gap-3.5 pb-3 border-b border-slate-200/80 px-1 rounded-2xl hover:bg-slate-200/50 transition-all">
-          <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0">
+          <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0 -ml-2.5">
             <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
           </div>
           <div class="sidebar-text overflow-hidden hidden">
@@ -84,7 +127,7 @@
         </a>
 
         <!-- Navigation Links -->
-        <nav class="flex flex-col gap-1.5 w-full">
+        <nav class="flex flex-col gap-1.5 w-full overflow-y-auto min-h-0">
           <a href="/dashboard/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
             <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
             <span class="sidebar-text text-xs whitespace-nowrap hidden">Dashboard</span>
@@ -132,127 +175,530 @@
     <!-- CONTENT AREA -->
     <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4">
 
-      <!-- BREADCRUMB -->
-      <div class="flex justify-between items-center px-2 pt-1 pb-1">
-        <h1 class="text-base font-medium text-slate-600 tracking-wide">MY <span class="font-bold text-slate-800">LIBRARY</span></h1>
-        <div class="relative">
-          <input type="text" placeholder="Search your games..."
-                 class="w-64 bg-[#F7F9FC] text-slate-800 pl-4 pr-10 py-2.5 rounded-full text-sm focus:outline-none border border-white shadow-sm font-medium placeholder:text-slate-400">
-          <i data-lucide="search" class="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+      <!-- BREADCRUMB & CONTROLS -->
+      <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
+        <div class="flex items-baseline gap-1">
+          <h1 class="text-base font-medium text-slate-600 tracking-wide">ANIME MERCH E-COMMERCE <span class="font-bold text-slate-800">LIBRARY</span> / <span class="font-bold text-slate-800">HOSHINO ICHIKA</span></h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <input type="text" placeholder="Search your library..."
+                   class="w-64 bg-[#F7F9FC] text-slate-800 pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none border border-white shadow-sm font-medium placeholder:text-slate-400">
+            <i data-lucide="search" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+          <button class="bg-[#F7F9FC] p-2.5 rounded-full border border-white shadow-sm text-slate-600 hover:bg-slate-200/50 transition-colors">
+            <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+          </button>
         </div>
       </div>
 
-      <!-- STEAM-STYLE LIBRARY HEADER BANNER -->
-      <div class="bg-[#F7F9FC] rounded-[2rem] p-5 border border-white shadow-sm shrink-0 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <div class="w-20 h-24 rounded-xl overflow-hidden shadow-sm shrink-0">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="current game" class="w-full h-full object-cover">
+      <!-- HERO: NOW PLAYING BANNER -->
+      <div class="bg-[#F7F9FC] rounded-[2rem] p-6 border border-white shadow-sm shrink-0 relative overflow-hidden group">
+        <div class="absolute inset-0 flex items-stretch">
+          <div class="w-[45%] h-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80"
+                 alt="now playing" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
           </div>
-          <div>
-            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Now Playing</p>
-            <h2 class="text-lg font-extrabold text-slate-800">Project Sekai: Colorful Stage!</h2>
-            <p class="text-xs text-slate-400 font-medium mt-0.5">Last played 2 hours ago · 320 hrs total</p>
+          <div class="flex-1 bg-gradient-to-r from-[#F7F9FC] via-[#F7F9FC]/95 to-[#F7F9FC]"></div>
+        </div>
+
+        <div class="relative z-10 flex justify-between items-start gap-6 pl-[47%]">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-2 h-2 rounded-full bg-[#323446] pulse-dot"></span>
+              <p class="text-[10px] text-[#323446] font-bold uppercase tracking-widest">Now Playing</p>
+            </div>
+            <h2 class="text-3xl font-extrabold text-slate-800 leading-tight">Project Sekai:<br>Colorful Stage!</h2>
+            <div class="flex items-center gap-3 mt-2 text-xs text-slate-500 font-medium">
+              <span class="flex items-center gap-1"><i data-lucide="building-2" class="w-3.5 h-3.5"></i> SEGA / Colorful Palette</span>
+              <span class="text-slate-300">•</span>
+              <span class="flex items-center gap-1"><i data-lucide="music" class="w-3.5 h-3.5"></i> Rhythm</span>
+              <span class="text-slate-300">•</span>
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5"></i> Last played 2h ago</span>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-3 mt-5">
+              <div class="bg-white/80 border border-slate-100 rounded-xl p-3">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Total Playtime</span>
+                  <i data-lucide="timer" class="w-3.5 h-3.5 text-slate-400"></i>
+                </div>
+                <p class="text-lg font-extrabold text-slate-800">320<span class="text-xs text-slate-400 font-semibold ml-0.5">hrs</span></p>
+              </div>
+              <div class="bg-white/80 border border-slate-100 rounded-xl p-3">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Songs Cleared</span>
+                  <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                </div>
+                <p class="text-lg font-extrabold text-slate-800">482<span class="text-xs text-slate-400 font-semibold ml-0.5">/520</span></p>
+              </div>
+              <div class="bg-white/80 border border-slate-100 rounded-xl p-3">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Achievements</span>
+                  <i data-lucide="trophy" class="w-3.5 h-3.5 text-slate-400"></i>
+                </div>
+                <p class="text-lg font-extrabold text-slate-800">87<span class="text-xs text-slate-400 font-semibold ml-0.5">%</span></p>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mt-5">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-[10px] font-semibold text-slate-500">Main Story Progress</span>
+                <span class="text-[10px] font-bold text-slate-700">Chapter 42 / 50</span>
+              </div>
+              <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                <div class="h-full bg-[#323446] rounded-full" style="width: 84%"></div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-2.5 mt-5">
+              <button class="bg-[#323446] hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2 shadow-sm transition-colors">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i> Continue Playing
+              </button>
+              <button class="bg-white hover:bg-slate-100 text-slate-700 font-semibold px-5 py-3 rounded-full text-xs flex items-center gap-2 border border-slate-200 transition-colors">
+                <i data-lucide="info" class="w-3.5 h-3.5"></i> Game Details
+              </button>
+              <button class="bg-white hover:bg-slate-100 text-slate-700 p-3 rounded-full border border-slate-200 transition-colors">
+                <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Completion Ring -->
+          <div class="flex flex-col items-center gap-1.5 shrink-0">
+            <div class="relative w-24 h-24">
+              <svg class="progress-ring w-full h-full">
+                <circle cx="48" cy="48" r="40" stroke="#e2e8f0" stroke-width="6" fill="none" />
+                <circle cx="48" cy="48" r="40" stroke="#323446" stroke-width="6" fill="none"
+                        stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="40.2" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-xl font-extrabold text-slate-800 leading-none">84%</span>
+                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Complete</span>
+              </div>
+            </div>
+            <span class="text-[9px] font-semibold text-slate-500 mt-1">Completion</span>
           </div>
         </div>
-        <button class="bg-[#323446] hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2 shadow-sm transition-colors shrink-0">
-          <i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i> Play
+      </div>
+
+      <!-- TABS & FILTERS -->
+      <div class="flex justify-between items-center px-1 shrink-0">
+        <div class="flex items-center gap-1 overflow-x-auto">
+          <button class="library-tab active text-xs font-semibold px-4 py-2 rounded-full transition-all">All Games <span class="ml-1.5 bg-white/20 text-[10px] px-1.5 py-0.5 rounded-full">48</span></button>
+          <button class="library-tab text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 font-semibold px-4 py-2 rounded-full transition-all">Installed <span class="ml-1.5 text-[10px]">24</span></button>
+          <button class="library-tab text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 font-semibold px-4 py-2 rounded-full transition-all">Ready to Play <span class="ml-1.5 text-[10px]">18</span></button>
+          <button class="library-tab text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 font-semibold px-4 py-2 rounded-full transition-all">Recently Played <span class="ml-1.5 text-[10px]">12</span></button>
+          <button class="library-tab text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 font-semibold px-4 py-2 rounded-full transition-all">DLC <span class="ml-1.5 text-[10px]">6</span></button>
+          <button class="library-tab text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 font-semibold px-4 py-2 rounded-full transition-all">Favorites</button>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <div class="flex items-center gap-1.5 bg-[#F7F9FC] border border-white rounded-full px-3 py-1.5 shadow-sm cursor-pointer hover:bg-slate-200/50 transition-colors">
+            <i data-lucide="arrow-down-up" class="w-3.5 h-3.5 text-slate-500"></i>
+            <span class="text-[11px] font-semibold text-slate-700">Sort: Recent</span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+          </div>
+          <div class="flex bg-[#F7F9FC] border border-white rounded-full p-0.5 shadow-sm">
+            <button class="p-1.5 rounded-full bg-[#323446] text-white">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+            </button>
+            <button class="p-1.5 rounded-full text-slate-500 hover:text-slate-800">
+              <i data-lucide="list" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PORTRAIT GAME GRID (6 columns) -->
+      <div class="grid grid-cols-6 gap-4">
+
+        <!-- Card 1: Project Sekai -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-white bg-[#323446] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Now Playing</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Project Sekai: Colorful Stage!</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">SEGA</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">320h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: NieR Automata -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Installed</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">NieR:Automata™</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">Square Enix</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">85h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Honkai Star Rail -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Installed</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-[#323446] hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Honkai: Star Rail</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">HoYoverse</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">140h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Genshin Impact -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-white bg-[#323446] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Update</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="download" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Genshin Impact</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">HoYoverse</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">56h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: Elden Ring -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2 flex flex-col gap-1">
+              <span class="text-[8px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Installed</span>
+              <span class="text-[8px] font-bold text-white bg-[#323446] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">GOTY</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-[#323446] hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Elden Ring: Shadow</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">FromSoftware</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">210h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Persona 3 Reload -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Installed</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Persona 3 Reload</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">ATLUS</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">32h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 7: Monster Hunter (Not Installed) -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1614624532983-4ce03382d63d?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500 opacity-75">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Not Installed</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="download" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Monster Hunter World</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">CAPCOM</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">45GB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 8: Zelda TOTK -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2 flex flex-col gap-1">
+              <span class="text-[8px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Installed</span>
+              <span class="text-[8px] font-bold text-white bg-[#323446] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">GOTY</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Zelda: Tears of Kingdom</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">Nintendo</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">120h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 9: Cyberpunk -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Installed</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Cyberpunk 2077</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">CD Projekt</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">89h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 10: Hollow Knight -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Installed</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-[#323446] hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Hollow Knight</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">Team Cherry</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">67h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 11: Hades -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2 flex flex-col gap-1">
+              <span class="text-[8px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Installed</span>
+              <span class="text-[8px] font-bold text-white bg-[#323446] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Indie Hit</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Hades</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">Supergiant</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">45h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 12: Stardew Valley -->
+        <div class="game-card bg-[#F7F9FC] rounded-2xl border border-white shadow-sm overflow-hidden group cursor-pointer">
+          <div class="relative aspect-[2/3] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1488866022916-f7f2b3077a5c?auto=format&fit=crop&w=400&q=80"
+                 alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+
+            <div class="absolute top-2 left-2">
+              <span class="text-[8px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Not Installed</span>
+            </div>
+
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-[#323446] hover:bg-white transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+
+            <div class="play-overlay absolute inset-0 flex items-center justify-center">
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center text-[#323446] shadow-lg hover:scale-105 transition-transform">
+                <i data-lucide="download" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Stardew Valley</h4>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-slate-200 font-medium truncate">ConcernedApe</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">2GB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- LOAD MORE -->
+      <div class="flex justify-center items-center gap-3 pt-2 pb-2 shrink-0">
+        <button class="bg-[#F7F9FC] hover:bg-slate-200/50 text-slate-700 font-semibold px-5 py-2.5 rounded-full text-xs border border-white shadow-sm flex items-center gap-2 transition-colors">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Load More Games
         </button>
-      </div>
-
-      <!-- STEAM-STYLE TABS -->
-      <div class="flex items-center gap-1 px-2 shrink-0 overflow-x-auto">
-        <span class="text-xs bg-[#323446] text-white font-semibold px-3.5 py-2 rounded-t-xl">All Games</span>
-        <span class="text-xs text-slate-500 hover:text-slate-800 font-semibold px-3.5 py-2 cursor-pointer">Installed</span>
-        <span class="text-xs text-slate-500 hover:text-slate-800 font-semibold px-3.5 py-2 cursor-pointer">Ready to Play</span>
-        <span class="text-xs text-slate-500 hover:text-slate-800 font-semibold px-3.5 py-2 cursor-pointer">Recently Played</span>
-        <span class="text-xs text-slate-500 hover:text-slate-800 font-semibold px-3.5 py-2 cursor-pointer">DLC</span>
-      </div>
-
-      <!-- GAME GRID -->
-      <div class="grid grid-cols-3 gap-4">
-        <div class="bg-[#F7F9FC] rounded-[1.6rem] border border-white shadow-sm overflow-hidden hover:border-slate-300 transition-all group">
-          <div class="relative h-28 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <span class="absolute top-2 right-2 text-[9px] font-bold text-slate-600 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full">320 hrs</span>
-          </div>
-          <div class="p-3.5">
-            <h4 class="text-sm font-bold text-slate-800 truncate">Project Sekai: Colorful Stage!</h4>
-            <p class="text-[10px] text-slate-400 font-medium mt-0.5">SEGA</p>
-            <button class="w-full mt-3 bg-[#323446] hover:bg-slate-800 text-white font-semibold py-2 rounded-full text-[10px] flex items-center justify-center gap-1.5 transition-colors">
-              <i data-lucide="play" class="w-3 h-3 fill-white"></i> Play
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-[#F7F9FC] rounded-[1.6rem] border border-white shadow-sm overflow-hidden hover:border-slate-300 transition-all group">
-          <div class="relative h-28 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80" alt="game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <span class="absolute top-2 right-2 text-[9px] font-bold text-slate-600 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full">85 hrs</span>
-          </div>
-          <div class="p-3.5">
-            <h4 class="text-sm font-bold text-slate-800 truncate">NieR:Automata™</h4>
-            <p class="text-[10px] text-slate-400 font-medium mt-0.5">Square Enix</p>
-            <button class="w-full mt-3 bg-[#323446] hover:bg-slate-800 text-white font-semibold py-2 rounded-full text-[10px] flex items-center justify-center gap-1.5 transition-colors">
-              <i data-lucide="play" class="w-3 h-3 fill-white"></i> Play
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-[#F7F9FC] rounded-[1.6rem] border border-white shadow-sm overflow-hidden hover:border-slate-300 transition-all group">
-          <div class="relative h-28 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80" alt="game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <span class="absolute top-2 right-2 text-[9px] font-bold text-slate-600 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full">140 hrs</span>
-          </div>
-          <div class="p-3.5">
-            <h4 class="text-sm font-bold text-slate-800 truncate">Honkai: Star Rail</h4>
-            <p class="text-[10px] text-slate-400 font-medium mt-0.5">HoYoverse</p>
-            <button class="w-full mt-3 bg-[#323446] hover:bg-slate-800 text-white font-semibold py-2 rounded-full text-[10px] flex items-center justify-center gap-1.5 transition-colors">
-              <i data-lucide="play" class="w-3 h-3 fill-white"></i> Play
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-[#F7F9FC] rounded-[1.6rem] border border-white shadow-sm overflow-hidden hover:border-slate-300 transition-all group">
-          <div class="relative h-28 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80" alt="game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <span class="absolute top-2 right-2 text-[9px] font-bold text-slate-600 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full">56 hrs</span>
-          </div>
-          <div class="p-3.5">
-            <h4 class="text-sm font-bold text-slate-800 truncate">Genshin Impact</h4>
-            <p class="text-[10px] text-slate-400 font-medium mt-0.5">HoYoverse</p>
-            <button class="w-full mt-3 bg-[#323446] hover:bg-slate-800 text-white font-semibold py-2 rounded-full text-[10px] flex items-center justify-center gap-1.5 transition-colors">
-              <i data-lucide="play" class="w-3 h-3 fill-white"></i> Play
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-[#F7F9FC] rounded-[1.6rem] border border-white shadow-sm overflow-hidden hover:border-slate-300 transition-all group">
-          <div class="relative h-28 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=400&q=80" alt="game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <span class="absolute top-2 right-2 text-[9px] font-bold text-slate-600 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full">210 hrs</span>
-          </div>
-          <div class="p-3.5">
-            <h4 class="text-sm font-bold text-slate-800 truncate">Elden Ring: Shadow</h4>
-            <p class="text-[10px] text-slate-400 font-medium mt-0.5">FromSoftware</p>
-            <button class="w-full mt-3 bg-[#323446] hover:bg-slate-800 text-white font-semibold py-2 rounded-full text-[10px] flex items-center justify-center gap-1.5 transition-colors">
-              <i data-lucide="play" class="w-3 h-3 fill-white"></i> Play
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-[#F7F9FC] rounded-[1.6rem] border border-white shadow-sm overflow-hidden hover:border-slate-300 transition-all group">
-          <div class="relative h-28 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=400&q=80" alt="game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <span class="absolute top-2 right-2 text-[9px] font-bold text-slate-600 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full">32 hrs</span>
-          </div>
-          <div class="p-3.5">
-            <h4 class="text-sm font-bold text-slate-800 truncate">Persona 3 Reload</h4>
-            <p class="text-[10px] text-slate-400 font-medium mt-0.5">ATLUS</p>
-            <button class="w-full mt-3 bg-[#323446] hover:bg-slate-800 text-white font-semibold py-2 rounded-full text-[10px] flex items-center justify-center gap-1.5 transition-colors">
-              <i data-lucide="play" class="w-3 h-3 fill-white"></i> Play
-            </button>
-          </div>
-        </div>
+        <span class="text-[10px] text-slate-400 font-medium">Showing 12 of 48 games</span>
       </div>
 
     </main>
@@ -266,10 +712,9 @@
     const toggleIcon = document.getElementById('toggle-icon');
     const collapseLabel = document.getElementById('collapse-label');
     const sidebarTexts = document.querySelectorAll('.sidebar-text');
-    let isCollapsed = true;
+    let isCollapsed = localStorage.getItem('kaimono_sidebar_collapsed') !== 'false';
 
-    toggleBtn.addEventListener('click', () => {
-      isCollapsed = !isCollapsed;
+    function applySidebar() {
       if (isCollapsed) {
         sidebar.classList.remove('w-64', 'px-4');
         sidebar.classList.add('w-20', 'px-2.5', 'items-center');
@@ -284,6 +729,27 @@
         collapseLabel.textContent = 'Collapse';
       }
       lucide.createIcons();
+    }
+
+    applySidebar();
+
+    toggleBtn.addEventListener('click', () => {
+      isCollapsed = !isCollapsed;
+      localStorage.setItem('kaimono_sidebar_collapsed', String(isCollapsed));
+      applySidebar();
+    });
+
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.library-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('active', 'bg-[#323446]', 'text-white');
+          t.classList.add('text-slate-500');
+        });
+        tab.classList.add('active');
+        tab.classList.remove('text-slate-500');
+      });
     });
   </script>
 </body>

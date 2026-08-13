@@ -16,6 +16,19 @@
       width: 0px;
       background: transparent;
     }
+    #sidebar {
+      align-items: stretch !important;
+    }
+    #sidebar a,
+    #sidebar button {
+      padding-left: 20px !important;
+      padding-right: 0 !important;
+      justify-content: flex-start !important;
+      transition: padding 300ms, background-color 200ms, color 200ms;
+    }
+    #sidebar .sidebar-text {
+      transition: opacity 300ms;
+    }
   </style>
 </head>
 <body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
@@ -69,12 +82,12 @@
   <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
 
     <!-- COLLAPSIBLE FLOATING SIDEBAR -->
-    <aside id="sidebar" class="w-20 items-center bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-2.5 shadow-sm border border-white shrink-0 h-full transition-all duration-300">
-      <div class="flex flex-col gap-5 w-full">
+    <aside id="sidebar" class="w-20 items-center bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-2.5 shadow-sm border border-white shrink-0 h-full overflow-hidden transition-all duration-300">
+      <div class="flex flex-col gap-5 w-full flex-1 min-h-0">
 
         <!-- Profile Header (active - current page) -->
         <a href="/profile/" class="flex items-center gap-3.5 pb-3 border-b border-slate-200/80 px-1 rounded-2xl bg-slate-200/70">
-          <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0">
+          <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0 -ml-2.5">
             <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
           </div>
           <div class="sidebar-text overflow-hidden hidden">
@@ -84,7 +97,7 @@
         </a>
 
         <!-- Navigation Links -->
-        <nav class="flex flex-col gap-1.5 w-full">
+        <nav class="flex flex-col gap-1.5 w-full overflow-y-auto min-h-0">
           <a href="/dashboard/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
             <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
             <span class="sidebar-text text-xs whitespace-nowrap hidden">Dashboard</span>
@@ -355,10 +368,9 @@
     const toggleIcon = document.getElementById('toggle-icon');
     const collapseLabel = document.getElementById('collapse-label');
     const sidebarTexts = document.querySelectorAll('.sidebar-text');
-    let isCollapsed = true;
+    let isCollapsed = localStorage.getItem('kaimono_sidebar_collapsed') !== 'false';
 
-    toggleBtn.addEventListener('click', () => {
-      isCollapsed = !isCollapsed;
+    function applySidebar() {
       if (isCollapsed) {
         sidebar.classList.remove('w-64', 'px-4');
         sidebar.classList.add('w-20', 'px-2.5', 'items-center');
@@ -373,6 +385,14 @@
         collapseLabel.textContent = 'Collapse';
       }
       lucide.createIcons();
+    }
+
+    applySidebar();
+
+    toggleBtn.addEventListener('click', () => {
+      isCollapsed = !isCollapsed;
+      localStorage.setItem('kaimono_sidebar_collapsed', String(isCollapsed));
+      applySidebar();
     });
   </script>
 </body>
