@@ -13,6 +13,32 @@
       background-color: #EBF0F5;
     }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+    /* ===== Landing -> Login page transition ===== */
+    .page-wipe {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: radial-gradient(circle at center, #1E1E28 0%, #0e1120 75%);
+      clip-path: circle(0% at 50% 50%);
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .page-wipe.active {
+      visibility: visible;
+      animation: wipe-in 750ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
+    @keyframes wipe-in {
+      to { clip-path: circle(150% at 50% 50%); }
+    }
+    .page-exit {
+      animation: page-exit 650ms cubic-bezier(0.4, 0, 1, 1) forwards;
+      pointer-events: none;
+    }
+    @keyframes page-exit {
+      from { opacity: 1; transform: scale(1); }
+      to   { opacity: 0; transform: scale(1.05); }
+    }
   </style>
 </head>
 <body class="text-slate-800 antialiased">
@@ -253,8 +279,25 @@
     </div>
   </footer>
 
+  <!-- Transition overlay (expanding circle wipe into the login page) -->
+  <div id="page-wipe" class="page-wipe" aria-hidden="true"></div>
+
   <script>
     lucide.createIcons();
+
+    // Beautiful dynamic exit: page zooms/fades out while a dark circle wipes in,
+    // then navigate to the login page.
+    var wipe = document.getElementById('page-wipe');
+    document.querySelectorAll('a[href="/login/"]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.body.classList.add('page-exit');
+        wipe.classList.add('active');
+        setTimeout(function () {
+          window.location.href = '/login/';
+        }, 720);
+      });
+    });
   </script>
 </body>
 </html>
