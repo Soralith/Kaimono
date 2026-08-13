@@ -136,7 +136,7 @@
                 </div>
               </div>
 
-              <form data-submit class="space-y-4">
+              <form data-submit data-dest="/accsetup/" class="space-y-4">
                 <div class="space-y-3">
                   <div>
                     <label class="block text-[10px] uppercase tracking-wider font-bold text-black/40 mb-1.5">Full Name</label>
@@ -250,7 +250,7 @@
                 <p class="text-sm text-black/50 mt-2 font-medium">Join the Kaimono store to manage your games</p>
               </div>
 
-              <form data-submit class="space-y-4 pt-2">
+              <form data-submit data-dest="/accsetup/" class="space-y-4 pt-2">
                 <div>
                   <label class="block text-[10px] uppercase tracking-wider font-bold text-black/50 mb-2">Select your role</label>
                   <div class="grid grid-cols-2 gap-2">
@@ -460,10 +460,11 @@
     document.querySelectorAll('form[data-submit]').forEach(function (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        var dest = form.getAttribute('data-dest') || '/dashboard/';
         document.body.classList.add('fade-out');
         document.getElementById('app-shell').classList.add('fade-out');
         setTimeout(function () {
-          window.location.href = '/dashboard/';
+          window.location.href = dest;
         }, 400);
       });
     });

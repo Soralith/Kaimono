@@ -6,6 +6,9 @@ def landing(request):
 def index(request):
     return render(request, 'dashboard/pages/login.html')
 
+def accsetup(request):
+    return render(request, 'dashboard/pages/accsetup.html')
+
 def dashboard(request):
     return render(request, 'dashboard/pages/dashboard.html')
 
