@@ -5,4 +5,8 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('login/', views.index, name='login'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('community/', views.community, name='community'),
+    path('profile/', views.profile, name='profile'),
+    path('wishlist/', views.wishlist, name='wishlist'),
+    path('library/', views.library, name='library'),
 ]

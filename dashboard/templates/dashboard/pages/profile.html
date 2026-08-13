@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaimono Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #E2E7EE;
+    }
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+
+  <!-- ==================== TOPBAR & HEADER AREA ==================== -->
+  <div class="pt-5 pb-3 px-6 relative w-full shrink-0">
+    <header class="bg-[#323446] text-slate-300 px-6 py-4 flex justify-between items-center shadow-md rounded-xl border border-slate-700/60">
+
+      <!-- LEFT SECTION -->
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <i data-lucide="user" class="w-4 h-4 text-white"></i>
+          <span class="font-bold text-white tracking-widest uppercase text-sm">@NAWSPHIC</span>
+        </div>
+
+        <div class="px-3 py-1 text-slate-300 font-serif italic text-sm tracking-wider opacity-90">
+          LazyStudio
+        </div>
+
+        <span class="text-slate-500">|</span>
+
+        <div class="flex items-center gap-3 text-slate-400 tracking-wider">
+          <span class="text-xs bg-slate-800/80 px-3 py-1 rounded text-slate-300 font-mono">CURRENT PROJECT</span>
+          <span class="text-slate-500">|</span>
+          <span class="font-semibold text-slate-200 text-sm">ANIME MERCH E-COMMERCE DASHBOARD</span>
+          <span class="text-slate-500">//</span>
+          <span class="text-slate-300 text-xs">PROJECT SEKAI STYLE</span>
+        </div>
+      </div>
+
+      <!-- RIGHT SECTION -->
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-0 opacity-70">
+          <div class="w-48 bg-slate-500/50 h-[2px] rounded-l-full relative">
+            <div class="absolute right-0 -top-1 w-2.5 h-3 bg-white shadow-sm"></div>
+          </div>
+          <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white rotate-180 -ml-1"></i>
+        </div>
+
+        <div class="flex items-center gap-4 pl-4">
+          <span class="font-bold text-white tracking-widest text-sm">HOSHINO ICHIKA</span>
+          <button class="p-1 transition-colors text-white">
+            <i data-lucide="list" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+
+    <!-- COLLAPSIBLE FLOATING SIDEBAR -->
+    <aside id="sidebar" class="w-20 items-center bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-2.5 shadow-sm border border-white shrink-0 h-full transition-all duration-300">
+      <div class="flex flex-col gap-5 w-full">
+
+        <!-- Profile Header (active - current page) -->
+        <a href="/profile/" class="flex items-center gap-3.5 pb-3 border-b border-slate-200/80 px-1 rounded-2xl bg-slate-200/70">
+          <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0">
+            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
+          </div>
+          <div class="sidebar-text overflow-hidden hidden">
+            <h4 class="font-bold text-slate-800 truncate text-xs">Hoshino Ichika</h4>
+            <p class="text-[10px] text-slate-400 font-medium truncate">Premium Member</p>
+          </div>
+        </a>
+
+        <!-- Navigation Links -->
+        <nav class="flex flex-col gap-1.5 w-full">
+          <a href="/dashboard/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Dashboard</span>
+          </a>
+          <a href="/community/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="users" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Community</span>
+          </a>
+          <a href="/wishlist/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all justify-between group">
+            <div class="flex items-center gap-3.5">
+              <i data-lucide="heart" class="w-5 h-5 shrink-0"></i>
+              <span class="sidebar-text text-xs whitespace-nowrap hidden">Wishlist</span>
+            </div>
+            <span class="sidebar-text text-[10px] font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full hidden">12</span>
+          </a>
+          <a href="/library/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="inbox" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Library</span>
+          </a>
+          <a href="#" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="settings" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Settings</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- BOTTOM ACTIONS SECTION -->
+      <div class="flex flex-col gap-1.5 w-full pt-4 border-t border-slate-200/80">
+
+        <!-- Collapse Button -->
+        <button id="toggle-sidebar" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all w-full text-left">
+          <i data-lucide="panel-left-open" id="toggle-icon" class="w-5 h-5 shrink-0"></i>
+          <span id="collapse-label" class="sidebar-text text-xs whitespace-nowrap hidden">Expand</span>
+        </button>
+
+        <!-- Logout Button -->
+        <a href="/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all">
+          <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
+          <span class="sidebar-text text-xs whitespace-nowrap hidden">Log Out</span>
+        </a>
+
+      </div>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4">
+
+      <!-- BREADCRUMB -->
+      <div class="flex items-baseline gap-1 px-2 pt-1 pb-1">
+        <h1 class="text-base font-medium text-slate-600 tracking-wide">MY <span class="font-bold text-slate-800">PROFILE</span></h1>
+      </div>
+
+      <!-- STEAM-STYLE PROFILE BANNER -->
+      <div class="bg-[#F7F9FC] rounded-[2.2rem] relative overflow-hidden shadow-sm border border-white shrink-0">
+        <div class="h-36 w-full relative">
+          <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1200&q=80" alt="profile banner" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+        </div>
+        <div class="flex items-end gap-5 px-7 -mt-16 pb-6 relative z-10">
+          <div class="w-24 h-24 rounded-full border-4 border-[#F7F9FC] overflow-hidden shadow-lg shrink-0">
+            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=300&q=80" alt="avatar" class="w-full h-full object-cover">
+          </div>
+          <div class="pb-1 flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="text-xl font-extrabold text-white">Hoshino Ichika</h2>
+              <span class="bg-[#323446] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Premium Member</span>
+            </div>
+            <p class="text-xs text-slate-200 font-medium mt-0.5">@HOSHINO_ICHIKA · Joined August 2025</p>
+            <div class="flex items-center gap-1.5 mt-2">
+              <span class="bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-white/20">LVL 42</span>
+              <span class="bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-white/20 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i> 2,450 XP</span>
+            </div>
+          </div>
+          <div class="pb-1 flex items-center gap-2 shrink-0">
+            <button class="bg-[#323446] hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-colors">
+              <i data-lucide="edit" class="w-3.5 h-3.5"></i> Edit Profile
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS ROW -->
+      <div class="grid grid-cols-4 gap-3 shrink-0">
+        <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600 shrink-0"><i data-lucide="trophy" class="w-4 h-4"></i></div>
+            <div>
+              <span class="text-[9px] text-slate-400 font-bold block leading-none uppercase">Games Owned</span>
+              <span class="text-sm font-extrabold text-slate-800">48</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600 shrink-0"><i data-lucide="users" class="w-4 h-4"></i></div>
+            <div>
+              <span class="text-[9px] text-slate-400 font-bold block leading-none uppercase">Friends</span>
+              <span class="text-sm font-extrabold text-slate-800">126</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600 shrink-0"><i data-lucide="medal" class="w-4 h-4"></i></div>
+            <div>
+              <span class="text-[9px] text-slate-400 font-bold block leading-none uppercase">Badges</span>
+              <span class="text-sm font-extrabold text-slate-800">32</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600 shrink-0"><i data-lucide="clock" class="w-4 h-4"></i></div>
+            <div>
+              <span class="text-[9px] text-slate-400 font-bold block leading-none uppercase">Hours Played</span>
+              <span class="text-sm font-extrabold text-slate-800">1,240h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 COLUMN LAYOUT -->
+      <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-5 flex-1 min-h-0">
+
+        <!-- LEFT: RECENT ACTIVITY -->
+        <div class="flex flex-col gap-4 overflow-y-auto pr-1">
+          <div>
+            <div class="flex justify-between items-center mb-2.5 px-1">
+              <h3 class="text-base font-semibold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="activity" class="w-4 h-4 text-slate-600"></i> Recent Activity
+              </h3>
+              <a href="#" class="text-xs text-slate-400 font-medium hover:text-slate-600">view all</a>
+            </div>
+            <div class="flex flex-col gap-2.5">
+              <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm flex items-center gap-3 hover:border-slate-300 transition-all shrink-0">
+                <div class="w-11 h-11 rounded-xl overflow-hidden shrink-0">
+                  <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=150&q=80" alt="game" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h5 class="text-xs font-bold text-slate-800 truncate">Played Project Sekai: Colorful Stage! for 2 hours</h5>
+                  <p class="text-[10px] text-slate-400 font-medium mt-0.5">2 hours ago</p>
+                </div>
+                <span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-1 rounded-lg shrink-0">+24 XP</span>
+              </div>
+              <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm flex items-center gap-3 hover:border-slate-300 transition-all shrink-0">
+                <div class="w-11 h-11 rounded-xl overflow-hidden shrink-0">
+                  <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=150&q=80" alt="game" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h5 class="text-xs font-bold text-slate-800 truncate">Earned "Rhythm Master" achievement in NieR:Automata</h5>
+                  <p class="text-[10px] text-slate-400 font-medium mt-0.5">Yesterday</p>
+                </div>
+                <span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-1 rounded-lg shrink-0">+40 XP</span>
+              </div>
+              <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm flex items-center gap-3 hover:border-slate-300 transition-all shrink-0">
+                <div class="w-11 h-11 rounded-xl overflow-hidden shrink-0">
+                  <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=150&q=80" alt="game" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h5 class="text-xs font-bold text-slate-800 truncate">Added 2 new items to your wishlist</h5>
+                  <p class="text-[10px] text-slate-400 font-medium mt-0.5">2 days ago</p>
+                </div>
+                <span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-1 rounded-lg shrink-0">+10 XP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCREENSHOTS GALLERY -->
+          <div>
+            <div class="flex justify-between items-center mb-2.5 px-1">
+              <h3 class="text-base font-semibold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="camera" class="w-4 h-4 text-slate-600"></i> Screenshots
+              </h3>
+              <a href="#" class="text-xs text-slate-400 font-medium hover:text-slate-600">view all</a>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="rounded-[1rem] overflow-hidden border border-white shadow-sm">
+                <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=300&q=80" alt="shot" class="w-full h-24 object-cover">
+              </div>
+              <div class="rounded-[1rem] overflow-hidden border border-white shadow-sm">
+                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=300&q=80" alt="shot" class="w-full h-24 object-cover">
+              </div>
+              <div class="rounded-[1rem] overflow-hidden border border-white shadow-sm">
+                <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=300&q=80" alt="shot" class="w-full h-24 object-cover">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="flex flex-col gap-4 overflow-y-auto pr-1">
+
+          <!-- BADGES -->
+          <div class="bg-[#F7F9FC] rounded-[1.8rem] border border-white shadow-sm p-4 shrink-0">
+            <h3 class="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-1.5">
+              <i data-lucide="medal" class="w-4 h-4 text-slate-600"></i> Badges
+            </h3>
+            <div class="grid grid-cols-4 gap-2.5">
+              <div class="bg-white/80 p-2 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                <i data-lucide="award" class="w-5 h-5 text-amber-500"></i>
+                <span class="text-[8px] font-bold text-slate-600 mt-1 leading-tight">OG Player</span>
+              </div>
+              <div class="bg-white/80 p-2 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                <i data-lucide="crown" class="w-5 h-5 text-amber-500"></i>
+                <span class="text-[8px] font-bold text-slate-600 mt-1 leading-tight">Collector</span>
+              </div>
+              <div class="bg-white/80 p-2 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i>
+                <span class="text-[8px] font-bold text-slate-600 mt-1 leading-tight">Streak 30</span>
+              </div>
+              <div class="bg-white/80 p-2 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                <i data-lucide="sparkles" class="w-5 h-5 text-slate-500"></i>
+                <span class="text-[8px] font-bold text-slate-600 mt-1 leading-tight">Newbie</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FRIENDS -->
+          <div class="bg-[#F7F9FC] rounded-[1.8rem] border border-white shadow-sm p-4 shrink-0">
+            <h3 class="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-1.5">
+              <i data-lucide="users" class="w-4 h-4 text-slate-600"></i> Friends (126)
+            </h3>
+            <div class="flex flex-col gap-2.5">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-full border border-slate-200 overflow-hidden shrink-0">
+                  <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80" alt="u" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <span class="text-[10px] font-bold text-slate-700 block truncate">Shiro</span>
+                  <span class="text-[9px] text-slate-400">In-game</span>
+                </div>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-full border border-slate-200 overflow-hidden shrink-0">
+                  <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=80&q=80" alt="u" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <span class="text-[10px] font-bold text-slate-700 block truncate">Hana</span>
+                  <span class="text-[9px] text-slate-400">Online</span>
+                </div>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-full border border-slate-200 overflow-hidden shrink-0">
+                  <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=80&q=80" alt="u" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <span class="text-[10px] font-bold text-slate-700 block truncate">Mika</span>
+                  <span class="text-[9px] text-slate-400">Offline</span>
+                </div>
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+              </div>
+              <a href="#" class="text-[10px] text-slate-400 font-medium hover:text-slate-600 mt-1">View all friends</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-sidebar');
+    const toggleIcon = document.getElementById('toggle-icon');
+    const collapseLabel = document.getElementById('collapse-label');
+    const sidebarTexts = document.querySelectorAll('.sidebar-text');
+    let isCollapsed = true;
+
+    toggleBtn.addEventListener('click', () => {
+      isCollapsed = !isCollapsed;
+      if (isCollapsed) {
+        sidebar.classList.remove('w-64', 'px-4');
+        sidebar.classList.add('w-20', 'px-2.5', 'items-center');
+        sidebarTexts.forEach(el => el.classList.add('hidden'));
+        toggleIcon.setAttribute('data-lucide', 'panel-left-open');
+        collapseLabel.textContent = 'Expand';
+      } else {
+        sidebar.classList.remove('w-20', 'px-2.5', 'items-center');
+        sidebar.classList.add('w-64', 'px-4');
+        sidebarTexts.forEach(el => el.classList.remove('hidden'));
+        toggleIcon.setAttribute('data-lucide', 'panel-left-close');
+        collapseLabel.textContent = 'Collapse';
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

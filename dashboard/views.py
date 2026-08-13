@@ -8,3 +8,15 @@ def index(request):
 
 def dashboard(request):
     return render(request, 'dashboard/pages/dashboard.html')
+
+def community(request):
+    return render(request, 'dashboard/pages/community.html')
+
+def profile(request):
+    return render(request, 'dashboard/pages/profile.html')
+
+def wishlist(request):
+    return render(request, 'dashboard/pages/wishlist.html')
+
+def library(request):
+    return render(request, 'dashboard/pages/library.html')
