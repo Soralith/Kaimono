@@ -76,9 +76,6 @@
                   <button type="button" data-role="developer" onclick="selectRole('developer')" class="role-btn p-3 rounded-2xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/70 text-black/60 border-white/80 shadow-sm active:scale-95">
                     <i data-lucide="code-2" class="w-4 h-4 opacity-60"></i>Developer
                   </button>
-                  <button type="button" data-role="publisher" onclick="selectRole('publisher')" class="role-btn p-3 rounded-2xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/70 text-black/60 border-white/80 shadow-sm active:scale-95">
-                    <i data-lucide="globe" class="w-4 h-4 opacity-60"></i>Publisher
-                  </button>
                   <button type="button" data-role="admin" onclick="selectRole('admin')" class="role-btn p-3 rounded-2xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/70 text-black/60 border-white/80 shadow-sm active:scale-95">
                     <i data-lucide="shield" class="w-4 h-4 opacity-60"></i>Admin
                   </button>
@@ -135,12 +132,6 @@
                   </button>
                   <button type="button" data-role="developer" onclick="selectRole('developer')" class="role-btn p-3 rounded-2xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/70 text-black/60 border-white/80 shadow-sm active:scale-95">
                     <i data-lucide="code-2" class="w-4 h-4 opacity-60"></i>Developer
-                  </button>
-                  <button type="button" data-role="publisher" onclick="selectRole('publisher')" class="role-btn p-3 rounded-2xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/70 text-black/60 border-white/80 shadow-sm active:scale-95">
-                    <i data-lucide="globe" class="w-4 h-4 opacity-60"></i>Publisher
-                  </button>
-                  <button type="button" data-role="admin" onclick="selectRole('admin')" class="role-btn p-3 rounded-2xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/70 text-black/60 border-white/80 shadow-sm active:scale-95">
-                    <i data-lucide="shield" class="w-4 h-4 opacity-60"></i>Admin
                   </button>
                 </div>
               </div>
@@ -210,11 +201,7 @@
                       <i data-lucide="code-2" class="w-4 h-4 opacity-70"></i>
                       <span>Developer</span>
                     </button>
-                    <button type="button" data-role="publisher" onclick="selectRole('publisher')" class="role-btn p-2.5 rounded-xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/80 text-black/60 border-white shadow-sm hover:bg-white">
-                      <i data-lucide="globe" class="w-4 h-4 opacity-70"></i>
-                      <span>Publisher</span>
-                    </button>
-                    <button type="button" data-role="admin" onclick="selectRole('admin')" class="role-btn p-2.5 rounded-xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/80 text-black/60 border-white shadow-sm hover:bg-white">
+                    <button type="button" data-role="admin" onclick="selectRole('admin')" class="role-btn col-span-2 p-2.5 rounded-xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/80 text-black/60 border-white shadow-sm hover:bg-white">
                       <i data-lucide="shield" class="w-4 h-4 opacity-70"></i>
                       <span>Admin</span>
                     </button>
@@ -274,14 +261,6 @@
                     <button type="button" data-role="developer" onclick="selectRole('developer')" class="role-btn p-2.5 rounded-xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/80 text-black/60 border-white shadow-sm hover:bg-white">
                       <i data-lucide="code-2" class="w-4 h-4 opacity-70"></i>
                       <span>Developer</span>
-                    </button>
-                    <button type="button" data-role="publisher" onclick="selectRole('publisher')" class="role-btn p-2.5 rounded-xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/80 text-black/60 border-white shadow-sm hover:bg-white">
-                      <i data-lucide="globe" class="w-4 h-4 opacity-70"></i>
-                      <span>Publisher</span>
-                    </button>
-                    <button type="button" data-role="admin" onclick="selectRole('admin')" class="role-btn p-2.5 rounded-xl text-xs font-bold border transition-all flex flex-col items-center gap-1.5 bg-white/80 text-black/60 border-white shadow-sm hover:bg-white">
-                      <i data-lucide="shield" class="w-4 h-4 opacity-70"></i>
-                      <span>Admin</span>
                     </button>
                   </div>
                 </div>
@@ -450,7 +429,9 @@
       document.querySelectorAll('[data-role]').forEach(function (btn) {
         var isActive = btn.getAttribute('data-role') === role;
         var isMobile = btn.closest('.mobile-form') !== null;
+        var isAdmin = btn.getAttribute('data-role') === 'admin';
         btn.className = isActive ? (isMobile ? ACTIVE_M : ACTIVE_D) : (isMobile ? IDLE_M : IDLE_D);
+        if (!isMobile && isAdmin) btn.className += ' col-span-2';
       });
       lucide.createIcons();
     }
