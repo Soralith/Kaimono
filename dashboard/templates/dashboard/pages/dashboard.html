@@ -7,6 +7,22 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    // Decide once per session: show splash only the first time, never on a refresh.
+    // sessionStorage survives page refreshes but is cleared when the tab/window closes.
+    window.__kaimonoShowSplash = (function () {
+      try {
+        if (sessionStorage.getItem('kaimono_splash_shown')) return false;
+        sessionStorage.setItem('kaimono_splash_shown', '1');
+        return true;
+      } catch (e) {
+        return true;
+      }
+    })();
+    if (!window.__kaimonoShowSplash) {
+      document.documentElement.classList.add('splash-skip');
+    }
+  </script>
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -25,6 +41,7 @@
 
     /* ===== Splash overlay (plays on load, then reveals dashboard) ===== */
     /* Keep the dashboard hidden until the splash runs, so it never flashes. */
+    html.splash-skip #splash-screen { display: none; }
     body.splash-active > :not(#splash-screen) { visibility: hidden; }
     #splash-screen {
       position: fixed;
@@ -125,7 +142,14 @@
     }
   </style>
 </head>
-<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm splash-active">
+<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+
+  <script>
+    // Only hide the dashboard content (and run the splash) on the first load of the session.
+    if (window.__kaimonoShowSplash) {
+      document.body.classList.add('splash-active');
+    }
+  </script>
 
   <!-- ===== SPLASH OVERLAY (plays on load, then reveals dashboard) ===== -->
   <div id="splash-screen">
@@ -580,7 +604,7 @@
         requestAnimationFrame(updateProgress);
       }
 
-      if (splashScreen) startSplash();
+      if (splashScreen && window.__kaimonoShowSplash) startSplash();
     })();
 
     // Automatic Carousel Script
