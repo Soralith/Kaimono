@@ -12,44 +12,166 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #E2E7EE;
     }
-    ::-webkit-scrollbar {
-      width: 0px;
-      background: transparent;
-    }
-    #sidebar {
-      align-items: stretch !important;
-    }
-    #sidebar a,
-    #sidebar button {
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+    #sidebar { align-items: stretch !important; }
+    #sidebar a, #sidebar button {
       padding-left: 20px !important;
       padding-right: 0 !important;
       justify-content: flex-start !important;
       transition: padding 300ms, background-color 200ms, color 200ms;
     }
-    #sidebar .sidebar-text {
-      transition: opacity 300ms;
+    #sidebar .sidebar-text { transition: opacity 300ms; }
+
+    /* ===== EDIT MODE ===== */
+    .edit-only { display: none !important; }
+    .profile-editing .view-only { display: none !important; }
+    .profile-editing .edit-only { display: flex !important; }
+
+    /* Upload overlays: HANYA aktif saat edit mode */
+    .avatar-overlay, .banner-overlay {
+      display: flex;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 250ms ease;
+      cursor: pointer;
+    }
+    .profile-editing .avatar-overlay,
+    .profile-editing .banner-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .avatar-overlay:hover, .banner-overlay:hover {
+      background-color: rgba(50, 52, 70, 0.75) !important;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .pulse-dot { animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.1); }
+    }
+    .float-up { animation: floatUp 3s ease-in-out infinite; }
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .xp-bar { position: relative; overflow: hidden; }
+    .xp-bar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      animation: xpShimmer 2.5s infinite;
+    }
+    @keyframes xpShimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* ===== TOGGLE SWITCH ===== */
+    .toggle-track {
+      width: 36px; height: 20px;
+      background-color: #cbd5e1;
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 250ms;
+      flex-shrink: 0;
+    }
+    .toggle-track.active { background-color: #323446; }
+    .toggle-knob {
+      width: 16px; height: 16px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px; left: 2px;
+      transition: left 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .toggle-track.active .toggle-knob { left: 18px; }
+
+    /* ===== EDIT TAB ===== */
+    .edit-tab { transition: all 200ms; position: relative; }
+    .edit-tab.active {
+      color: #323446;
+      background-color: white;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .edit-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 20%; right: 20%;
+      height: 2px;
+      background: #323446;
+      border-radius: 2px;
+    }
+
+    /* ===== CARD HOVER ===== */
+    .stat-card { transition: all 250ms ease; }
+    .stat-card:hover { transform: translateY(-2px); border-color: #cbd5e1; }
+    .badge-item { transition: all 250ms ease; }
+    .badge-item:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 16px -8px rgba(50,52,70,0.15); }
+    .game-card { transition: all 300ms ease; }
+    .game-card:hover { transform: translateY(-4px); }
+    .game-card:hover .game-img { transform: scale(1.08); }
+
+    /* ===== TIMELINE ===== */
+    .timeline-item { position: relative; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 23px; top: 56px; bottom: -12px;
+      width: 2px;
+      background: linear-gradient(to bottom, #e2e8f0, transparent);
+    }
+    .timeline-item:last-child::before { display: none; }
+
+    /* ===== AVATAR RING ===== */
+    .avatar-ring {
+      background: conic-gradient(from 0deg, #323446, #1a1c2a, #323446, #4a4c5e, #323446);
+      padding: 3px;
+      border-radius: 50%;
+    }
+
+    /* ===== CAROUSEL SCROLLBAR ===== */
+    .game-scroll::-webkit-scrollbar { height: 4px; }
+    .game-scroll::-webkit-scrollbar-track { background: transparent; }
+    .game-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+    .genre-tag { transition: all 200ms; }
+    .genre-tag:hover { background-color: #323446; color: white; }
+
+    /* ===== FORM INPUT ===== */
+    .form-input {
+      width: 100%;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+      outline: none;
+      transition: all 200ms;
+    }
+    .form-input:focus {
+      border-color: #323446;
+      box-shadow: 0 0 0 3px rgba(50, 52, 70, 0.12);
     }
   </style>
 </head>
 <body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
 
-  <!-- ==================== TOPBAR & HEADER AREA ==================== -->
+  <!-- TOPBAR -->
   <div class="pt-5 pb-3 px-6 relative w-full shrink-0">
     <header class="bg-[#323446] text-slate-300 px-6 py-4 flex justify-between items-center shadow-md rounded-xl border border-slate-700/60">
-
-      <!-- LEFT SECTION -->
       <div class="flex items-center gap-6">
         <div class="flex items-center gap-2">
           <i data-lucide="user" class="w-4 h-4 text-white"></i>
           <span class="font-bold text-white tracking-widest uppercase text-sm">@NAWSPHIC</span>
         </div>
-
-        <div class="px-3 py-1 text-slate-300 font-serif italic text-sm tracking-wider opacity-90">
-          LazyStudio
-        </div>
-
+        <div class="px-3 py-1 text-slate-300 font-serif italic text-sm tracking-wider opacity-90">LazyStudio</div>
         <span class="text-slate-500">|</span>
-
         <div class="flex items-center gap-3 text-slate-400 tracking-wider">
           <span class="text-xs bg-slate-800/80 px-3 py-1 rounded text-slate-300 font-mono">CURRENT PROJECT</span>
           <span class="text-slate-500">|</span>
@@ -58,8 +180,6 @@
           <span class="text-slate-300 text-xs">PROJECT SEKAI STYLE</span>
         </div>
       </div>
-
-      <!-- RIGHT SECTION -->
       <div class="flex items-center gap-6">
         <div class="flex items-center gap-0 opacity-70">
           <div class="w-48 bg-slate-500/50 h-[2px] rounded-l-full relative">
@@ -67,12 +187,9 @@
           </div>
           <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white rotate-180 -ml-1"></i>
         </div>
-
         <div class="flex items-center gap-4 pl-4">
           <span class="font-bold text-white tracking-widest text-sm">HOSHINO ICHIKA</span>
-          <button class="p-1 transition-colors text-white">
-            <i data-lucide="list" class="w-5 h-5"></i>
-          </button>
+          <button class="p-1 transition-colors text-white"><i data-lucide="list" class="w-5 h-5"></i></button>
         </div>
       </div>
     </header>
@@ -81,11 +198,9 @@
   <!-- MAIN WRAPPER -->
   <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
 
-    <!-- COLLAPSIBLE FLOATING SIDEBAR -->
+    <!-- SIDEBAR -->
     <aside id="sidebar" class="w-20 items-center bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-2.5 shadow-sm border border-white shrink-0 h-full overflow-hidden transition-all duration-300">
       <div class="flex flex-col gap-5 w-full flex-1 min-h-0">
-
-        <!-- Profile Header (active - current page) -->
         <a href="/profile/" class="flex items-center gap-3.5 pb-3 border-b border-slate-200/80 px-1 rounded-2xl bg-slate-200/70">
           <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0 -ml-2.5">
             <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
@@ -95,8 +210,6 @@
             <p class="text-[10px] text-slate-400 font-medium truncate">Premium Member</p>
           </div>
         </a>
-
-        <!-- Navigation Links -->
         <nav class="flex flex-col gap-1.5 w-full overflow-y-auto min-h-0">
           <a href="/dashboard/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
             <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
@@ -123,246 +236,944 @@
           </a>
         </nav>
       </div>
-
-      <!-- BOTTOM ACTIONS SECTION -->
       <div class="flex flex-col gap-1.5 w-full pt-4 border-t border-slate-200/80">
-
-        <!-- Collapse Button -->
         <button id="toggle-sidebar" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all w-full text-left">
           <i data-lucide="panel-left-open" id="toggle-icon" class="w-5 h-5 shrink-0"></i>
           <span id="collapse-label" class="sidebar-text text-xs whitespace-nowrap hidden">Expand</span>
         </button>
-
-        <!-- Logout Button -->
         <a href="/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all">
           <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
           <span class="sidebar-text text-xs whitespace-nowrap hidden">Log Out</span>
         </a>
-
       </div>
     </aside>
 
-    <!-- CONTENT AREA -->
-    <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4">
+    <!-- CONTENT -->
+    <main id="profile-main" class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4">
 
-      <!-- BREADCRUMB -->
-      <div class="flex items-baseline gap-1 px-2 pt-1 pb-1">
-        <h1 class="text-base font-medium text-slate-600 tracking-wide">MY <span class="font-bold text-slate-800">PROFILE</span></h1>
+      <!-- BREADCRUMB + ACTIONS -->
+      <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
+        <div class="flex items-baseline gap-1">
+          <h1 class="text-base font-medium text-slate-600 tracking-wide">ANIME MERCH E-COMMERCE <span class="font-bold text-slate-800">PROFILE</span> / <span class="font-bold text-slate-800">HOSHINO ICHIKA</span></h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <!-- Edit mode indicator -->
+          <span class="edit-only items-center gap-1.5 text-[10px] font-bold text-[#323446] bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#323446] pulse-dot"></span>
+            EDITING MODE
+          </span>
+
+          <!-- VIEW MODE -->
+          <button id="btn-edit" class="view-only bg-[#323446] hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all hover:shadow-md">
+            <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Profile
+          </button>
+
+          <!-- EDIT MODE -->
+          <button id="btn-cancel" class="edit-only bg-white hover:bg-slate-100 text-slate-700 font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 border border-slate-200 transition-colors">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i> Cancel
+          </button>
+          <button id="btn-save" class="edit-only bg-[#323446] hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-colors">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i> Save Changes
+          </button>
+        </div>
       </div>
 
-      <!-- STEAM-STYLE PROFILE BANNER -->
+      <!-- ============ PROFILE HERO ============ -->
       <div class="bg-[#F7F9FC] rounded-[2.2rem] relative overflow-hidden shadow-sm border border-white shrink-0">
-        <div class="h-36 w-full relative">
-          <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1200&q=80" alt="profile banner" class="w-full h-full object-cover">
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
-        </div>
-        <div class="flex items-end gap-5 px-7 -mt-16 pb-6 relative z-10">
-          <div class="w-24 h-24 rounded-full border-4 border-[#F7F9FC] overflow-hidden shadow-lg shrink-0">
-            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=300&q=80" alt="avatar" class="w-full h-full object-cover">
-          </div>
-          <div class="pb-1 flex-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <h2 class="text-xl font-extrabold text-white">Hoshino Ichika</h2>
-              <span class="bg-[#323446] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Premium Member</span>
+
+        <!-- BANNER (image + overlays only) -->
+        <div class="h-44 w-full relative">
+          <img id="banner-img" src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1600&q=80" alt="banner" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-b from-slate-900/10 via-slate-900/25 to-slate-900/60"></div>
+
+          <!-- Banner upload overlay (edit mode only) -->
+          <label class="banner-overlay absolute inset-0 bg-slate-900/40 items-center justify-center z-20">
+            <div class="bg-white/95 backdrop-blur-md rounded-full px-5 py-2.5 flex items-center gap-2 shadow-xl">
+              <i data-lucide="image" class="w-4 h-4 text-[#323446]"></i>
+              <span class="text-xs font-bold text-[#323446]">Change Cover Photo</span>
             </div>
-            <p class="text-xs text-slate-200 font-medium mt-0.5">@HOSHINO_ICHIKA · Joined August 2025</p>
-            <div class="flex items-center gap-1.5 mt-2">
-              <span class="bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-white/20">LVL 42</span>
-              <span class="bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-white/20 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i> 2,450 XP</span>
+            <input type="file" accept="image/*" class="hidden" onchange="previewImage(event, 'banner-img')">
+          </label>
+
+          <!-- Top-left: member ribbon -->
+          <div class="absolute top-4 left-5 z-10">
+            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5 flex items-center gap-1.5">
+              <i data-lucide="calendar" class="w-3 h-3 text-white"></i>
+              <span class="text-[10px] font-bold text-white uppercase tracking-wider">Member since Aug 2025</span>
             </div>
           </div>
-          <div class="pb-1 flex items-center gap-2 shrink-0">
-            <button class="bg-[#323446] hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-colors">
-              <i data-lucide="edit" class="w-3.5 h-3.5"></i> Edit Profile
+
+          <!-- Top-right: actions -->
+          <div class="absolute top-4 right-5 z-10 flex items-center gap-2">
+            <div class="edit-only items-center gap-1.5 bg-[#323446] text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
+              <i data-lucide="pencil" class="w-3 h-3"></i> Editing Cover
+            </div>
+            <button class="view-only bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold p-2.5 rounded-full border border-white/20 transition-colors">
+              <i data-lucide="share-2" class="w-4 h-4"></i>
             </button>
+            <button class="view-only bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold p-2.5 rounded-full border border-white/20 transition-colors">
+              <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Bottom-right: Now Playing floating card -->
+          <div class="absolute bottom-4 right-5 z-10 bg-white/10 backdrop-blur-xl border border-white/30 rounded-2xl p-3 w-60 shadow-xl float-up">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-white pulse-dot"></span>
+              <span class="text-[9px] font-bold text-white uppercase tracking-widest">Now Playing</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-800 shrink-0 shadow-lg">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=100&q=80" alt="">
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-[11px] font-extrabold text-white truncate">Project Sekai</p>
+                <p class="text-[9px] text-slate-200 truncate">Chapter 42 · 2h session</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- XP bar -->
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-10">
+            <div class="xp-bar h-full bg-gradient-to-r from-white/80 to-white" style="width: 82%"></div>
+          </div>
+        </div>
+
+        <!-- INFO ROW (below banner, dark text on light bg) -->
+        <div class="px-7 pb-6 relative z-10">
+          <div class="flex gap-6">
+
+            <!-- AVATAR (overlap banner) -->
+            <div class="relative shrink-0 -mt-14">
+              <div class="avatar-ring">
+                <div class="w-28 h-28 rounded-full border-4 border-[#F7F9FC] overflow-hidden shadow-xl bg-slate-200">
+                  <img id="avatar-img" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80" alt="avatar" class="w-full h-full object-cover">
+                </div>
+              </div>
+              <!-- Avatar upload overlay (edit mode only) -->
+              <label class="avatar-overlay absolute inset-0 rounded-full bg-slate-900/50 items-center justify-center border-4 border-[#F7F9FC]">
+                <div class="bg-white rounded-full p-2 shadow-lg">
+                  <i data-lucide="camera" class="w-5 h-5 text-[#323446]"></i>
+                </div>
+                <input type="file" accept="image/*" class="hidden" onchange="previewImage(event, 'avatar-img')">
+              </label>
+              <!-- Level badge -->
+              <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#323446] border-4 border-[#F7F9FC] rounded-full px-3 py-1 flex items-center gap-1 shadow-lg">
+                <i data-lucide="zap" class="w-3 h-3 text-white fill-white"></i>
+                <span class="text-[10px] font-extrabold text-white">LVL 42</span>
+              </div>
+              <!-- Premium crown -->
+              <div class="absolute -top-1 -right-1 w-9 h-9 rounded-full bg-[#323446] border-4 border-[#F7F9FC] flex items-center justify-center shadow-lg">
+                <i data-lucide="crown" class="w-3.5 h-3.5 text-white"></i>
+              </div>
+            </div>
+
+            <!-- PROFILE INFO -->
+            <div class="flex-1 min-w-0 pt-5">
+
+              <!-- VIEW MODE -->
+              <div class="view-only">
+                <div class="flex items-center gap-2.5 flex-wrap">
+                  <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Hoshino Ichika</h2>
+                  <i data-lucide="badge-check" class="w-5 h-5 text-[#323446] fill-[#323446]"></i>
+                  <span class="bg-[#323446] text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Premium</span>
+                </div>
+                <p class="text-xs text-slate-500 font-medium mt-1.5 flex items-center gap-1.5 flex-wrap">
+                  <span class="font-semibold">@hoshino_ichika</span>
+                  <span class="text-slate-300">·</span>
+                  <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> Tokyo, Japan</span>
+                  <span class="text-slate-300">·</span>
+                  <span class="flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> hoshino-ichika.dev</span>
+                </p>
+                <p class="text-xs text-slate-600 mt-2.5 max-w-2xl leading-relaxed">
+                  Rhythm game enthusiast & figure collector ✨ Currently grinding Project Sekai and hunting for rare Nendoroids. Always up for co-op sessions!
+                </p>
+                <div class="flex items-center gap-1.5 mt-3 flex-wrap">
+                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">Rhythm</span>
+                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">JRPG</span>
+                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">Action RPG</span>
+                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">Figure Collector</span>
+                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">Anime</span>
+                </div>
+              </div>
+
+              <!-- EDIT MODE -->
+              <div class="edit-only flex-col gap-3 max-w-3xl">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Display Name</label>
+                    <input type="text" value="Hoshino Ichika" class="form-input font-bold">
+                  </div>
+                  <div>
+                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Username</label>
+                    <div class="flex bg-white rounded-[10px] overflow-hidden border border-slate-200 focus-within:border-[#323446] focus-within:ring-2 focus-within:ring-[#323446]/12">
+                      <span class="bg-slate-100 text-slate-500 px-3 text-xs font-semibold flex items-center">@</span>
+                      <input type="text" value="hoshino_ichika" class="flex-1 bg-transparent px-2 py-2 text-xs font-semibold focus:outline-none">
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Bio</label>
+                  <textarea rows="2" class="form-input resize-none font-medium">Rhythm game enthusiast & figure collector ✨ Currently grinding Project Sekai and hunting for rare Nendoroids. Always up for co-op sessions!</textarea>
+                  <p class="text-[9px] text-slate-400 mt-1">152 / 200 characters</p>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                  <div>
+                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Location</label>
+                    <input type="text" value="Tokyo, Japan" class="form-input">
+                  </div>
+                  <div>
+                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Website</label>
+                    <input type="text" value="hoshino-ichika.dev" class="form-input">
+                  </div>
+                  <div>
+                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Pronouns</label>
+                    <select class="form-input">
+                      <option>She / Her</option>
+                      <option>He / Him</option>
+                      <option>They / Them</option>
+                      <option>Prefer not to say</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- QUICK ACTIONS (view mode) -->
+            <div class="view-only pt-5 shrink-0 flex items-start gap-2">
+              <button class="bg-[#323446] hover:bg-slate-800 text-white font-bold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-md transition-all hover:shadow-lg">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Follow
+              </button>
+              <button class="bg-white hover:bg-slate-100 text-slate-700 font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 border border-slate-200 transition-colors">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Message
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
 
       <!-- STATS ROW -->
-      <div class="grid grid-cols-4 gap-3 shrink-0">
-        <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm">
-          <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600 shrink-0"><i data-lucide="trophy" class="w-4 h-4"></i></div>
-            <div>
-              <span class="text-[9px] text-slate-400 font-bold block leading-none uppercase">Games Owned</span>
-              <span class="text-sm font-extrabold text-slate-800">48</span>
+      <div class="grid grid-cols-5 gap-3 shrink-0">
+        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+          <div class="flex items-start justify-between mb-2">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="gamepad-2" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+3</span>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 leading-none">48</p>
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Games Owned</span>
+          <div class="flex items-end gap-0.5 h-4 mt-2">
+            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 40%"></div>
+            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 60%"></div>
+            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 45%"></div>
+            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 80%"></div>
+            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 65%"></div>
+            <div class="flex-1 bg-[#323446] rounded-sm" style="height: 100%"></div>
+          </div>
+        </div>
+        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+          <div class="flex items-start justify-between mb-2">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="users" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+12</span>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 leading-none">126</p>
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Friends</span>
+          <div class="flex -space-x-1.5 mt-2">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2 border-[#F7F9FC]" alt="">
+            <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2 border-[#F7F9FC]" alt="">
+            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2 border-[#F7F9FC]" alt="">
+            <div class="w-5 h-5 rounded-full bg-slate-200 border-2 border-[#F7F9FC] flex items-center justify-center text-[8px] font-bold text-slate-600">+123</div>
+          </div>
+        </div>
+        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+          <div class="flex items-start justify-between mb-2">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="medal" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+2</span>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 leading-none">32</p>
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Badges</span>
+          <div class="flex items-center gap-0.5 mt-2">
+            <i data-lucide="award" class="w-3.5 h-3.5 text-[#323446]"></i>
+            <i data-lucide="crown" class="w-3.5 h-3.5 text-[#323446]"></i>
+            <i data-lucide="flame" class="w-3.5 h-3.5 text-[#323446]"></i>
+            <i data-lucide="trophy" class="w-3.5 h-3.5 text-[#323446]"></i>
+            <span class="text-[9px] font-bold text-slate-500 ml-1">+28</span>
+          </div>
+        </div>
+        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+          <div class="flex items-start justify-between mb-2">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="clock" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+48h</span>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 leading-none">1,240<span class="text-xs text-slate-400 font-bold ml-0.5">h</span></p>
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Total Playtime</span>
+          <div class="h-1 bg-slate-200 rounded-full overflow-hidden mt-3">
+            <div class="h-full bg-[#323446] rounded-full" style="width: 72%"></div>
+          </div>
+        </div>
+        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+          <div class="flex items-start justify-between mb-2">
+            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="heart" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">4 sale</span>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 leading-none">12</p>
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Wishlist</span>
+          <p class="text-[9px] text-slate-500 mt-2 leading-snug">Save <span class="font-bold text-[#323446]">$87.20</span> with current discounts</p>
+        </div>
+      </div>
+
+      <!-- EDIT MODE: TABBED PANEL -->
+      <div class="edit-only bg-[#F7F9FC] rounded-2xl border border-white shadow-sm shrink-0 flex-col">
+        <div class="flex items-center gap-1 p-2 border-b border-slate-200/60">
+          <button class="edit-tab active text-xs font-bold px-4 py-2 rounded-full" data-tab="privacy">
+            <i data-lucide="shield" class="w-3.5 h-3.5 inline mr-1"></i> Privacy
+          </button>
+          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full text-slate-500" data-tab="appearance">
+            <i data-lucide="palette" class="w-3.5 h-3.5 inline mr-1"></i> Appearance
+          </button>
+          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full text-slate-500" data-tab="connections">
+            <i data-lucide="link" class="w-3.5 h-3.5 inline mr-1"></i> Connections
+          </button>
+          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full text-slate-500" data-tab="notifications">
+            <i data-lucide="bell" class="w-3.5 h-3.5 inline mr-1"></i> Notifications
+          </button>
+        </div>
+
+        <!-- Privacy -->
+        <div class="edit-tab-content p-5 flex flex-col gap-3" data-content="privacy">
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="eye" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Public Profile</p>
+                <p class="text-[10px] text-slate-400">Anyone can view your profile and activity</p>
+              </div>
+            </div>
+            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="activity" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Show Online Status</p>
+                <p class="text-[10px] text-slate-400">Let friends see when you're online</p>
+              </div>
+            </div>
+            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="gamepad-2" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Show Game Activity</p>
+                <p class="text-[10px] text-slate-400">Display your recently played games publicly</p>
+              </div>
+            </div>
+            <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="message-circle" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Allow Direct Messages</p>
+                <p class="text-[10px] text-slate-400">Friends can send you private messages</p>
+              </div>
+            </div>
+            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="heart" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Show Wishlist</p>
+                <p class="text-[10px] text-slate-400">Let others see your saved items</p>
+              </div>
+            </div>
+            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+
+        <!-- Appearance -->
+        <div class="edit-tab-content p-5 flex-col gap-4 hidden" data-content="appearance">
+          <div>
+            <p class="text-xs font-bold text-slate-800 mb-2">Profile Theme</p>
+            <div class="grid grid-cols-5 gap-2">
+              <button class="aspect-square rounded-xl border-2 border-[#323446] bg-gradient-to-br from-slate-700 to-slate-900 relative">
+                <i data-lucide="check" class="w-4 h-4 text-white absolute top-1 right-1"></i>
+              </button>
+              <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-200 to-slate-400"></button>
+              <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 to-slate-200"></button>
+              <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-800 to-black"></button>
+              <button class="aspect-square rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center hover:border-slate-400 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4 text-slate-400"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-800 mb-2">Avatar Frame</p>
+            <div class="flex gap-3 overflow-x-auto pb-2">
+              <button class="shrink-0 flex flex-col items-center gap-1.5">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#323446] to-slate-700 p-1 relative">
+                  <div class="w-full h-full rounded-full border-2 border-white overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="">
+                  </div>
+                  <i data-lucide="check" class="w-4 h-4 text-[#323446] bg-white rounded-full absolute -bottom-1 -right-1 p-0.5"></i>
+                </div>
+                <span class="text-[9px] font-bold text-slate-700">Midnight</span>
+              </button>
+              <button class="shrink-0 flex flex-col items-center gap-1.5">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-slate-300 to-slate-500 p-1">
+                  <div class="w-full h-full rounded-full border-2 border-white overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="">
+                  </div>
+                </div>
+                <span class="text-[9px] font-bold text-slate-500">Silver</span>
+              </button>
+              <button class="shrink-0 flex flex-col items-center gap-1.5">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-slate-700 to-black p-1">
+                  <div class="w-full h-full rounded-full border-2 border-white overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="">
+                  </div>
+                </div>
+                <span class="text-[9px] font-bold text-slate-500">Obsidian</span>
+              </button>
+              <button class="shrink-0 flex flex-col items-center gap-1.5">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-slate-400 to-slate-200 p-1">
+                  <div class="w-full h-full rounded-full border-2 border-white overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="">
+                  </div>
+                </div>
+                <span class="text-[9px] font-bold text-slate-500">Platinum</span>
+              </button>
+              <button class="shrink-0 flex flex-col items-center gap-1.5">
+                <div class="w-16 h-16 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center">
+                  <i data-lucide="plus" class="w-5 h-5 text-slate-400"></i>
+                </div>
+                <span class="text-[9px] font-bold text-slate-400">Custom</span>
+              </button>
             </div>
           </div>
         </div>
-        <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm">
-          <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600 shrink-0"><i data-lucide="users" class="w-4 h-4"></i></div>
-            <div>
-              <span class="text-[9px] text-slate-400 font-bold block leading-none uppercase">Friends</span>
-              <span class="text-sm font-extrabold text-slate-800">126</span>
+
+        <!-- Connections -->
+        <div class="edit-tab-content p-5 flex-col gap-3 hidden" data-content="connections">
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="twitter" class="w-4 h-4 text-slate-600"></i></div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold text-slate-800">Twitter</p>
+                <p class="text-[10px] text-slate-400 truncate">@hoshino_ichika</p>
+              </div>
             </div>
+            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-1 rounded-full uppercase">Connected</span>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="instagram" class="w-4 h-4 text-slate-600"></i></div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold text-slate-800">Instagram</p>
+                <p class="text-[10px] text-slate-400 truncate">@ichika.figures</p>
+              </div>
+            </div>
+            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-1 rounded-full uppercase">Connected</span>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="youtube" class="w-4 h-4 text-slate-600"></i></div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold text-slate-800">YouTube</p>
+                <p class="text-[10px] text-slate-400">Not connected</p>
+              </div>
+            </div>
+            <button class="text-[9px] font-bold text-white bg-[#323446] px-3 py-1 rounded-full uppercase hover:bg-slate-800 transition-colors">Connect</button>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="twitch" class="w-4 h-4 text-slate-600"></i></div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold text-slate-800">Twitch</p>
+                <p class="text-[10px] text-slate-400">Not connected</p>
+              </div>
+            </div>
+            <button class="text-[9px] font-bold text-white bg-[#323446] px-3 py-1 rounded-full uppercase hover:bg-slate-800 transition-colors">Connect</button>
           </div>
         </div>
-        <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm">
-          <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600 shrink-0"><i data-lucide="medal" class="w-4 h-4"></i></div>
-            <div>
-              <span class="text-[9px] text-slate-400 font-bold block leading-none uppercase">Badges</span>
-              <span class="text-sm font-extrabold text-slate-800">32</span>
+
+        <!-- Notifications -->
+        <div class="edit-tab-content p-5 flex-col gap-3 hidden" data-content="notifications">
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="shopping-bag" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Wishlist Price Drops</p>
+                <p class="text-[10px] text-slate-400">Get notified when wishlist items go on sale</p>
+              </div>
             </div>
+            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="users" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Friend Requests</p>
+                <p class="text-[10px] text-slate-400">When someone sends you a friend request</p>
+              </div>
+            </div>
+            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="message-circle" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Comments & Replies</p>
+                <p class="text-[10px] text-slate-400">When someone replies to your posts</p>
+              </div>
+            </div>
+            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+            <div class="flex items-center gap-3">
+              <i data-lucide="mail" class="w-4 h-4 text-slate-500"></i>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Email Newsletter</p>
+                <p class="text-[10px] text-slate-400">Weekly digest of activity and deals</p>
+              </div>
+            </div>
+            <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
           </div>
         </div>
-        <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm">
-          <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600 shrink-0"><i data-lucide="clock" class="w-4 h-4"></i></div>
-            <div>
-              <span class="text-[9px] text-slate-400 font-bold block leading-none uppercase">Hours Played</span>
-              <span class="text-sm font-extrabold text-slate-800">1,240h</span>
+      </div>
+
+      <!-- FAVORITE GAMES -->
+      <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-5 shrink-0">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="star" class="w-4 h-4 text-slate-600"></i> Favorite Games
+          </h3>
+          <div class="flex items-center gap-2">
+            <button class="edit-only text-[10px] font-bold text-[#323446] uppercase tracking-wider hover:underline items-center gap-1">
+              <i data-lucide="plus" class="w-3 h-3"></i> Manage
+            </button>
+            <a href="#" class="view-only text-xs text-slate-400 font-medium hover:text-slate-600 flex items-center gap-1">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
+          </div>
+        </div>
+        <div class="flex gap-4 overflow-x-auto game-scroll pb-2">
+          <div class="game-card shrink-0 w-40 relative group">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+              <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#1</div>
+              <button class="edit-only absolute top-2 left-2 w-6 h-6 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+              </button>
+              <div class="absolute bottom-2 left-2 right-2">
+                <p class="text-[11px] font-extrabold text-white leading-tight truncate">Project Sekai</p>
+                <p class="text-[9px] text-slate-200 truncate">320 hrs played</p>
+              </div>
+            </div>
+          </div>
+          <div class="game-card shrink-0 w-40 relative group">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+              <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#2</div>
+              <button class="edit-only absolute top-2 left-2 w-6 h-6 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+              </button>
+              <div class="absolute bottom-2 left-2 right-2">
+                <p class="text-[11px] font-extrabold text-white leading-tight truncate">NieR:Automata</p>
+                <p class="text-[9px] text-slate-200 truncate">85 hrs played</p>
+              </div>
+            </div>
+          </div>
+          <div class="game-card shrink-0 w-40 relative group">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+              <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#3</div>
+              <button class="edit-only absolute top-2 left-2 w-6 h-6 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+              </button>
+              <div class="absolute bottom-2 left-2 right-2">
+                <p class="text-[11px] font-extrabold text-white leading-tight truncate">Honkai: Star Rail</p>
+                <p class="text-[9px] text-slate-200 truncate">140 hrs played</p>
+              </div>
+            </div>
+          </div>
+          <div class="game-card shrink-0 w-40 relative group">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+              <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#4</div>
+              <button class="edit-only absolute top-2 left-2 w-6 h-6 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+              </button>
+              <div class="absolute bottom-2 left-2 right-2">
+                <p class="text-[11px] font-extrabold text-white leading-tight truncate">Elden Ring</p>
+                <p class="text-[9px] text-slate-200 truncate">210 hrs played</p>
+              </div>
+            </div>
+          </div>
+          <div class="game-card shrink-0 w-40 relative group">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+              <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#5</div>
+              <button class="edit-only absolute top-2 left-2 w-6 h-6 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+              </button>
+              <div class="absolute bottom-2 left-2 right-2">
+                <p class="text-[11px] font-extrabold text-white leading-tight truncate">Persona 3 Reload</p>
+                <p class="text-[9px] text-slate-200 truncate">32 hrs played</p>
+              </div>
+            </div>
+          </div>
+          <div class="edit-only shrink-0 w-40 aspect-[2/3] rounded-2xl border-2 border-dashed border-slate-300 items-center justify-center cursor-pointer hover:border-[#323446] hover:bg-slate-100 transition-colors">
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+                <i data-lucide="plus" class="w-5 h-5 text-slate-500"></i>
+              </div>
+              <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Add Game</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 2 COLUMN LAYOUT -->
+      <!-- 2 COLUMN -->
       <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-5 flex-1 min-h-0">
 
-        <!-- LEFT: RECENT ACTIVITY -->
-        <div class="flex flex-col gap-4 overflow-y-auto pr-1">
-          <div>
-            <div class="flex justify-between items-center mb-2.5 px-1">
-              <h3 class="text-base font-semibold text-slate-800 flex items-center gap-1.5">
-                <i data-lucide="activity" class="w-4 h-4 text-slate-600"></i> Recent Activity
+        <!-- LEFT -->
+        <div class="flex flex-col gap-5 overflow-y-auto pr-1">
+
+          <!-- ACHIEVEMENT SHOWCASE -->
+          <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-5 shrink-0">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="trophy" class="w-4 h-4 text-slate-600"></i> Achievement Showcase
               </h3>
-              <a href="#" class="text-xs text-slate-400 font-medium hover:text-slate-600">view all</a>
+              <span class="text-[10px] font-bold text-slate-500">32 / 85 unlocked</span>
             </div>
-            <div class="flex flex-col gap-2.5">
-              <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm flex items-center gap-3 hover:border-slate-300 transition-all shrink-0">
-                <div class="w-11 h-11 rounded-xl overflow-hidden shrink-0">
-                  <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=150&q=80" alt="game" class="w-full h-full object-cover">
+
+            <div class="relative bg-gradient-to-br from-[#323446] to-slate-800 rounded-2xl p-5 mb-4 overflow-hidden">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
+              <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-12 -mb-12"></div>
+              <div class="relative flex items-center gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center shrink-0 border border-white/20">
+                  <i data-lucide="crown" class="w-8 h-8 text-white"></i>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <h5 class="text-xs font-bold text-slate-800 truncate">Played Project Sekai: Colorful Stage! for 2 hours</h5>
-                  <p class="text-[10px] text-slate-400 font-medium mt-0.5">2 hours ago</p>
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-[9px] font-bold text-white bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Featured</span>
+                    <span class="text-[9px] font-bold text-white bg-white/10 px-2 py-0.5 rounded-full">Rare · 3.2%</span>
+                  </div>
+                  <h4 class="text-base font-extrabold text-white">Rhythm Master</h4>
+                  <p class="text-[11px] text-slate-300 mt-0.5">Completed all Master difficulty songs in Project Sekai</p>
                 </div>
-                <span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-1 rounded-lg shrink-0">+24 XP</span>
+                <div class="text-right shrink-0">
+                  <p class="text-xs font-bold text-white/70">Earned</p>
+                  <p class="text-sm font-extrabold text-white">Yesterday</p>
+                </div>
               </div>
-              <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm flex items-center gap-3 hover:border-slate-300 transition-all shrink-0">
-                <div class="w-11 h-11 rounded-xl overflow-hidden shrink-0">
-                  <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=150&q=80" alt="game" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 min-w-0">
-                  <h5 class="text-xs font-bold text-slate-800 truncate">Earned "Rhythm Master" achievement in NieR:Automata</h5>
-                  <p class="text-[10px] text-slate-400 font-medium mt-0.5">Yesterday</p>
-                </div>
-                <span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-1 rounded-lg shrink-0">+40 XP</span>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2.5">
+              <div class="badge-item bg-white/80 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center cursor-pointer">
+                <i data-lucide="award" class="w-6 h-6 text-[#323446] mb-1.5"></i>
+                <span class="text-[9px] font-bold text-slate-700 leading-tight">OG Player</span>
+                <span class="text-[8px] text-slate-400 mt-0.5">Jan 2026</span>
               </div>
-              <div class="bg-[#F7F9FC] p-3.5 rounded-[1.3rem] border border-white shadow-sm flex items-center gap-3 hover:border-slate-300 transition-all shrink-0">
-                <div class="w-11 h-11 rounded-xl overflow-hidden shrink-0">
-                  <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=150&q=80" alt="game" class="w-full h-full object-cover">
+              <div class="badge-item bg-white/80 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center cursor-pointer">
+                <i data-lucide="flame" class="w-6 h-6 text-[#323446] mb-1.5"></i>
+                <span class="text-[9px] font-bold text-slate-700 leading-tight">Streak 30</span>
+                <span class="text-[8px] text-slate-400 mt-0.5">Aug 2026</span>
+              </div>
+              <div class="badge-item bg-white/80 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center cursor-pointer">
+                <i data-lucide="zap" class="w-6 h-6 text-[#323446] mb-1.5"></i>
+                <span class="text-[9px] font-bold text-slate-700 leading-tight">Speedrun</span>
+                <span class="text-[8px] text-slate-400 mt-0.5">Jul 2026</span>
+              </div>
+              <div class="badge-item bg-white/80 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center cursor-pointer">
+                <i data-lucide="music" class="w-6 h-6 text-[#323446] mb-1.5"></i>
+                <span class="text-[9px] font-bold text-slate-700 leading-tight">Rhythm Pro</span>
+                <span class="text-[8px] text-slate-400 mt-0.5">Jun 2026</span>
+              </div>
+            </div>
+            <button class="w-full mt-4 text-[11px] font-semibold text-slate-500 hover:text-slate-800 pt-3 border-t border-slate-200/60 transition-colors flex items-center justify-center gap-1">
+              View all 32 achievements <i data-lucide="chevron-right" class="w-3 h-3"></i>
+            </button>
+          </div>
+
+          <!-- ACTIVITY TIMELINE -->
+          <div>
+            <div class="flex justify-between items-center mb-3 px-1">
+              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="activity" class="w-4 h-4 text-slate-600"></i> Activity Timeline
+              </h3>
+              <a href="#" class="text-xs text-slate-400 font-medium hover:text-slate-600 flex items-center gap-1">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
+            </div>
+            <div class="flex flex-col gap-3">
+              <div class="timeline-item flex gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-[#323446] flex items-center justify-center shrink-0 shadow-md">
+                  <i data-lucide="gamepad-2" class="w-5 h-5 text-white"></i>
                 </div>
-                <div class="flex-1 min-w-0">
-                  <h5 class="text-xs font-bold text-slate-800 truncate">Added 2 new items to your wishlist</h5>
-                  <p class="text-[10px] text-slate-400 font-medium mt-0.5">2 days ago</p>
+                <div class="flex-1 bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm min-w-0">
+                  <div class="flex items-start justify-between gap-3 mb-1.5">
+                    <h5 class="text-xs font-extrabold text-slate-800">Played Project Sekai for 2 hours</h5>
+                    <span class="text-[9px] font-bold text-slate-400 shrink-0">2h ago</span>
+                  </div>
+                  <p class="text-[10px] text-slate-500 leading-relaxed">Completed Chapter 42 · Cleared 12 songs on Master difficulty · New personal best on "Ready Steady"</p>
+                  <div class="flex items-center gap-2 mt-2.5">
+                    <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+24 XP</span>
+                    <span class="text-[9px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full flex items-center gap-0.5">
+                      <i data-lucide="trophy" class="w-2.5 h-2.5"></i> 3 achievements
+                    </span>
+                  </div>
                 </div>
-                <span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-1 rounded-lg shrink-0">+10 XP</span>
+              </div>
+              <div class="timeline-item flex gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0">
+                  <i data-lucide="trophy" class="w-5 h-5 text-[#323446]"></i>
+                </div>
+                <div class="flex-1 bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm min-w-0">
+                  <div class="flex items-start justify-between gap-3 mb-1.5">
+                    <h5 class="text-xs font-extrabold text-slate-800">Earned "Rhythm Master" achievement</h5>
+                    <span class="text-[9px] font-bold text-slate-400 shrink-0">Yesterday</span>
+                  </div>
+                  <p class="text-[10px] text-slate-500 leading-relaxed">Rare achievement — only 3.2% of players have unlocked this in NieR:Automata</p>
+                  <div class="flex items-center gap-2 mt-2.5">
+                    <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+40 XP</span>
+                    <span class="text-[9px] font-bold text-white bg-[#323446] px-2 py-0.5 rounded-full">Rare</span>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item flex gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0">
+                  <i data-lucide="heart" class="w-5 h-5 text-[#323446]"></i>
+                </div>
+                <div class="flex-1 bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm min-w-0">
+                  <div class="flex items-start justify-between gap-3 mb-1.5">
+                    <h5 class="text-xs font-extrabold text-slate-800">Added 2 new items to wishlist</h5>
+                    <span class="text-[9px] font-bold text-slate-400 shrink-0">2d ago</span>
+                  </div>
+                  <p class="text-[10px] text-slate-500 leading-relaxed">Honkai: Star Rail (Free) and Genshin Impact: Best of Art 2026 ($35.99)</p>
+                  <div class="flex items-center gap-2 mt-2.5">
+                    <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+10 XP</span>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item flex gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0">
+                  <i data-lucide="zap" class="w-5 h-5 text-[#323446]"></i>
+                </div>
+                <div class="flex-1 bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm min-w-0">
+                  <div class="flex items-start justify-between gap-3 mb-1.5">
+                    <h5 class="text-xs font-extrabold text-slate-800">Reached Level 42! 🎉</h5>
+                    <span class="text-[9px] font-bold text-slate-400 shrink-0">3d ago</span>
+                  </div>
+                  <p class="text-[10px] text-slate-500 leading-relaxed">Top 8% of all members — unlocked "Midnight" profile frame</p>
+                  <div class="flex items-center gap-2 mt-2.5">
+                    <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+100 XP</span>
+                    <span class="text-[9px] font-bold text-white bg-[#323446] px-2 py-0.5 rounded-full">Milestone</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- SCREENSHOTS GALLERY -->
-          <div>
-            <div class="flex justify-between items-center mb-2.5 px-1">
-              <h3 class="text-base font-semibold text-slate-800 flex items-center gap-1.5">
-                <i data-lucide="camera" class="w-4 h-4 text-slate-600"></i> Screenshots
-              </h3>
-              <a href="#" class="text-xs text-slate-400 font-medium hover:text-slate-600">view all</a>
-            </div>
-            <div class="grid grid-cols-3 gap-3">
-              <div class="rounded-[1rem] overflow-hidden border border-white shadow-sm">
-                <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=300&q=80" alt="shot" class="w-full h-24 object-cover">
-              </div>
-              <div class="rounded-[1rem] overflow-hidden border border-white shadow-sm">
-                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=300&q=80" alt="shot" class="w-full h-24 object-cover">
-              </div>
-              <div class="rounded-[1rem] overflow-hidden border border-white shadow-sm">
-                <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=300&q=80" alt="shot" class="w-full h-24 object-cover">
-              </div>
-            </div>
-          </div>
         </div>
 
-        <!-- RIGHT COLUMN -->
+        <!-- RIGHT -->
         <div class="flex flex-col gap-4 overflow-y-auto pr-1">
 
-          <!-- BADGES -->
-          <div class="bg-[#F7F9FC] rounded-[1.8rem] border border-white shadow-sm p-4 shrink-0">
-            <h3 class="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-1.5">
-              <i data-lucide="medal" class="w-4 h-4 text-slate-600"></i> Badges
-            </h3>
-            <div class="grid grid-cols-4 gap-2.5">
-              <div class="bg-white/80 p-2 rounded-xl border border-slate-100 flex flex-col items-center text-center">
-                <i data-lucide="award" class="w-5 h-5 text-amber-500"></i>
-                <span class="text-[8px] font-bold text-slate-600 mt-1 leading-tight">OG Player</span>
+          <!-- FRIENDS ONLINE -->
+          <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-4 shrink-0">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="users" class="w-4 h-4 text-slate-600"></i> Friends Online
+              </h3>
+              <span class="flex items-center gap-1 text-[10px] font-bold text-[#323446]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#323446] pulse-dot"></span> 12 of 126
+              </span>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors cursor-pointer">
+                <div class="relative shrink-0">
+                  <div class="w-9 h-9 rounded-full border border-slate-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80" alt="">
+                  </div>
+                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#323446] border-2 border-[#F7F9FC]"></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] font-bold text-slate-800 truncate">shiro_kun</p>
+                  <p class="text-[9px] text-slate-400 truncate flex items-center gap-1">
+                    <span class="w-1 h-1 rounded-full bg-[#323446]"></span>
+                    Playing Project Sekai
+                  </p>
+                </div>
+                <button class="p-1.5 rounded-full hover:bg-slate-100 transition-colors">
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5 text-slate-400"></i>
+                </button>
               </div>
-              <div class="bg-white/80 p-2 rounded-xl border border-slate-100 flex flex-col items-center text-center">
-                <i data-lucide="crown" class="w-5 h-5 text-amber-500"></i>
-                <span class="text-[8px] font-bold text-slate-600 mt-1 leading-tight">Collector</span>
+              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors cursor-pointer">
+                <div class="relative shrink-0">
+                  <div class="w-9 h-9 rounded-full border border-slate-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=80&q=80" alt="">
+                  </div>
+                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#323446] border-2 border-[#F7F9FC]"></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] font-bold text-slate-800 truncate">hana_illustrator</p>
+                  <p class="text-[9px] text-slate-400 truncate flex items-center gap-1">
+                    <span class="w-1 h-1 rounded-full bg-[#323446]"></span>
+                    Drawing fan art
+                  </p>
+                </div>
+                <button class="p-1.5 rounded-full hover:bg-slate-100 transition-colors">
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5 text-slate-400"></i>
+                </button>
               </div>
-              <div class="bg-white/80 p-2 rounded-xl border border-slate-100 flex flex-col items-center text-center">
-                <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i>
-                <span class="text-[8px] font-bold text-slate-600 mt-1 leading-tight">Streak 30</span>
+              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors cursor-pointer">
+                <div class="relative shrink-0">
+                  <div class="w-9 h-9 rounded-full border border-slate-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=80&q=80" alt="">
+                  </div>
+                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#323446] border-2 border-[#F7F9FC]"></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] font-bold text-slate-800 truncate">ren_dev</p>
+                  <p class="text-[9px] text-slate-400 truncate flex items-center gap-1">
+                    <span class="w-1 h-1 rounded-full bg-[#323446]"></span>
+                    Playing Honkai
+                  </p>
+                </div>
+                <button class="p-1.5 rounded-full hover:bg-slate-100 transition-colors">
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5 text-slate-400"></i>
+                </button>
               </div>
-              <div class="bg-white/80 p-2 rounded-xl border border-slate-100 flex flex-col items-center text-center">
-                <i data-lucide="sparkles" class="w-5 h-5 text-slate-500"></i>
-                <span class="text-[8px] font-bold text-slate-600 mt-1 leading-tight">Newbie</span>
+              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors cursor-pointer">
+                <div class="relative shrink-0">
+                  <div class="w-9 h-9 rounded-full border border-slate-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=80&q=80" alt="">
+                  </div>
+                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-slate-300 border-2 border-[#F7F9FC]"></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] font-bold text-slate-800 truncate">mikaelle</p>
+                  <p class="text-[9px] text-slate-400 truncate">Online · 2m ago</p>
+                </div>
+                <button class="p-1.5 rounded-full hover:bg-slate-100 transition-colors">
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5 text-slate-400"></i>
+                </button>
+              </div>
+            </div>
+            <button class="w-full mt-2 text-[10px] font-semibold text-slate-500 hover:text-slate-800 pt-2 border-t border-slate-200/60 transition-colors flex items-center justify-center gap-1">
+              View all friends <i data-lucide="chevron-right" class="w-3 h-3"></i>
+            </button>
+          </div>
+
+          <!-- SCREENSHOTS -->
+          <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-4 shrink-0">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="camera" class="w-4 h-4 text-slate-600"></i> Screenshots
+              </h3>
+              <button class="edit-only text-[10px] font-bold text-[#323446] uppercase tracking-wider hover:underline items-center gap-1">
+                <i data-lucide="upload" class="w-3 h-3"></i> Upload
+              </button>
+              <a href="#" class="view-only text-xs text-slate-400 font-medium hover:text-slate-600 flex items-center gap-1">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="relative aspect-square rounded-xl overflow-hidden border border-white shadow-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=200&q=80" alt="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <button class="edit-only absolute top-1 right-1 w-5 h-5 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                  <i data-lucide="x" class="w-2.5 h-2.5"></i>
+                </button>
+              </div>
+              <div class="relative aspect-square rounded-xl overflow-hidden border border-white shadow-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=200&q=80" alt="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <button class="edit-only absolute top-1 right-1 w-5 h-5 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                  <i data-lucide="x" class="w-2.5 h-2.5"></i>
+                </button>
+              </div>
+              <div class="relative aspect-square rounded-xl overflow-hidden border border-white shadow-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=200&q=80" alt="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <button class="edit-only absolute top-1 right-1 w-5 h-5 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                  <i data-lucide="x" class="w-2.5 h-2.5"></i>
+                </button>
+              </div>
+              <div class="relative aspect-square rounded-xl overflow-hidden border border-white shadow-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=200&q=80" alt="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <button class="edit-only absolute top-1 right-1 w-5 h-5 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                  <i data-lucide="x" class="w-2.5 h-2.5"></i>
+                </button>
+              </div>
+              <div class="relative aspect-square rounded-xl overflow-hidden border border-white shadow-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=200&q=80" alt="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <button class="edit-only absolute top-1 right-1 w-5 h-5 rounded-full bg-[#323446] text-white items-center justify-center shadow-md">
+                  <i data-lucide="x" class="w-2.5 h-2.5"></i>
+                </button>
+              </div>
+              <div class="aspect-square rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center cursor-pointer hover:border-[#323446] hover:bg-slate-100 transition-colors">
+                <i data-lucide="plus" class="w-5 h-5 text-slate-400"></i>
               </div>
             </div>
           </div>
 
-          <!-- FRIENDS -->
-          <div class="bg-[#F7F9FC] rounded-[1.8rem] border border-white shadow-sm p-4 shrink-0">
-            <h3 class="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-1.5">
-              <i data-lucide="users" class="w-4 h-4 text-slate-600"></i> Friends (126)
-            </h3>
-            <div class="flex flex-col gap-2.5">
-              <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-full border border-slate-200 overflow-hidden shrink-0">
-                  <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80" alt="u" class="w-full h-full object-cover">
+          <!-- SOCIAL LINKS -->
+          <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-4 shrink-0">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="link" class="w-4 h-4 text-slate-600"></i> Social Links
+              </h3>
+              <button class="edit-only text-[10px] font-bold text-[#323446] uppercase tracking-wider hover:underline items-center gap-1">
+                <i data-lucide="plus" class="w-3 h-3"></i> Add
+              </button>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                  <i data-lucide="twitter" class="w-4 h-4 text-slate-600"></i>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <span class="text-[10px] font-bold text-slate-700 block truncate">Shiro</span>
-                  <span class="text-[9px] text-slate-400">In-game</span>
+                  <p class="text-[11px] font-bold text-slate-800 truncate">@hoshino_ichika</p>
+                  <p class="text-[9px] text-slate-400 truncate">Twitter</p>
                 </div>
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-              </div>
-              <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-full border border-slate-200 overflow-hidden shrink-0">
-                  <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=80&q=80" alt="u" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 min-w-0">
-                  <span class="text-[10px] font-bold text-slate-700 block truncate">Hana</span>
-                  <span class="text-[9px] text-slate-400">Online</span>
-                </div>
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-              </div>
-              <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-full border border-slate-200 overflow-hidden shrink-0">
-                  <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=80&q=80" alt="u" class="w-full h-full object-cover">
+                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+              </a>
+              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                  <i data-lucide="instagram" class="w-4 h-4 text-slate-600"></i>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <span class="text-[10px] font-bold text-slate-700 block truncate">Mika</span>
-                  <span class="text-[9px] text-slate-400">Offline</span>
+                  <p class="text-[11px] font-bold text-slate-800 truncate">@ichika.figures</p>
+                  <p class="text-[9px] text-slate-400 truncate">Instagram</p>
                 </div>
-                <span class="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
-              </div>
-              <a href="#" class="text-[10px] text-slate-400 font-medium hover:text-slate-600 mt-1">View all friends</a>
+                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+              </a>
+              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                  <i data-lucide="globe" class="w-4 h-4 text-slate-600"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] font-bold text-slate-800 truncate">hoshino-ichika.dev</p>
+                  <p class="text-[9px] text-slate-400 truncate">Website</p>
+                </div>
+                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+              </a>
             </div>
           </div>
 
         </div>
       </div>
+
     </main>
   </div>
 
   <script>
     lucide.createIcons();
 
+    // ===== SIDEBAR =====
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('toggle-sidebar');
     const toggleIcon = document.getElementById('toggle-icon');
@@ -386,14 +1197,75 @@
       }
       lucide.createIcons();
     }
-
     applySidebar();
-
     toggleBtn.addEventListener('click', () => {
       isCollapsed = !isCollapsed;
       localStorage.setItem('kaimono_sidebar_collapsed', String(isCollapsed));
       applySidebar();
     });
+
+    // ===== EDIT MODE (klik Edit Profile baru masuk mode edit) =====
+    const main = document.getElementById('profile-main');
+    const btnEdit = document.getElementById('btn-edit');
+    const btnCancel = document.getElementById('btn-cancel');
+    const btnSave = document.getElementById('btn-save');
+
+    btnEdit.addEventListener('click', () => {
+      main.classList.add('profile-editing');
+      lucide.createIcons();
+      main.scrollTop = 0;
+    });
+
+    btnCancel.addEventListener('click', () => {
+      main.classList.remove('profile-editing');
+      lucide.createIcons();
+      main.scrollTop = 0;
+    });
+
+    btnSave.addEventListener('click', () => {
+      const originalHTML = btnSave.innerHTML;
+      btnSave.innerHTML = '<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Saved!';
+      lucide.createIcons();
+      setTimeout(() => {
+        btnSave.innerHTML = originalHTML;
+        lucide.createIcons();
+        main.classList.remove('profile-editing');
+        lucide.createIcons();
+        main.scrollTop = 0;
+      }, 1000);
+    });
+
+    // ===== EDIT TABS =====
+    const editTabs = document.querySelectorAll('.edit-tab');
+    const editContents = document.querySelectorAll('.edit-tab-content');
+    editTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        editTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        editContents.forEach(c => {
+          if (c.dataset.content === target) {
+            c.classList.remove('hidden');
+            c.classList.add('flex');
+          } else {
+            c.classList.add('hidden');
+            c.classList.remove('flex');
+          }
+        });
+      });
+    });
+
+    // ===== IMAGE PREVIEW =====
+    function previewImage(event, targetId) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById(targetId).src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
   </script>
 </body>
 </html>
