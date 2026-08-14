@@ -570,6 +570,9 @@
       var totalDuration = greetings.length * displayDuration;
       var currentIndex = 0;
       var startTime = null;
+      var interval = null;
+      var rafId = null;
+      var finished = false;
 
       function changeGreeting() {
         if (currentIndex >= greetings.length) return;
@@ -586,27 +589,43 @@
         var elapsed = timestamp - startTime;
         var pct = Math.min((elapsed / totalDuration) * 100, 100);
         progressEl.style.width = pct + "%";
-        if (elapsed < totalDuration) requestAnimationFrame(updateProgress);
+        if (elapsed < totalDuration) rafId = requestAnimationFrame(updateProgress);
       }
 
       function finishSplash() {
+        if (finished) return;
+        finished = true;
+        clearInterval(interval);
+        if (rafId) cancelAnimationFrame(rafId);
         setTimeout(function () {
           splashScreen.classList.add("hidden");
           document.body.classList.remove("splash-active");
         }, 400);
       }
 
+      function skipSplash() {
+        if (finished) return;
+        progressEl.style.width = "100%";
+        greetElAndProceed();
+      }
+
+      function greetElAndProceed() {
+        greetingEl.textContent = greetings[greetings.length - 1];
+        greetingEl.classList.add("active");
+        finishSplash();
+      }
+
       function startSplash() {
         changeGreeting();
-        var interval = setInterval(function () {
+        interval = setInterval(function () {
           if (currentIndex < greetings.length) {
             changeGreeting();
           } else {
-            clearInterval(interval);
             finishSplash();
           }
         }, displayDuration);
-        requestAnimationFrame(updateProgress);
+        rafId = requestAnimationFrame(updateProgress);
+        splashScreen.addEventListener("click", skipSplash);
       }
 
       if (splashScreen && window.__kaimonoShowSplash) startSplash();
