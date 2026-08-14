@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kaimono — Anime Game Store</title>
+  <title>Kaimono — Anime Game Store & Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #EBF0F5;
+      background-color: #F7F9FC;
     }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
 
-    /* ===== Landing -> Login page transition ===== */
+    /* ===== Page Wipe ===== */
     .page-wipe {
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: radial-gradient(circle at center, #1E1E28 0%, #0e1120 75%);
+      background: radial-gradient(circle at center, #323446 0%, #1a1c2a 100%);
       clip-path: circle(0% at 50% 50%);
       visibility: hidden;
       pointer-events: none;
@@ -28,9 +28,7 @@
       visibility: visible;
       animation: wipe-in 750ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
     }
-    @keyframes wipe-in {
-      to { clip-path: circle(150% at 50% 50%); }
-    }
+    @keyframes wipe-in { to { clip-path: circle(150% at 50% 50%); } }
     .page-exit {
       animation: page-exit 650ms cubic-bezier(0.4, 0, 1, 1) forwards;
       pointer-events: none;
@@ -39,254 +37,508 @@
       from { opacity: 1; transform: scale(1); }
       to   { opacity: 0; transform: scale(1.05); }
     }
+
+    /* ===== Underlined arrow links ===== */
+    .arrow-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid currentColor;
+      transition: all 200ms ease;
+    }
+    .arrow-link:hover { gap: 10px; }
+
+    /* ===== Logo circles ===== */
+    .logo-circle { transition: all 300ms ease; }
+    .logo-circle:hover {
+      background-color: white;
+      box-shadow: 0 20px 40px -12px rgba(50, 52, 70, 0.18);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Numbered cards ===== */
+    .num-card { transition: all 250ms ease; }
+    .num-card:hover {
+      border-color: #323446;
+      transform: translateY(-2px);
+    }
+
+    /* ===== Feature cells ===== */
+    .feature-cell { transition: background-color 200ms ease; }
+    .feature-cell:hover { background-color: #F7F9FC; }
+
+    /* ===== Case study tabs ===== */
+    .case-tab {
+      background: white;
+      border: 1px solid #e2e8f0;
+      transition: all 250ms ease;
+    }
+    .case-tab:hover { border-color: #94a3b8; transform: translateX(4px); }
+    .case-tab .case-num { color: #94a3b8; transition: color 250ms; }
+    .case-tab .case-title { color: #0f172a; transition: color 250ms; }
+    .case-tab .case-desc { color: #64748b; transition: color 250ms; }
+    .case-tab .case-arrow { color: #cbd5e1; transition: all 250ms; }
+    .case-tab.active {
+      background: #323446;
+      border-color: #323446;
+      box-shadow: 0 20px 40px -16px rgba(50, 52, 70, 0.45);
+    }
+    .case-tab.active .case-num { color: rgba(255,255,255,0.55); }
+    .case-tab.active .case-title { color: white; }
+    .case-tab.active .case-desc { color: #cbd5e1; }
+    .case-tab.active .case-arrow { color: white; transform: rotate(-45deg); }
+
+    /* ===== Case panel transition ===== */
+    #cs-panel {
+      transition: opacity 250ms ease, transform 250ms ease;
+    }
+
+    .pulse-dot { animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
   </style>
 </head>
-<body class="text-slate-800 antialiased">
+<body class="text-slate-800 antialiased overflow-x-hidden">
 
   <!-- ==================== NAVBAR ==================== -->
-  <header class="bg-[#1E1E28] sticky top-0 z-40 shadow-lg shadow-slate-900/10">
-    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+  <header class="bg-[#F7F9FC]/90 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/70">
+    <nav class="w-full max-w-[1920px] mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
       <a href="/" class="flex items-center gap-3">
-        <div class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl flex items-center justify-center font-extrabold text-white text-sm shadow-md">K</div>
-        <div class="leading-tight">
-          <span class="font-bold text-white tracking-widest uppercase text-sm">@KAIMONO</span>
-          <span class="block text-[10px] text-slate-400 tracking-wider">STORE // GAMING PLATFORM</span>
-        </div>
+        <div class="w-10 h-10 bg-[#323446] rounded-xl flex items-center justify-center font-extrabold text-white text-base">K</div>
+        <span class="font-extrabold text-slate-900 tracking-tight text-lg">Kaimono</span>
       </a>
 
-      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-300">
-        <a href="#store" class="hover:text-white transition-colors">Store</a>
-        <a href="#features" class="hover:text-white transition-colors">Features</a>
-        <a href="#releases" class="hover:text-white transition-colors">New Releases</a>
+      <div class="hidden md:flex items-center gap-9 text-[15px] font-semibold text-slate-500">
+        <a href="#top" class="hover:text-slate-900 transition-colors">Home</a>
+        <a href="#store" class="hover:text-slate-900 transition-colors">Store</a>
+        <a href="#features" class="hover:text-slate-900 transition-colors">Features</a>
+        <a href="#releases" class="hover:text-slate-900 transition-colors">Releases</a>
+        <a href="#community" class="hover:text-slate-900 transition-colors">Community</a>
       </div>
 
-      <div class="flex items-center gap-3">
-        <a href="/login/" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors px-4 py-2 rounded-full">Sign In</a>
-        <a href="/login/" class="hidden sm:inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold px-5 py-2.5 rounded-full transition-all shadow-md shadow-indigo-900/30 hover:-translate-y-0.5">
-          Get Started <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      <div class="flex items-center gap-4">
+        <a href="/login/" class="text-[15px] font-semibold text-slate-600 hover:text-slate-900 transition-colors">Log in</a>
+        <a href="/login/" class="inline-flex items-center gap-2 bg-[#323446] hover:bg-slate-800 text-white text-[15px] font-bold px-6 py-3 rounded-full transition-all shadow-sm hover:-translate-y-0.5">
+          Get in touch
         </a>
       </div>
     </nav>
   </header>
 
-  <main class="max-w-7xl mx-auto px-6">
+  <main id="top" class="w-full max-w-[1920px] mx-auto px-6 lg:px-10">
 
     <!-- ==================== HERO ==================== -->
-    <section class="grid lg:grid-cols-2 gap-12 items-center pt-14 pb-16">
-      <div>
-        <span class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-bold px-3 py-1.5 rounded-full border border-indigo-100">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Welcome to your anime game store
-        </span>
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mt-5 leading-tight tracking-tight">
-          Every game, figure & merch.<br>
-          <span class="text-indigo-600">One dashboard.</span>
-        </h1>
-        <p class="text-slate-500 mt-5 max-w-lg text-base leading-relaxed">
-          Kaimono brings your collection, deals, and gameplay together in a soft, minimalist dashboard built for gamers. Sign in to unlock your personalized store.
+    <section class="pt-8 relative">
+      <div class="relative rounded-[2rem] overflow-hidden h-[520px] lg:h-[600px]">
+        <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=2000&q=80"
+             alt="Kaimono hero" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/70 via-slate-900/30 to-slate-900/10"></div>
+
+        <div class="absolute inset-0 flex flex-col justify-center px-10 lg:px-20 max-w-4xl">
+          <p class="text-base font-semibold text-white/80 tracking-wide">#1 Anime game store & dashboard</p>
+          <h1 class="text-6xl lg:text-[5.2rem] font-bold text-white mt-5 leading-[1.05] tracking-tight">
+            Every game<br>finds its shelf.
+          </h1>
+          <div class="flex items-center gap-10 mt-12">
+            <a href="/login/" class="arrow-link text-base font-bold text-white">
+              Start exploring <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+            </a>
+            <a href="#store" class="arrow-link text-base font-bold text-white/80">
+              Browse the store <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="absolute right-10 top-16 w-64 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-xl hidden md:block">
+          <div class="flex justify-end pb-2">
+            <i data-lucide="more-horizontal" class="w-5 h-5 text-white/60"></i>
+          </div>
+          <div class="rounded-xl overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80"
+                 alt="spotlight" class="w-full h-32 object-cover">
+          </div>
+          <div class="flex items-end justify-between pt-4">
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-white/70"></i>
+            <p class="text-sm font-semibold text-white text-right leading-snug">Discover this<br>week's spotlight</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlapping stats card -->
+      <div class="relative z-10 lg:absolute lg:right-12 lg:-bottom-16 mt-6 lg:mt-0">
+        <div class="bg-white rounded-[1.6rem] shadow-xl shadow-slate-900/10 ring-8 ring-[#F7F9FC] px-12 py-10 grid grid-cols-1 sm:grid-cols-3 gap-10 lg:w-[680px]">
+          <div>
+            <p class="text-4xl font-extrabold text-slate-900 tracking-tight">500+</p>
+            <p class="text-sm text-slate-500 font-medium mt-3 leading-snug">Titles curated across twelve publishers worldwide</p>
+          </div>
+          <div>
+            <p class="text-4xl font-extrabold text-slate-900 tracking-tight">12K</p>
+            <p class="text-sm text-slate-500 font-medium mt-3 leading-snug">Collectors managing their shelf on Kaimono</p>
+          </div>
+          <div>
+            <p class="text-4xl font-extrabold text-slate-900 tracking-tight">$87</p>
+            <p class="text-sm text-slate-500 font-medium mt-3 leading-snug">Average saved per month with price alerts</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== INTRO + LOGO CIRCLES ==================== -->
+    <section class="pt-36 lg:pt-40 pb-28">
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <h2 class="text-4xl lg:text-5xl font-bold tracking-tight leading-snug">
+          <span class="text-slate-900">Built for collectors,</span>
+          <span class="text-slate-400"> trusted by ten thousand gamers</span>
+        </h2>
+        <p class="text-base text-slate-500 leading-relaxed lg:pt-3">
+          We make sure every key we sell is legit, every figure is authentic, and every deal is tracked. A calm, sustainable home for your hobby — no ads, no dark patterns, no clutter.
         </p>
-        <div class="flex flex-wrap items-center gap-4 mt-8">
-          <a href="/login/" class="inline-flex items-center gap-2 bg-[#323446] hover:bg-slate-800 text-white text-sm font-bold px-7 py-3.5 rounded-full transition-all shadow-lg shadow-slate-300 hover:-translate-y-0.5">
-            Sign In & Explore <i data-lucide="play-circle" class="w-4 h-4 fill-white text-[#323446]"></i>
-          </a>
-          <a href="#store" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors px-4 py-3.5">
-            Browse games <i data-lucide="chevron-down" class="w-4 h-4"></i>
-          </a>
-        </div>
-        <div class="flex items-center gap-6 mt-8 text-xs text-slate-400 font-semibold">
-          <span class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-slate-500"></i> 10k+ gamers</span>
-          <span class="flex items-center gap-2"><i data-lucide="gamepad-2" class="w-4 h-4 text-slate-500"></i> 500+ titles</span>
-          <span class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-slate-500"></i> Secure checkout</span>
-        </div>
       </div>
 
-      <!-- Hero store mockup -->
-      <div class="relative">
-        <div class="bg-white rounded-[2.2rem] shadow-xl shadow-slate-200 border border-white overflow-hidden">
-          <div class="bg-[#323446] px-5 py-3.5 flex items-center justify-between">
-            <div class="flex items-center gap-2 text-white font-bold text-xs tracking-widest uppercase">
-              <i data-lucide="store" class="w-4 h-4 text-indigo-300"></i> Featured Store
-            </div>
-            <div class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-300">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SERVER: ONLINE
-            </div>
-          </div>
-          <div class="p-3">
-            <div class="relative rounded-[1.6rem] overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Featured game" class="w-full h-56 object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/10 to-transparent"></div>
-              <span class="absolute top-3 left-3 bg-white/15 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1 rounded-full border border-white/30 uppercase tracking-wider">Project Sekai</span>
-              <div class="absolute bottom-3 left-4 right-4 text-white">
-                <p class="text-[10px] text-slate-300 font-medium">ABSORPTIVE RHYTHM EXPERIENCE</p>
-                <h3 class="font-extrabold text-lg leading-tight">Colorful Stage! Collectors Bundle</h3>
-              </div>
-            </div>
-            <div class="flex items-center justify-between px-2 pt-4 pb-1">
-              <div>
-                <p class="text-[10px] text-slate-400 font-semibold">PRICE</p>
-                <p class="font-extrabold text-slate-800">$49.99 <span class="text-[10px] text-slate-400 line-through font-semibold">$59.99</span></p>
-              </div>
-              <a href="/login/" class="inline-flex items-center gap-2 bg-[#323446] hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-full transition-all">
-                Add to Cart <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
-              </a>
-            </div>
-          </div>
+      <div class="flex flex-wrap items-center justify-between gap-8 mt-24">
+        <div class="logo-circle w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-white shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2.5 cursor-pointer">
+          <i data-lucide="gamepad-2" class="w-5 h-5 text-[#323446]"></i>
+          <span class="text-sm font-extrabold text-slate-800 tracking-wider">SEGA</span>
         </div>
-        <div class="absolute -bottom-5 -left-5 w-24 h-24 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-        <div class="absolute -top-4 -right-4 w-32 h-32 bg-indigo-400/20 rounded-full blur-2xl pointer-events-none"></div>
-      </div>
-    </section>
-
-    <!-- ==================== FEATURES ==================== -->
-    <section id="features" class="pb-16">
-      <div class="text-center max-w-xl mx-auto mb-10">
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Everything your collection needs</h2>
-        <p class="text-slate-500 mt-3 text-sm">A distraction-free command center for your games, deals, and wishlist.</p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-5">
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-7 hover:shadow-md hover:-translate-y-1 transition-all">
-          <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-5 shadow-sm">
-            <i data-lucide="sparkles" class="w-5 h-5"></i>
-          </div>
-          <h3 class="font-bold text-slate-800">New Release Radar</h3>
-          <p class="text-sm text-slate-500 mt-2 leading-relaxed">Daily drops, previews, and curated picks across your favorite publishers — all in one feed.</p>
+        <div class="logo-circle w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-slate-200/70 flex items-center justify-center gap-2.5 cursor-pointer">
+          <i data-lucide="globe" class="w-5 h-5 text-slate-700"></i>
+          <span class="text-sm font-extrabold text-slate-700 tracking-wider">HoYoverse</span>
         </div>
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-7 hover:shadow-md hover:-translate-y-1 transition-all">
-          <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-5 shadow-sm">
-            <i data-lucide="tag" class="w-5 h-5"></i>
-          </div>
-          <h3 class="font-bold text-slate-800">Daily Deals</h3>
-          <p class="text-sm text-slate-500 mt-2 leading-relaxed">Flash sales and seasonal discounts tracked automatically so you never miss the good stuff.</p>
+        <div class="logo-circle w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-slate-200/70 flex items-center justify-center gap-2.5 cursor-pointer">
+          <i data-lucide="swords" class="w-5 h-5 text-slate-700"></i>
+          <span class="text-[13px] font-extrabold text-slate-700 tracking-wider">FromSoftware</span>
         </div>
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-7 hover:shadow-md hover:-translate-y-1 transition-all">
-          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-5 shadow-sm">
-            <i data-lucide="heart" class="w-5 h-5"></i>
-          </div>
-          <h3 class="font-bold text-slate-800">Wishlist Sync</h3>
-          <p class="text-sm text-slate-500 mt-2 leading-relaxed">Save games across platforms, get notified on price drops, and check out in a single click.</p>
+        <div class="logo-circle w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-slate-200/70 flex items-center justify-center gap-2.5 cursor-pointer">
+          <i data-lucide="shield" class="w-5 h-5 text-slate-700"></i>
+          <span class="text-sm font-extrabold text-slate-700 tracking-wider">ATLUS</span>
         </div>
-      </div>
-    </section>
-
-    <!-- ==================== NEW RELEASES ==================== -->
-    <section id="releases" class="pb-16">
-      <div class="flex justify-between items-end mb-6">
-        <div>
-          <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Hot Right Now</span>
-          <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">New Releases</h2>
-        </div>
-        <a href="/login/" class="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1">
-          view all <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-        </a>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <!-- Card -->
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-3.5 flex items-center gap-3 hover:shadow-md transition-all">
-          <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center shrink-0">
-            <i data-lucide="music" class="w-5 h-5"></i>
-          </div>
-          <div class="min-w-0">
-            <h4 class="text-xs font-bold text-slate-800 truncate">Songwriting</h4>
-            <p class="text-[10px] text-slate-400 font-medium truncate">Project Sekai · 9.2</p>
-          </div>
-        </div>
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-3.5 flex items-center gap-3 hover:shadow-md transition-all">
-          <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center shrink-0">
-            <i data-lucide="mic" class="w-5 h-5"></i>
-          </div>
-          <div class="min-w-0">
-            <h4 class="text-xs font-bold text-slate-800 truncate">Stage Performance</h4>
-            <p class="text-[10px] text-slate-400 font-medium truncate">Project Sekai · 9.0</p>
-          </div>
-        </div>
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-3.5 flex items-center gap-3 hover:shadow-md transition-all">
-          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center shrink-0">
-            <i data-lucide="clapperboard" class="w-5 h-5"></i>
-          </div>
-          <div class="min-w-0">
-            <h4 class="text-xs font-bold text-slate-800 truncate">Recording</h4>
-            <p class="text-[10px] text-slate-400 font-medium truncate">Project Sekai · 8.8</p>
-          </div>
-        </div>
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-3.5 flex items-center gap-3 hover:shadow-md transition-all">
-          <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center shrink-0">
-            <i data-lucide="sword" class="w-5 h-5"></i>
-          </div>
-          <div class="min-w-0">
-            <h4 class="text-xs font-bold text-slate-800 truncate">Elden Ring: Shadow</h4>
-            <p class="text-[10px] text-slate-400 font-medium truncate">FromSoftware · 4.9</p>
-          </div>
-        </div>
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-3.5 flex items-center gap-3 hover:shadow-md transition-all">
-          <div class="w-12 h-12 bg-sky-50 text-sky-600 rounded-xl flex items-center justify-center shrink-0">
-            <i data-lucide="space" class="w-5 h-5"></i>
-          </div>
-          <div class="min-w-0">
-            <h4 class="text-xs font-bold text-slate-800 truncate">Honkai: Star Rail</h4>
-            <p class="text-[10px] text-slate-400 font-medium truncate">HoYoverse · 4.8</p>
-          </div>
-        </div>
-        <div class="bg-white rounded-3xl border border-white shadow-sm p-3.5 flex items-center gap-3 hover:shadow-md transition-all">
-          <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center shrink-0">
-            <i data-lucide="drama" class="w-5 h-5"></i>
-          </div>
-          <div class="min-w-0">
-            <h4 class="text-xs font-bold text-slate-800 truncate">Persona 3 Reload</h4>
-            <p class="text-[10px] text-slate-400 font-medium truncate">ATLUS · 4.7</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== CTA BANNER ==================== -->
-    <section id="store" class="pb-20">
-      <div class="relative overflow-hidden rounded-[2.2rem] bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-900 px-8 sm:px-14 py-14 text-center">
-        <div class="absolute top-[-30%] right-[-10%] w-80 h-80 bg-indigo-500/25 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute bottom-[-30%] left-[-10%] w-72 h-72 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="relative z-10">
-          <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full border border-white/20">
-            <i data-lucide="gamepad-2" class="w-3.5 h-3.5"></i> Create your free account
-          </span>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-5 tracking-tight">Your game dashboard is waiting.</h2>
-          <p class="text-slate-300 mt-4 max-w-xl mx-auto text-sm">Join thousands of gamers managing their store, wishlist, and deals — all in one place.</p>
-          <div class="flex flex-wrap justify-center gap-4 mt-8">
-            <a href="/login/" class="inline-flex items-center gap-2 bg-white text-slate-900 text-sm font-bold px-8 py-3.5 rounded-full hover:-translate-y-0.5 hover:shadow-lg transition-all">
-              Get Started <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
-            <a href="/login/" class="inline-flex items-center gap-2 text-white/90 hover:text-white text-sm font-bold px-5 py-3.5 transition-colors">
-              Sign In <i data-lucide="log-in" class="w-4 h-4"></i>
-            </a>
-          </div>
+        <div class="logo-circle w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-slate-200/70 flex items-center justify-center gap-2.5 cursor-pointer">
+          <i data-lucide="zap" class="w-5 h-5 text-slate-700"></i>
+          <span class="text-[13px] font-extrabold text-slate-700 tracking-wider">Square Enix</span>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- ==================== FEATURES ==================== -->
+  <section id="features" class="bg-[#E2E7EE] py-28">
+    <div class="w-full max-w-[1920px] mx-auto px-6 lg:px-10">
+      <h2 class="text-4xl lg:text-5xl font-bold tracking-tight text-center leading-snug max-w-3xl mx-auto">
+        <span class="text-slate-900">One dashboard,</span>
+        <span class="text-slate-400"> with everything your shelf needs</span>
+      </h2>
+
+      <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm mt-16 grid md:grid-cols-3 overflow-hidden">
+        <div class="feature-cell p-10 lg:p-12 border-b border-r border-slate-100">
+          <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-7">
+            <i data-lucide="layers" class="w-5 h-5 text-[#323446]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Unified library</h3>
+          <p class="text-[15px] text-slate-500 mt-3 leading-relaxed">Keys, bundles and pre-orders from every platform, shelved together in one calm gallery.</p>
+        </div>
+        <div class="feature-cell p-10 lg:p-12 border-b border-r border-slate-100">
+          <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-7">
+            <i data-lucide="badge-check" class="w-5 h-5 text-[#323446]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Authenticity control</h3>
+          <p class="text-[15px] text-slate-500 mt-3 leading-relaxed">Every figure and artbook is verified with the publisher before it reaches your wishlist.</p>
+        </div>
+        <div class="feature-cell p-10 lg:p-12 border-b border-slate-100">
+          <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-7">
+            <i data-lucide="headphones" class="w-5 h-5 text-[#323446]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Collector support</h3>
+          <p class="text-[15px] text-slate-500 mt-3 leading-relaxed">Real humans, 24/7, who know the difference between a nendoroid and a scale figure.</p>
+        </div>
+        <div class="feature-cell p-10 lg:p-12 border-r border-slate-100">
+          <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-7">
+            <i data-lucide="book-open" class="w-5 h-5 text-[#323446]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Care guides</h3>
+          <p class="text-[15px] text-slate-500 mt-3 leading-relaxed">Display, storage and maintenance guides so your collection stays mint for years.</p>
+        </div>
+        <div class="feature-cell p-10 lg:p-12 border-r border-slate-100">
+          <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-7">
+            <i data-lucide="package" class="w-5 h-5 text-[#323446]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Safe delivery</h3>
+          <p class="text-[15px] text-slate-500 mt-3 leading-relaxed">Double-boxed, tracked and insured shipping — collectors' boxes arrive corner-sharp.</p>
+        </div>
+        <div class="feature-cell p-10 lg:p-12">
+          <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-7">
+            <i data-lucide="sparkles" class="w-5 h-5 text-[#323446]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Smart price alerts</h3>
+          <p class="text-[15px] text-slate-500 mt-3 leading-relaxed">Wishlist an item once; our tracker pings you the second it drops anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="w-full max-w-[1920px] mx-auto px-6 lg:px-10">
+
+    <!-- ==================== TRUSTED SERVICE SPLIT ==================== -->
+    <section id="store" class="py-32">
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+        <div>
+          <h2 class="text-4xl lg:text-5xl font-bold tracking-tight leading-snug">
+            <span class="text-slate-900">One store,</span>
+            <span class="text-slate-400"> for every kind of collector</span>
+          </h2>
+          <a href="/login/" class="inline-flex items-center gap-2 bg-[#323446] hover:bg-slate-800 text-white text-sm font-bold px-7 py-3.5 rounded-full transition-all mt-9 hover:-translate-y-0.5">
+            Get in touch <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
+
+          <div class="grid grid-cols-2 gap-5 mt-20">
+            <div class="num-card bg-white border border-slate-200 rounded-xl p-7">
+              <span class="text-sm font-semibold text-slate-400">01</span>
+              <h4 class="text-base font-bold text-slate-900 mt-4 leading-snug">Game keys & bundles</h4>
+              <a href="#releases" class="text-xs font-semibold text-slate-500 underline underline-offset-4 hover:text-slate-900 mt-4 inline-block">View Details</a>
+            </div>
+            <div class="num-card bg-white border border-slate-200 rounded-xl p-7">
+              <span class="text-sm font-semibold text-slate-400">02</span>
+              <h4 class="text-base font-bold text-slate-900 mt-4 leading-snug">Scale figures & nendoroids</h4>
+              <a href="#releases" class="text-xs font-semibold text-slate-500 underline underline-offset-4 hover:text-slate-900 mt-4 inline-block">View Details</a>
+            </div>
+            <div class="num-card bg-white border border-slate-200 rounded-xl p-7">
+              <span class="text-sm font-semibold text-slate-400">03</span>
+              <h4 class="text-base font-bold text-slate-900 mt-4 leading-snug">OSTs & vinyl records</h4>
+              <a href="#releases" class="text-xs font-semibold text-slate-500 underline underline-offset-4 hover:text-slate-900 mt-4 inline-block">View Details</a>
+            </div>
+            <div class="num-card bg-white border border-slate-200 rounded-xl p-7">
+              <span class="text-sm font-semibold text-slate-400">04</span>
+              <h4 class="text-base font-bold text-slate-900 mt-4 leading-snug">Artbooks & apparel</h4>
+              <a href="#releases" class="text-xs font-semibold text-slate-500 underline underline-offset-4 hover:text-slate-900 mt-4 inline-block">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-[1.6rem] overflow-hidden h-[520px] lg:h-[620px]">
+          <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1200&q=80"
+               alt="collector" class="w-full h-full object-cover">
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CASE STUDY SHOWCASE (NEW) ==================== -->
+    <section id="community" class="pb-32">
+
+      <!-- Header row: heading + controls -->
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+        <h2 class="text-4xl lg:text-5xl font-bold tracking-tight leading-snug max-w-3xl">
+          <span class="text-slate-900">See how collectors use Kaimono,</span>
+          <span class="text-slate-400"> right on target</span>
+        </h2>
+        <div class="flex items-center gap-4 shrink-0">
+          <button id="cs-prev" class="w-12 h-12 rounded-full border border-slate-300 text-slate-600 flex items-center justify-center hover:bg-[#323446] hover:border-[#323446] hover:text-white transition-all">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </button>
+          <button id="cs-next" class="w-12 h-12 rounded-full border border-slate-300 text-slate-600 flex items-center justify-center hover:bg-[#323446] hover:border-[#323446] hover:text-white transition-all">
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+          <span id="cs-counter" class="text-base font-bold text-slate-400 font-mono tracking-widest ml-2">01 / 03</span>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] gap-6 mt-14 items-start">
+
+        <!-- LEFT: case selector + CTA -->
+        <div class="flex flex-col gap-3">
+          <button class="case-tab active flex items-center gap-5 p-6 rounded-2xl text-left" data-case="0">
+            <span class="case-num text-sm font-extrabold font-mono">01</span>
+            <span class="flex-1 min-w-0">
+              <span class="case-title block text-lg font-bold leading-tight">Figure collectors</span>
+              <span class="case-desc block text-sm mt-1">Authenticity checks & restock alerts</span>
+            </span>
+            <i data-lucide="arrow-right" class="case-arrow w-5 h-5 shrink-0"></i>
+          </button>
+
+          <button class="case-tab flex items-center gap-5 p-6 rounded-2xl text-left" data-case="1">
+            <span class="case-num text-sm font-extrabold font-mono">02</span>
+            <span class="flex-1 min-w-0">
+              <span class="case-title block text-lg font-bold leading-tight">Rhythm gamers</span>
+              <span class="case-desc block text-sm mt-1">Playtime & achievement journaling</span>
+            </span>
+            <i data-lucide="arrow-right" class="case-arrow w-5 h-5 shrink-0"></i>
+          </button>
+
+          <button class="case-tab flex items-center gap-5 p-6 rounded-2xl text-left" data-case="2">
+            <span class="case-num text-sm font-extrabold font-mono">03</span>
+            <span class="flex-1 min-w-0">
+              <span class="case-title block text-lg font-bold leading-tight">OST & vinyl hunters</span>
+              <span class="case-desc block text-sm mt-1">One wishlist across three platforms</span>
+            </span>
+            <i data-lucide="arrow-right" class="case-arrow w-5 h-5 shrink-0"></i>
+          </button>
+
+          <!-- Dark CTA card -->
+          <div class="mt-3 bg-[#323446] rounded-2xl p-8 relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full pointer-events-none"></div>
+            <div class="absolute -bottom-14 -left-10 w-40 h-40 bg-white/5 rounded-full pointer-events-none"></div>
+            <p class="text-xl font-bold text-white leading-snug relative">Your shelf has a story too.</p>
+            <p class="text-sm text-slate-300 mt-2.5 leading-relaxed relative">Share how you collect — the best story gets featured here next month.</p>
+            <a href="/login/" class="relative inline-flex items-center gap-2 bg-white text-[#323446] text-sm font-bold px-5 py-2.5 rounded-full hover:-translate-y-0.5 transition-all mt-6">
+              Share your story <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- RIGHT: showcase panel -->
+        <div id="cs-panel" class="bg-white rounded-[2rem] border border-slate-200/70 shadow-xl shadow-slate-900/5 overflow-hidden">
+          <div class="grid lg:grid-cols-2">
+
+            <!-- Quote side -->
+            <div class="p-10 lg:p-14 flex flex-col">
+              <div class="flex items-center justify-between">
+                <span id="cs-brand" class="text-base font-extrabold text-[#323446] tracking-tight">shiro_kun</span>
+                <i data-lucide="quote" class="w-10 h-10 text-slate-100 fill-slate-100"></i>
+              </div>
+
+              <p id="cs-quote" class="text-xl lg:text-2xl font-semibold text-slate-800 leading-snug mt-8">
+                "Kaimono caught two restocks I would have missed. Every figure arrives verified, double-boxed, corner-sharp — my shelves have never been this organized."
+              </p>
+
+              <div class="flex items-center gap-4 mt-10">
+                <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-slate-200 shrink-0">
+                  <img id="cs-avatar" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=150&q=80" alt="avatar" class="w-full h-full object-cover">
+                </div>
+                <div class="min-w-0">
+                  <p class="flex items-center gap-1.5 text-base font-bold text-slate-900">
+                    <span id="cs-name">shiro_kun</span>
+                    <i data-lucide="badge-check" class="w-4 h-4 text-[#323446] fill-[#323446] shrink-0"></i>
+                  </p>
+                  <p id="cs-role" class="text-sm text-slate-500 mt-0.5">Figure collector · 2.4K followers</p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4 mt-auto pt-10">
+                <a href="/login/" class="inline-flex items-center gap-2 bg-[#323446] hover:bg-slate-800 text-white text-sm font-bold px-6 py-3 rounded-full transition-colors">
+                  View case study
+                </a>
+                <a href="/login/" class="arrow-link text-sm font-bold text-slate-500">
+                  Follow <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Image side -->
+            <div class="relative min-h-[320px] lg:min-h-0">
+              <img id="cs-img" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80"
+                   alt="case" class="absolute inset-0 w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
+
+              <!-- Floating live chip -->
+              <div class="absolute top-6 left-6 bg-white/95 backdrop-blur-md rounded-2xl px-5 py-4 shadow-xl max-w-[240px]">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#323446] pulse-dot"></span>
+                  <span id="cs-chip-label" class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Restock alert</span>
+                </div>
+                <p id="cs-chip-value" class="text-sm font-bold text-slate-900 leading-snug">Nendoroid Ichika · back in stock</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Metrics bar -->
+          <div class="border-t border-slate-100 grid grid-cols-3 divide-x divide-slate-100 bg-[#F7F9FC]">
+            <div class="p-6 lg:p-8 text-center">
+              <p id="cs-m1v" class="text-3xl font-extrabold text-slate-900 tracking-tight">214</p>
+              <p id="cs-m1l" class="text-sm text-slate-500 font-medium mt-1.5">figures tracked</p>
+            </div>
+            <div class="p-6 lg:p-8 text-center">
+              <p id="cs-m2v" class="text-3xl font-extrabold text-slate-900 tracking-tight">$1.2K</p>
+              <p id="cs-m2l" class="text-sm text-slate-500 font-medium mt-1.5">saved this year</p>
+            </div>
+            <div class="p-6 lg:p-8 text-center">
+              <p id="cs-m3v" class="text-3xl font-extrabold text-slate-900 tracking-tight">38</p>
+              <p id="cs-m3l" class="text-sm text-slate-500 font-medium mt-1.5">restock alerts caught</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
   <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-[#1E1E28] text-slate-400">
-    <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-lg flex items-center justify-center font-extrabold text-white text-xs">K</div>
-        <span class="font-bold text-white tracking-widest uppercase text-xs">@KAIMONO</span>
+  <footer class="bg-[#14151d] text-slate-400">
+    <div class="w-full max-w-[1920px] mx-auto px-6 lg:px-10 pt-24 pb-12">
+
+      <div class="grid lg:grid-cols-2 gap-12 items-start pb-20 border-b border-white/10">
+        <div>
+          <h2 class="text-4xl lg:text-5xl font-bold tracking-tight leading-snug">
+            <span class="text-white">It's time to organize your shelf,</span>
+            <span class="text-slate-500"> with one quiet dashboard</span>
+          </h2>
+          <div class="flex flex-wrap items-center gap-8 mt-10">
+            <span class="flex items-center gap-2.5 text-base font-semibold text-slate-300">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-white"></i> Free forever for collectors
+            </span>
+            <span class="flex items-center gap-2.5 text-base font-semibold text-slate-300">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-white"></i> No ads, no dark patterns
+            </span>
+          </div>
+        </div>
+        <div>
+          <p class="text-base text-slate-400 leading-relaxed max-w-md">
+            By bringing your library, wishlist and deals together, Kaimono makes collecting more profitable for your pocket and calmer for your mind.
+          </p>
+          <a href="/login/" class="inline-flex items-center gap-2 bg-white text-slate-900 text-sm font-bold px-8 py-3.5 rounded-full hover:-translate-y-0.5 hover:shadow-lg transition-all mt-8">
+            Get in touch <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
+        </div>
       </div>
-      <div class="text-xs font-semibold flex items-center gap-5">
-        <a href="/login/" class="hover:text-white transition-colors">Sign In</a>
-        <a href="#features" class="hover:text-white transition-colors">Features</a>
-        <a href="#releases" class="hover:text-white transition-colors">New Releases</a>
+
+      <div class="pt-12 flex flex-col lg:flex-row items-center justify-between gap-8">
+        <a href="/" class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center font-extrabold text-[#323446] text-base">K</div>
+          <span class="font-extrabold text-white tracking-tight text-lg">Kaimono</span>
+        </a>
+
+        <div class="flex items-center gap-9 text-[15px] font-semibold text-slate-400">
+          <a href="#top" class="hover:text-white transition-colors">Home</a>
+          <a href="#store" class="hover:text-white transition-colors">Store</a>
+          <a href="#features" class="hover:text-white transition-colors">Features</a>
+          <a href="#releases" class="hover:text-white transition-colors">Releases</a>
+          <a href="#community" class="hover:text-white transition-colors">Community</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center transition-colors">
+            <i data-lucide="linkedin" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center transition-colors">
+            <i data-lucide="twitter" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center transition-colors">
+            <i data-lucide="facebook" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center transition-colors">
+            <i data-lucide="instagram" class="w-4 h-4"></i>
+          </a>
+        </div>
       </div>
-      <p class="text-[11px] text-slate-500 font-medium">STORE DASHBOARD // GAMING PLATFORM</p>
+
+      <div class="pt-10 mt-10 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-slate-500">© 2026 Kaimono Inc. All rights reserved.</p>
+        <div class="flex items-center gap-8 text-sm text-slate-500">
+          <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+        </div>
+      </div>
     </div>
   </footer>
 
-  <!-- Transition overlay (expanding circle wipe into the login page) -->
+  <!-- Transition overlay -->
   <div id="page-wipe" class="page-wipe" aria-hidden="true"></div>
 
   <script>
     lucide.createIcons();
 
-    // Beautiful dynamic exit: page zooms/fades out while a dark circle wipes in,
-    // then navigate to the login page.
+    // ===== PAGE WIPE =====
     var wipe = document.getElementById('page-wipe');
     document.querySelectorAll('a[href="/login/"]').forEach(function (link) {
       link.addEventListener('click', function (e) {
@@ -296,6 +548,100 @@
         setTimeout(function () {
           window.location.href = '/login/';
         }, 720);
+      });
+    });
+
+    // ===== CASE STUDY SHOWCASE =====
+    var CASES = [
+      {
+        brand: 'shiro_kun',
+        quote: '"Kaimono caught two restocks I would have missed. Every figure arrives verified, double-boxed, corner-sharp — my shelves have never been this organized."',
+        name: 'shiro_kun',
+        role: 'Figure collector · 2.4K followers',
+        avatar: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=150&q=80',
+        img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80',
+        chipLabel: 'Restock alert',
+        chipValue: 'Nendoroid Ichika · back in stock',
+        metrics: [['214', 'figures tracked'], ['$1.2K', 'saved this year'], ['38', 'restock alerts caught']]
+      },
+      {
+        brand: 'hana_illustrator',
+        quote: '"The dashboard tracks every hour I spend in rhythm games and every yen I save. It feels like a journal of my hobby, not a store trying to sell me things."',
+        name: 'hana_illustrator',
+        role: 'Rhythm gamer · 5.1K followers',
+        avatar: 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=150&q=80',
+        img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80',
+        chipLabel: 'Session logged',
+        chipValue: 'Project Sekai · 2h 14m today',
+        metrics: [['1,240', 'hours logged'], ['482', 'songs cleared'], ['87%', 'achievement rate']]
+      },
+      {
+        brand: 'ren_dev',
+        quote: '"I hunt OSTs and vinyl across three platforms. One unified wishlist caught two restocks in the first month — it paid for itself before I even checked out."',
+        name: 'ren_dev',
+        role: 'OST hunter · 970 followers',
+        avatar: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=150&q=80',
+        img: 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1200&q=80',
+        chipLabel: 'Price drop',
+        chipValue: 'Persona 3 OST · now -30%',
+        metrics: [['3', 'platforms synced'], ['96', 'vinyls tracked'], ['12', 'deals caught']]
+      }
+    ];
+
+    var csCurrent = 0;
+    var csPanel = document.getElementById('cs-panel');
+    var csTabs = document.querySelectorAll('.case-tab');
+
+    function applyCase(i) {
+      var c = CASES[i];
+      document.getElementById('cs-brand').textContent = c.brand;
+      document.getElementById('cs-quote').textContent = c.quote;
+      document.getElementById('cs-name').textContent = c.name;
+      document.getElementById('cs-role').textContent = c.role;
+      document.getElementById('cs-avatar').src = c.avatar;
+      document.getElementById('cs-img').src = c.img;
+      document.getElementById('cs-chip-label').textContent = c.chipLabel;
+      document.getElementById('cs-chip-value').textContent = c.chipValue;
+      document.getElementById('cs-m1v').textContent = c.metrics[0][0];
+      document.getElementById('cs-m1l').textContent = c.metrics[0][1];
+      document.getElementById('cs-m2v').textContent = c.metrics[1][0];
+      document.getElementById('cs-m2l').textContent = c.metrics[1][1];
+      document.getElementById('cs-m3v').textContent = c.metrics[2][0];
+      document.getElementById('cs-m3l').textContent = c.metrics[2][1];
+      document.getElementById('cs-counter').textContent = '0' + (i + 1) + ' / 0' + CASES.length;
+      csTabs.forEach(function (t, ti) { t.classList.toggle('active', ti === i); });
+    }
+
+    function switchCase(i) {
+      csCurrent = (i + CASES.length) % CASES.length;
+      csPanel.style.opacity = '0';
+      csPanel.style.transform = 'translateY(10px)';
+      setTimeout(function () {
+        applyCase(csCurrent);
+        csPanel.style.opacity = '1';
+        csPanel.style.transform = 'translateY(0)';
+      }, 230);
+    }
+
+    csTabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        switchCase(parseInt(tab.dataset.case, 10));
+      });
+    });
+    document.getElementById('cs-prev').addEventListener('click', function () { switchCase(csCurrent - 1); });
+    document.getElementById('cs-next').addEventListener('click', function () { switchCase(csCurrent + 1); });
+
+    // ===== SMOOTH SCROLL =====
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+      anchor.addEventListener('click', function (e) {
+        var href = this.getAttribute('href');
+        if (href.length > 1) {
+          var target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
       });
     });
   </script>
