@@ -118,10 +118,10 @@
 
     <!-- Profile header -->
     <a href="/profile/" data-path="/profile/" data-tip="Profile" class="nav-item nav-profile">
-      <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-slate-300 object-cover shadow-sm shrink-0">
+      <img src="{{ request.user.avatar_url|default:'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80' }}" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-slate-300 object-cover shadow-sm shrink-0">
       <span class="sidebar-text">
-        <span class="block font-bold text-slate-800 truncate text-xs">Hoshino Ichika</span>
-        <span class="block text-[10px] text-slate-400 font-medium truncate">Premium Member</span>
+        <span class="block font-bold text-slate-800 truncate text-xs">{{ request.user.display_name|default:request.user.username }}</span>
+        <span class="block text-[10px] text-slate-400 font-medium truncate">{{ request.user.get_role_display|default:'Member' }}</span>
       </span>
     </a>
 
@@ -163,7 +163,7 @@
       </span>
       <span id="collapse-label" class="sidebar-text text-xs">Expand</span>
     </button>
-    <a href="/" data-tip="Log Out" class="nav-item">
+    <a href="/logout/" data-tip="Log Out" class="nav-item">
       <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
       <span class="sidebar-text text-xs">Log Out</span>
     </a>
