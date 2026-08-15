@@ -52,6 +52,36 @@
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
   }
 
+  /* Tooltip — hanya tampil saat collapsed, muncul di kanan ikon */
+  #sidebar-tip {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: none;
+    align-items: center;
+    transform: translateY(-50%);
+    z-index: 100;
+    background: #323446;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.625rem;
+    box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.35);
+    pointer-events: none;
+  }
+  #sidebar-tip .sidebar-tip-arrow {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    margin-top: -5px;
+    border: 5px solid transparent;
+    border-right-color: #323446;
+    border-right-width: 5px;
+  }
+
   /* Profile header: avatar 40px — center saat collapse, sumbu center sama dgn ikon saat expand */
   #sidebar .nav-profile {
     padding-left: 0.625rem;  /* collapse: 10+10 → avatar center di x=40 */
@@ -83,11 +113,11 @@
   }
 </style>
 
-<aside id="sidebar" class="shrink-0 h-full bg-[#F7F9FC] text-slate-700 rounded-[2rem] border border-white flex flex-col justify-between overflow-hidden">
+<aside id="sidebar" class="shrink-0 h-full bg-[#F7F9FC] text-slate-700 rounded-[2rem] border border-white flex flex-col justify-between">
   <div class="flex flex-col gap-5 w-full flex-1 min-h-0">
 
     <!-- Profile header -->
-    <a href="/profile/" data-path="/profile/" class="nav-item nav-profile">
+    <a href="/profile/" data-path="/profile/" data-tip="Profile" class="nav-item nav-profile">
       <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-slate-300 object-cover shadow-sm shrink-0">
       <span class="sidebar-text">
         <span class="block font-bold text-slate-800 truncate text-xs">Hoshino Ichika</span>
@@ -97,28 +127,28 @@
 
     <!-- Navigation -->
     <nav class="flex flex-col gap-1.5 w-full overflow-y-auto min-h-0">
-      <a href="/dashboard/" data-path="/dashboard/" class="nav-item">
+      <a href="/dashboard/" data-path="/dashboard/" data-tip="Dashboard" class="nav-item">
         <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
         <span class="sidebar-text text-xs">Dashboard</span>
       </a>
-      <a href="/shop/" data-path="/shop/" class="nav-item">
+      <a href="/shop/" data-path="/shop/" data-tip="Shop" class="nav-item">
         <i data-lucide="store" class="w-5 h-5 shrink-0"></i>
         <span class="sidebar-text text-xs">Shop</span>
       </a>
-      <a href="/community/" data-path="/community/" class="nav-item">
+      <a href="/community/" data-path="/community/" data-tip="Community" class="nav-item">
         <i data-lucide="users" class="w-5 h-5 shrink-0"></i>
         <span class="sidebar-text text-xs">Community</span>
       </a>
-      <a href="/wishlist/" data-path="/wishlist/" class="nav-item">
+      <a href="/wishlist/" data-path="/wishlist/" data-tip="Wishlist" class="nav-item">
         <i data-lucide="heart" class="w-5 h-5 shrink-0"></i>
         <span class="sidebar-text fill text-xs">Wishlist</span>
         <span class="sidebar-text text-[10px] font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full">12</span>
       </a>
-      <a href="/library/" data-path="/library/" class="nav-item">
+      <a href="/library/" data-path="/library/" data-tip="Library" class="nav-item">
         <i data-lucide="inbox" class="w-5 h-5 shrink-0"></i>
         <span class="sidebar-text text-xs">Library</span>
       </a>
-      <a href="/settings/" data-path="/settings/" class="nav-item">
+      <a href="/settings/" data-path="/settings/" data-tip="Settings" class="nav-item">
         <i data-lucide="settings" class="w-5 h-5 shrink-0"></i>
         <span class="sidebar-text text-xs">Settings</span>
       </a>
@@ -127,18 +157,23 @@
 
   <!-- Bottom actions -->
   <div class="flex flex-col gap-1.5 w-full pt-4 border-t border-slate-200/80">
-    <button id="toggle-sidebar" class="nav-item">
+    <button id="toggle-sidebar" class="nav-item" data-tip="Expand">
       <span id="toggle-icon-holder" class="flex items-center justify-center w-5 h-5 shrink-0">
         <i data-lucide="panel-left-open" class="w-5 h-5 shrink-0"></i>
       </span>
       <span id="collapse-label" class="sidebar-text text-xs">Expand</span>
     </button>
-    <a href="/" class="nav-item">
+    <a href="/" data-tip="Log Out" class="nav-item">
       <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
       <span class="sidebar-text text-xs">Log Out</span>
     </a>
   </div>
 </aside>
+
+<div id="sidebar-tip" role="tooltip" aria-hidden="true">
+  <span class="sidebar-tip-arrow"></span>
+  <span id="sidebar-tip-label"></span>
+</div>
 
 <script>
 (function () {
@@ -147,6 +182,8 @@
   var toggleBtn  = document.getElementById('toggle-sidebar');
   var iconHolder = document.getElementById('toggle-icon-holder');
   var label      = document.getElementById('collapse-label');
+  var tipEl      = document.getElementById('sidebar-tip');
+  var tipLabel   = document.getElementById('sidebar-tip-label');
   var isCollapsed = localStorage.getItem('kaimono_sidebar_collapsed') !== 'false';
 
   var path = window.location.pathname;
@@ -155,12 +192,45 @@
     if (p && path.indexOf(p) === 0) a.classList.add('nav-active');
   });
 
+  function setTip() {
+    tipEl.style.display = 'none';
+  }
+  setTip();
+
+  function showTip(item) {
+    if (!tipEl || !tipLabel) return;
+    if (sidebar.classList.contains('expanded')) return;
+    tipLabel.textContent = item.getAttribute('data-tip') || '';
+    if (!tipLabel.textContent) return;
+    var r = item.getBoundingClientRect();
+    tipEl.style.display = 'flex';
+    tipEl.style.transform = 'translateY(-50%)';
+    tipEl.style.left = (r.right + 10) + 'px';
+    tipEl.style.top = (r.top + r.height / 2) + 'px';
+    tipEl.setAttribute('aria-hidden', 'false');
+  }
+
+  function hideTip() {
+    if (!tipEl) return;
+    tipEl.style.display = 'none';
+    tipEl.setAttribute('aria-hidden', 'true');
+  }
+
+  sidebar.querySelectorAll('.nav-item').forEach(function (item) {
+    item.addEventListener('mouseenter', function () { showTip(item); });
+    item.addEventListener('mouseleave', hideTip);
+    item.addEventListener('focus', function () { showTip(item); });
+    item.addEventListener('blur', hideTip);
+  });
+
   function render() {
     sidebar.classList.toggle('expanded', !isCollapsed);
     if (iconHolder) {
       iconHolder.innerHTML = '<i data-lucide="' + (isCollapsed ? 'panel-left-open' : 'panel-left-close') + '" class="w-5 h-5 shrink-0"></i>';
     }
     if (label) label.textContent = isCollapsed ? 'Expand' : 'Collapse';
+    toggleBtn.setAttribute('data-tip', isCollapsed ? 'Expand' : 'Collapse');
+    if (!isCollapsed) hideTip();
     if (window.lucide) lucide.createIcons();
   }
   render();
