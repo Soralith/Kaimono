@@ -12,6 +12,9 @@ def accsetup(request):
 def dashboard(request):
     return render(request, 'dashboard/pages/dashboard.html')
 
+def shop(request):
+    return render(request, 'dashboard/pages/shop.html')
+
 def community(request):
     return render(request, 'dashboard/pages/community.html')
 
