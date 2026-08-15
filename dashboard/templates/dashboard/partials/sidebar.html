@@ -1,39 +1,92 @@
+<!-- dashboard/templates/dashboard/partials/sidebar.html -->
 <style>
-  /* ===== KAIMONO SIDEBAR — UNIFIED (single source of truth) ===== */
+  /* ===== KAIMONO SIDEBAR — UNIFIED (v3: icon center saat collapse, zero-shift) ===== */
   #sidebar {
     width: 5rem;
-    padding: 1.5rem 0.625rem;
-    box-shadow: 0 1px 2px rgba(15,23,42,0.05);
-    transition: width 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms cubic-bezier(0.4,0,0.2,1), box-shadow 300ms ease;
+    padding: 1.5rem 0.625rem; /* 10px kiri-kanan saat collapse */
+    background: #F7F9FC;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                padding 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 300ms ease;
   }
-  #sidebar.expanded { width: 16rem; padding: 1.5rem 1rem; box-shadow: 0 18px 44px -18px rgba(50,52,70,0.22); }
+  #sidebar.expanded {
+    width: 16rem;
+    padding: 1.5rem 1rem; /* 16px kiri-kanan saat expand */
+    box-shadow: 0 18px 44px -18px rgba(50, 52, 70, 0.22);
+  }
+
+  /* Nav items */
   #sidebar .nav-item {
-    display: flex; align-items: center; justify-content: center; gap: 0;
-    padding: 0.75rem 0; width: 100%; color: #64748b; font-weight: 600;
-    border-radius: 1rem; text-align: left;
-    transition: gap 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms cubic-bezier(0.4,0,0.2,1), background-color 200ms, color 200ms;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    /* COLLAPSE: 10px (sidebar) + 20px (item) = ikon 20px tepat di tengah (center x=40 dari 80px) */
+    padding: 0.75rem 0 0.75rem 1.25rem;
+    width: 100%;
+    color: #64748b;
+    font-weight: 600;
+    border-radius: 1rem;
+    text-align: left;
+    transition: gap 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                padding 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 200ms ease,
+                color 200ms ease;
   }
-  #sidebar.expanded .nav-item { justify-content: flex-start; gap: 0.875rem; padding: 0.75rem 0.875rem; }
-  #sidebar .nav-item:hover { background: rgba(226,232,240,0.5); color: #0f172a; }
-  #sidebar .nav-active, #sidebar .nav-active:hover {
-    background: rgba(226,232,240,0.8); color: #0f172a; font-weight: 700;
-    box-shadow: 0 1px 2px rgba(15,23,42,0.08);
+  /* EXPAND: 16px (sidebar) + 14px (item) = x=30 → SAMA dengan collapse (10+20) → ikon tidak bergeser */
+  #sidebar.expanded .nav-item {
+    gap: 0.875rem;
+    padding: 0.75rem 0.875rem;
   }
-  #sidebar .nav-profile { padding-bottom: 0.75rem; border-bottom: 1px solid rgba(226,232,240,0.8); }
+
+  #sidebar .nav-item:hover {
+    background: rgba(226, 232, 240, 0.5);
+    color: #0f172a;
+  }
+  #sidebar .nav-active,
+  #sidebar .nav-active:hover {
+    background: rgba(226, 232, 240, 0.8);
+    color: #0f172a;
+    font-weight: 700;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  }
+
+  /* Profile header: avatar 40px — center saat collapse, sumbu center sama dgn ikon saat expand */
+  #sidebar .nav-profile {
+    padding-left: 0.625rem;  /* collapse: 10+10 → avatar center di x=40 */
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  }
+  #sidebar.expanded .nav-profile {
+    padding-left: 0.25rem;   /* expand: 16+4 → avatar center di x=40, sejajar sumbu ikon */
+  }
+
+  /* Label text: fade smooth, tanpa transform */
   #sidebar .sidebar-text {
-    display: block; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap;
-    transform: translateX(-6px);
-    transition: max-width 300ms cubic-bezier(0.4,0,0.2,1), opacity 160ms ease, transform 160ms ease;
+    display: block;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 160ms ease;
   }
   #sidebar.expanded .sidebar-text {
-    max-width: 12rem; opacity: 1; transform: translateX(0);
-    transition: max-width 300ms cubic-bezier(0.4,0,0.2,1), opacity 220ms ease 90ms, transform 220ms ease 90ms;
+    max-width: 12rem;
+    opacity: 1;
+    transition: max-width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 220ms ease 90ms;
   }
-  #sidebar.expanded .sidebar-text.fill { flex: 1 1 auto; }
+  #sidebar.expanded .sidebar-text.fill {
+    flex: 1 1 auto;
+  }
 </style>
 
 <aside id="sidebar" class="shrink-0 h-full bg-[#F7F9FC] text-slate-700 rounded-[2rem] border border-white flex flex-col justify-between overflow-hidden">
   <div class="flex flex-col gap-5 w-full flex-1 min-h-0">
+
+    <!-- Profile header -->
     <a href="/profile/" data-path="/profile/" class="nav-item nav-profile">
       <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-slate-300 object-cover shadow-sm shrink-0">
       <span class="sidebar-text">
@@ -41,6 +94,8 @@
         <span class="block text-[10px] text-slate-400 font-medium truncate">Premium Member</span>
       </span>
     </a>
+
+    <!-- Navigation -->
     <nav class="flex flex-col gap-1.5 w-full overflow-y-auto min-h-0">
       <a href="/dashboard/" data-path="/dashboard/" class="nav-item">
         <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
@@ -65,6 +120,8 @@
       </a>
     </nav>
   </div>
+
+  <!-- Bottom actions -->
   <div class="flex flex-col gap-1.5 w-full pt-4 border-t border-slate-200/80">
     <button id="toggle-sidebar" class="nav-item">
       <span id="toggle-icon-holder" class="flex items-center justify-center w-5 h-5 shrink-0">
@@ -88,7 +145,6 @@
   var label      = document.getElementById('collapse-label');
   var isCollapsed = localStorage.getItem('kaimono_sidebar_collapsed') !== 'false';
 
-  // Active link otomatis dari URL — markup identik di semua page
   var path = window.location.pathname;
   sidebar.querySelectorAll('[data-path]').forEach(function (a) {
     var p = a.getAttribute('data-path');
@@ -97,7 +153,9 @@
 
   function render() {
     sidebar.classList.toggle('expanded', !isCollapsed);
-    if (iconHolder) iconHolder.innerHTML = '<i data-lucide="' + (isCollapsed ? 'panel-left-open' : 'panel-left-close') + '" class="w-5 h-5 shrink-0"></i>';
+    if (iconHolder) {
+      iconHolder.innerHTML = '<i data-lucide="' + (isCollapsed ? 'panel-left-open' : 'panel-left-close') + '" class="w-5 h-5 shrink-0"></i>';
+    }
     if (label) label.textContent = isCollapsed ? 'Expand' : 'Collapse';
     if (window.lucide) lucide.createIcons();
   }
