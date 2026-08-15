@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -584,22 +585,11 @@
   <!-- TOAST CONTAINER -->
   <div id="toast-container" class="toast-container"></div>
 
+  <script src="{% static 'dashboard/js/products.js' %}"></script>
+
   <script>
-    // ===== PRODUCT DATABASE =====
-    const PRODUCTS = [
-      { id: 1, name: "NieR:Automata™ GOTY Edition", brand: "Square Enix", category: "games", type: "Action RPG", price: 19.99, originalPrice: 39.99, rating: 4.9, reviews: 2400, stock: "In stock · Ships in 24h", badges: ["-50%", "Summer"], image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80", popularity: 95, date: "2026-07-15" },
-      { id: 2, name: "Honkai: Star Rail Collector's Edition", brand: "HoYoverse", category: "games", type: "Turn-based RPG", price: 59.99, originalPrice: null, rating: 4.7, reviews: 1800, stock: "Pre-order · Ships Dec 2026", badges: ["New"], image: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80", popularity: 88, date: "2026-08-01" },
-      { id: 3, name: "Genshin Impact 1/7 Scale PVC Figure", brand: "Anime Collectibles", category: "figures", type: "PVC Statue", price: 99.99, originalPrice: 129.99, rating: 4.9, reviews: 890, stock: "Release: Jan 2027", badges: ["Pre-Order"], image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80", popularity: 92, date: "2026-06-20" },
-      { id: 4, name: "Persona 3 Reload Premium Hoodie", brand: "Official Apparel", category: "apparel", type: "Cotton Hoodie", price: 34.99, originalPrice: 49.99, rating: 4.6, reviews: 3100, stock: "In stock · 4 sizes", badges: ["-30%", "Bestseller"], image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80", popularity: 97, date: "2026-05-10" },
-      { id: 5, name: "Monster Hunter World: Iceborne Master", brand: "CAPCOM", category: "games", type: "Action", price: 9.89, originalPrice: 29.99, rating: 4.8, reviews: 5600, stock: "In stock · Ships in 24h", badges: ["-67%"], image: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=400&q=80", popularity: 85, date: "2025-12-01" },
-      { id: 6, name: "Hatsune Miku Nendoroid 15th Anniversary", brand: "Good Smile", category: "figures", type: "Nendoroid", price: 79.99, originalPrice: null, rating: 5.0, reviews: 4200, stock: "Only 12 left", badges: ["Limited"], image: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80", popularity: 99, date: "2026-04-15" },
-      { id: 7, name: "Vintage Anime Art T-Shirt Collection", brand: "Official Apparel", category: "apparel", type: "Unisex Tee", price: 19.99, originalPrice: 24.99, rating: 4.4, reviews: 612, stock: "In stock · Unisex", badges: ["-20%"], image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80", popularity: 72, date: "2026-03-20" },
-      { id: 8, name: "Acrylic Keychain Collection Set (8 pcs)", brand: "Accessories", category: "accessories", type: "Acrylic", price: 12.99, originalPrice: null, rating: 4.9, reviews: 7800, stock: "In stock · Ships in 24h", badges: ["Bestseller"], image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80", popularity: 94, date: "2026-02-28" },
-      { id: 9, name: "Project Sekai Colorful Stage! Soundtrack", brand: "Sega", category: "accessories", type: "CD + Booklet", price: 29.99, originalPrice: null, rating: 4.8, reviews: 1200, stock: "In stock", badges: ["New"], image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80", popularity: 80, date: "2026-07-01" },
-      { id: 10, name: "Chainsaw Man Power Scale Figure", brand: "Bandai", category: "figures", type: "1/8 Scale", price: 149.99, originalPrice: 179.99, rating: 4.9, reviews: 650, stock: "Pre-order · Feb 2027", badges: ["Pre-Order", "-17%"], image: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=400&q=80", popularity: 87, date: "2026-06-15" },
-      { id: 11, name: "Elden Ring Shadow of the Erdtree DLC", brand: "FromSoftware", category: "games", type: "Expansion", price: 39.99, originalPrice: null, rating: 4.8, reviews: 8900, stock: "In stock · Digital", badges: ["Hot"], image: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80", popularity: 96, date: "2026-05-20" },
-      { id: 12, name: "Jujutsu Kaisen Sukuna Hoodie Black", brand: "Crunchyroll", category: "apparel", type: "Premium Cotton", price: 54.99, originalPrice: 69.99, rating: 4.7, reviews: 2100, stock: "In stock · 5 sizes", badges: ["-21%"], image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80", popularity: 89, date: "2026-04-01" },
-    ];
+    // ===== PRODUCT DATABASE (shared with game detail pages) =====
+    const PRODUCTS = window.KAIMONO_PRODUCTS || [];
 
     const CATEGORIES = [
       { id: "all", label: "All Products", icon: "layout-grid", count: PRODUCTS.length },
@@ -901,6 +891,14 @@
 
     // ===== ATTACH EVENTS TO PRODUCT ELEMENTS =====
     const attachProductEvents = () => {
+      // Open game detail page
+      document.querySelectorAll(".product-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const id = Number(card.dataset.id);
+          window.location.href = `/shop/${id}/`;
+        });
+      });
+
       // Wishlist
       document.querySelectorAll(".heart-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {

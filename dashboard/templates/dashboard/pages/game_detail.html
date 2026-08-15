@@ -1,0 +1,503 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game — Kaimono</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #EBF0F5; }
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+    .hide-scroll::-webkit-scrollbar { display: none; }
+    .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ===== Fade animations (DESIGN.md soft transitions) ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .animate-fadeInUp { animation: fadeInUp 450ms ease-out both; }
+    .animate-fadeIn { animation: fadeIn 300ms ease-out both; }
+
+    /* ===== Hero capsule ===== */
+    .capsule-overlay {
+      background: linear-gradient(to top, rgba(20, 22, 32, 0.95) 0%, rgba(20, 22, 32, 0.5) 45%, rgba(20, 22, 32, 0.15) 100%);
+    }
+
+    /* ===== Media gallery ===== */
+    .gallery-stage { transition: opacity 250ms ease, transform 300ms ease; }
+    .gallery-thumb {
+      transition: all 200ms ease;
+      opacity: 0.65;
+    }
+    .gallery-thumb:hover { opacity: 1; transform: translateY(-2px); }
+    .gallery-thumb.active {
+      opacity: 1;
+      border-color: #6366F1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    /* ===== Tag pills ===== */
+    .tag-pill { transition: all 200ms ease; }
+    .tag-pill:hover { background-color: #323446; color: white; }
+
+    /* ===== Purchase accent ===== */
+    .btn-dark { transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1); }
+    .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -12px rgba(50, 52, 70, 0.5); }
+
+    /* ===== Wishlist / follow state ===== */
+    #gd-wish.active {
+      background-color: #323446;
+      color: white;
+      border-color: #323446;
+    }
+    #gd-wish.active svg { fill: #ef4444; color: #fff; }
+    .follow-btn.active {
+      background-color: #6366F1;
+      color: white;
+      border-color: #6366F1;
+    }
+
+    /* ===== Toast ===== */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast { pointer-events: auto; min-width: 260px; }
+  </style>
+</head>
+<body data-product-id="{{ product_id }}" class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+
+  {% include "dashboard/partials/topbar.html" %}
+
+  <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+
+    {% include "dashboard/partials/sidebar.html" %}
+
+    <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4" id="main-content">
+
+      <!-- BREADCRUMB -->
+      <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
+        <div class="flex items-baseline gap-1">
+          <a href="/shop/" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#323446] transition-colors">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Shop
+          </a>
+        </div>
+        <span id="page-cat" class="text-xs font-bold text-slate-400 uppercase tracking-wider"></span>
+      </div>
+
+      <!-- ============ STAGE 1 · HEADER & MAIN MEDIA ============ -->
+      <div class="shrink-0 relative rounded-[2rem] overflow-hidden shadow-xl shadow-slate-900/20">
+        <img id="gd-banner" src="" alt="header capsule" class="w-full h-[300px] lg:h-[360px] object-cover">
+        <div class="capsule-overlay absolute inset-0"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div class="max-w-2xl">
+            <div class="flex items-center gap-2 mb-3">
+              <span id="gd-badges" class="flex items-center gap-1.5"></span>
+            </div>
+            <h1 id="gd-title" class="text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight"></h1>
+            <div class="flex items-center gap-3 mt-3">
+              <span id="gd-stars" class="flex items-center gap-0.5"></span>
+              <span id="gd-rating" class="text-sm font-bold text-white"></span>
+              <span id="gd-reviews" class="text-sm text-white/70"></span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span id="gd-publisher-chip" class="bg-white/10 backdrop-blur border border-white/15 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider"></span>
+            <span id="gd-type-chip" class="bg-[#6366F1] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Media gallery + summary info -->
+      <div class="grid lg:grid-cols-[1.6fr_1fr] gap-6 items-start mt-6">
+
+        <!-- Media gallery -->
+        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-4 lg:p-5 animate-fadeInUp">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i data-lucide="monitor-play" class="w-4 h-4 text-[#6366F1]"></i> Trailer & Screenshots
+            </h3>
+            <span id="media-counter" class="text-[10px] font-bold text-slate-400 font-mono tracking-widest"></span>
+          </div>
+
+          <!-- Main stage -->
+          <div class="relative rounded-2xl overflow-hidden bg-slate-900 aspect-video" id="media-stage">
+            <div id="media-main"></div>
+            <button id="media-prev" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur text-white flex items-center justify-center transition-colors z-10">
+              <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <button id="media-next" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur text-white flex items-center justify-center transition-colors z-10">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+            <span id="media-tag" class="absolute bottom-3 left-3 bg-white/15 backdrop-blur border border-white/15 text-white text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider"></span>
+          </div>
+
+          <!-- Thumbnails -->
+          <div id="media-thumbs" class="flex gap-2.5 mt-3 overflow-x-auto hide-scroll"></div>
+        </div>
+
+        <!-- Summary info box -->
+        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 80ms">
+          <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
+            <i data-lucide="info" class="w-4 h-4 text-[#6366F1]"></i> About This Product
+          </h3>
+          <p id="gd-desc" class="text-[13px] text-slate-500 leading-relaxed"></p>
+
+          <div class="grid grid-cols-2 gap-3 mt-5">
+            <div class="bg-[#F7F9FC] rounded-xl p-3">
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> Release Date</p>
+              <p id="gd-release" class="text-xs font-bold text-slate-800 mt-1"></p>
+            </div>
+            <div class="bg-[#F7F9FC] rounded-xl p-3">
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1"><i data-lucide="code-2" class="w-3 h-3"></i> Developer</p>
+              <p id="gd-developer" class="text-xs font-bold text-slate-800 mt-1"></p>
+            </div>
+            <div class="bg-[#F7F9FC] rounded-xl p-3">
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1"><i data-lucide="building-2" class="w-3 h-3"></i> Publisher</p>
+              <p id="gd-publisher" class="text-xs font-bold text-slate-800 mt-1"></p>
+            </div>
+            <div class="bg-[#F7F9FC] rounded-xl p-3">
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1"><i data-lucide="tag" class="w-3 h-3"></i> Category</p>
+              <p id="gd-type-box" class="text-xs font-bold text-slate-800 mt-1"></p>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-5">
+            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">Tags</p>
+            <div id="gd-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ STAGE 2: PURCHASE & COMMUNITY ============ -->
+      <div class="grid lg:grid-cols-[1fr_1.4fr] gap-6 mt-6">
+
+        <!-- Purchase box -->
+        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 h-fit animate-fadeInUp">
+          <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
+            <i data-lucide="shopping-cart" class="w-4 h-4 text-[#6366F1]"></i> Purchase
+          </h3>
+
+          <div class="flex items-end gap-2.5 mb-2">
+            <span id="gd-price" class="text-4xl font-extrabold text-slate-900 tracking-tight"></span>
+            <span id="gd-old-price" class="text-sm text-slate-400 line-through mb-1 hidden"></span>
+            <span id="gd-save" class="bg-[#323446] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full mb-1.5 hidden"></span>
+          </div>
+
+          <p id="gd-price-note" class="text-[11px] text-slate-400 font-medium mb-5"></p>
+
+          <button id="gd-buy" class="w-full bg-[#323446] hover:bg-slate-800 text-white font-bold py-3.5 rounded-full text-sm flex items-center justify-center gap-2 transition-all btn-dark">
+            <i data-lucide="zap" class="w-4 h-4"></i> <span id="gd-buy-label">Buy Now</span>
+          </button>
+
+          <div class="grid grid-cols-2 gap-2 mt-3">
+            <button id="gd-wish" class="w-full bg-[#F7F9FC] hover:bg-slate-200/60 text-slate-700 font-bold py-3 rounded-full text-xs flex items-center justify-center gap-2 border border-slate-200 transition-colors">
+              <i data-lucide="heart" class="w-3.5 h-3.5"></i> Wishlist
+            </button>
+            <button id="gd-follow" class="follow-btn w-full bg-[#F7F9FC] hover:bg-slate-200/60 text-slate-700 font-bold py-3 rounded-full text-xs flex items-center justify-center gap-2 border border-slate-200 transition-colors">
+              <i data-lucide="bell-plus" class="w-3.5 h-3.5"></i> Follow
+            </button>
+          </div>
+
+          <div class="flex items-center gap-4 mt-4 pt-4 border-t border-slate-100">
+            <span class="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500"><i data-lucide="shield-check" class="w-3 h-3 text-slate-400"></i> Authentic keys</span>
+            <span class="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500"><i data-lucide="truck" class="w-3 h-3 text-slate-400"></i> Free ship $80+</span>
+            <span class="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500"><i data-lucide="rotate-ccw" class="w-3 h-3 text-slate-400"></i> 30-day returns</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-6">
+
+          <!-- Wishlist & friends status -->
+          <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 100ms">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4 text-[#6366F1]"></i> Wishlist & Friends Status
+              </h3>
+              <span class="text-[10px] font-bold text-slate-400">Steam friends</span>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="bg-[#F7F9FC] rounded-xl p-4">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3 h-3 text-emerald-500"></i> Own this game</p>
+                <div id="gd-friends-own" class="flex flex-wrap gap-1.5 mt-3"></div>
+              </div>
+              <div class="bg-[#F7F9FC] rounded-xl p-4">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3 text-rose-500"></i> On their wishlist</p>
+                <div id="gd-friends-want" class="flex flex-wrap gap-1.5 mt-3"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bundles / packages -->
+          <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 160ms">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                <i data-lucide="package-plus" class="w-4 h-4 text-[#6366F1]"></i> Bundles & Editions
+              </h3>
+              <span id="gd-bundle-count" class="text-[10px] font-bold text-slate-400"></span>
+            </div>
+            <div id="gd-bundles" class="grid sm:grid-cols-2 gap-3"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="{% static 'dashboard/js/products.js' %}"></script>
+  <script>
+    lucide.createIcons();
+
+    var PRODUCTS = window.KAIMONO_PRODUCTS || [];
+    var PRODUCT_ID = Number(document.body.dataset.productId);
+
+    var $g = function (id) { return document.getElementById(id); };
+    var fmt = function (n) { return "$" + n.toFixed(2); };
+
+    function openToast(msg, icon) {
+      var c = $g("toast-container");
+      var t = document.createElement("div");
+      t.className = "toast bg-white border border-slate-200 shadow-xl rounded-2xl p-3 flex items-center gap-3 animate-fadeIn";
+      t.innerHTML = '<div class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center shrink-0"><i data-lucide="' + (icon || "check") + '" class="w-4 h-4"></i></div>' +
+                    '<p class="text-xs font-semibold text-slate-800 flex-1">' + msg + '</p>';
+      c.appendChild(t);
+      lucide.createIcons();
+      setTimeout(function () {
+        t.style.opacity = "0";
+        t.style.transition = "opacity 300ms";
+        setTimeout(function () { t.remove(); }, 300);
+      }, 2600);
+    }
+
+    var readLS = function (k) { try { return JSON.parse(localStorage.getItem(k) || "[]"); } catch (e) { return []; } };
+    var writeLS = function (k, v) { localStorage.setItem(k, JSON.stringify(v)); };
+
+    var p = PRODUCTS.find(function (x) { return x.id === PRODUCT_ID; });
+
+    if (!p) {
+      document.getElementById("main-content").innerHTML =
+        '<div class="flex flex-col items-center justify-center py-32 bg-white rounded-2xl border border-slate-200/70">' +
+        '<div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-4"><i data-lucide="package-x" class="w-10 h-10 text-slate-400"></i></div>' +
+        '<h2 class="text-lg font-extrabold text-slate-800">Product not found</h2>' +
+        '<p class="text-xs text-slate-500 mt-1">The item you are looking for does not exist.</p>' +
+        '<a href="/shop/" class="mt-5 bg-[#323446] hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-full text-xs flex items-center gap-2"><i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Shop</a>' +
+        '</div>';
+      lucide.createIcons();
+    } else {
+      var banner = (p.media && p.media[0] && p.media[0].poster) || p.image;
+
+      $g("gd-banner").src = banner;
+      $g("gd-title").textContent = p.name;
+      $g("page-cat").textContent = p.category;
+      $g("gd-rating").textContent = p.rating;
+      $g("gd-reviews").textContent = "(" + p.reviews.toLocaleString() + " reviews)";
+
+      var stars = "";
+      for (var s = 1; s <= 5; s++) {
+        stars += '<i data-lucide="star" class="w-3.5 h-3.5 ' + (s <= Math.round(p.rating) ? "text-amber-400 fill-amber-400" : "text-white/30") + '"></i>';
+      }
+      $g("gd-stars").innerHTML = stars;
+
+      $g("gd-badges").innerHTML = (p.badges || []).map(function (b) {
+        return '<span class="bg-[#323446] text-white text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md">' + b + '</span>';
+      }).join("");
+      $g("gd-publisher-chip").textContent = p.publisher || p.brand;
+      $g("gd-type-chip").textContent = p.type;
+
+      // stock line under title
+      var stockLine = document.createElement("p");
+      stockLine.className = "flex items-center gap-1.5 mt-3 text-sm font-semibold text-white/90";
+      stockLine.innerHTML = '<i data-lucide="package" class="w-3.5 h-3.5"></i><span>' + p.stock + '</span>';
+      $g("gd-reviews").parentNode.appendChild(stockLine);
+
+      // Summary info
+      $g("gd-desc").textContent = p.description || "";
+      $g("gd-release").textContent = p.releaseDate || "TBA";
+      $g("gd-developer").textContent = p.developer || "—";
+      $g("gd-publisher").textContent = p.publisher || "—";
+      $g("gd-type-box").textContent = p.type;
+      $g("gd-tags").innerHTML = (p.tags || []).map(function (t) {
+        return '<span class="tag-pill bg-[#F7F9FC] border border-slate-200 text-slate-600 text-[10px] font-bold px-2.5 py-1 rounded-full">' + t + '</span>';
+      }).join("");
+
+      // Media gallery
+      gallery = buildGallery();
+      mIdx = 0;
+      renderGallery();
+      $g("media-prev").addEventListener("click", function () {
+        mIdx = (mIdx - 1 + gallery.length) % gallery.length;
+        renderGallery();
+      });
+      $g("media-next").addEventListener("click", function () {
+        mIdx = (mIdx + 1) % gallery.length;
+        renderGallery();
+      });
+
+      // Purchase box
+      $g("gd-price").textContent = fmt(p.price);
+      if (p.originalPrice) {
+        var save = Math.round((1 - p.price / p.originalPrice) * 100);
+        $g("gd-old-price").textContent = fmt(p.originalPrice);
+        $g("gd-old-price").classList.remove("hidden");
+        $g("gd-save").textContent = "Save " + save + "%";
+        $g("gd-save").classList.remove("hidden");
+      }
+      var isPre = /pre/i.test(p.stock);
+      $g("gd-buy-label").textContent = isPre ? "Pre-Purchase" : "Buy Now";
+      $g("gd-price-note").textContent = isPre ? "Pre-purchase now and receive the key on release." : (p.originalPrice ? "Promotional price — limited time only." : "Price includes all platform fees.");
+      $g("gd-buy").querySelector("i").setAttribute("data-lucide", isPre ? "clock-3" : "zap");
+
+      // Wishlist + follow
+      var wish = readLS("kaimono_wishlist");
+      var follow = readLS("kaimono_follows");
+      if (wish.indexOf(p.id) > -1) $g("gd-wish").classList.add("active");
+      if (follow.indexOf(p.id) > -1) $g("gd-follow").classList.add("active");
+
+      $g("gd-wish").addEventListener("click", function () {
+        var w = readLS("kaimono_wishlist");
+        var i = w.indexOf(p.id);
+        if (i > -1) { w.splice(i, 1); $g("gd-wish").classList.remove("active"); openToast("Removed from wishlist", "heart-off"); }
+        else { w.push(p.id); $g("gd-wish").classList.add("active"); openToast("Added to wishlist", "heart"); }
+        writeLS("kaimono_wishlist", w);
+      });
+
+      $g("gd-follow").addEventListener("click", function () {
+        var f = readLS("kaimono_follows");
+        var i = f.indexOf(p.id);
+        if (i > -1) { f.splice(i, 1); $g("gd-follow").classList.remove("active"); openToast("Unfollowed — updates stopped", "bell-off"); }
+        else { f.push(p.id); $g("gd-follow").classList.add("active"); openToast("Following — you'll get restock alerts", "bell-plus"); }
+        writeLS("kaimono_follows", f);
+      });
+
+      $g("gd-buy").addEventListener("click", function () {
+        openToast(isPre ? "Pre-purchase initiated — " + p.name : "Adding to cart — " + p.name, "shopping-cart");
+      });
+
+      // Friends status
+      var friends = p.friends || [];
+      var ownList = friends.filter(function (f) { return f.status === "owns"; });
+      var wantList = friends.filter(function (f) { return f.status === "wants"; });
+      $g("gd-friends-own").innerHTML = ownList.length ? "" : '<span class="text-[11px] text-slate-400 font-medium">No friends own it yet</span>';
+      $g("gd-friends-want").innerHTML = wantList.length ? "" : '<span class="text-[11px] text-slate-400 font-medium">No friends on wishlist yet</span>';
+      ownList.forEach(function (f) { $g("gd-friends-own").appendChild(buildFriend(f)); });
+      wantList.forEach(function (f) { $g("gd-friends-want").appendChild(buildFriend(f)); });
+
+      // Bundles
+      var bundles = p.bundles || [];
+      $g("gd-bundle-count").textContent = bundles.length + " available";
+      $g("gd-bundles").innerHTML = "";
+      if (bundles.length === 0) {
+        $g("gd-bundles").innerHTML = '<div class="sm:col-span-2 rounded-xl border border-dashed border-slate-200 py-8 text-center"><p class="text-xs text-slate-400 font-medium">No bundles available for this item.</p></div>';
+      } else {
+        bundles.forEach(function (b) {
+          var typeBadge = b.type === "dlc" ? "DLC" : b.type === "edition" ? "Edition" : "Bundle";
+          var el = document.createElement("div");
+          el.className = "rounded-xl border border-slate-200 bg-[#F7F9FC] p-4 flex flex-col";
+          el.innerHTML =
+            '<div class="flex items-center justify-between mb-2">' +
+              '<span class="text-[9px] font-extrabold uppercase tracking-wider ' + (b.type === "dlc" ? "text-[#6366F1]" : "text-slate-400") + '">' + typeBadge + '</span>' +
+              '<i data-lucide="check" class="w-3.5 h-3.5 text-slate-400"></i>' +
+            '</div>' +
+            '<h4 class="text-sm font-extrabold text-slate-800 leading-snug">' + b.name + '</h4>' +
+            '<ul class="mt-2 mb-3 flex-1 space-y-1">' + (b.includes || []).map(function (inc) {
+              return '<li class="flex items-start gap-1.5 text-[11px] text-slate-500"><i data-lucide="dot" class="w-2.5 h-2.5 mt-0.5 shrink-0"></i>' + inc + '</li>';
+            }).join("") + '</ul>' +
+            '<div class="flex items-center justify-between mt-1">' +
+              '<div class="flex items-baseline gap-1.5">' +
+                (b.originalPrice ? '<span class="text-[10px] text-slate-400 line-through">' + fmt(b.originalPrice) + '</span>' : "") +
+                '<span class="text-sm font-extrabold text-slate-900">' + fmt(b.price) + '</span>' +
+              '</div>' +
+              '<button class="bundle-buy bg-[#323446] hover:bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors" data-name="' + b.name + '">Buy</button>' +
+            '</div>';
+          $g("gd-bundles").appendChild(el);
+        });
+        document.querySelectorAll(".bundle-buy").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            openToast(btn.dataset.name + " added to cart", "package-plus");
+          });
+        });
+      }
+
+      lucide.createIcons();
+    }
+
+    function buildFriend(f) {
+      var d = document.createElement("div");
+      d.className = "flex items-center gap-2 bg-white rounded-full pl-1 pr-3 py-1 border border-slate-200 shadow-sm";
+      d.innerHTML = '<img src="' + f.avatar + '" alt="" class="w-6 h-6 rounded-full object-cover">' +
+                    '<span class="text-[11px] font-bold text-slate-700 truncate">' + f.name + '</span>';
+      return d;
+    }
+
+    // ===== Media gallery =====
+    var gallery = [];
+    var mIdx = 0;
+
+    function buildGallery() {
+      var gl = [];
+      (p.media || []).forEach(function (m) { gl.push({ type: "video", src: m.src, poster: m.poster, label: m.label }); });
+      (p.screenshots || []).forEach(function (sn) { gl.push({ type: "image", src: sn, label: "Screenshot" }); });
+      if (gl.length === 0) gl.push({ type: "image", src: p.image, label: p.type });
+      return gl;
+    }
+
+    function renderGallery() {
+      var item = gallery[mIdx];
+      var main = $g("media-main");
+      main.style.opacity = "0";
+      setTimeout(function () {
+        main.innerHTML = "";
+        if (item.type === "video") {
+          var v = document.createElement("video");
+          v.src = item.src;
+          v.poster = item.poster;
+          v.controls = true;
+          v.className = "w-full h-full object-cover";
+          main.appendChild(v);
+        } else {
+          var im = document.createElement("img");
+          im.src = item.src;
+          im.alt = p.name;
+          im.className = "w-full h-full object-cover";
+          main.appendChild(im);
+        }
+        main.style.opacity = "1";
+        $g("media-tag").textContent = item.label || (item.type === "video" ? "Trailer" : "Screenshot");
+        $g("media-counter").textContent = String(mIdx + 1).padStart(2, "0") + " / " + String(gallery.length).padStart(2, "0");
+        lucide.createIcons();
+      }, 150);
+
+      var thumbs = $g("media-thumbs");
+      thumbs.innerHTML = "";
+      gallery.forEach(function (g, i) {
+        var b = document.createElement("button");
+        b.className = "gallery-thumb relative w-24 h-14 rounded-lg overflow-hidden border-2 shrink-0 " + (i === mIdx ? "active border-[#6366F1]" : "border-transparent");
+        if (g.type === "video") {
+          b.innerHTML = '<img src="' + g.poster + '" alt="" class="w-full h-full object-cover">' +
+            '<span class="absolute inset-0 bg-black/30 flex items-center justify-center"><i data-lucide="play" class="w-4 h-4 text-white"></i></span>';
+        } else {
+          b.innerHTML = '<img src="' + g.src + '" alt="" class="w-full h-full object-cover">';
+        }
+        b.addEventListener("click", function () { mIdx = i; renderGallery(); });
+        thumbs.appendChild(b);
+      });
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>

@@ -15,6 +15,9 @@ def dashboard(request):
 def shop(request):
     return render(request, 'dashboard/pages/shop.html')
 
+def game_detail(request, product_id):
+    return render(request, 'dashboard/pages/game_detail.html', {'product_id': product_id})
+
 def community(request):
     return render(request, 'dashboard/pages/community.html')
 
