@@ -1,5 +1,26 @@
 <!-- dashboard/templates/dashboard/partials/sidebar.html -->
 <style>
+  /* ===== KAIMONO THEMES ===== */
+  body[data-theme="midnight"]  { background-color: #0f172a !important; }
+  body[data-theme="obsidian"]  { background-color: #000000 !important; }
+  body[data-theme="silver"]    { background-color: #e2e8f0 !important; }
+  body[data-theme="paper"]     { background-color: #f5f3ea !important; }
+
+  body[data-theme="midnight"] #sidebar,
+  body[data-theme="obsidian"] #sidebar { background: #16161f !important; box-shadow: none; }
+  body[data-theme="midnight"] #sidebar .nav-item,
+  body[data-theme="obsidian"] #sidebar .nav-item { color: #94a3b8; }
+  body[data-theme="midnight"] #sidebar .nav-item:hover,
+  body[data-theme="obsidian"] #sidebar .nav-item:hover { background: rgba(255,255,255,.07); color: #e2e8f0; }
+  body[data-theme="midnight"] #sidebar .nav-active,
+  body[data-theme="midnight"] #sidebar .nav-active:hover,
+  body[data-theme="obsidian"] #sidebar .nav-active,
+  body[data-theme="obsidian"] #sidebar .nav-active:hover { background: rgba(255,255,255,.12); color: #ffffff; box-shadow: none; }
+  body[data-theme="midnight"] #sidebar .nav-profile,
+  body[data-theme="obsidian"] #sidebar .nav-profile { border-bottom-color: rgba(255,255,255,.08); }
+  body[data-theme="midnight"] #sidebar .nav-profile .text-slate-800,
+  body[data-theme="obsidian"] #sidebar .nav-profile .text-slate-800 { color: #e2e8f0; }
+
   /* ===== KAIMONO SIDEBAR — UNIFIED (v3: icon center saat collapse, zero-shift) ===== */
   #sidebar {
     width: 5rem;
@@ -176,6 +197,12 @@
 </div>
 
 <script>
+// Apply the user's saved theme to <body> as soon as the page loads.
+(function () {
+  if (document.body) {
+    document.body.setAttribute('data-theme', '{{ request.user.theme|default:"silver" }}');
+  }
+})();
 (function () {
   var sidebar = document.getElementById('sidebar');
   if (!sidebar) return;

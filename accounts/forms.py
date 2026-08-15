@@ -67,4 +67,4 @@ class SettingsForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('display_name', 'bio')
+        fields = ('display_name', 'bio', 'theme')

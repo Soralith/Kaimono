@@ -293,20 +293,19 @@
                 <i data-lucide="palette" class="w-4 h-4 text-slate-600"></i> Profile Theme
               </h3>
               <div class="grid grid-cols-4 gap-3">
-                <button class="theme-swatch selected relative aspect-[4/3] rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 border border-slate-200">
-                  <i data-lucide="check" class="w-4 h-4 text-white absolute top-2 right-2"></i>
-                  <span class="absolute bottom-2 left-3 text-[10px] font-bold text-white">Midnight</span>
+                {% for value, label in form.fields.theme.choices %}
+                <button type="button" data-theme="{{ value }}" onclick="selectTheme('{{ value }}', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border border-slate-200
+                  {% if value == 'midnight' %}bg-gradient-to-br from-slate-700 to-slate-900{% endif %}
+                  {% if value == 'silver' %}bg-gradient-to-br from-slate-200 to-slate-400{% endif %}
+                  {% if value == 'paper' %}bg-gradient-to-br from-slate-50 to-slate-200{% endif %}
+                  {% if value == 'obsidian' %}bg-gradient-to-br from-slate-800 to-black{% endif %}
+                  {% if form.theme.value == value %}selected{% endif %}">
+                  {% if form.theme.value == value %}<i data-lucide="check" class="w-4 h-4 text-white absolute top-2 right-2 theme-check"></i>{% endif %}
+                  <span class="absolute bottom-2 left-3 text-[10px] font-bold {% if value == 'midnight' or value == 'obsidian' %}text-white{% else %}text-slate-600{% endif %}">{{ label }}</span>
                 </button>
-                <button class="theme-swatch relative aspect-[4/3] rounded-xl bg-gradient-to-br from-slate-200 to-slate-400 border border-slate-200">
-                  <span class="absolute bottom-2 left-3 text-[10px] font-bold text-slate-700">Silver</span>
-                </button>
-                <button class="theme-swatch relative aspect-[4/3] rounded-xl bg-gradient-to-br from-slate-50 to-slate-200 border border-slate-200">
-                  <span class="absolute bottom-2 left-3 text-[10px] font-bold text-slate-600">Paper</span>
-                </button>
-                <button class="theme-swatch relative aspect-[4/3] rounded-xl bg-gradient-to-br from-slate-800 to-black border border-slate-200">
-                  <span class="absolute bottom-2 left-3 text-[10px] font-bold text-white">Obsidian</span>
-                </button>
+                {% endfor %}
               </div>
+              <input type="hidden" name="theme" id="set-theme" form="set-form" value="{{ form.theme.value|default:'silver' }}">
             </div>
 
             <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-6 shrink-0">
@@ -675,6 +674,22 @@
         document.getElementById('avatar-remove').value = '';
       };
       reader.readAsDataURL(file);
+    }
+
+    function selectTheme(value, btn) {
+      document.querySelectorAll('.theme-swatch').forEach(function (s) {
+        s.classList.remove('selected');
+        var c = s.querySelector('.theme-check');
+        if (c) c.remove();
+      });
+      btn.classList.add('selected');
+      var check = document.createElement('i');
+      check.className = 'w-4 h-4 text-white absolute top-2 right-2 theme-check';
+      check.setAttribute('data-lucide', 'check');
+      btn.prepend(check);
+      if (window.lucide) lucide.createIcons();
+      document.getElementById('set-theme').value = value;
+      document.body.setAttribute('data-theme', value); // live preview
     }
   </script>
 </body>

@@ -7,6 +7,12 @@ class User(AbstractUser):
         ('gamer', 'Gamer'),
         ('developer', 'Developer'),
     ]
+    THEME_CHOICES = [
+        ('midnight', 'Midnight'),
+        ('silver', 'Silver'),
+        ('paper', 'Paper'),
+        ('obsidian', 'Obsidian'),
+    ]
 
     display_name = models.CharField(max_length=60, blank=True)
     email = models.EmailField(unique=True)
@@ -15,6 +21,7 @@ class User(AbstractUser):
     bio = models.CharField(max_length=200, blank=True)
     avatar_url = models.URLField(blank=True)
     banner_url = models.URLField(blank=True)
+    theme = models.CharField(max_length=20, choices=THEME_CHOICES, default='silver')
 
     def __str__(self):
         return f'{self.display_name or self.username} (@{self.username})'
