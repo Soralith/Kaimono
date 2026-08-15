@@ -12,20 +12,25 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
+# Environment variables (.env), with sensible dev defaults.
+env = environ.Env(DEBUG=(bool, True))
+environ.Env.read_env(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pvqt*!_33_r0*ja%08e-a)u0yy__))opy$_e+*z&$z%+om2z*h'
+SECRET_KEY = env(
+    'SECRET_KEY',
+    default='django-insecure-void-key-change-me',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG', default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', 'testserver'])
 
 
 # Application definition
@@ -38,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dashboard',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -73,12 +79,34 @@ WSGI_APPLICATION = 'kaimono.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Supabase Postgres (the project's database). Falls back to local SQLite
+# only if no DATABASE_URL is configured.
+if env('DATABASE_URL', default=None):
+    DATABASES = {
+        'default': env.db('DATABASE_URL', default=''),
     }
-}
+    DATABASES['default']['CONN_MAX_AGE'] = 60
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+AUTH_USER_MODEL = 'accounts.User'
+
+# File storage configuration
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Supabase project + Storage (S3-compatible endpoint)
+SUPABASE_URL = env('SUPABASE_URL', default='')
+SUPABASE_REGION = env('SUPABASE_REGION', default='ap-northeast-2')
+SUPABASE_S3_BUCKET = env('S3_BUCKET', default='accounts')
+SUPABASE_S3_ACCESS_KEY_ID = env('S3_ACCESS_KEY_ID', default='')
+SUPABASE_S3_SECRET_ACCESS_KEY = env('S3_SECRET_ACCESS_KEY', default='')
+SUPABASE_S3_ENDPOINT = f'{SUPABASE_URL}/storage/v1/s3'
 
 
 # Password validation

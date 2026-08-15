@@ -3,7 +3,7 @@
     <div class="flex items-center gap-6">
       <div class="flex items-center gap-2">
         <i data-lucide="user" class="w-4 h-4 text-white"></i>
-        <span class="font-bold text-white tracking-widest uppercase text-sm">@NAWSPHIC</span>
+        <span class="font-bold text-white tracking-widest uppercase text-sm">@{{ request.user.username|default:'guest' }}</span>
       </div>
       <div class="px-3 py-1 text-slate-300 font-serif italic text-sm tracking-wider opacity-90">LazyStudio</div>
       <span class="text-slate-500">|</span>
@@ -23,7 +23,7 @@
         <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white rotate-180 -ml-1"></i>
       </div>
       <div class="flex items-center gap-4 pl-4">
-        <span class="font-bold text-white tracking-widest text-sm">HOSHINO ICHIKA</span>
+        <span class="font-bold text-white tracking-widest text-sm">{{ request.user.display_name|default:request.user.username|upper }}</span>
         <button class="p-1 transition-colors text-white"><i data-lucide="list" class="w-5 h-5"></i></button>
       </div>
     </div>
