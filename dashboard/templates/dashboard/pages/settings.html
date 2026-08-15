@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaimono Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #E2E7EE;
+    }
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+    #sidebar { align-items: stretch !important; }
+    #sidebar a, #sidebar button {
+      padding-left: 20px !important;
+      padding-right: 0 !important;
+      justify-content: flex-start !important;
+      transition: padding 300ms, background-color 200ms, color 200ms;
+    }
+    #sidebar .sidebar-text { transition: opacity 300ms; }
+
+    .toggle-track {
+      width: 36px; height: 20px;
+      background-color: #cbd5e1;
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 250ms;
+      flex-shrink: 0;
+    }
+    .toggle-track.active { background-color: #323446; }
+    .toggle-knob {
+      width: 16px; height: 16px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px; left: 2px;
+      transition: left 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .toggle-track.active .toggle-knob { left: 18px; }
+
+    .settings-tab {
+      transition: all 200ms;
+      cursor: pointer;
+    }
+    .settings-tab:hover {
+      background-color: #e8ecf3;
+    }
+    .settings-tab.active {
+      background-color: #323446;
+      color: white;
+      box-shadow: 0 2px 8px rgba(50, 52, 70, 0.2);
+    }
+
+    .setting-card {
+      transition: all 250ms ease;
+    }
+    .setting-card:hover {
+      transform: translateY(-1px);
+      border-color: #cbd5e1;
+    }
+
+    .form-input {
+      width: 100%;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+      outline: none;
+      transition: all 200ms;
+    }
+    .form-input:focus {
+      border-color: #323446;
+      box-shadow: 0 0 0 3px rgba(50, 52, 70, 0.12);
+    }
+
+    .danger-btn {
+      transition: all 200ms;
+    }
+    .danger-btn:hover {
+      background-color: #dc2626;
+      border-color: #dc2626;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+
+  <!-- TOPBAR -->
+  <div class="pt-5 pb-3 px-6 relative w-full shrink-0">
+    <header class="bg-[#323446] text-slate-300 px-6 py-4 flex justify-between items-center shadow-md rounded-xl border border-slate-700/60">
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <i data-lucide="settings" class="w-4 h-4 text-white"></i>
+          <span class="font-bold text-white tracking-widest uppercase text-sm">@NAWSPHIC</span>
+        </div>
+        <div class="px-3 py-1 text-slate-300 font-serif italic text-sm tracking-wider opacity-90">LazyStudio</div>
+        <span class="text-slate-500">|</span>
+        <div class="flex items-center gap-3 text-slate-400 tracking-wider">
+          <span class="text-xs bg-slate-800/80 px-3 py-1 rounded text-slate-300 font-mono">CURRENT PROJECT</span>
+          <span class="text-slate-500">|</span>
+          <span class="font-semibold text-slate-200 text-sm">ANIME MERCH E-COMMERCE DASHBOARD</span>
+          <span class="text-slate-500">//</span>
+          <span class="text-slate-300 text-xs">PROJECT SEKAI STYLE</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-0 opacity-70">
+          <div class="w-48 bg-slate-500/50 h-[2px] rounded-l-full relative">
+            <div class="absolute right-0 -top-1 w-2.5 h-3 bg-white shadow-sm"></div>
+          </div>
+          <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white rotate-180 -ml-1"></i>
+        </div>
+        <div class="flex items-center gap-4 pl-4">
+          <span class="font-bold text-white tracking-widest text-sm">HOSHINO ICHIKA</span>
+          <button class="p-1 transition-colors text-white"><i data-lucide="list" class="w-5 h-5"></i></button>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="w-20 items-center bg-[#F7F9FC] text-slate-700 rounded-[2rem] flex flex-col justify-between py-6 px-2.5 shadow-sm border border-white shrink-0 h-full overflow-hidden transition-all duration-300">
+      <div class="flex flex-col gap-5 w-full flex-1 min-h-0">
+        <a href="/profile/" class="flex items-center gap-3.5 pb-3 border-b border-slate-200/80 px-1 rounded-2xl bg-slate-200/70">
+          <div class="w-10 h-10 rounded-full border-2 border-slate-300 overflow-hidden shadow-sm shrink-0 -ml-2.5">
+            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
+          </div>
+          <div class="sidebar-text overflow-hidden hidden">
+            <h4 class="font-bold text-slate-800 truncate text-xs">Hoshino Ichika</h4>
+            <p class="text-[10px] text-slate-400 font-medium truncate">Premium Member</p>
+          </div>
+        </a>
+        <nav class="flex flex-col gap-1.5 w-full overflow-y-auto min-h-0">
+          <a href="/dashboard/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Dashboard</span>
+          </a>
+          <a href="/community/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="users" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Community</span>
+          </a>
+          <a href="/wishlist/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all justify-between group">
+            <div class="flex items-center gap-3.5">
+              <i data-lucide="heart" class="w-5 h-5 shrink-0"></i>
+              <span class="sidebar-text text-xs whitespace-nowrap hidden">Wishlist</span>
+            </div>
+            <span class="sidebar-text text-[10px] font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full hidden">12</span>
+          </a>
+          <a href="/library/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all group">
+            <i data-lucide="inbox" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Library</span>
+          </a>
+          <a href="/settings/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl bg-slate-200/60 text-slate-900 font-semibold transition-all group">
+            <i data-lucide="settings" class="w-5 h-5 shrink-0"></i>
+            <span class="sidebar-text text-xs whitespace-nowrap hidden">Settings</span>
+          </a>
+        </nav>
+      </div>
+      <div class="flex flex-col gap-1.5 w-full pt-4 border-t border-slate-200/80">
+        <button id="toggle-sidebar" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all w-full text-left">
+          <i data-lucide="panel-left-open" id="toggle-icon" class="w-5 h-5 shrink-0"></i>
+          <span id="collapse-label" class="sidebar-text text-xs whitespace-nowrap hidden">Expand</span>
+        </button>
+        <a href="/" class="flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 font-semibold transition-all">
+          <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
+          <span class="sidebar-text text-xs whitespace-nowrap hidden">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4">
+
+      <!-- BREADCRUMB -->
+      <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
+        <div class="flex items-baseline gap-1">
+          <h1 class="text-base font-medium text-slate-600 tracking-wide">ANIME MERCH E-COMMERCE <span class="font-bold text-slate-800">SETTINGS</span></h1>
+        </div>
+      </div>
+
+      <!-- SETTINGS LAYOUT -->
+      <div class="flex gap-5 flex-1 min-h-0">
+
+        <!-- SETTINGS SIDEBAR (TABS) -->
+        <aside class="w-52 shrink-0 bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-3 flex flex-col gap-1">
+          <div class="settings-tab active rounded-xl px-4 py-3 text-xs font-bold flex items-center gap-2.5" data-tab="account">
+            <i data-lucide="user" class="w-4 h-4"></i> Account
+          </div>
+          <div class="settings-tab rounded-xl px-4 py-3 text-xs font-bold flex items-center gap-2.5 text-slate-500" data-tab="notifications">
+            <i data-lucide="bell" class="w-4 h-4"></i> Notifications
+          </div>
+          <div class="settings-tab rounded-xl px-4 py-3 text-xs font-bold flex items-center gap-2.5 text-slate-500" data-tab="privacy">
+            <i data-lucide="shield" class="w-4 h-4"></i> Privacy
+          </div>
+          <div class="settings-tab rounded-xl px-4 py-3 text-xs font-bold flex items-center gap-2.5 text-slate-500" data-tab="appearance">
+            <i data-lucide="palette" class="w-4 h-4"></i> Appearance
+          </div>
+          <div class="settings-tab rounded-xl px-4 py-3 text-xs font-bold flex items-center gap-2.5 text-slate-500" data-tab="connections">
+            <i data-lucide="link" class="w-4 h-4"></i> Connections
+          </div>
+          <div class="mt-auto pt-3 border-t border-slate-200/60">
+            <div class="settings-tab rounded-xl px-4 py-3 text-xs font-bold flex items-center gap-2.5 text-red-500 hover:bg-red-50" data-tab="danger">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i> Danger Zone
+            </div>
+          </div>
+        </aside>
+
+        <!-- SETTINGS CONTENT -->
+        <div class="flex-1 flex flex-col gap-4 overflow-y-auto pr-1">
+
+          <!-- ==================================================== -->
+          <!-- ACCOUNT -->
+          <!-- ==================================================== -->
+          <div class="tab-content flex flex-col gap-4" data-content="account">
+            <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-6 flex flex-col gap-5">
+              <div>
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="user" class="w-4 h-4 text-slate-500"></i> Profile Information
+                </h2>
+                <p class="text-[10px] text-slate-400 mt-1">Update your public profile details</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Display Name</label>
+                  <input type="text" value="Hoshino Ichika" class="form-input">
+                </div>
+                <div>
+                  <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Username</label>
+                  <div class="flex bg-white rounded-[10px] overflow-hidden border border-slate-200 focus-within:border-[#323446] focus-within:ring-2 focus-within:ring-[#323446]/12">
+                    <span class="bg-slate-100 text-slate-500 px-3 text-xs font-semibold flex items-center">@</span>
+                    <input type="text" value="hoshino_ichika" class="flex-1 bg-transparent px-2 py-2 text-xs font-semibold focus:outline-none">
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Bio</label>
+                <textarea rows="2" class="form-input resize-none font-medium">Rhythm game enthusiast & figure collector ✨</textarea>
+                <p class="text-[9px] text-slate-400 mt-1">48 / 200 characters</p>
+              </div>
+              <div class="flex justify-end">
+                <button class="bg-[#323446] hover:bg-slate-800 text-white font-bold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all hover:shadow-md">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i> Save Changes
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-6 flex flex-col gap-5">
+              <div>
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="mail" class="w-4 h-4 text-slate-500"></i> Email & Password
+                </h2>
+                <p class="text-[10px] text-slate-400 mt-1">Manage your login credentials</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Email Address</label>
+                  <input type="email" value="hoshino@example.com" class="form-input">
+                </div>
+                <div>
+                  <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Phone Number</label>
+                  <input type="text" value="+81 90-1234-5678" class="form-input">
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">New Password</label>
+                  <input type="password" placeholder="Leave blank to keep current" class="form-input font-normal text-slate-400">
+                </div>
+                <div>
+                  <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Confirm Password</label>
+                  <input type="password" placeholder="Re-enter new password" class="form-input font-normal text-slate-400">
+                </div>
+              </div>
+              <div class="flex justify-end">
+                <button class="bg-[#323446] hover:bg-slate-800 text-white font-bold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all hover:shadow-md">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i> Update
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================================================== -->
+          <!-- NOTIFICATIONS -->
+          <!-- ==================================================== -->
+          <div class="tab-content flex-col gap-4 hidden" data-content="notifications">
+            <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-6 flex flex-col gap-4">
+              <div>
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="bell" class="w-4 h-4 text-slate-500"></i> Push Notifications
+                </h2>
+                <p class="text-[10px] text-slate-400 mt-1">Control what alerts you receive</p>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+                    <i data-lucide="shopping-bag" class="w-4 h-4 text-slate-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Wishlist Price Drops</p>
+                    <p class="text-[10px] text-slate-400">Get notified when wishlist items go on sale</p>
+                  </div>
+                </div>
+                <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+                    <i data-lucide="message-circle" class="w-4 h-4 text-slate-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Direct Messages</p>
+                    <p class="text-[10px] text-slate-400">New messages from other users</p>
+                  </div>
+                </div>
+                <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+                    <i data-lucide="users" class="w-4 h-4 text-slate-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Community Activity</p>
+                    <p class="text-[10px] text-slate-400">Replies, likes, and follows</p>
+                  </div>
+                </div>
+                <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+                    <i data-lucide="mail" class="w-4 h-4 text-slate-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Email Newsletter</p>
+                    <p class="text-[10px] text-slate-400">Weekly digest of activity and deals</p>
+                  </div>
+                </div>
+                <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+                    <i data-lucide="gamepad-2" class="w-4 h-4 text-slate-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Game Updates</p>
+                    <p class="text-[10px] text-slate-400">New releases and updates from followed games</p>
+                  </div>
+                </div>
+                <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================================================== -->
+          <!-- PRIVACY -->
+          <!-- ==================================================== -->
+          <div class="tab-content flex-col gap-4 hidden" data-content="privacy">
+            <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-6 flex flex-col gap-4">
+              <div>
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="shield" class="w-4 h-4 text-slate-500"></i> Privacy Settings
+                </h2>
+                <p class="text-[10px] text-slate-400 mt-1">Control your visibility on the platform</p>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <i data-lucide="eye" class="w-4 h-4 text-slate-500"></i>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Public Profile</p>
+                    <p class="text-[10px] text-slate-400">Anyone can view your profile and activity</p>
+                  </div>
+                </div>
+                <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <i data-lucide="activity" class="w-4 h-4 text-slate-500"></i>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Show Online Status</p>
+                    <p class="text-[10px] text-slate-400">Let friends see when you're online</p>
+                  </div>
+                </div>
+                <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <i data-lucide="gamepad-2" class="w-4 h-4 text-slate-500"></i>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Show Game Activity</p>
+                    <p class="text-[10px] text-slate-400">Display your recently played games publicly</p>
+                  </div>
+                </div>
+                <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <i data-lucide="search" class="w-4 h-4 text-slate-500"></i>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Search Engine Indexing</p>
+                    <p class="text-[10px] text-slate-400">Allow search engines to index your profile</p>
+                  </div>
+                </div>
+                <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================================================== -->
+          <!-- APPEARANCE -->
+          <!-- ==================================================== -->
+          <div class="tab-content flex-col gap-4 hidden" data-content="appearance">
+            <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-6 flex flex-col gap-5">
+              <div>
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="palette" class="w-4 h-4 text-slate-500"></i> Appearance
+                </h2>
+                <p class="text-[10px] text-slate-400 mt-1">Customize how the dashboard looks for you</p>
+              </div>
+              <div>
+                <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Profile Theme</label>
+                <div class="grid grid-cols-6 gap-2">
+                  <button class="aspect-square rounded-xl border-2 border-[#323446] bg-gradient-to-br from-slate-700 to-slate-900 relative">
+                    <i data-lucide="check" class="w-4 h-4 text-white absolute top-1 right-1"></i>
+                  </button>
+                  <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-200 to-slate-400"></button>
+                  <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 to-slate-200"></button>
+                  <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-800 to-black"></button>
+                  <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-indigo-900 to-purple-900"></button>
+                  <button class="aspect-square rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center hover:border-slate-400 transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4 text-slate-400"></i>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Sidebar Style</label>
+                <div class="flex gap-3">
+                  <button class="flex-1 p-3 bg-white rounded-xl border-2 border-[#323446] text-center">
+                    <i data-lucide="panel-left" class="w-5 h-5 mx-auto mb-1 text-[#323446]"></i>
+                    <span class="text-[10px] font-bold text-slate-800 block">Expanded</span>
+                  </button>
+                  <button class="flex-1 p-3 bg-white rounded-xl border-2 border-slate-200 text-center">
+                    <i data-lucide="panel-left-close" class="w-5 h-5 mx-auto mb-1 text-slate-400"></i>
+                    <span class="text-[10px] font-bold text-slate-500 block">Collapsed</span>
+                  </button>
+                  <button class="flex-1 p-3 bg-white rounded-xl border-2 border-slate-200 text-center">
+                    <i data-lucide="panel-top" class="w-5 h-5 mx-auto mb-1 text-slate-400"></i>
+                    <span class="text-[10px] font-bold text-slate-500 block">Top Bar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================================================== -->
+          <!-- CONNECTIONS -->
+          <!-- ==================================================== -->
+          <div class="tab-content flex-col gap-4 hidden" data-content="connections">
+            <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-6 flex flex-col gap-4">
+              <div>
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                  <i data-lucide="link" class="w-4 h-4 text-slate-500"></i> Connected Accounts
+                </h2>
+                <p class="text-[10px] text-slate-400 mt-1">Link your social accounts to your profile</p>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center">
+                    <i data-lucide="twitter" class="w-5 h-5 text-sky-600"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-slate-800">Twitter</p>
+                    <p class="text-[10px] text-slate-400 truncate">@hoshino_ichika</p>
+                  </div>
+                </div>
+                <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-3 py-1 rounded-full uppercase">Connected</span>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
+                    <i data-lucide="youtube" class="w-5 h-5 text-red-500"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-slate-800">YouTube</p>
+                    <p class="text-[10px] text-slate-400">Not connected</p>
+                  </div>
+                </div>
+                <button class="text-[9px] font-bold text-white bg-[#323446] px-3 py-1.5 rounded-full uppercase hover:bg-slate-800 transition-colors">Connect</button>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                    <i data-lucide="discord" class="w-5 h-5 text-indigo-500"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-slate-800">Discord</p>
+                    <p class="text-[10px] text-slate-400 truncate">hoshino_ichika#4201</p>
+                  </div>
+                </div>
+                <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-3 py-1 rounded-full uppercase">Connected</span>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                    <i data-lucide="github" class="w-5 h-5 text-blue-600"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-slate-800">GitHub</p>
+                    <p class="text-[10px] text-slate-400">Not connected</p>
+                  </div>
+                </div>
+                <button class="text-[9px] font-bold text-white bg-[#323446] px-3 py-1.5 rounded-full uppercase hover:bg-slate-800 transition-colors">Connect</button>
+              </div>
+              <div class="setting-card flex items-center justify-between p-4 bg-white/80 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center">
+                    <i data-lucide="instagram" class="w-5 h-5 text-pink-600"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-slate-800">Instagram</p>
+                    <p class="text-[10px] text-slate-400">Not connected</p>
+                  </div>
+                </div>
+                <button class="text-[9px] font-bold text-white bg-[#323446] px-3 py-1.5 rounded-full uppercase hover:bg-slate-800 transition-colors">Connect</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================================================== -->
+          <!-- DANGER ZONE -->
+          <!-- ==================================================== -->
+          <div class="tab-content flex-col gap-4 hidden" data-content="danger">
+            <div class="bg-[#F7F9FC] rounded-2xl border border-red-200 shadow-sm p-6 flex flex-col gap-5">
+              <div>
+                <h2 class="text-sm font-extrabold text-red-600 flex items-center gap-2">
+                  <i data-lucide="alert-triangle" class="w-4 h-4"></i> Danger Zone
+                </h2>
+                <p class="text-[10px] text-slate-400 mt-1">Irreversible actions — proceed with caution</p>
+              </div>
+              <div class="bg-white/80 rounded-xl border border-red-100 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
+                    <i data-lucide="download" class="w-5 h-5 text-red-500"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Export My Data</p>
+                    <p class="text-[10px] text-slate-400">Download all your data and activity logs</p>
+                  </div>
+                </div>
+                <button class="text-[9px] font-bold text-white bg-[#323446] px-4 py-2 rounded-full uppercase hover:bg-slate-800 transition-colors">Export</button>
+              </div>
+              <div class="bg-white/80 rounded-xl border border-red-200 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
+                    <i data-lucide="trash-2" class="w-5 h-5 text-red-600"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-800">Delete Account</p>
+                    <p class="text-[10px] text-slate-400">Permanently delete your account and all associated data</p>
+                  </div>
+                </div>
+                <button class="danger-btn text-[9px] font-bold text-white bg-slate-400 px-4 py-2 rounded-full uppercase border border-transparent transition-colors">Delete</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // === SIDEBAR COLLAPSE ===
+    document.getElementById('toggle-sidebar')?.addEventListener('click', function () {
+      const sidebar = document.getElementById('sidebar');
+      const isCollapsed = sidebar.classList.toggle('w-20');
+      sidebar.classList.toggle('w-52');
+      document.querySelectorAll('.sidebar-text').forEach(el => el.classList.toggle('hidden'));
+      document.getElementById('collapse-label').textContent = isCollapsed ? 'Expand' : 'Collapse';
+      document.getElementById('toggle-icon').setAttribute('data-lucide', isCollapsed ? 'panel-left-open' : 'panel-left-close');
+      lucide.createIcons();
+    });
+
+    // === SETTINGS TAB SWITCHING ===
+    document.querySelectorAll('.settings-tab').forEach(tab => {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.settings-tab').forEach(t => {
+          t.classList.remove('active', 'text-white');
+          t.classList.add('text-slate-500');
+        });
+        this.classList.add('active');
+        this.classList.remove('text-slate-500');
+        this.classList.add('text-white');
+
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        document.querySelector(`.tab-content[data-content="${this.dataset.tab}"]`)?.classList.remove('hidden');
+      });
+    });
+  </script>
+
+</body>
+</html>

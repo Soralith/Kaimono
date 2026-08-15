@@ -23,3 +23,6 @@ def wishlist(request):
 
 def library(request):
     return render(request, 'dashboard/pages/library.html')
+
+def settings(request):
+    return render(request, 'dashboard/pages/settings.html')
