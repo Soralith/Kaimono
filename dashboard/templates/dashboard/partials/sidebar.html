@@ -21,6 +21,18 @@
   body[data-theme="midnight"] #sidebar .nav-profile .text-slate-800,
   body[data-theme="obsidian"] #sidebar .nav-profile .text-slate-800 { color: #e2e8f0; }
 
+  /* Reduce animations: kill transitions/keyframes app-wide */
+  body[data-motion="reduced"] *, body[data-motion="reduced"] *::before, body[data-motion="reduced"] *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+
+  /* Compact mode: tighten shell spacing */
+  body[data-compact="1"] #sidebar { padding-top: 1rem; padding-bottom: 1rem; }
+  body[data-compact="1"] #sidebar .nav-item { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  body[data-compact="1"] #sidebar .nav-profile { padding-bottom: 0.5rem; }
+
   /* ===== KAIMONO SIDEBAR — UNIFIED (v3: icon center saat collapse, zero-shift) ===== */
   #sidebar {
     width: 5rem;
@@ -197,10 +209,12 @@
 </div>
 
 <script>
-// Apply the user's saved theme to <body> as soon as the page loads.
+// Apply the user's saved preferences to <body> as soon as the page loads.
 (function () {
   if (document.body) {
     document.body.setAttribute('data-theme', '{{ request.user.theme|default:"silver" }}');
+    document.body.setAttribute('data-motion', '{{ request.user.reduce_animations|yesno:"reduced," }}');
+    document.body.setAttribute('data-compact', '{{ request.user.compact_mode|yesno:"1," }}');
   }
 })();
 (function () {
@@ -211,7 +225,9 @@
   var label      = document.getElementById('collapse-label');
   var tipEl      = document.getElementById('sidebar-tip');
   var tipLabel   = document.getElementById('sidebar-tip-label');
-  var isCollapsed = localStorage.getItem('kaimono_sidebar_collapsed') !== 'false';
+  var expandedDefault = {{ request.user.sidebar_expanded|yesno:"true,false" }};
+  var stored = localStorage.getItem('kaimono_sidebar_collapsed');
+  var isCollapsed = stored !== null ? stored !== 'false' : !expandedDefault;
 
   var path = window.location.pathname;
   sidebar.querySelectorAll('[data-path]').forEach(function (a) {

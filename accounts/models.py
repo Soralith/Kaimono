@@ -22,6 +22,9 @@ class User(AbstractUser):
     avatar_url = models.URLField(blank=True)
     banner_url = models.URLField(blank=True)
     theme = models.CharField(max_length=20, choices=THEME_CHOICES, default='silver')
+    sidebar_expanded = models.BooleanField(default=False)
+    reduce_animations = models.BooleanField(default=False)
+    compact_mode = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.display_name or self.username} (@{self.username})'

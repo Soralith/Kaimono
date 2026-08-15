@@ -317,11 +317,14 @@
                   <div class="flex items-center gap-3">
                     <i data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i>
                     <div>
-                      <p class="text-xs font-bold text-slate-800">Compact Mode</p>
+                      <p class="text-xs font-bold text-slate-800">Compact Sidebar Mode</p>
                       <p class="text-[10px] text-slate-400">Tighter spacing, more content on screen</p>
                     </div>
                   </div>
-                  <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+                  <div class="toggle-track {% if form.compact_mode.value %}active{% endif %}" onclick="togglePref('compact_mode', this)">
+                    <div class="toggle-knob"></div>
+                  </div>
+                  <input type="hidden" name="compact_mode" id="pref-compact_mode" form="set-form" value="{{ form.compact_mode.value|yesno:'1,0' }}">
                 </div>
                 <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
                   <div class="flex items-center gap-3">
@@ -331,7 +334,10 @@
                       <p class="text-[10px] text-slate-400">Minimize motion across the dashboard</p>
                     </div>
                   </div>
-                  <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+                  <div class="toggle-track {% if form.reduce_animations.value %}active{% endif %}" onclick="togglePref('reduce_animations', this)">
+                    <div class="toggle-knob"></div>
+                  </div>
+                  <input type="hidden" name="reduce_animations" id="pref-reduce_animations" form="set-form" value="{{ form.reduce_animations.value|yesno:'1,0' }}">
                 </div>
                 <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
                   <div class="flex items-center gap-3">
@@ -341,17 +347,10 @@
                       <p class="text-[10px] text-slate-400">Start every session with labels visible</p>
                     </div>
                   </div>
-                  <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-                </div>
-                <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="image" class="w-4 h-4 text-slate-500"></i>
-                    <div>
-                      <p class="text-xs font-bold text-slate-800">High-Quality Cover Art</p>
-                      <p class="text-[10px] text-slate-400">Load full-resolution artwork (uses more data)</p>
-                    </div>
+                  <div class="toggle-track {% if form.sidebar_expanded.value %}active{% endif %}" onclick="togglePref('sidebar_expanded', this)">
+                    <div class="toggle-knob"></div>
                   </div>
-                  <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+                  <input type="hidden" name="sidebar_expanded" id="pref-sidebar_expanded" form="set-form" value="{{ form.sidebar_expanded.value|yesno:'1,0' }}">
                 </div>
               </div>
             </div>
@@ -690,6 +689,18 @@
       if (window.lucide) lucide.createIcons();
       document.getElementById('set-theme').value = value;
       document.body.setAttribute('data-theme', value); // live preview
+    }
+
+    function togglePref(name, el) {
+      var on = el.classList.toggle('active');
+      document.getElementById('pref-' + name).value = on ? '1' : '0';
+      // live preview
+      if (name === 'reduce_animations') document.body.setAttribute('data-motion', on ? 'reduced' : '');
+      if (name === 'compact_mode') document.body.setAttribute('data-compact', on ? '1' : '');
+      if (name === 'sidebar_expanded') {
+        var sb = document.getElementById('sidebar');
+        if (sb) sb.classList.toggle('expanded', on);
+      }
     }
   </script>
 </body>
