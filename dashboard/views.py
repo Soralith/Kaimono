@@ -1,10 +1,14 @@
 from django.shortcuts import render
+from django.utils import timezone
 
 def landing(request):
     return render(request, 'dashboard/pages/landing.html')
 
 def dashboard(request):
-    return render(request, 'dashboard/pages/dashboard.html')
+    context = {
+        'today': timezone.now()
+    }
+    return render(request, 'dashboard/pages/dashboard.html', context)
 
 def shop(request):
     return render(request, 'dashboard/pages/shop.html')
