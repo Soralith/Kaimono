@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     /* ===== THEME VARIABLES (GLOBAL) ===== */
-    :root {
+    :root, [data-theme="silver"] {
       --bg-primary: #E2E7EE;
       --bg-surface: #F7F9FC;
       --bg-card: #ffffff;
@@ -19,6 +19,7 @@
       --border-color: #ffffff;
       --border-soft: #e2e8f0;
       --brand: #323446;
+      --on-brand: #ffffff;
       --brand-soft: rgba(50, 52, 70, 0.12);
       --hover-bg: rgba(255, 255, 255, 0.7);
       --shadow-color: rgba(50, 52, 70, 0.1);
@@ -33,6 +34,7 @@
       --border-color: #334155;
       --border-soft: #475569;
       --brand: #64748b;
+      --on-brand: #ffffff;
       --brand-soft: rgba(148, 163, 184, 0.15);
       --hover-bg: rgba(255,255,255,0.03);
       --shadow-color: rgba(0, 0, 0, 0.3);
@@ -47,6 +49,7 @@
       --border-color: #e7e5e4;
       --border-soft: #d6d3d1;
       --brand: #292524;
+      --on-brand: #ffffff;
       --brand-soft: rgba(41, 37, 36, 0.1);
       --hover-bg: rgba(255, 255, 255, 0.6);
       --shadow-color: rgba(41, 37, 36, 0.08);
@@ -61,6 +64,7 @@
       --border-color: #262626;
       --border-soft: #404040;
       --brand: #fafafa;
+      --on-brand: #0a0a0a;
       --brand-soft: rgba(255, 255, 255, 0.08);
       --hover-bg: rgba(255,255,255,0.03);
       --shadow-color: rgba(0, 0, 0, 0.5);
@@ -84,7 +88,8 @@
     }
     .btn-brand {
       background-color: var(--brand);
-      color: white;
+      color: var(--on-brand);
+      transition: opacity 200ms ease;
     }
     .btn-brand:hover { opacity: 0.9; }
     .btn-ghost {
@@ -107,6 +112,12 @@
       box-shadow: 0 0 0 3px var(--brand-soft);
     }
 
+    /* Helper class untuk badge brand */
+    .badge-brand {
+      background-color: var(--brand);
+      color: var(--on-brand);
+    }
+
     /* ===== Tabs ===== */
     .wl-tab { 
       color: var(--text-muted); 
@@ -114,11 +125,11 @@
     }
     .wl-tab.active { 
       background-color: var(--brand); 
-      color: white; 
+      color: var(--on-brand); 
     }
     .wl-tab.active .tab-count { 
-      background-color: rgba(255, 255, 255, 0.2); 
-      color: white; 
+      background-color: color-mix(in srgb, var(--on-brand) 20%, transparent); 
+      color: var(--on-brand); 
     }
     .wl-tab:not(.active):hover { 
       color: var(--text-primary); 
@@ -150,7 +161,7 @@
     }
     .wl-card:hover .wl-buy { 
       background-color: var(--brand); 
-      color: white; 
+      color: var(--on-brand); 
       border-color: var(--brand);
     }
     .wl-card:hover .wl-buy i { transform: translateX(2px); }
@@ -189,7 +200,7 @@
         <div class="flex items-center justify-between gap-6">
           <div class="flex items-center gap-4 flex-1 min-w-0">
             <div class="w-14 h-14 rounded-2xl btn-brand flex items-center justify-center shrink-0 shadow-md">
-              <i data-lucide="heart" class="w-6 h-6 text-white fill-white"></i>
+              <i data-lucide="heart" class="w-6 h-6" style="color: var(--on-brand); fill: var(--on-brand);"></i>
             </div>
             <div class="min-w-0">
               <p class="text-[10px] font-bold uppercase tracking-widest" style="color: var(--text-muted);">Your Wishlist</p>
@@ -258,7 +269,7 @@
             <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80" alt="game" class="wl-image w-full h-full object-cover transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-r from-transparent to-black/5"></div>
             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="text-[9px] font-extrabold text-white px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--brand);">-50% OFF</span>
+              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">-50% OFF</span>
             </div>
             <div class="absolute bottom-2.5 left-2.5">
               <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Game</span>
@@ -297,7 +308,7 @@
           <div class="w-[38%] shrink-0 relative overflow-hidden">
             <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="artbook" class="wl-image w-full h-full object-cover transition-transform duration-500">
             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="text-[9px] font-extrabold text-white px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--brand);">-40% OFF</span>
+              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">-40% OFF</span>
             </div>
             <div class="absolute bottom-2.5 left-2.5">
               <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Artbook</span>
@@ -368,7 +379,7 @@
           <div class="w-[38%] shrink-0 relative overflow-hidden">
             <img src="https://images.unsplash.com/photo-1614624532983-4ce03382d63d?auto=format&fit=crop&w=400&q=80" alt="game" class="wl-image w-full h-full object-cover transition-transform duration-500">
             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="text-[9px] font-extrabold text-white px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--brand);">-67% OFF</span>
+              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">-67% OFF</span>
             </div>
             <div class="absolute bottom-2.5 left-2.5">
               <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Game</span>
@@ -407,7 +418,7 @@
           <div class="w-[38%] shrink-0 relative overflow-hidden">
             <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80" alt="figure" class="wl-image w-full h-full object-cover transition-transform duration-500">
             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="text-[9px] font-extrabold text-white px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--brand);">-25% OFF</span>
+              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">-25% OFF</span>
             </div>
             <div class="absolute bottom-2.5 left-2.5">
               <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Figure</span>
@@ -556,7 +567,7 @@
               <div class="flex items-center gap-1.5 mt-2 flex-wrap">
                 <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Metroidvania</span>
                 <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">2D</span>
-                <span class="text-[9px] font-semibold text-white px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--brand);"><i data-lucide="clock" class="w-2.5 h-2.5"></i> Coming Soon</span>
+                <span class="badge-brand text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5"><i data-lucide="clock" class="w-2.5 h-2.5"></i> Coming Soon</span>
               </div>
             </div>
             <div class="flex justify-between items-end mt-3">
@@ -576,7 +587,7 @@
           <div class="w-[38%] shrink-0 relative overflow-hidden">
             <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80" alt="bundle" class="wl-image w-full h-full object-cover transition-transform duration-500">
             <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold text-white px-2 py-0.5 rounded-full uppercase" style="background: var(--brand);">Bundle · 3 Items</span>
+              <span class="badge-brand text-[8px] font-bold px-2 py-0.5 rounded-full uppercase">Bundle · 3 Items</span>
             </div>
           </div>
           <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
