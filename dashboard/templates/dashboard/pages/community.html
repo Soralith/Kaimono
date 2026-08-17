@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     /* ===== THEME VARIABLES (GLOBAL) ===== */
-    :root {
+    :root, [data-theme="silver"] {
       --bg-primary: #E2E7EE;
       --bg-surface: #F7F9FC;
       --bg-card: #ffffff;
@@ -19,6 +19,7 @@
       --border-color: #ffffff;
       --border-soft: #e2e8f0;
       --brand: #323446;
+      --on-brand: #ffffff;
       --brand-soft: rgba(50, 52, 70, 0.12);
       --hover-bg: rgba(255, 255, 255, 0.7);
       --shadow-color: rgba(50, 52, 70, 0.1);
@@ -33,6 +34,7 @@
       --border-color: #334155;
       --border-soft: #475569;
       --brand: #64748b;
+      --on-brand: #ffffff;
       --brand-soft: rgba(148, 163, 184, 0.15);
       --hover-bg: rgba(255,255,255,0.03);
       --shadow-color: rgba(0, 0, 0, 0.3);
@@ -47,6 +49,7 @@
       --border-color: #e7e5e4;
       --border-soft: #d6d3d1;
       --brand: #292524;
+      --on-brand: #ffffff;
       --brand-soft: rgba(41, 37, 36, 0.1);
       --hover-bg: rgba(255, 255, 255, 0.6);
       --shadow-color: rgba(41, 37, 36, 0.08);
@@ -61,6 +64,7 @@
       --border-color: #262626;
       --border-soft: #404040;
       --brand: #fafafa;
+      --on-brand: #0a0a0a;
       --brand-soft: rgba(255, 255, 255, 0.08);
       --hover-bg: rgba(255,255,255,0.03);
       --shadow-color: rgba(0, 0, 0, 0.5);
@@ -110,7 +114,7 @@
     }
     .feed-filter.active {
       background-color: var(--brand);
-      color: white;
+      color: var(--on-brand);
     }
     .feed-filter:not(.active):hover {
       color: var(--text-primary);
@@ -122,10 +126,11 @@
     .rail-item { transition: background-color 200ms ease; color: var(--text-secondary); }
     .rail-item:hover { background: var(--hover-bg); }
 
-    /* Helper classes */
+    /* Helper classes (FIXED untuk obsidian) */
     .btn-brand {
       background-color: var(--brand);
-      color: white;
+      color: var(--on-brand);
+      transition: opacity 200ms ease;
     }
     .btn-brand:hover { opacity: 0.9; }
     .btn-ghost {
@@ -148,6 +153,12 @@
     .themed-input::placeholder { color: var(--text-muted); }
     .themed-input:focus {
       border-color: var(--brand);
+    }
+
+    /* Helper class untuk badge brand */
+    .badge-brand {
+      background-color: var(--brand);
+      color: var(--on-brand);
     }
   </style>
 </head>
@@ -263,11 +274,11 @@
             <div class="absolute left-0 top-0 bottom-0 w-1" style="background: var(--brand);"></div>
             <div class="p-4 pl-5">
               <div class="flex items-center gap-2 mb-2">
-                <span class="text-[9px] font-bold text-white px-2 py-0.5 rounded-full uppercase tracking-wider" style="background: var(--brand);">Pinned</span>
+                <span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Pinned</span>
                 <span class="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase" style="color: var(--text-secondary); background: var(--border-soft);">Announcement</span>
               </div>
               <div class="flex items-center gap-2.5 mb-2">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0" style="background: var(--brand);"><i data-lucide="megaphone" class="w-4 h-4"></i></div>
+                <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background: var(--brand); color: var(--on-brand);"><i data-lucide="megaphone" class="w-4 h-4"></i></div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-1.5">
                     <span class="text-xs font-extrabold" style="color: var(--text-primary);">Kaimono Official</span>
@@ -416,7 +427,7 @@
               <h3 class="text-sm font-extrabold mb-2" style="color: var(--text-primary);">LF: Authentic Nendoroid Ichika (1st press) — WTB or Trade</h3>
               <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">Hey everyone! I've been hunting for the first press edition of the Ichika Nendoroid for months now. I'm willing to pay a fair price or trade for my duplicate Miku V4X figure.</p>
               <div class="flex items-center gap-1.5 mb-3 flex-wrap">
-                <span class="text-[9px] font-bold text-white px-2 py-0.5 rounded-full" style="background: var(--brand);">#LF</span>
+                <span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full">#LF</span>
                 <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="color: var(--text-secondary); background: var(--border-soft);">#nendoroid</span>
                 <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="color: var(--text-secondary); background: var(--border-soft);">#projectsekai</span>
                 <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="color: var(--text-secondary); background: var(--border-soft);">#trading</span>
@@ -460,7 +471,7 @@
                 <div class="relative h-32 overflow-hidden">
                   <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
                   <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent"></div>
-                  <div class="absolute bottom-3 left-3 right-3"><span class="text-[9px] font-bold text-white px-2 py-0.5 rounded-full uppercase tracking-wider" style="background: var(--brand);">Guide · 15 min read</span></div>
+                  <div class="absolute bottom-3 left-3 right-3"><span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Guide · 15 min read</span></div>
                 </div>
                 <div class="p-3">
                   <h4 class="text-xs font-extrabold mb-1" style="color: var(--text-primary);">Ultimate Crystal Farming Guide v2.4 — 10x Efficiency</h4>
@@ -516,10 +527,10 @@
               <button class="p-1 rounded-md transition-colors icon-muted hover:opacity-70"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>
             </div>
             <div class="flex flex-col gap-1">
-              <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-white text-left shadow-sm btn-brand">
+              <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left shadow-sm btn-brand">
                 <i data-lucide="hash" class="w-4 h-4 shrink-0"></i>
                 <span class="flex-1 text-xs font-bold truncate">general</span>
-                <span class="text-[9px] font-bold bg-white/20 px-1.5 py-0.5 rounded-full">24</span>
+                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style="background: color-mix(in srgb, var(--on-brand) 20%, transparent); color: var(--on-brand);">24</span>
               </button>
               <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left">
                 <i data-lucide="image" class="w-4 h-4 shrink-0 icon-muted"></i>
@@ -589,15 +600,15 @@
             </div>
           </div>
 
-          <!-- Discover (tetap dark untuk branding CTA) -->
-          <div class="rounded-2xl p-5 relative overflow-hidden shrink-0" style="background: var(--brand);">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full pointer-events-none"></div>
-            <div class="absolute -bottom-12 -left-10 w-32 h-32 bg-white/5 rounded-full pointer-events-none"></div>
-            <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center mb-3 relative"><i data-lucide="compass" class="w-4 h-4 text-white"></i></div>
-            <p class="text-sm font-bold text-white leading-snug relative">Discover more communities</p>
-            <p class="text-[11px] text-white/70 mt-1.5 leading-relaxed relative">Find collectors, co-op partners, and trade circles that match your shelf.</p>
-            <button class="mt-4 w-full bg-white text-[11px] font-bold py-2.5 rounded-full hover:-translate-y-0.5 transition-all relative" style="color: var(--brand);">Browse Communities</button>
-            <button class="mt-2 w-full border border-white/20 text-white text-[11px] font-bold py-2.5 rounded-full hover:bg-white/10 transition-colors relative">Upcoming Events</button>
+          <!-- Discover (fixed dark CTA card — background selalu brand, text selalu kontras) -->
+          <div class="rounded-2xl p-5 relative overflow-hidden shrink-0" style="background: var(--brand); color: var(--on-brand);">
+            <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none" style="background: color-mix(in srgb, var(--on-brand) 5%, transparent);"></div>
+            <div class="absolute -bottom-12 -left-10 w-32 h-32 rounded-full pointer-events-none" style="background: color-mix(in srgb, var(--on-brand) 5%, transparent);"></div>
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3 relative" style="background: color-mix(in srgb, var(--on-brand) 10%, transparent); color: var(--on-brand);"><i data-lucide="compass" class="w-4 h-4"></i></div>
+            <p class="text-sm font-bold leading-snug relative" style="color: var(--on-brand);">Discover more communities</p>
+            <p class="text-[11px] mt-1.5 leading-relaxed relative" style="color: color-mix(in srgb, var(--on-brand) 70%, transparent);">Find collectors, co-op partners, and trade circles that match your shelf.</p>
+            <button class="mt-4 w-full text-[11px] font-bold py-2.5 rounded-full hover:-translate-y-0.5 transition-all relative" style="background: var(--on-brand); color: var(--brand);">Browse Communities</button>
+            <button class="mt-2 w-full border text-[11px] font-bold py-2.5 rounded-full transition-colors relative" style="border-color: color-mix(in srgb, var(--on-brand) 20%, transparent); color: var(--on-brand);">Upcoming Events</button>
           </div>
 
         </aside>
