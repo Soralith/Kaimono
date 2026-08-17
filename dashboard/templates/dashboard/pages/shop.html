@@ -9,7 +9,83 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #E2E7EE; }
+    /* ===== THEME VARIABLES (GLOBAL) ===== */
+    :root {
+      --bg-primary: #E2E7EE;
+      --bg-surface: #F7F9FC;
+      --bg-card: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border-color: #ffffff;
+      --border-soft: #e2e8f0;
+      --brand: #323446;
+      --brand-soft: rgba(50, 52, 70, 0.12);
+      --hover-bg: rgba(255, 255, 255, 0.7);
+      --shadow-color: rgba(50, 52, 70, 0.1);
+    }
+    [data-theme="midnight"] {
+      --bg-primary: #0f172a;
+      --bg-surface: #1e293b;
+      --bg-card: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --border-soft: #475569;
+      --brand: #64748b;
+      --brand-soft: rgba(148, 163, 184, 0.15);
+      --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+    }
+    [data-theme="paper"] {
+      --bg-primary: #F5F1E8;
+      --bg-surface: #FAF7F0;
+      --bg-card: #ffffff;
+      --text-primary: #1c1917;
+      --text-secondary: #57534e;
+      --text-muted: #a8a29e;
+      --border-color: #e7e5e4;
+      --border-soft: #d6d3d1;
+      --brand: #292524;
+      --brand-soft: rgba(41, 37, 36, 0.1);
+      --hover-bg: rgba(255, 255, 255, 0.6);
+      --shadow-color: rgba(41, 37, 36, 0.08);
+    }
+    [data-theme="obsidian"] {
+      --bg-primary: #0a0a0a;
+      --bg-surface: #171717;
+      --bg-card: #1f1f1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a3a3a3;
+      --text-muted: #525252;
+      --border-color: #262626;
+      --border-soft: #404040;
+      --brand: #fafafa;
+      --brand-soft: rgba(255, 255, 255, 0.08);
+      --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-secondary);
+      transition: background-color 300ms ease, color 300ms ease;
+    }
+    [data-theme] h1, [data-theme] h2, [data-theme] h3, [data-theme] h4 { color: var(--text-primary); }
+    [data-theme] label { color: var(--text-muted); }
+
+    .surface-card {
+      background-color: var(--bg-surface) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-secondary);
+    }
+    .dark-card {
+      background-color: var(--bg-card) !important;
+      color: var(--text-secondary);
+    }
+
     ::-webkit-scrollbar { width: 0px; background: transparent; }
     .hide-scroll::-webkit-scrollbar { display: none; }
     .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -65,6 +141,8 @@
       transition: all 350ms cubic-bezier(0.4, 0, 0.2, 1);
       opacity: 0;
       transform: translateY(10px);
+      background-color: var(--bg-surface);
+      border-color: var(--border-color);
     }
     .product-card.visible {
       opacity: 1;
@@ -72,7 +150,7 @@
     }
     .product-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 20px 40px -20px rgba(50, 52, 70, 0.3);
+      box-shadow: 0 20px 40px -20px var(--shadow-color);
     }
     .product-card:hover .product-image { transform: scale(1.08); }
     .product-card:hover .quick-actions { opacity: 1; transform: translateY(0); }
@@ -114,14 +192,22 @@
     /* ===== Category Pills ===== */
     .cat-pill { transition: all 250ms ease; }
     .cat-pill.active {
-      background-color: #323446;
+      background-color: var(--brand);
       color: white;
-      box-shadow: 0 8px 20px -8px rgba(50, 52, 70, 0.5);
+      box-shadow: 0 8px 20px -8px var(--shadow-color);
     }
     .cat-pill.active .cat-count { background-color: rgba(255, 255, 255, 0.2); color: white; }
     .cat-pill.active .cat-icon-bg { background-color: rgba(255, 255, 255, 0.15); }
     .cat-pill.active .cat-icon { color: white; }
-    .cat-pill:not(.active):hover { background-color: #ffffff; transform: translateY(-1px); }
+    .cat-pill:not(.active) {
+      background-color: var(--bg-surface);
+      color: var(--text-secondary);
+      border-color: var(--border-color);
+    }
+    .cat-pill:not(.active):hover {
+      background-color: var(--bg-card);
+      transform: translateY(-1px);
+    }
 
     /* ===== Toast ===== */
     .toast-container {
@@ -137,10 +223,12 @@
     .toast {
       pointer-events: auto;
       min-width: 280px;
+      background: var(--bg-card);
+      border-color: var(--border-soft);
+      color: var(--text-primary);
     }
 
     /* ===== Modal ===== */
-    /* FIX BUG #1: tambah pointer-events supaya backdrop invisible tidak menelan klik & scroll */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -166,6 +254,8 @@
       transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
       max-height: 90vh;
       overflow-y: auto;
+      background: var(--bg-surface);
+      border-color: var(--border-color);
     }
     .modal-content.active {
       opacity: 1;
@@ -192,19 +282,20 @@
       bottom: 0;
       width: 420px;
       max-width: 90vw;
-      background-color: #F7F9FC;
+      background-color: var(--bg-surface);
       z-index: 81;
       transform: translateX(100%);
       transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: -20px 0 60px -20px rgba(0, 0, 0, 0.3);
+      box-shadow: -20px 0 60px -20px var(--shadow-color);
       display: flex;
       flex-direction: column;
+      color: var(--text-secondary);
     }
     .cart-drawer.active { transform: translateX(0); }
 
     /* ===== Quantity control ===== */
     .qty-btn { transition: all 150ms ease; }
-    .qty-btn:hover:not(:disabled) { background-color: #323446; color: white; }
+    .qty-btn:hover:not(:disabled) { background-color: var(--brand); color: white; }
     .qty-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     /* ===== Sort dropdown ===== */
@@ -213,10 +304,10 @@
       top: calc(100% + 8px);
       right: 0;
       min-width: 180px;
-      background: white;
+      background: var(--bg-card);
       border-radius: 12px;
-      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
-      border: 1px solid #e2e8f0;
+      box-shadow: 0 20px 40px -12px var(--shadow-color);
+      border: 1px solid var(--border-soft);
       padding: 4px;
       opacity: 0;
       transform: translateY(-8px);
@@ -234,19 +325,19 @@
       border-radius: 8px;
       font-size: 11px;
       font-weight: 600;
-      color: #475569;
+      color: var(--text-secondary);
       cursor: pointer;
       transition: all 150ms;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .dropdown-item:hover { background-color: #f1f5f9; color: #0f172a; }
-    .dropdown-item.active { background-color: #323446; color: white; }
+    .dropdown-item:hover { background-color: var(--hover-bg); color: var(--text-primary); }
+    .dropdown-item.active { background-color: var(--brand); color: white; }
 
     /* ===== Skeleton loader ===== */
     .skeleton {
-      background: linear-gradient(90deg, #e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%);
+      background: linear-gradient(90deg, var(--border-soft) 0%, var(--hover-bg) 50%, var(--border-soft) 100%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
@@ -258,7 +349,7 @@
     }
 
     /* ===== Wishlist heart ===== */
-    .heart-btn.active svg { fill: #323446; color: #323446; }
+    .heart-btn.active svg { fill: var(--brand); color: var(--brand); }
 
     /* ===== Empty state ===== */
     .empty-state {
@@ -271,8 +362,8 @@
     }
 
     /* ===== Star rating ===== */
-    .star-filled { color: #323446; fill: #323446; }
-    .star-empty { color: #cbd5e1; }
+    .star-filled { color: var(--brand); fill: var(--brand); }
+    .star-empty { color: var(--border-soft); }
 
     /* ===== Image zoom in modal ===== */
     .zoom-container {
@@ -287,9 +378,39 @@
     .zoom-container.zoomed img {
       transform: scale(1.8);
     }
+
+    /* ===== Theme-aware button ===== */
+    .btn-brand {
+      background-color: var(--brand);
+      color: white;
+    }
+    .btn-brand:hover { opacity: 0.9; }
+
+    /* ===== Theme-aware input ===== */
+    .themed-input {
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+    .themed-input::placeholder { color: var(--text-muted); }
+    .themed-input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-soft);
+    }
+
+    /* ===== Theme-aware small button ===== */
+    .btn-ghost {
+      background-color: var(--bg-card);
+      color: var(--text-secondary);
+      border-color: var(--border-soft);
+    }
+    .btn-ghost:hover {
+      background-color: var(--hover-bg);
+      color: var(--text-primary);
+    }
   </style>
 </head>
-<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+<body class="h-screen flex flex-col overflow-hidden text-sm">
 
   {% include "dashboard/partials/topbar.html" %}
 
@@ -302,22 +423,22 @@
       <!-- BREADCRUMB + CONTROLS -->
       <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
         <div class="flex items-baseline gap-1">
-          <h1 class="text-base font-medium text-slate-600 tracking-wide">ANIME MERCH E-COMMERCE <span class="font-bold text-slate-800">SHOP</span> / <span class="font-bold text-slate-800">HOSHINO ICHIKA</span></h1>
+          <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">ANIME MERCH E-COMMERCE <span class="font-bold" style="color: var(--text-primary);">SHOP</span> / <span class="font-bold" style="color: var(--text-primary);">HOSHINO ICHIKA</span></h1>
         </div>
         <div class="flex items-center gap-2.5">
           <div class="relative">
             <input type="text" id="search-input" placeholder="Search games, figures, apparel..."
-                   class="w-72 bg-[#F7F9FC] text-slate-800 pl-10 pr-4 py-2.5 rounded-full text-xs focus:outline-none border border-white shadow-sm font-semibold placeholder:text-slate-400 focus:border-[#323446] focus:ring-2 focus:ring-[#323446]/10 transition-all">
-            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors">
-              <i data-lucide="x" class="w-3 h-3 text-slate-600"></i>
+                   class="themed-input w-72 pl-10 pr-4 py-2.5 rounded-full text-xs focus:outline-none border shadow-sm font-semibold transition-all">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style="color: var(--text-muted);"></i>
+            <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full btn-ghost flex items-center justify-center transition-colors">
+              <i data-lucide="x" class="w-3 h-3"></i>
             </button>
           </div>
-          <button id="wishlist-btn" class="bg-[#F7F9FC] hover:bg-white p-2.5 rounded-full border border-white shadow-sm text-slate-600 hover:text-[#323446] transition-colors relative">
+          <button id="wishlist-btn" class="themed-input hover:opacity-80 p-2.5 rounded-full border shadow-sm transition-colors relative" style="color: var(--text-secondary);">
             <i data-lucide="heart" class="w-4 h-4"></i>
-            <span id="wishlist-count" class="hidden absolute -top-1 -right-1 min-w-4 h-4 bg-[#323446] text-white text-[9px] font-bold rounded-full items-center justify-center px-1">0</span>
+            <span id="wishlist-count" class="hidden absolute -top-1 -right-1 min-w-4 h-4 btn-brand text-[9px] font-bold rounded-full items-center justify-center px-1">0</span>
           </button>
-          <button id="cart-btn" class="bg-[#323446] hover:bg-slate-800 p-2.5 rounded-full text-white shadow-sm transition-colors relative flex items-center gap-2 pl-2.5 pr-3.5">
+          <button id="cart-btn" class="btn-brand hover:opacity-90 p-2.5 rounded-full shadow-sm transition-all relative flex items-center gap-2 pl-2.5 pr-3.5">
             <i data-lucide="shopping-bag" class="w-4 h-4" id="cart-icon"></i>
             <span id="cart-count" class="text-xs font-bold">0</span>
             <span class="w-px h-3 bg-white/30"></span>
@@ -326,7 +447,7 @@
         </div>
       </div>
 
-      <!-- HERO BANNER -->
+      <!-- HERO BANNER (tetap gelap karena desain spesifik event) -->
       <div class="relative bg-gradient-to-br from-[#323446] via-slate-800 to-[#1a1c2a] rounded-[2rem] overflow-hidden shrink-0 shadow-xl shadow-slate-900/20">
         <div class="absolute inset-0 hero-pattern pointer-events-none"></div>
         <div class="absolute -top-32 -right-32 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -422,15 +543,15 @@
               </div>
             </div>
 
-            <div class="absolute -bottom-2 left-0 bg-white rounded-2xl p-3 shadow-xl border border-white flex items-center gap-2.5">
+            <div class="absolute -bottom-2 left-0 rounded-2xl p-3 shadow-xl border flex items-center gap-2.5" style="background: var(--bg-card); border-color: var(--border-color);">
               <div class="flex -space-x-2">
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2 border-white" alt="">
-                <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2 border-white" alt="">
-                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2 border-white" alt="">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
+                <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
+                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
               </div>
               <div class="flex flex-col">
-                <p class="text-[11px] font-extrabold text-slate-800 leading-tight">2.4k+ joined</p>
-                <p class="text-[9px] text-slate-500 font-semibold">Shopping this event</p>
+                <p class="text-[11px] font-extrabold leading-tight" style="color: var(--text-primary);">2.4k+ joined</p>
+                <p class="text-[9px] font-semibold" style="color: var(--text-muted);">Shopping this event</p>
               </div>
             </div>
           </div>
@@ -445,11 +566,11 @@
       </div>
 
       <!-- FILTER BAR -->
-      <div class="flex justify-between items-center px-1 shrink-0 bg-[#F7F9FC] border border-white rounded-2xl p-2 shadow-sm">
+      <div class="flex justify-between items-center px-1 shrink-0 surface-card border rounded-2xl p-2 shadow-sm">
         <div class="flex items-center gap-2 min-w-0">
-          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2 shrink-0">Showing:</span>
-          <span id="result-count" class="text-xs font-bold text-slate-800 shrink-0">0 products</span>
-          <span class="w-px h-4 bg-slate-200 shrink-0"></span>
+          <span class="text-[10px] font-bold uppercase tracking-wider px-2 shrink-0" style="color: var(--text-muted);">Showing:</span>
+          <span id="result-count" class="text-xs font-bold shrink-0" style="color: var(--text-primary);">0 products</span>
+          <span class="w-px h-4 shrink-0" style="background: var(--border-soft);"></span>
           <div id="active-filters" class="flex items-center gap-1.5 overflow-x-auto hide-scroll">
             <!-- Rendered by JS -->
           </div>
@@ -458,10 +579,10 @@
         <div class="flex items-center gap-2 shrink-0">
           <!-- Price range -->
           <div class="relative">
-            <button id="price-filter-btn" class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1.5 cursor-pointer hover:border-[#323446] transition-colors">
-              <i data-lucide="dollar-sign" class="w-3.5 h-3.5 text-slate-500"></i>
-              <span id="price-range-label" class="text-[11px] font-semibold text-slate-700">All prices</span>
-              <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+            <button id="price-filter-btn" class="btn-ghost flex items-center gap-1.5 border rounded-full px-3 py-1.5 cursor-pointer transition-colors">
+              <i data-lucide="dollar-sign" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
+              <span id="price-range-label" class="text-[11px] font-semibold" style="color: var(--text-secondary);">All prices</span>
+              <i data-lucide="chevron-down" class="w-3 h-3" style="color: var(--text-muted);"></i>
             </button>
             <div id="price-dropdown" class="dropdown">
               <div class="dropdown-item active" data-price="all">All prices <i data-lucide="check" class="w-3 h-3"></i></div>
@@ -475,10 +596,10 @@
 
           <!-- Sort -->
           <div class="relative">
-            <button id="sort-btn" class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1.5 cursor-pointer hover:border-[#323446] transition-colors">
-              <i data-lucide="arrow-down-up" class="w-3.5 h-3.5 text-slate-500"></i>
-              <span id="sort-label" class="text-[11px] font-semibold text-slate-700">Popular</span>
-              <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+            <button id="sort-btn" class="btn-ghost flex items-center gap-1.5 border rounded-full px-3 py-1.5 cursor-pointer transition-colors">
+              <i data-lucide="arrow-down-up" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
+              <span id="sort-label" class="text-[11px] font-semibold" style="color: var(--text-secondary);">Popular</span>
+              <i data-lucide="chevron-down" class="w-3 h-3" style="color: var(--text-muted);"></i>
             </button>
             <div id="sort-dropdown" class="dropdown">
               <div class="dropdown-item active" data-sort="popular">Popular <i data-lucide="check" class="w-3 h-3"></i></div>
@@ -490,16 +611,16 @@
             </div>
           </div>
 
-          <button id="clear-all-filters" class="hidden bg-white hover:bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full text-[11px] font-semibold text-slate-600 hover:text-[#323446] transition-colors flex items-center gap-1">
+          <button id="clear-all-filters" class="hidden btn-ghost border px-3 py-1.5 rounded-full text-[11px] font-semibold transition-colors flex items-center gap-1">
             <i data-lucide="x" class="w-3 h-3"></i> Clear all
           </button>
 
           <!-- View toggle -->
-          <div class="flex bg-white border border-slate-200 rounded-full p-0.5">
-            <button id="view-grid" class="p-1.5 rounded-full bg-[#323446] text-white">
+          <div class="flex btn-ghost border rounded-full p-0.5">
+            <button id="view-grid" class="p-1.5 rounded-full btn-brand">
               <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
             </button>
-            <button id="view-list" class="p-1.5 rounded-full text-slate-400 hover:text-slate-800">
+            <button id="view-list" class="p-1.5 rounded-full hover:opacity-70" style="color: var(--text-muted);">
               <i data-lucide="list" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -513,22 +634,22 @@
 
       <!-- EMPTY STATE -->
       <div id="empty-state" class="hidden empty-state">
-        <div class="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center mb-4">
-          <i data-lucide="search-x" class="w-10 h-10 text-slate-400"></i>
+        <div class="w-20 h-20 rounded-full flex items-center justify-center mb-4" style="background: var(--border-soft);">
+          <i data-lucide="search-x" class="w-10 h-10" style="color: var(--text-muted);"></i>
         </div>
-        <h3 class="text-lg font-extrabold text-slate-800 mb-1">No products found</h3>
-        <p class="text-xs text-slate-500 max-w-sm">Try adjusting your filters or search terms to find what you're looking for.</p>
-        <button id="reset-filters" class="mt-4 bg-[#323446] hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 transition-colors">
+        <h3 class="text-lg font-extrabold mb-1" style="color: var(--text-primary);">No products found</h3>
+        <p class="text-xs max-w-sm" style="color: var(--text-muted);">Try adjusting your filters or search terms to find what you're looking for.</p>
+        <button id="reset-filters" class="mt-4 btn-brand font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 transition-colors">
           <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset filters
         </button>
       </div>
 
       <!-- LOAD MORE -->
       <div id="load-more-wrapper" class="flex justify-center items-center gap-3 pt-2 pb-2 shrink-0">
-        <button id="load-more-btn" class="bg-[#F7F9FC] hover:bg-slate-200/50 text-slate-700 font-semibold px-5 py-2.5 rounded-full text-xs border border-white shadow-sm flex items-center gap-2 transition-colors">
+        <button id="load-more-btn" class="surface-card hover:opacity-80 font-semibold px-5 py-2.5 rounded-full text-xs border shadow-sm flex items-center gap-2 transition-all" style="color: var(--text-secondary);">
           <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Load More Products
         </button>
-        <span id="showing-text" class="text-[10px] text-slate-400 font-medium">Showing 0 products</span>
+        <span id="showing-text" class="text-[10px] font-medium" style="color: var(--text-muted);">Showing 0 products</span>
       </div>
 
     </main>
@@ -536,7 +657,7 @@
 
   <!-- QUICK VIEW MODAL -->
   <div id="modal-backdrop" class="modal-backdrop"></div>
-  <div id="quick-view-modal" class="modal-content bg-[#F7F9FC] rounded-3xl border border-white shadow-2xl w-[900px] max-w-[95vw]">
+  <div id="quick-view-modal" class="modal-content rounded-3xl border shadow-2xl w-[900px] max-w-[95vw]">
     <div id="modal-content" class="grid grid-cols-2 gap-0">
       <!-- Rendered by JS -->
     </div>
@@ -545,14 +666,14 @@
   <!-- CART DRAWER -->
   <div id="cart-drawer-backdrop" class="cart-drawer-backdrop"></div>
   <div id="cart-drawer" class="cart-drawer">
-    <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+    <div class="p-5 border-b flex items-center justify-between" style="border-color: var(--border-soft);">
       <div class="flex items-center gap-2">
-        <i data-lucide="shopping-bag" class="w-5 h-5 text-[#323446]"></i>
-        <h3 class="text-base font-extrabold text-slate-800">Shopping Cart</h3>
-        <span id="cart-drawer-count" class="bg-[#323446] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">0</span>
+        <i data-lucide="shopping-bag" class="w-5 h-5" style="color: var(--brand);"></i>
+        <h3 class="text-base font-extrabold" style="color: var(--text-primary);">Shopping Cart</h3>
+        <span id="cart-drawer-count" class="btn-brand text-[10px] font-bold px-2 py-0.5 rounded-full">0</span>
       </div>
-      <button id="close-cart" class="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors">
-        <i data-lucide="x" class="w-4 h-4 text-slate-600"></i>
+      <button id="close-cart" class="w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center transition-all" style="background: var(--bg-card);">
+        <i data-lucide="x" class="w-4 h-4" style="color: var(--text-secondary);"></i>
       </button>
     </div>
 
@@ -560,23 +681,23 @@
       <!-- Rendered by JS -->
     </div>
 
-    <div id="cart-footer" class="border-t border-slate-200 p-5 shrink-0">
+    <div id="cart-footer" class="border-t p-5 shrink-0" style="border-color: var(--border-soft);">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs font-semibold text-slate-500">Subtotal</span>
-        <span id="cart-subtotal" class="text-sm font-bold text-slate-800">$0.00</span>
+        <span class="text-xs font-semibold" style="color: var(--text-muted);">Subtotal</span>
+        <span id="cart-subtotal" class="text-sm font-bold" style="color: var(--text-primary);">$0.00</span>
       </div>
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs font-semibold text-slate-500">Shipping</span>
-        <span id="cart-shipping" class="text-xs font-bold text-slate-600">Calculated at checkout</span>
+        <span class="text-xs font-semibold" style="color: var(--text-muted);">Shipping</span>
+        <span id="cart-shipping" class="text-xs font-bold" style="color: var(--text-secondary);">Calculated at checkout</span>
       </div>
-      <div class="flex items-center justify-between pt-3 border-t border-slate-200 mb-4">
-        <span class="text-sm font-bold text-slate-800">Total</span>
-        <span id="cart-grand-total" class="text-lg font-extrabold text-slate-800">$0.00</span>
+      <div class="flex items-center justify-between pt-3 border-t mb-4" style="border-color: var(--border-soft);">
+        <span class="text-sm font-bold" style="color: var(--text-primary);">Total</span>
+        <span id="cart-grand-total" class="text-lg font-extrabold" style="color: var(--text-primary);">$0.00</span>
       </div>
-      <button id="checkout-btn" class="w-full bg-[#323446] hover:bg-slate-800 text-white font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+      <button id="checkout-btn" class="w-full btn-brand hover:opacity-90 font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
         <i data-lucide="credit-card" class="w-4 h-4"></i> Checkout
       </button>
-      <button id="continue-shopping" class="w-full mt-2 text-slate-600 hover:text-slate-900 font-semibold py-2 rounded-full text-xs transition-colors">
+      <button id="continue-shopping" class="w-full mt-2 font-semibold py-2 rounded-full text-xs transition-colors" style="color: var(--text-secondary);">
         Continue Shopping
       </button>
     </div>
@@ -588,6 +709,12 @@
   <script src="{% static 'dashboard/js/products.js' %}"></script>
 
   <script>
+    // ===== LOAD THEME FROM LOCALSTORAGE =====
+    (function() {
+      const theme = localStorage.getItem('kaimono_theme');
+      if (theme) document.body.setAttribute('data-theme', theme);
+    })();
+
     // ===== PRODUCT DATABASE (shared with game detail pages) =====
     const PRODUCTS = window.KAIMONO_PRODUCTS || [];
 
@@ -606,7 +733,6 @@
       priceRange: "all",
       sortBy: "popular",
       viewMode: "grid",
-      /* FIX BUG #3: tambah flag untuk filter wishlist */
       showWishlistOnly: false,
       cart: JSON.parse(localStorage.getItem("kaimono_cart") || "[]"),
       wishlist: JSON.parse(localStorage.getItem("kaimono_wishlist") || "[]"),
@@ -623,21 +749,15 @@
       localStorage.setItem("kaimono_wishlist", JSON.stringify(state.wishlist));
     };
 
-    /* FIX BUG #2: Toast pakai warna monokrom, bukan emerald/red/blue yang melanggar palette */
     const showToast = (message, icon = "check", variant = "success") => {
       const container = $("toast-container");
       const toast = document.createElement("div");
-      toast.className = "toast bg-white border border-slate-200 shadow-xl rounded-2xl p-3 flex items-center gap-3 animate-slideInRight";
-      const iconColors = {
-        success: "bg-slate-100 text-slate-700",
-        error: "bg-slate-100 text-slate-700",
-        info: "bg-slate-100 text-slate-700",
-      };
+      toast.className = "toast border shadow-xl rounded-2xl p-3 flex items-center gap-3 animate-slideInRight";
       toast.innerHTML = `
-        <div class="w-8 h-8 rounded-full ${iconColors[variant]} flex items-center justify-center shrink-0">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background: var(--brand-soft); color: var(--brand);">
           <i data-lucide="${icon}" class="w-4 h-4"></i>
         </div>
-        <p class="text-xs font-semibold text-slate-800 flex-1">${message}</p>
+        <p class="text-xs font-semibold flex-1" style="color: var(--text-primary);">${message}</p>
       `;
       container.appendChild(toast);
       lucide.createIcons();
@@ -651,20 +771,22 @@
     // ===== RENDER: CATEGORY PILLS =====
     const renderCategories = () => {
       const container = $("category-pills");
-      container.innerHTML = CATEGORIES.map(cat => `
-        <button class="cat-pill flex items-center gap-2.5 ${state.activeCategory === cat.id && !state.showWishlistOnly ? "active" : "bg-[#F7F9FC] text-slate-700 border border-white shadow-sm"} pl-2 pr-4 py-2 rounded-full shrink-0 transition-all" data-category="${cat.id}">
-          <span class="cat-icon-bg w-7 h-7 rounded-full ${state.activeCategory === cat.id && !state.showWishlistOnly ? "bg-white/15" : "bg-slate-200"} flex items-center justify-center shrink-0">
-            <i data-lucide="${cat.icon}" class="w-3.5 h-3.5 cat-icon ${state.activeCategory === cat.id && !state.showWishlistOnly ? "text-white" : "text-slate-600"}"></i>
-          </span>
-          <span class="text-xs font-bold">${cat.label}</span>
-          <span class="cat-count ${state.activeCategory === cat.id && !state.showWishlistOnly ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"} text-[10px] font-bold px-1.5 py-0.5 rounded-full">${cat.count}</span>
-        </button>
-      `).join("");
+      container.innerHTML = CATEGORIES.map(cat => {
+        const isActive = state.activeCategory === cat.id && !state.showWishlistOnly;
+        return `
+          <button class="cat-pill flex items-center gap-2.5 ${isActive ? "active" : ""} pl-2 pr-4 py-2 rounded-full shrink-0 transition-all" data-category="${cat.id}">
+            <span class="cat-icon-bg w-7 h-7 rounded-full ${isActive ? "" : ""} flex items-center justify-center shrink-0" style="${!isActive ? 'background: var(--border-soft);' : ''}">
+              <i data-lucide="${cat.icon}" class="w-3.5 h-3.5 cat-icon" style="${!isActive ? 'color: var(--text-secondary);' : ''}"></i>
+            </span>
+            <span class="text-xs font-bold">${cat.label}</span>
+            <span class="cat-count text-[10px] font-bold px-1.5 py-0.5 rounded-full" style="${!isActive ? 'background: var(--border-soft); color: var(--text-secondary);' : ''}">${cat.count}</span>
+          </button>
+        `;
+      }).join("");
 
       container.querySelectorAll(".cat-pill").forEach(btn => {
         btn.addEventListener("click", () => {
           state.activeCategory = btn.dataset.category;
-          /* FIX BUG #3: reset wishlist mode saat user klik kategori */
           state.showWishlistOnly = false;
           state.displayedCount = 8;
           renderCategories();
@@ -680,17 +802,14 @@
     const getFilteredProducts = () => {
       let products = [...PRODUCTS];
 
-      /* FIX BUG #3: filter wishlist dulu kalau aktif */
       if (state.showWishlistOnly) {
         products = products.filter(p => state.wishlist.includes(p.id));
       }
 
-      // Category filter
       if (state.activeCategory !== "all") {
         products = products.filter(p => p.category === state.activeCategory);
       }
 
-      // Search filter
       if (state.searchQuery) {
         const q = state.searchQuery.toLowerCase();
         products = products.filter(p =>
@@ -701,13 +820,11 @@
         );
       }
 
-      // Price filter
       if (state.priceRange !== "all") {
         const [min, max] = state.priceRange.split("-").map(Number);
         products = products.filter(p => p.price >= min && p.price <= max);
       }
 
-      // Sort
       switch (state.sortBy) {
         case "popular": products.sort((a, b) => b.popularity - a.popularity); break;
         case "newest": products.sort((a, b) => new Date(b.date) - new Date(a.date)); break;
@@ -735,23 +852,11 @@
 
     // ===== RENDER: BADGES =====
     const renderBadges = (badges) => {
-      const badgeClasses = {
-        "-50%": "bg-[#323446] text-white",
-        "-30%": "bg-[#323446] text-white",
-        "-20%": "bg-[#323446] text-white",
-        "-17%": "bg-[#323446] text-white",
-        "-67%": "bg-[#323446] text-white",
-        "-21%": "bg-[#323446] text-white",
-        "New": "bg-white text-[#323446] border border-[#323446]",
-        "Pre-Order": "bg-slate-200 text-slate-800",
-        "Bestseller": "bg-slate-200 text-slate-800",
-        "Limited": "bg-[#323446] text-white",
-        "Summer": "bg-white/15 backdrop-blur border border-white/20 text-white",
-        "Hot": "bg-[#323446] text-white",
-      };
       return badges.map(b => {
-        const cls = badgeClasses[b] || "bg-[#323446] text-white";
-        return `<span class="${cls} text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">${b}</span>`;
+        let cls = "btn-brand text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm";
+        if (b === "New") cls = "bg-white text-[#323446] border border-[#323446] text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm";
+        else if (b === "Pre-Order" || b === "Bestseller") cls = "text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm";
+        return `<span class="${cls}" ${b === "Pre-Order" || b === "Bestseller" ? 'style="background: var(--border-soft); color: var(--text-primary);"' : ''}>${b}</span>`;
       }).join("");
     };
 
@@ -790,40 +895,40 @@
 
         if (state.viewMode === "list") {
           return `
-            <div class="product-card bg-[#F7F9FC] rounded-2xl p-2 border border-white shadow-sm flex gap-4 cursor-pointer" data-id="${p.id}" style="animation-delay: ${idx * 40}ms">
-              <div class="image-wrapper relative rounded-xl overflow-hidden bg-slate-200 shrink-0" style="width: 160px; aspect-ratio: 4/5;">
+            <div class="product-card rounded-2xl p-2 border shadow-sm flex gap-4 cursor-pointer" data-id="${p.id}" style="animation-delay: ${idx * 40}ms">
+              <div class="image-wrapper relative rounded-xl overflow-hidden shrink-0" style="width: 160px; aspect-ratio: 4/5; background: var(--border-soft);">
                 <img src="${p.image}" alt="${p.name}" class="product-image w-full h-full object-cover">
                 <div class="absolute top-2 left-2 flex flex-col gap-1">${renderBadges(p.badges)}</div>
               </div>
               <div class="flex-1 flex flex-col justify-between py-2 pr-2">
                 <div>
                   <div class="flex items-center justify-between mb-1">
-                    <div class="flex items-center gap-0.5">${renderStars(p.rating)}<span class="text-[9px] text-slate-500 font-semibold ml-1">(${p.reviews.toLocaleString()})</span></div>
-                    <button class="heart-btn ${isWished ? "active" : ""} w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center transition-all" data-id="${p.id}">
-                      <i data-lucide="heart" class="w-4 h-4"></i>
+                    <div class="flex items-center gap-0.5">${renderStars(p.rating)}<span class="text-[9px] font-semibold ml-1" style="color: var(--text-muted);">(${p.reviews.toLocaleString()})</span></div>
+                    <button class="heart-btn ${isWished ? "active" : ""} w-8 h-8 rounded-full hover:opacity-70 flex items-center justify-center transition-all" data-id="${p.id}" style="background: var(--bg-card);">
+                      <i data-lucide="heart" class="w-4 h-4" style="color: var(--text-secondary);"></i>
                     </button>
                   </div>
-                  <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">${p.brand}</p>
-                  <h4 class="text-sm font-extrabold text-slate-800 leading-tight mt-0.5">${p.name}</h4>
-                  <p class="text-[10px] text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="package" class="w-3 h-3"></i> ${p.stock}</p>
+                  <p class="text-[9px] font-bold uppercase tracking-wider" style="color: var(--text-muted);">${p.brand}</p>
+                  <h4 class="text-sm font-extrabold leading-tight mt-0.5" style="color: var(--text-primary);">${p.name}</h4>
+                  <p class="text-[10px] mt-1 flex items-center gap-1" style="color: var(--text-muted);"><i data-lucide="package" class="w-3 h-3"></i> ${p.stock}</p>
                 </div>
-                <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+                <div class="flex items-center justify-between mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
                   <div class="flex items-baseline gap-1.5">
-                    ${p.originalPrice ? `<span class="text-[10px] text-slate-400 line-through">${formatPrice(p.originalPrice)}</span>` : ""}
-                    <span class="text-lg font-extrabold text-slate-800">${formatPrice(p.price)}</span>
+                    ${p.originalPrice ? `<span class="text-[10px] line-through" style="color: var(--text-muted);">${formatPrice(p.originalPrice)}</span>` : ""}
+                    <span class="text-lg font-extrabold" style="color: var(--text-primary);">${formatPrice(p.price)}</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <button class="quick-view-btn bg-white hover:bg-slate-100 text-[#323446] font-bold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5 border border-slate-200 transition-colors" data-id="${p.id}">
+                    <button class="quick-view-btn btn-ghost font-bold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5 border transition-colors" data-id="${p.id}">
                       <i data-lucide="eye" class="w-3.5 h-3.5"></i> View
                     </button>
                     ${inCart ? `
-                      <div class="flex items-center gap-1 bg-slate-100 rounded-full p-1">
-                        <button class="qty-btn w-7 h-7 rounded-full bg-white flex items-center justify-center" data-action="dec" data-id="${p.id}"><i data-lucide="minus" class="w-3 h-3"></i></button>
-                        <span class="text-xs font-bold w-6 text-center">${inCart.qty}</span>
-                        <button class="qty-btn w-7 h-7 rounded-full bg-white flex items-center justify-center" data-action="inc" data-id="${p.id}"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                      <div class="flex items-center gap-1 rounded-full p-1" style="background: var(--border-soft);">
+                        <button class="qty-btn w-7 h-7 rounded-full flex items-center justify-center" style="background: var(--bg-card);" data-action="dec" data-id="${p.id}"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                        <span class="text-xs font-bold w-6 text-center" style="color: var(--text-primary);">${inCart.qty}</span>
+                        <button class="qty-btn w-7 h-7 rounded-full flex items-center justify-center" style="background: var(--bg-card);" data-action="inc" data-id="${p.id}"><i data-lucide="plus" class="w-3 h-3"></i></button>
                       </div>
                     ` : `
-                      <button class="add-cart-btn bg-[#323446] hover:bg-slate-800 text-white font-bold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5 transition-colors" data-id="${p.id}">
+                      <button class="add-cart-btn btn-brand font-bold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5 transition-all" data-id="${p.id}">
                         <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Add
                       </button>
                     `}
@@ -835,41 +940,41 @@
         }
 
         return `
-          <div class="product-card bg-[#F7F9FC] rounded-2xl p-3 border border-white shadow-sm flex flex-col gap-2.5 cursor-pointer" data-id="${p.id}" style="animation-delay: ${idx * 40}ms">
-            <div class="image-wrapper relative rounded-xl overflow-hidden bg-slate-200 shrink-0" style="aspect-ratio: 4/5;">
+          <div class="product-card rounded-2xl p-3 border shadow-sm flex flex-col gap-2.5 cursor-pointer" data-id="${p.id}" style="animation-delay: ${idx * 40}ms">
+            <div class="image-wrapper relative rounded-xl overflow-hidden shrink-0" style="aspect-ratio: 4/5; background: var(--border-soft);">
               <img src="${p.image}" alt="${p.name}" class="product-image w-full h-full object-cover">
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none"></div>
               <div class="absolute top-2 left-2 flex flex-col gap-1">${renderBadges(p.badges)}</div>
-              <button class="heart-btn ${isWished ? "active" : ""} absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-600 shadow-sm transition-all" data-id="${p.id}">
+              <button class="heart-btn ${isWished ? "active" : ""} absolute top-2 right-2 w-8 h-8 rounded-full backdrop-blur flex items-center justify-center shadow-sm transition-all" style="background: var(--bg-card); color: var(--text-secondary);" data-id="${p.id}">
                 <i data-lucide="heart" class="w-3.5 h-3.5"></i>
               </button>
               <div class="quick-actions absolute bottom-2 left-2 right-2 flex gap-1.5">
-                <button class="quick-view-btn flex-1 bg-white/95 backdrop-blur text-[#323446] font-bold text-[10px] py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-white transition-colors shadow-md" data-id="${p.id}">
+                <button class="quick-view-btn flex-1 backdrop-blur font-bold text-[10px] py-2 rounded-lg flex items-center justify-center gap-1 hover:opacity-90 transition-all shadow-md" style="background: var(--bg-card); color: var(--text-primary);" data-id="${p.id}">
                   <i data-lucide="eye" class="w-3 h-3"></i> Quick View
                 </button>
               </div>
             </div>
             <div class="px-0.5 flex flex-col gap-1 flex-1">
               <div class="flex items-center justify-between">
-                <div class="flex items-center gap-0.5">${renderStars(p.rating)}<span class="text-[9px] text-slate-500 font-semibold ml-0.5">(${p.reviews.toLocaleString()})</span></div>
+                <div class="flex items-center gap-0.5">${renderStars(p.rating)}<span class="text-[9px] font-semibold ml-0.5" style="color: var(--text-muted);">(${p.reviews.toLocaleString()})</span></div>
               </div>
-              <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">${p.brand}</p>
-              <h4 class="text-xs font-extrabold text-slate-800 leading-tight line-clamp-2">${p.name}</h4>
-              <p class="text-[9px] text-slate-500 flex items-center gap-1 mt-0.5"><i data-lucide="package" class="w-2.5 h-2.5"></i> ${p.stock}</p>
+              <p class="text-[9px] font-bold uppercase tracking-wider" style="color: var(--text-muted);">${p.brand}</p>
+              <h4 class="text-xs font-extrabold leading-tight line-clamp-2" style="color: var(--text-primary);">${p.name}</h4>
+              <p class="text-[9px] flex items-center gap-1 mt-0.5" style="color: var(--text-muted);"><i data-lucide="package" class="w-2.5 h-2.5"></i> ${p.stock}</p>
             </div>
-            <div class="px-0.5 flex items-center justify-between pt-2 border-t border-slate-100">
+            <div class="px-0.5 flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
               <div class="flex items-baseline gap-1.5">
-                ${p.originalPrice ? `<span class="text-[10px] text-slate-400 line-through">${formatPrice(p.originalPrice)}</span>` : ""}
-                <span class="text-sm font-extrabold text-slate-800">${formatPrice(p.price)}</span>
+                ${p.originalPrice ? `<span class="text-[10px] line-through" style="color: var(--text-muted);">${formatPrice(p.originalPrice)}</span>` : ""}
+                <span class="text-sm font-extrabold" style="color: var(--text-primary);">${formatPrice(p.price)}</span>
               </div>
               ${inCart ? `
-                <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
-                  <button class="qty-btn w-6 h-6 rounded-full bg-white flex items-center justify-center" data-action="dec" data-id="${p.id}"><i data-lucide="minus" class="w-2.5 h-2.5"></i></button>
-                  <span class="text-[11px] font-bold w-5 text-center">${inCart.qty}</span>
-                  <button class="qty-btn w-6 h-6 rounded-full bg-white flex items-center justify-center" data-action="inc" data-id="${p.id}"><i data-lucide="plus" class="w-2.5 h-2.5"></i></button>
+                <div class="flex items-center gap-1 rounded-xl p-1" style="background: var(--border-soft);">
+                  <button class="qty-btn w-6 h-6 rounded-full flex items-center justify-center" style="background: var(--bg-card);" data-action="dec" data-id="${p.id}"><i data-lucide="minus" class="w-2.5 h-2.5"></i></button>
+                  <span class="text-[11px] font-bold w-5 text-center" style="color: var(--text-primary);">${inCart.qty}</span>
+                  <button class="qty-btn w-6 h-6 rounded-full flex items-center justify-center" style="background: var(--bg-card);" data-action="inc" data-id="${p.id}"><i data-lucide="plus" class="w-2.5 h-2.5"></i></button>
                 </div>
               ` : `
-                <button class="add-cart-btn bg-[#323446] text-white p-2 rounded-xl shadow-sm atc-btn" data-id="${p.id}">
+                <button class="add-cart-btn btn-brand text-white p-2 rounded-xl shadow-sm atc-btn" data-id="${p.id}">
                   <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                 </button>
               `}
@@ -878,7 +983,6 @@
         `;
       }).join("");
 
-      // Stagger animation
       setTimeout(() => {
         grid.querySelectorAll(".product-card").forEach((card, i) => {
           setTimeout(() => card.classList.add("visible"), i * 40);
@@ -891,7 +995,6 @@
 
     // ===== ATTACH EVENTS TO PRODUCT ELEMENTS =====
     const attachProductEvents = () => {
-      // Open game detail page
       document.querySelectorAll(".product-card").forEach(card => {
         card.addEventListener("click", () => {
           const id = Number(card.dataset.id);
@@ -899,7 +1002,6 @@
         });
       });
 
-      // Wishlist
       document.querySelectorAll(".heart-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -918,7 +1020,6 @@
           }
           saveState();
           updateCounters();
-          /* FIX BUG #3: re-render agar wishlist filter tetap valid (kalau item terakhir dihapus dari wishlist, tampilkan empty state) */
           if (state.showWishlistOnly) {
             renderProducts();
             renderActiveFilters();
@@ -927,7 +1028,6 @@
         });
       });
 
-      // Add to cart
       document.querySelectorAll(".add-cart-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -952,7 +1052,6 @@
         });
       });
 
-      // Quantity buttons
       document.querySelectorAll(".qty-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -976,7 +1075,6 @@
         });
       });
 
-      // Quick view
       document.querySelectorAll(".quick-view-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -1011,7 +1109,6 @@
       } else {
         wishBadge.classList.add("hidden");
         wishBadge.classList.remove("flex");
-        /* FIX BUG #3: kalau wishlist jadi kosong & lagi di mode wishlist, keluarin mode */
         if (state.showWishlistOnly) {
           state.showWishlistOnly = false;
           renderProducts();
@@ -1026,11 +1123,11 @@
       if (state.cart.length === 0) {
         container.innerHTML = `
           <div class="empty-state" style="padding: 40px 0;">
-            <div class="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center mb-4">
-              <i data-lucide="shopping-bag" class="w-10 h-10 text-slate-400"></i>
+            <div class="w-20 h-20 rounded-full flex items-center justify-center mb-4" style="background: var(--border-soft);">
+              <i data-lucide="shopping-bag" class="w-10 h-10" style="color: var(--text-muted);"></i>
             </div>
-            <h3 class="text-base font-extrabold text-slate-800 mb-1">Your cart is empty</h3>
-            <p class="text-xs text-slate-500">Start shopping to add items</p>
+            <h3 class="text-base font-extrabold mb-1" style="color: var(--text-primary);">Your cart is empty</h3>
+            <p class="text-xs" style="color: var(--text-muted);">Start shopping to add items</p>
           </div>
         `;
         lucide.createIcons();
@@ -1041,24 +1138,24 @@
         const p = PRODUCTS.find(p => p.id === c.id);
         if (!p) return "";
         return `
-          <div class="flex gap-3 py-3 border-b border-slate-100 last:border-b-0">
-            <div class="w-20 h-24 rounded-xl overflow-hidden bg-slate-200 shrink-0">
+          <div class="flex gap-3 py-3 border-b last:border-b-0" style="border-color: var(--border-soft);">
+            <div class="w-20 h-24 rounded-xl overflow-hidden shrink-0" style="background: var(--border-soft);">
               <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">
             </div>
             <div class="flex-1 flex flex-col justify-between">
               <div>
-                <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">${p.brand}</p>
-                <h4 class="text-xs font-extrabold text-slate-800 leading-tight line-clamp-2">${p.name}</h4>
+                <p class="text-[9px] font-bold uppercase tracking-wider" style="color: var(--text-muted);">${p.brand}</p>
+                <h4 class="text-xs font-extrabold leading-tight line-clamp-2" style="color: var(--text-primary);">${p.name}</h4>
               </div>
               <div class="flex items-center justify-between mt-2">
-                <div class="flex items-center gap-1 bg-slate-100 rounded-full p-0.5">
-                  <button class="qty-btn w-6 h-6 rounded-full bg-white flex items-center justify-center" data-action="dec" data-id="${p.id}"><i data-lucide="minus" class="w-2.5 h-2.5"></i></button>
-                  <span class="text-[11px] font-bold w-5 text-center">${c.qty}</span>
-                  <button class="qty-btn w-6 h-6 rounded-full bg-white flex items-center justify-center" data-action="inc" data-id="${p.id}"><i data-lucide="plus" class="w-2.5 h-2.5"></i></button>
+                <div class="flex items-center gap-1 rounded-full p-0.5" style="background: var(--border-soft);">
+                  <button class="qty-btn w-6 h-6 rounded-full flex items-center justify-center" style="background: var(--bg-card);" data-action="dec" data-id="${p.id}"><i data-lucide="minus" class="w-2.5 h-2.5"></i></button>
+                  <span class="text-[11px] font-bold w-5 text-center" style="color: var(--text-primary);">${c.qty}</span>
+                  <button class="qty-btn w-6 h-6 rounded-full flex items-center justify-center" style="background: var(--bg-card);" data-action="inc" data-id="${p.id}"><i data-lucide="plus" class="w-2.5 h-2.5"></i></button>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="text-sm font-extrabold text-slate-800">${formatPrice(p.price * c.qty)}</span>
-                  <button class="cart-remove-btn w-6 h-6 rounded-full hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors" data-id="${p.id}">
+                  <span class="text-sm font-extrabold" style="color: var(--text-primary);">${formatPrice(p.price * c.qty)}</span>
+                  <button class="cart-remove-btn w-6 h-6 rounded-full hover:opacity-70 flex items-center justify-center transition-all" data-id="${p.id}" style="color: var(--text-muted);">
                     <i data-lucide="trash-2" class="w-3 h-3"></i>
                   </button>
                 </div>
@@ -1110,19 +1207,19 @@
       const discount = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
 
       $("modal-content").innerHTML = `
-        <div class="relative bg-slate-100 aspect-square zoom-container" id="zoom-container">
+        <div class="relative aspect-square zoom-container" id="zoom-container" style="background: var(--border-soft);">
           <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">
           <div class="absolute top-4 left-4 flex flex-col gap-1">${renderBadges(p.badges)}</div>
           <div class="absolute top-4 right-4 flex flex-col gap-2">
-            <button id="modal-close" class="w-9 h-9 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-600 hover:bg-white transition-colors shadow-md">
+            <button id="modal-close" class="w-9 h-9 rounded-full backdrop-blur flex items-center justify-center hover:opacity-80 transition-all shadow-md" style="background: var(--bg-card); color: var(--text-secondary);">
               <i data-lucide="x" class="w-4 h-4"></i>
             </button>
-            <button id="modal-wishlist" class="heart-btn ${isWished ? "active" : ""} w-9 h-9 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-600 shadow-md" data-id="${p.id}">
+            <button id="modal-wishlist" class="heart-btn ${isWished ? "active" : ""} w-9 h-9 rounded-full backdrop-blur flex items-center justify-center shadow-md" style="background: var(--bg-card); color: var(--text-secondary);" data-id="${p.id}">
               <i data-lucide="heart" class="w-4 h-4"></i>
             </button>
           </div>
           <div class="absolute bottom-4 left-4 right-4 flex gap-1.5">
-            <div class="w-16 h-16 rounded-lg overflow-hidden border-2 border-[#323446] cursor-pointer ring-2 ring-white">
+            <div class="w-16 h-16 rounded-lg overflow-hidden border-2 cursor-pointer ring-2" style="border-color: var(--brand); ring-color: var(--bg-card);">
               <img src="${p.image}" class="w-full h-full object-cover">
             </div>
             <div class="w-16 h-16 rounded-lg overflow-hidden border-2 border-transparent cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
@@ -1135,66 +1232,66 @@
         </div>
 
         <div class="p-8 flex flex-col">
-          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">${p.brand}</p>
-          <h2 class="text-2xl font-extrabold text-slate-800 leading-tight mt-1">${p.name}</h2>
+          <p class="text-[10px] font-bold uppercase tracking-[0.2em]" style="color: var(--text-muted);">${p.brand}</p>
+          <h2 class="text-2xl font-extrabold leading-tight mt-1" style="color: var(--text-primary);">${p.name}</h2>
           <div class="flex items-center gap-2 mt-2">
             <div class="flex items-center gap-0.5">${renderStars(p.rating)}</div>
-            <span class="text-xs font-bold text-slate-700">${p.rating}</span>
-            <span class="text-xs text-slate-400">(${p.reviews.toLocaleString()} reviews)</span>
+            <span class="text-xs font-bold" style="color: var(--text-secondary);">${p.rating}</span>
+            <span class="text-xs" style="color: var(--text-muted);">(${p.reviews.toLocaleString()} reviews)</span>
           </div>
 
           <div class="flex items-baseline gap-2 mt-4">
-            <span class="text-3xl font-extrabold text-slate-800">${formatPrice(p.price)}</span>
+            <span class="text-3xl font-extrabold" style="color: var(--text-primary);">${formatPrice(p.price)}</span>
             ${p.originalPrice ? `
-              <span class="text-sm text-slate-400 line-through">${formatPrice(p.originalPrice)}</span>
-              <span class="bg-[#323446] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">Save ${discount}%</span>
+              <span class="text-sm line-through" style="color: var(--text-muted);">${formatPrice(p.originalPrice)}</span>
+              <span class="btn-brand text-[10px] font-extrabold px-2 py-0.5 rounded-full">Save ${discount}%</span>
             ` : ""}
           </div>
 
-          <p class="text-xs text-slate-600 leading-relaxed mt-4">
+          <p class="text-xs leading-relaxed mt-4" style="color: var(--text-secondary);">
             Experience the ultimate edition with exclusive content, premium packaging, and limited-time bonuses. A must-have for collectors and fans.
           </p>
 
-          <div class="flex items-center gap-2 mt-4 text-xs text-slate-500">
+          <div class="flex items-center gap-2 mt-4 text-xs" style="color: var(--text-muted);">
             <i data-lucide="package" class="w-3.5 h-3.5"></i>
             <span class="font-semibold">${p.stock}</span>
           </div>
 
-          <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-200">
-            <div class="flex items-center gap-2 text-xs text-slate-600">
-              <i data-lucide="tag" class="w-3.5 h-3.5 text-slate-400"></i>
+          <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t" style="border-color: var(--border-soft);">
+            <div class="flex items-center gap-2 text-xs" style="color: var(--text-secondary);">
+              <i data-lucide="tag" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
               <span class="font-semibold">${p.type}</span>
             </div>
-            <div class="flex items-center gap-2 text-xs text-slate-600">
-              <i data-lucide="folder" class="w-3.5 h-3.5 text-slate-400"></i>
+            <div class="flex items-center gap-2 text-xs" style="color: var(--text-secondary);">
+              <i data-lucide="folder" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
               <span class="font-semibold capitalize">${p.category}</span>
             </div>
-            <div class="flex items-center gap-2 text-xs text-slate-600">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-slate-400"></i>
+            <div class="flex items-center gap-2 text-xs" style="color: var(--text-secondary);">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
               <span class="font-semibold">Authenticity guaranteed</span>
             </div>
-            <div class="flex items-center gap-2 text-xs text-slate-600">
-              <i data-lucide="truck" class="w-3.5 h-3.5 text-slate-400"></i>
+            <div class="flex items-center gap-2 text-xs" style="color: var(--text-secondary);">
+              <i data-lucide="truck" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
               <span class="font-semibold">Free shipping $80+</span>
             </div>
           </div>
 
           <div class="mt-auto pt-6 flex gap-2">
             ${inCart ? `
-              <div class="flex items-center gap-2 bg-slate-100 rounded-full p-1">
-                <button class="modal-qty-btn w-9 h-9 rounded-full bg-white flex items-center justify-center" data-action="dec" data-id="${p.id}"><i data-lucide="minus" class="w-4 h-4"></i></button>
-                <span class="text-sm font-bold w-8 text-center">${inCart.qty}</span>
-                <button class="modal-qty-btn w-9 h-9 rounded-full bg-white flex items-center justify-center" data-action="inc" data-id="${p.id}"><i data-lucide="plus" class="w-4 h-4"></i></button>
+              <div class="flex items-center gap-2 rounded-full p-1" style="background: var(--border-soft);">
+                <button class="modal-qty-btn w-9 h-9 rounded-full flex items-center justify-center" style="background: var(--bg-card);" data-action="dec" data-id="${p.id}"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                <span class="text-sm font-bold w-8 text-center" style="color: var(--text-primary);">${inCart.qty}</span>
+                <button class="modal-qty-btn w-9 h-9 rounded-full flex items-center justify-center" style="background: var(--bg-card);" data-action="inc" data-id="${p.id}"><i data-lucide="plus" class="w-4 h-4"></i></button>
               </div>
-              <button id="modal-view-cart" class="flex-1 bg-[#323446] text-white font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 transition-colors">
+              <button id="modal-view-cart" class="flex-1 btn-brand font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 transition-all">
                 <i data-lucide="shopping-bag" class="w-4 h-4"></i> View Cart
               </button>
             ` : `
-              <button id="modal-add-cart" class="flex-1 bg-[#323446] hover:bg-slate-800 text-white font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 transition-colors" data-id="${p.id}">
+              <button id="modal-add-cart" class="flex-1 btn-brand hover:opacity-90 font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 transition-all" data-id="${p.id}">
                 <i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart
               </button>
             `}
-            <button id="modal-buy-now" class="flex-1 bg-white hover:bg-slate-50 text-[#323446] font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 border border-slate-200 transition-colors" data-id="${p.id}">
+            <button id="modal-buy-now" class="flex-1 btn-ghost border font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 transition-all" data-id="${p.id}">
               <i data-lucide="zap" class="w-4 h-4"></i> Buy Now
             </button>
           </div>
@@ -1206,7 +1303,6 @@
 
       lucide.createIcons();
 
-      // Modal events
       $("modal-close").addEventListener("click", closeModal);
       $("modal-backdrop").addEventListener("click", closeModal);
 
@@ -1300,7 +1396,6 @@
       $("quick-view-modal").classList.remove("active");
     };
 
-    // ===== CART DRAWER =====
     const openCart = () => {
       $("cart-drawer-backdrop").classList.add("active");
       $("cart-drawer").classList.add("active");
@@ -1312,7 +1407,6 @@
       $("cart-drawer").classList.remove("active");
     };
 
-    // ===== DROPDOWN LOGIC =====
     const setupDropdown = (btnId, dropdownId) => {
       const btn = $(btnId);
       const dd = $(dropdownId);
@@ -1341,7 +1435,6 @@
       });
     };
 
-    // ===== UPDATE ACTIVE FILTERS =====
     const updateClearFiltersButton = () => {
       const hasFilters = state.searchQuery || state.activeCategory !== "all" || state.priceRange !== "all" || state.showWishlistOnly;
       $("clear-all-filters").classList.toggle("hidden", !hasFilters);
@@ -1362,7 +1455,7 @@
       }
 
       container.innerHTML = filters.map(f => `
-        <span class="flex items-center gap-1 bg-[#323446] text-white text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer hover:bg-slate-800 transition-colors shrink-0" data-filter="${f.key}">
+        <span class="flex items-center gap-1 btn-brand text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer hover:opacity-90 transition-all shrink-0" data-filter="${f.key}">
           ${f.label} <i data-lucide="x" class="w-3 h-3"></i>
         </span>
       `).join("");
@@ -1384,7 +1477,6 @@
             items.forEach(i => i.classList.remove("active"));
             items[0].classList.add("active");
           } else if (key === "wishlist") {
-            /* FIX BUG #3: handle hapus filter wishlist */
             state.showWishlistOnly = false;
           }
           renderActiveFilters();
@@ -1396,7 +1488,6 @@
       lucide.createIcons();
     };
 
-    // ===== COUNTDOWN TIMER =====
     const initCountdown = () => {
       const target = new Date();
       target.setDate(target.getDate() + 3);
@@ -1420,9 +1511,7 @@
       setInterval(update, 1000);
     };
 
-    // ===== INIT EVENTS =====
     const initEvents = () => {
-      // Search
       let searchDebounce;
       $("search-input").addEventListener("input", (e) => {
         clearTimeout(searchDebounce);
@@ -1445,11 +1534,9 @@
         updateClearFiltersButton();
       });
 
-      // Sort
       document.querySelectorAll("#sort-dropdown .dropdown-item").forEach(item => {
         item.addEventListener("click", () => {
           state.sortBy = item.dataset.sort;
-          /* FIX BUG #4: ambil label dari dataset, bukan textContent (hindari ikut SVG text) */
           const labels = {
             "popular": "Popular",
             "newest": "Newest",
@@ -1463,7 +1550,6 @@
         });
       });
 
-      // Price
       document.querySelectorAll("#price-dropdown .dropdown-item").forEach(item => {
         item.addEventListener("click", () => {
           state.priceRange = item.dataset.price;
@@ -1476,28 +1562,27 @@
         });
       });
 
-      // View toggle
       $("view-grid").addEventListener("click", () => {
         state.viewMode = "grid";
-        $("view-grid").classList.add("bg-[#323446]", "text-white");
+        $("view-grid").classList.add("btn-brand");
         $("view-grid").classList.remove("text-slate-400");
-        $("view-list").classList.remove("bg-[#323446]", "text-white");
-        $("view-list").classList.add("text-slate-400");
+        $("view-list").classList.remove("btn-brand");
+        $("view-list").style.color = "var(--text-muted)";
+        $("view-grid").style.color = "white";
         document.body.classList.remove("view-list");
         renderProducts();
       });
 
       $("view-list").addEventListener("click", () => {
         state.viewMode = "list";
-        $("view-list").classList.add("bg-[#323446]", "text-white");
-        $("view-list").classList.remove("text-slate-400");
-        $("view-grid").classList.remove("bg-[#323446]", "text-white");
-        $("view-grid").classList.add("text-slate-400");
+        $("view-list").classList.add("btn-brand");
+        $("view-list").style.color = "white";
+        $("view-grid").classList.remove("btn-brand");
+        $("view-grid").style.color = "var(--text-muted)";
         document.body.classList.add("view-list");
         renderProducts();
       });
 
-      // Cart drawer
       $("cart-btn").addEventListener("click", openCart);
       $("close-cart").addEventListener("click", closeCart);
       $("cart-drawer-backdrop").addEventListener("click", closeCart);
@@ -1507,7 +1592,6 @@
         showToast("Proceeding to checkout...", "credit-card", "info");
       });
 
-      // Clear all filters
       $("clear-all-filters").addEventListener("click", () => {
         state.searchQuery = "";
         state.activeCategory = "all";
@@ -1527,18 +1611,15 @@
         showToast("Filters cleared", "rotate-ccw", "info");
       });
 
-      // Empty state reset
       $("reset-filters").addEventListener("click", () => {
         $("clear-all-filters").click();
       });
 
-      // Load more
       $("load-more-btn").addEventListener("click", () => {
         state.displayedCount += 4;
         renderProducts();
       });
 
-      // Hero buttons
       $("explore-btn").addEventListener("click", () => {
         state.activeCategory = "all";
         state.showWishlistOnly = false;
@@ -1549,7 +1630,6 @@
         renderActiveFilters();
         updateClearFiltersButton();
         showToast("Showing all products", "sparkles", "info");
-        /* FIX BUG #4: scroll main-content, bukan window (karena layout flex overflow) */
         $("main-content").scrollTo({ top: 0, behavior: "smooth" });
       });
 
@@ -1557,13 +1637,11 @@
         showToast("Coupon SUMMER20 applied!", "ticket", "success");
       });
 
-      /* FIX BUG #3: wishlist button sekarang benar-benar filter ke wishlist */
       $("wishlist-btn").addEventListener("click", () => {
         if (state.wishlist.length === 0) {
           showToast("Your wishlist is empty", "heart", "info");
           return;
         }
-        /* Toggle: kalau sudah di mode wishlist, keluarin. Kalau belum, masukin */
         if (state.showWishlistOnly) {
           state.showWishlistOnly = false;
           showToast("Showing all products", "heart", "info");
@@ -1582,14 +1660,12 @@
         updateClearFiltersButton();
       });
 
-      // Close dropdowns on outside click
       document.addEventListener("click", (e) => {
         if (!e.target.closest(".relative")) {
           document.querySelectorAll(".dropdown.active").forEach(d => d.classList.remove("active"));
         }
       });
 
-      // Close modal on Escape
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
           closeModal();
@@ -1602,7 +1678,6 @@
       setupDropdown("price-filter-btn", "price-dropdown");
     };
 
-    // ===== INIT =====
     document.addEventListener("DOMContentLoaded", () => {
       renderCategories();
       renderProducts();
