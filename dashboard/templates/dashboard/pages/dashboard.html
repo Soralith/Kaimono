@@ -24,7 +24,7 @@
   </script>
   <style>
     /* ===== THEME VARIABLES (GLOBAL) ===== */
-    :root {
+    :root, [data-theme="silver"] {
       --bg-primary: #E2E7EE;
       --bg-surface: #F7F9FC;
       --bg-card: #ffffff;
@@ -34,8 +34,10 @@
       --border-color: #ffffff;
       --border-soft: #e2e8f0;
       --brand: #323446;
+      --on-brand: #ffffff;
       --brand-soft: rgba(50, 52, 70, 0.12);
       --hover-bg: rgba(255, 255, 255, 0.7);
+      --shadow-color: rgba(50, 52, 70, 0.1);
     }
     [data-theme="midnight"] {
       --bg-primary: #0f172a;
@@ -47,8 +49,10 @@
       --border-color: #334155;
       --border-soft: #475569;
       --brand: #64748b;
+      --on-brand: #ffffff;
       --brand-soft: rgba(148, 163, 184, 0.15);
       --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.3);
     }
     [data-theme="paper"] {
       --bg-primary: #F5F1E8;
@@ -60,8 +64,10 @@
       --border-color: #e7e5e4;
       --border-soft: #d6d3d1;
       --brand: #292524;
+      --on-brand: #ffffff;
       --brand-soft: rgba(41, 37, 36, 0.1);
       --hover-bg: rgba(255, 255, 255, 0.6);
+      --shadow-color: rgba(41, 37, 36, 0.08);
     }
     [data-theme="obsidian"] {
       --bg-primary: #0a0a0a;
@@ -73,8 +79,10 @@
       --border-color: #262626;
       --border-soft: #404040;
       --brand: #fafafa;
+      --on-brand: #0a0a0a;
       --brand-soft: rgba(255, 255, 255, 0.08);
       --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.5);
     }
 
     body {
@@ -94,6 +102,26 @@
     .dark-card {
       background-color: var(--bg-card) !important;
       color: var(--text-secondary);
+    }
+
+    /* ===== NEW: HELPER CLASSES ===== */
+    .btn-brand {
+      background-color: var(--brand);
+      color: var(--on-brand);
+      transition: opacity 200ms ease;
+    }
+    .btn-brand:hover { opacity: 0.88; }
+    
+    .themed-input {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+    .themed-input::placeholder { color: var(--text-muted); }
+    .themed-input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-soft);
+      outline: none;
     }
 
     ::-webkit-scrollbar {
@@ -268,7 +296,7 @@
           <!-- SEARCH BAR -->
           <div class="relative w-full shadow-sm rounded-full">
             <input type="text" placeholder="Search games, figures, apparel..."
-                   class="w-full pl-6 pr-12 py-4 rounded-full text-sm focus:outline-none border font-medium placeholder:text-slate-400" style="background: var(--bg-surface); color: var(--text-primary); border-color: var(--border-color);">
+                   class="themed-input w-full pl-6 pr-12 py-4 rounded-full text-sm font-medium transition-all">
             <i data-lucide="search" class="w-5 h-5 absolute right-5 top-1/2 -translate-y-1/2 icon-muted"></i>
           </div>
 
@@ -280,12 +308,12 @@
               <div class="z-10 max-w-[320px] relative">
                 <span class="text-sm font-semibold tracking-wide" style="color: var(--text-secondary);">Featured & Recommendations</span>
                 <h2 class="text-2xl font-bold mt-2 leading-snug" style="color: var(--text-primary);">Project Sekai:<br>Colorful Stage! Collectibles</h2>
-                <button class="mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all" style="background: var(--brand); color: white;">
-                  Explore Collection <i data-lucide="play-circle" class="w-4 h-4 fill-white"></i>
+                <button class="btn-brand mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
+                  Explore Collection <i data-lucide="play-circle" class="w-4 h-4 fill-current"></i>
                 </button>
               </div>
               <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80" alt="Featured 1" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
-              <div class="absolute right-0 top-0 h-full w-[58%] bg-gradient-to-r from-[#F7F9FC] via-[#F7F9FC]/80 to-transparent z-0"></div>
+              <div class="absolute right-0 top-0 h-full w-[58%] z-0" style="background: linear-gradient(to right, var(--bg-surface), color-mix(in srgb, var(--bg-surface) 80%, transparent) 60%, transparent);"></div>
             </div>
 
             <!-- Slide 2 -->
@@ -293,12 +321,12 @@
               <div class="z-10 max-w-[320px] relative">
                 <span class="text-sm font-semibold tracking-wide" style="color: var(--text-secondary);">Featured & Recommendations</span>
                 <h2 class="text-2xl font-bold mt-2 leading-snug" style="color: var(--text-primary);">Genshin Impact:<br>Exclusive Figure Drop</h2>
-                <button class="mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all" style="background: var(--brand); color: white;">
-                  Shop Pre-Order <i data-lucide="play-circle" class="w-4 h-4 fill-white"></i>
+                <button class="btn-brand mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
+                  Shop Pre-Order <i data-lucide="play-circle" class="w-4 h-4 fill-current"></i>
                 </button>
               </div>
               <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80" alt="Featured 2" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
-              <div class="absolute right-0 top-0 h-full w-[58%] bg-gradient-to-r from-[#F7F9FC] via-[#F7F9FC]/80 to-transparent z-0"></div>
+              <div class="absolute right-0 top-0 h-full w-[58%] z-0" style="background: linear-gradient(to right, var(--bg-surface), color-mix(in srgb, var(--bg-surface) 80%, transparent) 60%, transparent);"></div>
             </div>
 
             <!-- Slide 3 -->
@@ -306,19 +334,19 @@
               <div class="z-10 max-w-[320px] relative">
                 <span class="text-sm font-semibold tracking-wide" style="color: var(--text-secondary);">Featured & Recommendations</span>
                 <h2 class="text-2xl font-bold mt-2 leading-snug" style="color: var(--text-primary);">Persona 5 Royal:<br>Digital OST & Game Bundle</h2>
-                <button class="mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all" style="background: var(--brand); color: white;">
-                  Buy Bundle <i data-lucide="play-circle" class="w-4 h-4 fill-white"></i>
+                <button class="btn-brand mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
+                  Buy Bundle <i data-lucide="play-circle" class="w-4 h-4 fill-current"></i>
                 </button>
               </div>
               <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80" alt="Featured 3" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
-              <div class="absolute right-0 top-0 h-full w-[58%] bg-gradient-to-r from-[#F7F9FC] via-[#F7F9FC]/80 to-transparent z-0"></div>
+              <div class="absolute right-0 top-0 h-full w-[58%] z-0" style="background: linear-gradient(to right, var(--bg-surface), color-mix(in srgb, var(--bg-surface) 80%, transparent) 60%, transparent);"></div>
             </div>
 
             <!-- Carousel Dots -->
             <div class="absolute bottom-4 left-7 flex gap-1.5 z-20">
-              <span class="dot w-2.5 h-2.5 rounded-full bg-slate-800 transition-all"></span>
-              <span class="dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all"></span>
-              <span class="dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all"></span>
+              <span class="dot w-2.5 h-2.5 rounded-full transition-all" style="background: var(--brand);"></span>
+              <span class="dot w-2.5 h-2.5 rounded-full transition-all" style="background: var(--border-soft);"></span>
+              <span class="dot w-2.5 h-2.5 rounded-full transition-all" style="background: var(--border-soft);"></span>
             </div>
           </div>
 
@@ -461,7 +489,7 @@
               <div class="relative h-32 rounded-2xl overflow-hidden mb-3 shrink-0">
                 <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=80" alt="Featured Game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/20 to-transparent"></div>
-                <span class="absolute top-2.5 left-2.5 text-white font-extrabold text-[8px] px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--brand);">Editor's Choice</span>
+                <span class="absolute top-2.5 left-2.5 font-extrabold text-[8px] px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--brand); color: var(--on-brand);">Editor's Choice</span>
                 <div class="absolute bottom-2.5 left-3 right-3 flex justify-between items-end text-white">
                   <div>
                     <h4 class="font-extrabold text-sm leading-tight">Elden Ring: Shadow</h4>
@@ -492,7 +520,7 @@
                 </div>
               </div>
 
-              <button class="w-full font-semibold py-2.5 rounded-full text-xs hover:opacity-90 transition-all shadow-sm flex items-center justify-center gap-1.5 shrink-0 mt-2" style="background: var(--brand); color: white;">
+              <button class="btn-brand w-full font-semibold py-2.5 rounded-full text-xs shadow-sm flex items-center justify-center gap-1.5 shrink-0 mt-2">
                 Get Game <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -588,10 +616,10 @@
     function showSlide(index) {
       slides.forEach((slide, i) => {
         slide.classList.remove('active');
-        dots[i].classList.replace('bg-slate-800', 'bg-slate-300');
+        dots[i].style.background = 'var(--border-soft)';
       });
       slides[index].classList.add('active');
-      dots[index].classList.replace('bg-slate-300', 'bg-slate-800');
+      dots[index].style.background = 'var(--brand)';
     }
 
     setInterval(() => {
