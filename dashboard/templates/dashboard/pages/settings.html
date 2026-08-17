@@ -315,13 +315,6 @@
                   <span class="set-tab-desc block text-[10px] truncate">Theme & display</span>
                 </span>
               </button>
-              <button class="set-tab flex items-center gap-3 px-3.5 py-3 rounded-xl text-left w-full" data-set="notifications">
-                <i data-lucide="bell" class="set-tab-icon w-4 h-4 shrink-0"></i>
-                <span class="flex-1 min-w-0">
-                  <span class="block text-xs font-bold">Notifications</span>
-                  <span class="set-tab-desc block text-[10px] truncate">Alerts & emails</span>
-                </span>
-              </button>
               <button class="set-tab flex items-center gap-3 px-3.5 py-3 rounded-xl text-left w-full" data-set="privacy">
                 <i data-lucide="shield" class="set-tab-icon w-4 h-4 shrink-0"></i>
                 <span class="flex-1 min-w-0">
@@ -518,85 +511,6 @@
                     <input type="checkbox" name="sidebar_expanded" form="set-form" class="sr-only" {% if form.sidebar_expanded.value %}checked{% endif %} onchange="syncPref(this, 'sidebar_expanded')">
                     <div class="toggle-knob"></div>
                   </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ===== PANEL: NOTIFICATIONS ===== -->
-          <div class="set-panel flex flex-col gap-5 hidden" data-panel="notifications">
-            <div class="surface-card rounded-2xl border shadow-sm p-6 shrink-0">
-              <h3 class="text-base font-semibold flex items-center gap-2 mb-4">
-                <i data-lucide="shopping-bag" class="w-4 h-4 icon-muted"></i> Store Alerts
-              </h3>
-              <div class="flex flex-col gap-2">
-                <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="tag" class="w-4 h-4 icon-muted"></i>
-                    <div>
-                      <p class="text-xs font-bold" style="color: var(--text-primary);">Wishlist Price Drops</p>
-                      <p class="text-[10px]" style="color: var(--text-muted);">When a saved item goes on sale</p>
-                    </div>
-                  </div>
-                  <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-                </div>
-                <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="package" class="w-4 h-4 icon-muted"></i>
-                    <div>
-                      <p class="text-xs font-bold" style="color: var(--text-primary);">Restock Alerts</p>
-                      <p class="text-[10px]" style="color: var(--text-muted);">When out-of-stock figures come back</p>
-                    </div>
-                  </div>
-                  <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-                </div>
-                <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="truck" class="w-4 h-4 icon-muted"></i>
-                    <div>
-                      <p class="text-xs font-bold" style="color: var(--text-primary);">Order & Shipping Updates</p>
-                      <p class="text-[10px]" style="color: var(--text-muted);">Tracking numbers and delivery status</p>
-                    </div>
-                  </div>
-                  <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="surface-card rounded-2xl border shadow-sm p-6 shrink-0">
-              <h3 class="text-base font-semibold flex items-center gap-2 mb-4">
-                <i data-lucide="users" class="w-4 h-4 icon-muted"></i> Social & Community
-              </h3>
-              <div class="flex flex-col gap-2">
-                <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="user-plus" class="w-4 h-4 icon-muted"></i>
-                    <div>
-                      <p class="text-xs font-bold" style="color: var(--text-primary);">Friend Requests</p>
-                      <p class="text-[10px]" style="color: var(--text-muted);">When someone sends you a request</p>
-                    </div>
-                  </div>
-                  <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-                </div>
-                <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="message-circle" class="w-4 h-4 icon-muted"></i>
-                    <div>
-                      <p class="text-xs font-bold" style="color: var(--text-primary);">Comments & Replies</p>
-                      <p class="text-[10px]" style="color: var(--text-muted);">When someone replies to your posts</p>
-                    </div>
-                  </div>
-                  <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-                </div>
-                <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="mail" class="w-4 h-4 icon-muted"></i>
-                    <div>
-                      <p class="text-xs font-bold" style="color: var(--text-primary);">Weekly Newsletter</p>
-                      <p class="text-[10px]" style="color: var(--text-muted);">Digest of deals and new releases</p>
-                    </div>
-                  </div>
-                  <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
                 </div>
               </div>
             </div>
