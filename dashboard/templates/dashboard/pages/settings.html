@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     /* ===== THEME VARIABLES (GLOBAL) ===== */
-    :root {
+    :root, [data-theme="silver"] {
       --bg-primary: #E2E7EE;
       --bg-surface: #F7F9FC;
       --bg-card: #ffffff;
@@ -19,8 +19,11 @@
       --border-color: #ffffff;
       --border-soft: #e2e8f0;
       --brand: #323446;
+      --on-brand: #ffffff;        /* NEW: warna teks di atas brand */
       --brand-soft: rgba(50, 52, 70, 0.12);
       --hover-bg: rgba(255, 255, 255, 0.7);
+      --shadow-color: rgba(50, 52, 70, 0.1);
+      --toggle-knob: #ffffff;
     }
     [data-theme="midnight"] {
       --bg-primary: #0f172a;
@@ -32,21 +35,11 @@
       --border-color: #334155;
       --border-soft: #475569;
       --brand: #64748b;
+      --on-brand: #ffffff;
       --brand-soft: rgba(148, 163, 184, 0.15);
       --hover-bg: rgba(255,255,255,0.03);
-    }
-    [data-theme="silver"] {
-      --bg-primary: #E2E7EE;
-      --bg-surface: #F7F9FC;
-      --bg-card: #ffffff;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #94a3b8;
-      --border-color: #ffffff;
-      --border-soft: #e2e8f0;
-      --brand: #323446;
-      --brand-soft: rgba(50, 52, 70, 0.12);
-      --hover-bg: rgba(255, 255, 255, 0.7);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --toggle-knob: #ffffff;
     }
     [data-theme="paper"] {
       --bg-primary: #F5F1E8;
@@ -58,8 +51,11 @@
       --border-color: #e7e5e4;
       --border-soft: #d6d3d1;
       --brand: #292524;
+      --on-brand: #ffffff;
       --brand-soft: rgba(41, 37, 36, 0.1);
       --hover-bg: rgba(255, 255, 255, 0.6);
+      --shadow-color: rgba(41, 37, 36, 0.08);
+      --toggle-knob: #ffffff;
     }
     [data-theme="obsidian"] {
       --bg-primary: #0a0a0a;
@@ -70,9 +66,12 @@
       --text-muted: #525252;
       --border-color: #262626;
       --border-soft: #404040;
-      --brand: #fafafa;
+      --brand: #fafafa;            /* putih — aksen premium */
+      --on-brand: #0a0a0a;         /* FIX: hitam untuk teks di atas brand */
       --brand-soft: rgba(255, 255, 255, 0.08);
       --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      --toggle-knob: #0a0a0a;      /* FIX: knob hitam di track putih */
     }
 
     /* Apply theme variables globally */
@@ -84,6 +83,8 @@
     }
     [data-theme] h1, [data-theme] h2, [data-theme] h3, [data-theme] h4 { color: var(--text-primary); }
     [data-theme] label { color: var(--text-muted); }
+
+    /* ===== HELPER CLASSES ===== */
     .surface-card {
       background-color: var(--bg-surface) !important;
       border-color: var(--border-color) !important;
@@ -93,6 +94,37 @@
       background-color: var(--bg-card) !important;
       color: var(--text-secondary);
     }
+
+    /* NEW: Brand button — otomatis adaptif */
+    .btn-brand {
+      background-color: var(--brand);
+      color: var(--on-brand);
+      transition: opacity 200ms ease;
+    }
+    .btn-brand:hover { opacity: 0.88; }
+
+    /* NEW: Ghost button */
+    .btn-ghost {
+      background-color: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-soft);
+      transition: all 200ms ease;
+    }
+    .btn-ghost:hover {
+      background-color: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    /* NEW: Accent card — untuk Help & Danger Zone */
+    .accent-card {
+      background-color: var(--brand);
+      color: var(--on-brand);
+      box-shadow: 0 20px 40px -12px var(--shadow-color);
+    }
+    .accent-card h3, .accent-card h4 { color: var(--on-brand); }
+    .accent-muted { color: color-mix(in srgb, var(--on-brand) 70%, transparent); }
+    .accent-soft-bg { background-color: color-mix(in srgb, var(--on-brand) 10%, transparent); }
+    .accent-border { border-color: color-mix(in srgb, var(--on-brand) 15%, transparent); }
 
     /* Reduce animations mode */
     [data-motion="reduced"] *,
@@ -109,11 +141,13 @@
     .set-tab:hover { background-color: var(--hover-bg); color: var(--text-primary); }
     .set-tab.active {
       background-color: var(--brand);
-      color: white;
-      box-shadow: 0 8px 20px -8px rgba(50, 52, 70, 0.5);
+      color: var(--on-brand);
+      box-shadow: 0 8px 20px -8px var(--shadow-color);
     }
-    .set-tab.active .set-tab-desc { color: #cbd5e1; }
-    .set-tab.active .set-tab-icon { color: white; }
+    .set-tab.active .set-tab-desc { 
+      color: color-mix(in srgb, var(--on-brand) 75%, transparent); 
+    }
+    .set-tab.active .set-tab-icon { color: var(--on-brand); }
 
     /* ===== PANEL TRANSITION ===== */
     .set-panel { animation: panelIn 350ms ease; }
@@ -122,10 +156,10 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== TOGGLE SWITCH ===== */
+    /* ===== TOGGLE SWITCH (FIXED untuk obsidian) ===== */
     .toggle-track {
       width: 36px; height: 20px;
-      background-color: #cbd5e1;
+      background-color: var(--border-soft);
       border-radius: 999px;
       position: relative;
       cursor: pointer;
@@ -135,12 +169,12 @@
     .toggle-track.active { background-color: var(--brand); }
     .toggle-knob {
       width: 16px; height: 16px;
-      background: white;
+      background: var(--toggle-knob, white);
       border-radius: 50%;
       position: absolute;
       top: 2px; left: 2px;
       transition: left 250ms cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     .toggle-track.active .toggle-knob { left: 18px; }
 
@@ -157,6 +191,7 @@
       outline: none;
       transition: all 200ms;
     }
+    .form-input::placeholder { color: var(--text-muted); }
     .form-input:focus {
       border-color: var(--brand);
       box-shadow: 0 0 0 3px var(--brand-soft);
@@ -167,12 +202,25 @@
       cursor: not-allowed;
     }
 
+    /* NEW: Themed input untuk search */
+    .themed-input {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-soft);
+    }
+    .themed-input::placeholder { color: var(--text-muted); }
+    .themed-input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-soft);
+      outline: none;
+    }
+
     /* ===== ROW HOVER ===== */
     .setting-row { transition: background-color 200ms ease; }
     .setting-row:hover { background-color: var(--hover-bg); }
 
     /* ===== THEME SWATCH ===== */
-    .theme-swatch { transition: all 200ms ease; }
+    .theme-swatch { transition: all 200ms ease; border-color: var(--border-soft) !important; }
     .theme-swatch:hover { transform: translateY(-2px); }
     .theme-swatch.selected {
       box-shadow: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--brand);
@@ -187,7 +235,22 @@
     /* Icon helper */
     [data-theme] .icon-muted { color: var(--text-muted); }
     [data-theme] .icon-brand { color: var(--brand); }
-    [data-theme] .text-brand-badge { color: var(--brand); background: var(--brand-soft); }
+    
+    /* FIX: text-brand-badge untuk obsidian */
+    [data-theme] .text-brand-badge { 
+      color: var(--brand); 
+      background: var(--brand-soft); 
+    }
+    [data-theme="obsidian"] .text-brand-badge {
+      color: var(--text-primary);
+      background: var(--border-soft);
+    }
+
+    /* FIX: Active session "Current" pulse dot */
+    .pulse-dot-brand { 
+      animation: pulse 2s ease-in-out infinite; 
+      background-color: currentColor;
+    }
   </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden text-sm">
@@ -207,13 +270,13 @@
         </div>
         <div class="flex items-center gap-2">
           <span class="flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full" style="color: var(--text-muted); background: var(--bg-card); border: 1px solid var(--border-soft);">
-            <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+            <span class="w-1.5 h-1.5 rounded-full" style="background: var(--text-muted);"></span>
             All changes saved
           </span>
-          <button id="btn-discard" class="font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-soft);">
+          <button id="btn-discard" class="btn-ghost font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2">
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Discard
           </button>
-          <button id="btn-save" form="set-form" class="font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-colors" style="background: var(--brand); color: white;">
+          <button id="btn-save" form="set-form" class="btn-brand font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm">
             <i data-lucide="check" class="w-3.5 h-3.5"></i> Save Changes
           </button>
         </div>
@@ -233,7 +296,7 @@
         <aside class="flex flex-col gap-4 overflow-y-auto pr-1">
           <div class="surface-card rounded-2xl border shadow-sm p-2.5 shrink-0">
             <div class="relative mb-2.5">
-              <input type="text" placeholder="Search settings..." class="w-full rounded-full pl-9 pr-3 py-2.5 text-xs font-medium placeholder:text-slate-400 focus:outline-none focus:border-[#323446] focus:ring-2 focus:ring-[#323446]/10 transition-all" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-soft);">
+              <input type="text" placeholder="Search settings..." class="themed-input w-full rounded-full pl-9 pr-3 py-2.5 text-xs font-medium transition-all">
               <i data-lucide="search" class="w-3.5 h-3.5 icon-muted absolute left-3.5 top-1/2 -translate-y-1/2"></i>
             </div>
 
@@ -283,15 +346,15 @@
             </div>
           </div>
 
-          <!-- Help card -->
-          <div class="rounded-2xl p-5 shrink-0 relative overflow-hidden" style="background: var(--brand);">
-            <div class="absolute -top-8 -right-8 w-28 h-28 bg-white/5 rounded-full pointer-events-none"></div>
-            <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center mb-3">
-              <i data-lucide="life-buoy" class="w-4 h-4 text-white"></i>
+          <!-- Help card — FIXED dengan accent-card -->
+          <div class="accent-card rounded-2xl p-5 shrink-0 relative overflow-hidden">
+            <div class="absolute -top-8 -right-8 w-28 h-28 rounded-full pointer-events-none accent-soft-bg"></div>
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3 accent-soft-bg">
+              <i data-lucide="life-buoy" class="w-4 h-4"></i>
             </div>
-            <p class="text-sm font-bold text-white leading-snug">Need a hand?</p>
-            <p class="text-[11px] text-white/70 mt-1.5 leading-relaxed">Our collector support team replies within 24 hours.</p>
-            <button class="mt-4 w-full bg-white text-xs font-bold py-2.5 rounded-full hover:-translate-y-0.5 transition-all" style="color: var(--brand);">
+            <p class="text-sm font-bold leading-snug">Need a hand?</p>
+            <p class="accent-muted text-[11px] mt-1.5 leading-relaxed">Our collector support team replies within 24 hours.</p>
+            <button class="mt-4 w-full text-xs font-bold py-2.5 rounded-full hover:-translate-y-0.5 transition-all" style="background: var(--on-brand); color: var(--brand);">
               Contact Support
             </button>
           </div>
@@ -319,11 +382,11 @@
                   <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">{{ form.instance.email }} · {{ form.instance.get_role_display }}</p>
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
-                  <label class="text-[11px] font-bold px-4 py-2 rounded-full transition-colors cursor-pointer" style="background: var(--brand); color: white;">
+                  <label class="btn-brand text-[11px] font-bold px-4 py-2 rounded-full cursor-pointer">
                     Change Photo
                     <input type="file" name="avatar" accept="image/*" form="set-form" class="hidden" onchange="setAvatarPreview(this)">
                   </label>
-                  <button type="button" onclick="document.getElementById('avatar-remove').value='1'; document.getElementById('set-avatar').src='https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&amp;fit=crop&amp;w=200&amp;q=80'" class="text-[11px] font-bold px-4 py-2 rounded-full transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-soft);">Remove</button>
+                  <button type="button" onclick="document.getElementById('avatar-remove').value='1'; document.getElementById('set-avatar').src='https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&amp;fit=crop&amp;w=200&amp;q=80'" class="btn-ghost text-[11px] font-bold px-4 py-2 rounded-full">Remove</button>
                   <input type="hidden" name="avatar_remove" id="avatar-remove" form="set-form" value="">
                 </div>
               </div>
@@ -393,22 +456,22 @@
                 <i data-lucide="palette" class="w-4 h-4 icon-muted"></i> Profile Theme
               </h3>
               <div class="grid grid-cols-4 gap-3">
-                <button type="button" data-theme="midnight" onclick="selectTheme('midnight', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border border-slate-200 bg-gradient-to-br from-slate-700 to-slate-900">
+                <button type="button" data-theme="midnight" onclick="selectTheme('midnight', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border bg-gradient-to-br from-slate-700 to-slate-900">
                   <span class="absolute bottom-2 left-3 text-[10px] font-bold text-white">Midnight</span>
                 </button>
-                <button type="button" data-theme="silver" onclick="selectTheme('silver', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border border-slate-200 bg-gradient-to-br from-slate-200 to-slate-400">
-                  <span class="absolute bottom-2 left-3 text-[10px] font-bold text-slate-600">Silver</span>
+                <button type="button" data-theme="silver" onclick="selectTheme('silver', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border bg-gradient-to-br from-slate-200 to-slate-400">
+                  <span class="absolute bottom-2 left-3 text-[10px] font-bold text-slate-700">Silver</span>
                 </button>
-                <button type="button" data-theme="paper" onclick="selectTheme('paper', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-200">
-                  <span class="absolute bottom-2 left-3 text-[10px] font-bold text-slate-600">Paper</span>
+                <button type="button" data-theme="paper" onclick="selectTheme('paper', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border bg-gradient-to-br from-stone-50 to-stone-200">
+                  <span class="absolute bottom-2 left-3 text-[10px] font-bold text-stone-700">Paper</span>
                 </button>
-                <button type="button" data-theme="obsidian" onclick="selectTheme('obsidian', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border border-slate-200 bg-gradient-to-br from-slate-800 to-black">
+                <button type="button" data-theme="obsidian" onclick="selectTheme('obsidian', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border bg-gradient-to-br from-neutral-800 to-black">
                   <span class="absolute bottom-2 left-3 text-[10px] font-bold text-white">Obsidian</span>
                 </button>
               </div>
               <input type="hidden" name="theme" id="set-theme" form="set-form" value="{{ form.theme.value|default:'silver' }}">
-              <p class="text-[10px] mt-4" style="color: var(--text-muted);">
-                <i data-lucide="info" class="w-3 h-3 inline"></i> Theme akan otomatis tersimpan dan ter-apply di semua halaman dashboard.
+              <p class="text-[10px] mt-4 flex items-center gap-1" style="color: var(--text-muted);">
+                <i data-lucide="info" class="w-3 h-3"></i> Theme akan otomatis tersimpan dan ter-apply di semua halaman dashboard.
               </p>
             </div>
 
@@ -584,7 +647,7 @@
                     <p class="text-[10px]" style="color: var(--text-muted);">Add an extra layer of protection to your account</p>
                   </div>
                 </div>
-                <button class="text-[11px] font-bold px-4 py-2 rounded-full transition-colors shrink-0" style="background: var(--brand); color: white;">Enable 2FA</button>
+                <button class="btn-brand text-[11px] font-bold px-4 py-2 rounded-full shrink-0">Enable 2FA</button>
               </div>
 
               <p class="text-[10px] font-bold uppercase tracking-wider mb-3" style="color: var(--text-muted);">Active Sessions</p>
@@ -597,7 +660,7 @@
                     <p class="text-xs font-bold flex items-center gap-2" style="color: var(--text-primary);">
                       Firefox · Windows
                       <span class="text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 text-brand-badge">
-                        <span class="w-1 h-1 rounded-full bg-current pulse-dot"></span> Current
+                        <span class="w-1 h-1 rounded-full pulse-dot-brand"></span> Current
                       </span>
                     </p>
                     <p class="text-[10px] truncate" style="color: var(--text-muted);">Tokyo, Japan · Active now</p>
@@ -611,7 +674,7 @@
                     <p class="text-xs font-bold" style="color: var(--text-primary);">Kaimono App · Android</p>
                     <p class="text-[10px] truncate" style="color: var(--text-muted);">Tokyo, Japan · 2 hours ago</p>
                   </div>
-                  <button class="text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors shrink-0" style="color: var(--text-secondary); background: var(--bg-card); border: 1px solid var(--border-soft);">Revoke</button>
+                  <button class="btn-ghost text-[10px] font-bold px-3 py-1.5 rounded-full shrink-0">Revoke</button>
                 </div>
                 <div class="setting-row flex items-center gap-3 p-3.5 rounded-xl">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--bg-card);">
@@ -621,7 +684,7 @@
                     <p class="text-xs font-bold" style="color: var(--text-primary);">Safari · MacBook</p>
                     <p class="text-[10px] truncate" style="color: var(--text-muted);">Osaka, Japan · 3 days ago</p>
                   </div>
-                  <button class="text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors shrink-0" style="color: var(--text-secondary); background: var(--bg-card); border: 1px solid var(--border-soft);">Revoke</button>
+                  <button class="btn-ghost text-[10px] font-bold px-3 py-1.5 rounded-full shrink-0">Revoke</button>
                 </div>
               </div>
             </div>
@@ -643,7 +706,7 @@
                     <p class="text-[10px] truncate" style="color: var(--text-muted);">@hoshino_ichika · Connected since Mar 2026</p>
                   </div>
                   <span class="text-[9px] font-bold px-2.5 py-1 rounded-full uppercase shrink-0 text-brand-badge">Connected</span>
-                  <button class="text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors shrink-0" style="color: var(--text-secondary); background: var(--bg-card); border: 1px solid var(--border-soft);">Disconnect</button>
+                  <button class="btn-ghost text-[10px] font-bold px-3 py-1.5 rounded-full shrink-0">Disconnect</button>
                 </div>
                 <div class="setting-row flex items-center gap-3 p-4 rounded-xl">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--bg-card);">
@@ -654,7 +717,7 @@
                     <p class="text-[10px] truncate" style="color: var(--text-muted);">@ichika.figures · Connected since May 2026</p>
                   </div>
                   <span class="text-[9px] font-bold px-2.5 py-1 rounded-full uppercase shrink-0 text-brand-badge">Connected</span>
-                  <button class="text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors shrink-0" style="color: var(--text-secondary); background: var(--bg-card); border: 1px solid var(--border-soft);">Disconnect</button>
+                  <button class="btn-ghost text-[10px] font-bold px-3 py-1.5 rounded-full shrink-0">Disconnect</button>
                 </div>
                 <div class="setting-row flex items-center gap-3 p-4 rounded-xl">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--bg-card);">
@@ -664,7 +727,7 @@
                     <p class="text-xs font-bold" style="color: var(--text-primary);">YouTube</p>
                     <p class="text-[10px] truncate" style="color: var(--text-muted);">Share your gameplay clips automatically</p>
                   </div>
-                  <button class="text-[10px] font-bold text-white px-4 py-1.5 rounded-full transition-colors shrink-0" style="background: var(--brand);">Connect</button>
+                  <button class="btn-brand text-[10px] font-bold px-4 py-1.5 rounded-full shrink-0">Connect</button>
                 </div>
                 <div class="setting-row flex items-center gap-3 p-4 rounded-xl">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--bg-card);">
@@ -674,7 +737,7 @@
                     <p class="text-xs font-bold" style="color: var(--text-primary);">Twitch</p>
                     <p class="text-[10px] truncate" style="color: var(--text-muted);">Show live streams on your profile</p>
                   </div>
-                  <button class="text-[10px] font-bold text-white px-4 py-1.5 rounded-full transition-colors shrink-0" style="background: var(--brand);">Connect</button>
+                  <button class="btn-brand text-[10px] font-bold px-4 py-1.5 rounded-full shrink-0">Connect</button>
                 </div>
               </div>
             </div>
@@ -682,29 +745,29 @@
 
           <!-- ===== PANEL: DANGER ZONE ===== -->
           <div class="set-panel flex flex-col gap-5 hidden" data-panel="danger">
-            <div class="rounded-2xl shadow-xl shadow-slate-900/20 p-6 shrink-0 relative overflow-hidden" style="background: var(--brand);">
-              <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full pointer-events-none"></div>
-              <h3 class="text-base font-semibold text-white flex items-center gap-2 mb-2 relative">
+            <div class="accent-card rounded-2xl p-6 shrink-0 relative overflow-hidden">
+              <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none accent-soft-bg"></div>
+              <h3 class="text-base font-semibold flex items-center gap-2 mb-2 relative">
                 <i data-lucide="alert-triangle" class="w-4 h-4"></i> Danger Zone
               </h3>
-              <p class="text-xs text-white/70 leading-relaxed max-w-lg relative">
+              <p class="accent-muted text-xs leading-relaxed max-w-lg relative">
                 These actions are permanent and cannot be undone. Please proceed with caution — your collection, wishlist, and community history will be affected.
               </p>
 
               <div class="flex flex-col gap-3 mt-6 relative">
-                <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                <div class="flex items-center justify-between p-4 rounded-xl accent-soft-bg border accent-border">
                   <div>
-                    <p class="text-xs font-bold text-white">Deactivate Account</p>
-                    <p class="text-[10px] text-white/60 mt-0.5">Temporarily hide your profile. You can reactivate anytime.</p>
+                    <p class="text-xs font-bold">Deactivate Account</p>
+                    <p class="accent-muted text-[10px] mt-0.5">Temporarily hide your profile. You can reactivate anytime.</p>
                   </div>
-                  <button class="bg-white text-xs font-bold px-4 py-2 rounded-full hover:-translate-y-0.5 transition-all shrink-0" style="color: var(--brand);">Deactivate</button>
+                  <button class="text-xs font-bold px-4 py-2 rounded-full hover:-translate-y-0.5 transition-all shrink-0" style="background: var(--on-brand); color: var(--brand);">Deactivate</button>
                 </div>
-                <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                <div class="flex items-center justify-between p-4 rounded-xl accent-soft-bg border accent-border">
                   <div>
-                    <p class="text-xs font-bold text-white">Delete Account Permanently</p>
-                    <p class="text-[10px] text-white/60 mt-0.5">Erase all data, including library, wishlist, and badges.</p>
+                    <p class="text-xs font-bold">Delete Account Permanently</p>
+                    <p class="accent-muted text-[10px] mt-0.5">Erase all data, including library, wishlist, and badges.</p>
                   </div>
-                  <button class="bg-transparent border border-white/30 text-white text-[11px] font-bold px-4 py-2 rounded-full hover:bg-white/10 transition-colors shrink-0">Delete Account</button>
+                  <button class="text-[11px] font-bold px-4 py-2 rounded-full transition-colors shrink-0" style="background: transparent; border: 1px solid color-mix(in srgb, var(--on-brand) 30%, transparent); color: var(--on-brand);">Delete Account</button>
                 </div>
               </div>
             </div>
@@ -757,8 +820,9 @@
       });
       btn.classList.add('selected');
       var check = document.createElement('i');
-      check.className = 'w-4 h-4 text-white absolute top-2 right-2 theme-check';
+      check.className = 'w-4 h-4 absolute top-2 right-2 theme-check';
       check.setAttribute('data-lucide', 'check');
+      check.style.color = value === 'silver' || value === 'paper' ? '#475569' : '#ffffff';
       btn.prepend(check);
       if (window.lucide) lucide.createIcons();
       document.getElementById('set-theme').value = value;
@@ -795,8 +859,9 @@
       if (swatch) {
         swatch.classList.add('selected');
         var check = document.createElement('i');
-        check.className = 'w-4 h-4 text-white absolute top-2 right-2 theme-check';
+        check.className = 'w-4 h-4 absolute top-2 right-2 theme-check';
         check.setAttribute('data-lucide', 'check');
+        check.style.color = currentTheme === 'silver' || currentTheme === 'paper' ? '#475569' : '#ffffff';
         swatch.prepend(check);
         lucide.createIcons();
       }
