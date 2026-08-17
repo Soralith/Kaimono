@@ -488,10 +488,10 @@
                       <p class="text-[10px]" style="color: var(--text-muted);">Tighter spacing, more content on screen</p>
                     </div>
                   </div>
-                  <div class="toggle-track {% if form.compact_mode.value %}active{% endif %}" onclick="togglePref('compact_mode', this)">
+                  <label class="toggle-track {% if form.compact_mode.value %}active{% endif %}">
+                    <input type="checkbox" name="compact_mode" form="set-form" class="sr-only" {% if form.compact_mode.value %}checked{% endif %} onchange="syncPref(this, 'compact_mode')">
                     <div class="toggle-knob"></div>
-                  </div>
-                  <input type="hidden" name="compact_mode" id="pref-compact_mode" form="set-form" value="{{ form.compact_mode.value|yesno:'1,0' }}">
+                  </label>
                 </div>
                 <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
                   <div class="flex items-center gap-3">
@@ -501,10 +501,10 @@
                       <p class="text-[10px]" style="color: var(--text-muted);">Minimize motion across the dashboard</p>
                     </div>
                   </div>
-                  <div class="toggle-track {% if form.reduce_animations.value %}active{% endif %}" onclick="togglePref('reduce_animations', this)">
+                  <label class="toggle-track {% if form.reduce_animations.value %}active{% endif %}">
+                    <input type="checkbox" name="reduce_animations" form="set-form" class="sr-only" {% if form.reduce_animations.value %}checked{% endif %} onchange="syncPref(this, 'reduce_animations')">
                     <div class="toggle-knob"></div>
-                  </div>
-                  <input type="hidden" name="reduce_animations" id="pref-reduce_animations" form="set-form" value="{{ form.reduce_animations.value|yesno:'1,0' }}">
+                  </label>
                 </div>
                 <div class="setting-row flex items-center justify-between p-3.5 rounded-xl">
                   <div class="flex items-center gap-3">
@@ -514,10 +514,10 @@
                       <p class="text-[10px]" style="color: var(--text-muted);">Start every session with labels visible</p>
                     </div>
                   </div>
-                  <div class="toggle-track {% if form.sidebar_expanded.value %}active{% endif %}" onclick="togglePref('sidebar_expanded', this)">
+                  <label class="toggle-track {% if form.sidebar_expanded.value %}active{% endif %}">
+                    <input type="checkbox" name="sidebar_expanded" form="set-form" class="sr-only" {% if form.sidebar_expanded.value %}checked{% endif %} onchange="syncPref(this, 'sidebar_expanded')">
                     <div class="toggle-knob"></div>
-                  </div>
-                  <input type="hidden" name="sidebar_expanded" id="pref-sidebar_expanded" form="set-form" value="{{ form.sidebar_expanded.value|yesno:'1,0' }}">
+                  </label>
                 </div>
               </div>
             </div>
@@ -833,22 +833,15 @@
     }
 
     // ===== TOGGLE PREFERENCES =====
-    function togglePref(name, el) {
-      var on = el.classList.toggle('active');
-      document.getElementById('pref-' + name).value = on ? '1' : '0';
-
-      if (name === 'reduce_animations') {
-        document.body.setAttribute('data-motion', on ? 'reduced' : '');
-        localStorage.setItem('kaimono_motion', on ? 'reduced' : '');
-      }
-      if (name === 'compact_mode') {
-        document.body.setAttribute('data-compact', on ? '1' : '');
-        localStorage.setItem('kaimono_compact', on ? '1' : '0');
-      }
+    function syncPref(el, name) {
+      var on = el.checked;
+      var track = el.closest('.toggle-track');
+      if (track) track.classList.toggle('active', on);
+      if (name === 'reduce_animations') document.body.setAttribute('data-motion', on ? 'reduced' : '');
+      if (name === 'compact_mode') document.body.setAttribute('data-compact', on ? '1' : '');
       if (name === 'sidebar_expanded') {
         var sb = document.getElementById('sidebar');
         if (sb) sb.classList.toggle('expanded', on);
-        localStorage.setItem('kaimono_sidebar', on ? '1' : '0');
       }
     }
 
