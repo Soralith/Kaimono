@@ -203,11 +203,12 @@
         </div>
       </div>
 
+      {% if now_playing %}
       <!-- HERO: NOW PLAYING BANNER -->
       <div class="surface-card rounded-[2rem] p-6 border shadow-sm shrink-0 relative overflow-hidden group">
         <div class="absolute inset-0 flex items-stretch">
           <div class="w-[45%] h-full overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80"
+            <img src="{{ now_playing.image_url }}"
                  alt="now playing" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
           </div>
           <div class="flex-1" style="background: linear-gradient(to right, var(--bg-surface), var(--bg-surface) 95%, var(--bg-surface));"></div>
@@ -219,13 +220,11 @@
               <span class="w-2 h-2 rounded-full pulse-dot"></span>
               <p class="text-[10px] font-bold uppercase tracking-widest" style="color: var(--brand);">Now Playing</p>
             </div>
-            <h2 class="text-3xl font-extrabold leading-tight" style="color: var(--text-primary);">Project Sekai:<br>Colorful Stage!</h2>
+            <h2 class="text-3xl font-extrabold leading-tight" style="color: var(--text-primary);">{{ now_playing.title }}</h2>
             <div class="flex items-center gap-3 mt-2 text-xs font-medium" style="color: var(--text-muted);">
-              <span class="flex items-center gap-1"><i data-lucide="building-2" class="w-3.5 h-3.5"></i> SEGA / Colorful Palette</span>
+              <span class="flex items-center gap-1"><i data-lucide="building-2" class="w-3.5 h-3.5"></i> {{ now_playing.studio }}</span>
               <span style="color: var(--border-soft);">•</span>
-              <span class="flex items-center gap-1"><i data-lucide="music" class="w-3.5 h-3.5"></i> Rhythm</span>
-              <span style="color: var(--border-soft);">•</span>
-              <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5"></i> Last played 2h ago</span>
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5"></i> {{ now_playing.meta }} playtime</span>
             </div>
 
             <!-- Stats -->
@@ -295,16 +294,17 @@
           </div>
         </div>
       </div>
+      {% endif %}
 
       <!-- TABS & FILTERS -->
       <div class="flex justify-between items-center px-1 shrink-0">
         <div class="flex items-center gap-1 overflow-x-auto">
-          <button class="library-tab active text-xs font-semibold px-4 py-2 rounded-full transition-all">All Games <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full">48</span></button>
-          <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">Installed <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">24</span></button>
-          <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">Ready to Play <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">18</span></button>
-          <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">Recently Played <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">12</span></button>
+          <button class="library-tab active text-xs font-semibold px-4 py-2 rounded-full transition-all">All Games <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full">{{ total_count }}</span></button>
+          <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">Installed <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">{{ installed_count }}</span></button>
+          <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">Ready to Play <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">{{ ready_count }}</span></button>
+          <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">Recently Played <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">{{ recent_count }}</span></button>
           <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">DLC <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">6</span></button>
-          <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">Favorites</button>
+          <button class="library-tab text-xs font-semibold px-4 py-2 rounded-full transition-all">Favorites <span class="tab-count ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">{{ favorites_count }}</span></button>
         </div>
 
         <div class="flex items-center gap-2 shrink-0">
@@ -325,265 +325,61 @@
       </div>
 
       <!-- PORTRAIT GAME GRID (6 columns) -->
+      {% if games %}
       <div class="grid grid-cols-6 gap-4">
-
-        <!-- Card 1: Project Sekai -->
+        {% for game in games %}
         <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
           <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="badge-brand text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Now Playing</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Project Sekai: Colorful Stage!</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">SEGA</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">320h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2: NieR Automata -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">Installed</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">NieR:Automata™</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">Square Enix</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">85h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 3: Honkai Star Rail -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">Installed</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Honkai: Star Rail</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">HoYoverse</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">140h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 4: Genshin Impact -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="badge-brand text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Update</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="download" class="w-5 h-5"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Genshin Impact</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">HoYoverse</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">56h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 5: Elden Ring -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2 flex flex-col gap-1">
-              <span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">Installed</span>
-              <span class="badge-brand text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">GOTY</span>
-            </div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Elden Ring: Shadow</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">FromSoftware</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">210h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 6: Persona 3 Reload -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">Installed</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Persona 3 Reload</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">ATLUS</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">32h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 7: Monster Hunter -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1614624532983-4ce03382d63d?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500 opacity-75">
+            {% if game.status == "Not Installed" %}
+            <img src="{{ game.image_url }}" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500 opacity-75">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--border-soft); color: var(--text-muted);">Not Installed</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="download" class="w-5 h-5"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Monster Hunter World</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">CAPCOM</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">45GB</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 8: Zelda TOTK -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
+            {% else %}
+            <img src="{{ game.image_url }}" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
+            {% endif %}
             <div class="absolute top-2 left-2 flex flex-col gap-1">
-              <span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">Installed</span>
-              <span class="badge-brand text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">GOTY</span>
+              {% if game.status == "Not Installed" %}
+              <span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--border-soft); color: var(--text-muted);">Not Installed</span>
+              {% elif not game.badge %}
+              <span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">{{ game.status }}</span>
+              {% endif %}
+              {% if game.badge %}
+              <span class="badge-brand text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">{{ game.badge }}</span>
+              {% endif %}
             </div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i></button>
+            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors {% if game.favorite %}" style="color: var(--brand);"><i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>{% else %}" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i>{% endif %}</button>
             <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
+              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);">
+                {% if game.status == "Not Installed" or game.badge == "Update" %}
+                <i data-lucide="download" class="w-5 h-5"></i>
+                {% else %}
+                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                {% endif %}
+              </button>
             </div>
             <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Zelda: Tears of Kingdom</h4>
+              <h4 class="text-sm font-extrabold text-white leading-tight truncate">{{ game.title }}</h4>
               <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">Nintendo</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">120h</span>
+                <p class="text-[10px] text-slate-200 font-medium truncate">{{ game.studio }}</p>
+                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">{{ game.meta }}</span>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Card 9: Cyberpunk -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">Installed</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Cyberpunk 2077</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">CD Projekt</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">89h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 10: Hollow Knight -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">Installed</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Hollow Knight</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">Team Cherry</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">67h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 11: Hades -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2 flex flex-col gap-1">
-              <span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--bg-card); color: var(--text-secondary);">Installed</span>
-              <span class="badge-brand text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Indie Hit</span>
-            </div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--text-secondary);"><i data-lucide="heart" class="w-3.5 h-3.5"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="play" class="w-6 h-6 fill-current"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Hades</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">Supergiant</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">45h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 12: Stardew Valley -->
-        <div class="game-card rounded-2xl border shadow-sm overflow-hidden group cursor-pointer">
-          <div class="relative aspect-[2/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1488866022916-f7f2b3077a5c?auto=format&fit=crop&w=400&q=80" alt="game" class="game-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent"></div>
-            <div class="absolute top-2 left-2"><span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--border-soft); color: var(--text-muted);">Not Installed</span></div>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i></button>
-            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-              <button class="w-14 h-14 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg hover:scale-105 transition-transform" style="color: var(--brand);"><i data-lucide="download" class="w-5 h-5"></i></button>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-3">
-              <h4 class="text-sm font-extrabold text-white leading-tight truncate">Stardew Valley</h4>
-              <div class="flex items-center justify-between mt-1">
-                <p class="text-[10px] text-slate-200 font-medium truncate">ConcernedApe</p>
-                <span class="text-[9px] font-bold text-white bg-slate-900/70 backdrop-blur px-1.5 py-0.5 rounded">2GB</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        {% endfor %}
       </div>
+      {% else %}
+      <div class="surface-card rounded-2xl border shadow-sm p-10 text-center">
+        <p class="text-sm font-semibold" style="color: var(--text-secondary);">Your library is empty.</p>
+      </div>
+      {% endif %}
 
       <!-- LOAD MORE -->
       <div class="flex justify-center items-center gap-3 pt-2 pb-2 shrink-0">
         <button class="btn-ghost font-semibold px-5 py-2.5 rounded-full text-xs border shadow-sm flex items-center gap-2 transition-all">
           <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Load More Games
         </button>
-        <span class="text-[10px] font-medium" style="color: var(--text-muted);">Showing 12 of 48 games</span>
+        <span class="text-[10px] font-medium" style="color: var(--text-muted);">Showing {{ games|length }} of {{ total_count }} games</span>
       </div>
 
     </main>

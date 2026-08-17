@@ -197,6 +197,7 @@
 
       <!-- HERO SUMMARY -->
       <div class="surface-card rounded-[2rem] p-5 border shadow-sm shrink-0">
+        {% if items %}
         <div class="flex items-center justify-between gap-6">
           <div class="flex items-center gap-4 flex-1 min-w-0">
             <div class="w-14 h-14 rounded-2xl btn-brand flex items-center justify-center shrink-0 shadow-md">
@@ -204,29 +205,30 @@
             </div>
             <div class="min-w-0">
               <p class="text-[10px] font-bold uppercase tracking-widest" style="color: var(--text-muted);">Your Wishlist</p>
-              <h2 class="text-xl font-extrabold leading-tight truncate" style="color: var(--text-primary);">12 items saved for later</h2>
-              <p class="text-xs font-medium mt-0.5" style="color: var(--text-secondary);">4 items on discount — you could save <span class="font-bold" style="color: var(--text-primary);">$87.20</span> today</p>
+              <h2 class="text-xl font-extrabold leading-tight truncate" style="color: var(--text-primary);">{{ total_count }} items saved for later</h2>
+              <p class="text-xs font-medium mt-0.5" style="color: var(--text-secondary);">{{ on_sale_count }} items on discount — you could save <span class="font-bold" style="color: var(--text-primary);">${{ savings|floatformat:2 }}</span> today</p>
             </div>
           </div>
           <div class="grid grid-cols-4 gap-2 shrink-0">
             <div class="rounded-xl px-4 py-3 text-center min-w-[95px]" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
-              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">12</p>
+              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">{{ total_count }}</p>
               <span class="text-[9px] font-bold uppercase tracking-wider block mt-1.5" style="color: var(--text-muted);">Total</span>
             </div>
             <div class="rounded-xl px-4 py-3 text-center min-w-[95px]" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
-              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">$284</p>
+              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">${{ total_value|floatformat:0 }}</p>
               <span class="text-[9px] font-bold uppercase tracking-wider block mt-1.5" style="color: var(--text-muted);">Value</span>
             </div>
             <div class="rounded-xl px-4 py-3 text-center min-w-[95px]" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
-              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">$87</p>
+              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">${{ savings|floatformat:0 }}</p>
               <span class="text-[9px] font-bold uppercase tracking-wider block mt-1.5" style="color: var(--text-muted);">Savings</span>
             </div>
             <div class="rounded-xl px-4 py-3 text-center min-w-[95px]" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
-              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">4</p>
+              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">{{ on_sale_count }}</p>
               <span class="text-[9px] font-bold uppercase tracking-wider block mt-1.5" style="color: var(--text-muted);">On Sale</span>
             </div>
           </div>
         </div>
+        {% endif %}
         <div class="flex items-center gap-2 mt-5 pt-4 border-t" style="border-color: var(--border-soft);">
           <button class="btn-brand font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 transition-all">
             <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Buy All Discounted
@@ -245,11 +247,11 @@
 
       <!-- TABS -->
       <div class="flex items-center gap-1 px-1 overflow-x-auto shrink-0">
-        <button class="wl-tab active text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">All Items <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">12</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">On Sale <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">4</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Games <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">8</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Merch & Figures <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">3</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Bundles <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">1</span></button>
+        <button class="wl-tab active text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">All Items <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ total_count }}</span></button>
+        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">On Sale <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ on_sale_count }}</span></button>
+        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Games <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ games_count }}</span></button>
+        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Merch & Figures <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ merch_count }}</span></button>
+        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Bundles <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ bundles_count }}</span></button>
         <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Pre-Order</button>
         <div class="flex items-center gap-1.5 ml-auto shrink-0">
           <div class="btn-ghost flex items-center gap-1.5 border rounded-full px-3 py-1.5 shadow-sm cursor-pointer transition-all">
@@ -261,40 +263,60 @@
       </div>
 
       <!-- WISHLIST GRID -->
+      {% if items %}
       <div class="grid grid-cols-2 gap-4">
-
-        <!-- CARD 1: NieR -->
+        {% for item in items %}
         <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
           <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80" alt="game" class="wl-image w-full h-full object-cover transition-transform duration-500">
+            <img src="{{ item.image_url }}" alt="{{ item.category }}" class="wl-image w-full h-full object-cover transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-r from-transparent to-black/5"></div>
+            {% if item.badge %}
             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">-50% OFF</span>
+              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">{{ item.badge }}</span>
             </div>
+            {% endif %}
             <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Game</span>
+              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">{{ item.category }}</span>
             </div>
           </div>
           <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
             <div>
               <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">NieR:Automata™ GOTY Edition</h4>
+                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">{{ item.title }}</h4>
                 <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
               </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">Square Enix · Action RPG · Wishlist added Mar 2026</p>
+              <p class="text-[10px] font-medium" style="color: var(--text-muted);">{{ item.description }}</p>
               <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Singleplayer</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">RPG</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> 4.9</span>
+                {% for tag in item.tag_list %}
+                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">{{ tag }}</span>
+                {% endfor %}
+                {% if item.rating %}
+                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> {{ item.rating }}</span>
+                {% endif %}
               </div>
             </div>
             <div class="flex justify-between items-end mt-3">
               <div>
-                <span class="text-[10px] line-through" style="color: var(--text-muted);">$39.99</span>
-                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">$19.99</p>
+                {% if item.list_price %}
+                <span class="text-[10px] line-through" style="color: var(--text-muted);">${{ item.list_price|floatformat:2 }}</span>
+                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">${{ item.price|floatformat:2 }}</p>
+                {% elif item.price %}
+                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">${{ item.price|floatformat:2 }}</p>
+                {% else %}
+                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">{{ item.price_label }}</p>
+                {% endif %}
               </div>
               <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Add to Cart
+                {% if item.action == "Get Free" %}
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                {% elif "Notify" in item.action %}
+                <i data-lucide="bell" class="w-3.5 h-3.5"></i>
+                {% elif "Pre-Order" in item.action %}
+                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                {% else %}
+                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                {% endif %}
+                {{ item.action }}
               </button>
             </div>
           </div>
@@ -302,324 +324,17 @@
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
-
-        <!-- CARD 2: Genshin Artbook -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="artbook" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">-40% OFF</span>
-            </div>
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Artbook</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Genshin Impact: Best of Art 2026</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">HoYoverse · Artbook · Wishlist added Jun 2026</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Hardcover</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Limited Edition</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div>
-                <span class="text-[10px] line-through" style="color: var(--text-muted);">$59.99</span>
-                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">$35.99</p>
-              </div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Add to Cart
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <!-- CARD 3: Honkai Star Rail -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80" alt="game" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Game · Free</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Honkai: Star Rail</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">HoYoverse · Turn-Based RPG · Wishlist added Aug 2025</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Gacha</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Multiplayer</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> 4.8</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div><p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">Free to Play</p></div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="download" class="w-3.5 h-3.5"></i> Get Free
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <!-- CARD 4: Monster Hunter -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1614624532983-4ce03382d63d?auto=format&fit=crop&w=400&q=80" alt="game" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">-67% OFF</span>
-            </div>
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Game</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Monster Hunter World: Iceborne</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">CAPCOM · Action RPG · Wishlist added Jan 2026</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Co-op</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Hunting</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> 4.7</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div>
-                <span class="text-[10px] line-through" style="color: var(--text-muted);">$29.99</span>
-                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">$9.89</p>
-              </div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Add to Cart
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <!-- CARD 5: Venti Figure -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80" alt="figure" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">-25% OFF</span>
-            </div>
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Figure</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Genshin Impact Venti Scale Figure</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">Good Smile Company · 1/7 Scale · Wishlist added May 2026</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Pre-Painted</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="package" class="w-2.5 h-2.5"></i> Ships in 2w</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div>
-                <span class="text-[10px] line-through" style="color: var(--text-muted);">$120.00</span>
-                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">$89.99</p>
-              </div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Add to Cart
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <!-- CARD 6: Persona 3 -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=400&q=80" alt="game" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Game</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Persona 3 Reload</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">ATLUS · JRPG · Wishlist added Feb 2026</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">JRPG</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Turn-Based</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> 4.8</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div><p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">$69.99</p></div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="bell" class="w-3.5 h-3.5"></i> Notify on Drop
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <!-- CARD 7: Cyberpunk -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80" alt="game" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Game</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Cyberpunk 2077: Ultimate Edition</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">CD Projekt RED · Open World RPG · Wishlist added Dec 2025</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Open World</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Cyberpunk</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> 4.6</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div><p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">$59.99</p></div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="bell" class="w-3.5 h-3.5"></i> Notify on Drop
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <!-- CARD 8: Ichika Nendoroid -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="nendoroid" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Figure · Pre-Order</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Project Sekai Ichika Nendoroid</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">Good Smile · Nendoroid · Wishlist added Apr 2026</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Pre-Order</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="calendar" class="w-2.5 h-2.5"></i> Ships Nov 2026</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div><p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">$65.00</p></div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Pre-Order
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <!-- CARD 9: Silksong -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="game" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">Indie Game</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Hollow Knight: Silksong</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">Team Cherry · Metroidvania · Wishlist added Jul 2026</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Metroidvania</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">2D</span>
-                <span class="badge-brand text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5"><i data-lucide="clock" class="w-2.5 h-2.5"></i> Coming Soon</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div><p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">TBA</p></div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="bell" class="w-3.5 h-3.5"></i> Notify on Release
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <!-- CARD 10: Persona 5 Bundle -->
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80" alt="bundle" class="wl-image w-full h-full object-cover transition-transform duration-500">
-            <div class="absolute bottom-2.5 left-2.5">
-              <span class="badge-brand text-[8px] font-bold px-2 py-0.5 rounded-full uppercase">Bundle · 3 Items</span>
-            </div>
-          </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">Persona 5 Royal Ultimate Bundle</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
-              </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">ATLUS · Game + DLC + OST · Wishlist added May 2026</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">Bundle</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">JRPG</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> 4.9</span>
-              </div>
-            </div>
-            <div class="flex justify-between items-end mt-3">
-              <div><p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">$89.99</p></div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Add to Cart
-              </button>
-            </div>
-          </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
+        {% endfor %}
       </div>
+      {% else %}
+      <div class="surface-card rounded-2xl border shadow-sm p-10 text-center">
+        <p class="text-sm font-semibold" style="color: var(--text-secondary);">Your wishlist is empty.</p>
+      </div>
+      {% endif %}
 
       <!-- FOOTER INFO -->
       <div class="flex justify-between items-center px-2 pt-2 pb-2 shrink-0">
-        <span class="text-[10px] font-medium" style="color: var(--text-muted);">Showing 10 of 12 items · Last updated 2 hours ago</span>
+        <span class="text-[10px] font-medium" style="color: var(--text-muted);">Showing {{ items|length }} of {{ total_count }} items · Last updated 2 hours ago</span>
         <div class="flex items-center gap-2">
           <button class="text-[11px] font-semibold flex items-center gap-1 transition-colors" style="color: var(--text-muted);">
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Remove All
