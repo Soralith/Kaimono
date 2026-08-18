@@ -7,11 +7,12 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
-from django.db.models import Q
+from django.db.models import Q, Count
+from collections import defaultdict
 from .models import (
     WishlistItem, LibraryGame,
     CommunityStory, CommunityChannel, CommunityGame, CommunityPost,
-    PostImage, PostTag, PostReaction, Poll, PollOption,
+    PostImage, PostTag, PostReaction, Poll, PollOption, PollVote,
     CommunityComment, UserLike, UserBookmark,
     CommunityMember, UserFollowedGame,
 )
@@ -33,25 +34,42 @@ def _get_avatar(request):
     return 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=100&q=80'
 
 
+def _poll_annotation(poll, username):
+    """Compute a poll's live totals + the given user's current selection.
+
+    Returns (options, has_voted, selected_option_id, total_votes). Percentages
+    are derived from actual PollVote rows so votes are per-user and re-votable.
+    """
+    total = poll.votes.count()
+    sel = PollVote.objects.filter(poll=poll, user_name=username).values_list('option_id', flat=True).first()
+    opts = list(poll.options.all())
+    for o in opts:
+        cnt = o.votes.count()
+        o.percentage = round(cnt / total * 100) if total else 0
+        o.is_selected = (sel is not None and o.id == sel)
+    return opts, sel is not None, sel, total
+
+
 def _annotate_posts(posts, request):
     """Add extra context to posts for the template."""
     username = _get_username(request)
     liked_ids = set(
         UserLike.objects.filter(user_name=username).values_list('post_id', flat=True)
     )
-    bookmarked_ids = set(
-        UserBookmark.objects.filter(user_name=username).values_list('post_id', flat=True)
-    )
     for post in posts:
         post.reactions = list(post.reaction_types.all())
         post.is_liked = post.id in liked_ids
-        post.is_bookmarked = post.id in bookmarked_ids
+        post.is_bookmarked = False
+        post.is_owner = post.author_name == username
         if post.post_type == 'poll' and hasattr(post, 'poll'):
             post.poll_obj = post.poll
-            post.poll_options = list(post.poll.options.all())
+            post.poll_options, post.poll_voted, post.poll_selected_id, post.poll_total = _poll_annotation(post.poll, username)
         else:
             post.poll_obj = None
             post.poll_options = []
+            post.poll_voted = False
+            post.poll_selected_id = None
+            post.poll_total = 0
 
 
 def _render_post_html(post, request):
@@ -226,82 +244,37 @@ def community_toggle_like(request):
         return JsonResponse({'error': str(e)}, status=400)
 
 
-# ── AJAX: Toggle Bookmark ─────────────────────────────────────────
-
-@require_POST
-def community_toggle_bookmark(request):
-    try:
-        data = json.loads(request.body)
-        post_id = data.get('post_id')
-        post = CommunityPost.objects.get(id=post_id)
-        username = _get_username(request)
-
-        bm, created = UserBookmark.objects.get_or_create(
-            user_name=username, post=post
-        )
-        if not created:
-            bm.delete()
-            post.bookmark_count = max(0, post.bookmark_count - 1)
-            post.save(update_fields=['bookmark_count'])
-            return JsonResponse({'bookmarked': False, 'count': post.bookmark_count})
-        else:
-            post.bookmark_count += 1
-            post.save(update_fields=['bookmark_count'])
-            return JsonResponse({'bookmarked': True, 'count': post.bookmark_count})
-    except CommunityPost.DoesNotExist:
-        return JsonResponse({'error': 'Post not found'}, status=404)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
-
-
 # ── AJAX: Vote Poll ───────────────────────────────────────────────
 
 @require_POST
 def community_vote_poll(request):
     try:
         data = json.loads(request.body)
-        option_id = data.get('option_id')
+        option_id = int(data.get('option_id'))
         option = PollOption.objects.select_related('poll').get(id=option_id)
-        poll = option.poll
-
-        # Mark selected
-        if not option.is_selected:
-            poll.options.filter(is_selected=True).update(is_selected=False)
-            option.is_selected = True
-            option.save(update_fields=['is_selected'])
-
-            poll.total_votes += 1
-            poll.save(update_fields=['total_votes'])
-
-            # Simple percentage bump: voted option gets +15%, others share -15%
-            opts = list(poll.options.all())
-            n = len(opts)
-            if n > 0:
-                bump = 15
-                share = bump // max(1, n - 1) if n > 1 else 0
-                for o in opts:
-                    if o.is_selected:
-                        o.percentage = min(95, o.percentage + bump)
-                    else:
-                        o.percentage = max(1, o.percentage - share)
-                # Normalize to 100
-                total_pct = sum(o.percentage for o in opts)
-                if total_pct != 100 and opts:
-                    opts[0].percentage += 100 - total_pct
-                PollOption.objects.bulk_update(opts, ['percentage'])
-
-        return JsonResponse({
-            'voted': True,
-            'total_votes': poll.total_votes,
-            'options': [
-                {'id': o.id, 'label': o.label, 'percentage': o.percentage, 'is_selected': o.is_selected}
-                for o in poll.options.all()
-            ]
-        })
-    except PollOption.DoesNotExist:
+    except (PollOption.DoesNotExist, TypeError, ValueError, KeyError):
         return JsonResponse({'error': 'Option not found'}, status=404)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
+    poll = option.poll
+    username = _get_username(request)
+
+    # Per-user vote: move the current user's vote to the chosen option.
+    existing = PollVote.objects.filter(poll=poll, user_name=username).first()
+    if existing is None or existing.option_id != option_id:
+        if existing is not None:
+            existing.delete()
+        PollVote.objects.create(poll=poll, option=option, user_name=username)
+
+    opts, voted, sel, total = _poll_annotation(poll, username)
+    return JsonResponse({
+        'voted': True,
+        'total_votes': total,
+        'poll_voted': voted,
+        'selected_option_id': sel,
+        'options': [
+            {'id': o.id, 'label': o.label, 'percentage': o.percentage, 'is_selected': o.is_selected}
+            for o in opts
+        ],
+    })
 
 
 # ── AJAX: Create Post ─────────────────────────────────────────────
@@ -373,13 +346,91 @@ def community_create_post(request):
         post.is_bookmarked = False
         if post.post_type == 'poll' and hasattr(post, 'poll'):
             post.poll_obj = post.poll
-            post.poll_options = list(post.poll.options.all())
+            post.poll_options, post.poll_voted, post.poll_selected_id, post.poll_total = _poll_annotation(post.poll, _get_username(request))
         else:
             post.poll_obj = None
             post.poll_options = []
+            post.poll_voted = False
+            post.poll_selected_id = None
+            post.poll_total = 0
         html = _render_post_html(post, request)
 
         return JsonResponse({'success': True, 'post_html': html, 'post_id': post.id})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+# ── AJAX: Edit Post ───────────────────────────────────────────────
+
+@require_POST
+def community_edit_post(request):
+    try:
+        data = json.loads(request.body)
+        post_id = data.get('post_id')
+        post = CommunityPost.objects.get(id=post_id)
+        username = _get_username(request)
+
+        if post.author_name != username:
+            return JsonResponse({'error': 'Not authorized to edit this post'}, status=403)
+
+        title = data.get('title', '').strip()
+        content = data.get('content', '').strip()
+
+        if post.post_type == 'poll':
+            if not title:
+                return JsonResponse({'error': 'Poll question is required'}, status=400)
+            post.title = title
+        else:
+            post.title = title
+            post.content = content
+
+        post.time_ago = 'Edited just now'
+        post.save(update_fields=['title', 'content', 'time_ago'])
+
+        if post.post_type == 'poll' and hasattr(post, 'poll'):
+            post.poll_obj = post.poll
+            post.poll_options, post.poll_voted, post.poll_selected_id, post.poll_total = _poll_annotation(post.poll, username)
+        else:
+            post.poll_obj = None
+            post.poll_options = []
+            post.poll_voted = False
+            post.poll_selected_id = None
+            post.poll_total = 0
+
+        post.reactions = list(post.reaction_types.all())
+        post.is_liked = False
+        post.is_bookmarked = False
+        post.is_owner = post.author_name == username
+
+        return JsonResponse({'success': True, 'post_html': _render_post_html(post, request)})
+    except CommunityPost.DoesNotExist:
+        return JsonResponse({'error': 'Post not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+# ── AJAX: Delete Post ─────────────────────────────────────────────
+
+@require_POST
+def community_delete_post(request):
+    try:
+        data = json.loads(request.body)
+        post_id = data.get('post_id')
+        post = CommunityPost.objects.get(id=post_id)
+        username = _get_username(request)
+
+        if post.author_name != username:
+            return JsonResponse({'error': 'Not authorized to delete this post'}, status=403)
+
+        channel = post.channel
+        post.delete()
+        if channel:
+            channel.post_count = max(0, channel.post_count - 1)
+            channel.save(update_fields=['post_count'])
+
+        return JsonResponse({'success': True, 'post_id': post_id})
+    except CommunityPost.DoesNotExist:
+        return JsonResponse({'error': 'Post not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 

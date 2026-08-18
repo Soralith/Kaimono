@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from dashboard.models import (
     CommunityStory, CommunityChannel, CommunityGame,
     CommunityPost, PostImage, PostTag, PostReaction,
-    Poll, PollOption,
+    Poll, PollOption, PollVote,
 )
 
 
@@ -13,6 +13,7 @@ class Command(BaseCommand):
         # Clear existing
         PollOption.objects.all().delete()
         Poll.objects.all().delete()
+        PollVote.objects.all().delete()
         PostReaction.objects.all().delete()
         PostTag.objects.all().delete()
         PostImage.objects.all().delete()
@@ -120,10 +121,25 @@ class Command(BaseCommand):
             total_votes=1284,
             time_left="3 days left",
         )
-        PollOption.objects.create(poll=poll, label="Silksong", percentage=48, is_selected=True, order=0)
-        PollOption.objects.create(poll=poll, label="GTA VI", percentage=29, order=1)
-        PollOption.objects.create(poll=poll, label="Metroid Prime 4", percentage=15, order=2)
-        PollOption.objects.create(poll=poll, label="Fable", percentage=8, order=3)
+        opt_silksong = PollOption.objects.create(poll=poll, label="Silksong", percentage=48, order=0)
+        opt_gta = PollOption.objects.create(poll=poll, label="GTA VI", percentage=29, order=1)
+        opt_metroid = PollOption.objects.create(poll=poll, label="Metroid Prime 4", percentage=15, order=2)
+        opt_fable = PollOption.objects.create(poll=poll, label="Fable", percentage=8, order=3)
+
+        # Seed per-user votes so percentages/count look realistic (48/29/15/8 ≈ 1284).
+        dist = [
+            (opt_silksong, 48),
+            (opt_gta, 29),
+            (opt_metroid, 15),
+            (opt_fable, 8),
+        ]
+        votes = []
+        n = 1
+        for opt, pct in dist:
+            for _ in range(round(1284 * pct / 100)):
+                votes.append(PollVote(poll=poll, option=opt, user_name=f"voter_{n}"))
+                n += 1
+        PollVote.objects.bulk_create(votes)
 
         # -- POST 4: Discussion --
         p4 = CommunityPost.objects.create(

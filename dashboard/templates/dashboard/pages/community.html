@@ -51,7 +51,10 @@
     .feed-filter.active { background-color: var(--brand); color: var(--on-brand); }
     .feed-filter:not(.active):hover { color: var(--text-primary); }
     .poll-option { transition: all 200ms ease; cursor: pointer; }
-    .poll-option:hover { background-color: var(--hover-bg); }
+    .poll-option:hover { border-color: var(--brand); }
+    .poll-option.selected { border-color: var(--brand); }
+    .poll-options:not(.show-results) .poll-bar,
+    .poll-options:not(.show-results) .poll-pct { display: none; }
     .rail-item { transition: background-color 200ms ease; color: var(--text-secondary); cursor: pointer; }
     .rail-item:hover { background: var(--hover-bg); }
     .channel-link { color: var(--text-secondary); }
@@ -263,6 +266,25 @@
     </div>
   </div>
 
+  <!-- Edit Post Modal -->
+  <div id="edit-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="flex items-center justify-between p-4 border-b" style="border-color: var(--border-soft);">
+        <h3 class="text-sm font-extrabold" style="color: var(--text-primary);">Edit Post</h3>
+        <button id="close-edit-modal-btn" class="p-1.5 rounded-full icon-muted hover:opacity-70"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <div class="p-4">
+        <label class="text-[10px] font-bold uppercase tracking-wider mb-1 block" style="color: var(--text-muted);">Title / Question</label>
+        <input type="text" id="edit-title" class="themed-input w-full px-3 py-2 rounded-xl text-xs border focus:outline-none mb-3" placeholder="Title">
+        <label class="text-[10px] font-bold uppercase tracking-wider mb-1 block" style="color: var(--text-muted);">Content</label>
+        <textarea id="edit-content" class="themed-input w-full px-3 py-2 rounded-xl text-xs border focus:outline-none resize-none mb-4" rows="4" placeholder="What's on your mind?"></textarea>
+        <button id="edit-save-btn" class="btn-brand w-full py-2.5 rounded-xl text-xs font-bold transition-all">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Toast -->
   <div id="toast" class="toast"></div>
@@ -286,15 +308,12 @@
       setTimeout(() => t.classList.remove('show'), 2500);
     }
 
-    let _fetching = false;
     function apiPost(url, data) {
-      if (_fetching) return Promise.resolve({});
-      _fetching = true;
       return fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
         body: JSON.stringify(data),
-      }).then(r => r.json()).finally(() => { _fetching = false; });
+      }).then(r => r.json());
     }
 
     // === THEME ===
@@ -530,7 +549,7 @@
             likeBtn.style.background = '';
             icon.classList.remove('fill-current');
             label.textContent = 'Like';
-            if (countEl) { const c = parseInt(countEl) - 1; countEl.textContent = Math.max(0,c) + ' reactions'; }
+            if (countEl) { const c = parseInt(countEl.textContent) - 1; countEl.textContent = Math.max(0, c) + ' reactions'; }
           } else {
             likeBtn.classList.add('btn-liked');
             likeBtn.style.color = 'var(--brand)';
@@ -545,32 +564,37 @@
         });
       }
 
-      // BOOKMARK
-      const bookmarkBtn = card.querySelector('.bookmark-btn');
-      if (bookmarkBtn) {
-        bookmarkBtn.addEventListener('click', () => {
-          const icon = bookmarkBtn.querySelector('i');
-          const label = bookmarkBtn.querySelector('.bookmark-label');
-          const wasSaved = bookmarkBtn.classList.contains('btn-bookmarked');
-          // Optimistic UI
-          if (wasSaved) {
-            bookmarkBtn.classList.remove('btn-bookmarked');
-            bookmarkBtn.style.color = 'var(--text-secondary)';
-            bookmarkBtn.style.background = '';
-            icon.classList.remove('fill-current');
-            label.textContent = 'Save';
-          } else {
-            bookmarkBtn.classList.add('btn-bookmarked');
-            bookmarkBtn.style.color = 'var(--brand)';
-            bookmarkBtn.style.background = 'var(--brand-soft)';
-            icon.classList.add('fill-current');
-            label.textContent = 'Saved';
-            showToast('Post saved!');
-          }
-          apiPost('{% url "community_toggle_bookmark" %}', { post_id: parseInt(postId) }).then(data => {
-            if (data.error) showToast(data.error);
-          });
+      // POST MENU (dropdown: Edit / Delete) — only rendered for owner posts
+      const menuBtn = card.querySelector('.post-menu-btn');
+      const menu = card.querySelector('.post-menu');
+      if (menuBtn && menu) {
+        menuBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          document.querySelectorAll('.post-menu').forEach(m => { if (m !== menu) m.classList.add('hidden'); });
+          menu.classList.toggle('hidden');
         });
+        document.addEventListener('click', (e) => {
+          if (!menu.contains(e.target) && !menuBtn.contains(e.target)) menu.classList.add('hidden');
+        });
+        const editBtn = card.querySelector('.post-edit-btn');
+        if (editBtn) {
+          editBtn.addEventListener('click', () => {
+            menu.classList.add('hidden');
+            openEditPost(card);
+          });
+        }
+        const deleteBtn = card.querySelector('.post-delete-btn');
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', () => {
+            menu.classList.add('hidden');
+            if (!confirm('Delete this post? This action cannot be undone.')) return;
+            apiPost('{% url "community_delete_post" %}', { post_id: parseInt(postId) }).then(data => {
+              if (data.error) { showToast(data.error); return; }
+              card.remove();
+              showToast('Post deleted');
+            });
+          });
+        }
       }
 
       // SHARE
@@ -588,53 +612,84 @@
         });
       }
 
-      // POLL VOTING
+      // POLL VOTING — pick > verify > submit > changeable
       const pollOptions = card.querySelectorAll('.poll-option');
-      pollOptions.forEach(optBtn => {
-        optBtn.addEventListener('click', () => {
-          const optionId = optBtn.dataset.optionId;
-          if (!optionId || optBtn.classList.contains('voted')) return;
+      const pollWrap = card.querySelector('.poll-options');
+      const confirmBar = card.querySelector('.poll-confirm');
+      const confirmLabel = card.querySelector('.poll-confirm-label');
+      const cancelBtn = card.querySelector('.poll-cancel');
+      const submitBtn = card.querySelector('.poll-submit');
+      let pendingOption = null;
 
-          // Optimistic: highlight selected immediately
-          pollOptions.forEach(b => { b.style.pointerEvents = 'none'; });
-          optBtn.classList.add('voted');
-          const bar = optBtn.querySelector('.poll-bar');
-          if (bar) bar.style.background = 'var(--brand-soft)';
-
-          apiPost('{% url "community_vote_poll" %}', { option_id: parseInt(optionId) }).then(data => {
-            if (data.error) { showToast(data.error); pollOptions.forEach(b => { b.style.pointerEvents = ''; }); return; }
-            data.options.forEach(opt => {
-              const btn = card.querySelector(`.poll-option[data-option-id="${opt.id}"]`);
-              if (!btn) return;
-              const b = btn.querySelector('.poll-bar');
-              const p = btn.querySelector('.poll-pct');
-              if (b) b.style.width = opt.percentage + '%';
-              if (p) p.textContent = opt.percentage + '%';
-              if (opt.is_selected) {
-                if (b) b.style.background = 'var(--brand-soft)';
-                btn.classList.add('voted');
-                btn.style.pointerEvents = '';
-                if (!btn.querySelector('.icon-brand')) {
-                  const label = btn.querySelector('.text-xs.font-bold');
-                  if (label) {
-                    const chk = document.createElement('i');
-                    chk.setAttribute('data-lucide', 'check-circle-2');
-                    chk.className = 'w-4 h-4 icon-brand';
-                    label.parentNode.insertBefore(chk, label);
-                    initIcons(btn);
-                  }
-                }
-              } else {
-                if (b) b.style.background = 'var(--border-soft)';
-                btn.classList.remove('voted');
-                btn.style.pointerEvents = '';
+      function clearPending() {
+        if (pendingOption) pendingOption.classList.remove('selected');
+        pendingOption = null;
+        if (confirmBar) confirmBar.classList.add('hidden');
+      }
+      function applyResults(data) {
+        data.options.forEach(opt => {
+          const btn = card.querySelector(`.poll-option[data-option-id="${opt.id}"]`);
+          if (!btn) return;
+          const bar = btn.querySelector('.poll-bar');
+          const pct = btn.querySelector('.poll-pct');
+          if (bar) bar.style.width = opt.percentage + '%';
+          if (pct) pct.textContent = opt.percentage + '%';
+          if (opt.is_selected) {
+            btn.classList.add('voted');
+            if (bar) bar.style.background = 'var(--brand-soft)';
+            if (!btn.querySelector('.icon-brand')) {
+              const label = btn.querySelector('.text-xs.font-semibold');
+              const radio = btn.querySelector('.poll-radio');
+              if (label) {
+                const chk = document.createElement('i');
+                chk.setAttribute('data-lucide', 'check-circle-2');
+                chk.className = 'w-4 h-4 icon-brand shrink-0';
+                label.parentNode.insertBefore(chk, label);
               }
-            });
-            card.querySelectorAll('.poll-votes').forEach(el => { el.textContent = data.total_votes; });
+              if (radio) radio.remove();
+              initIcons(btn);
+            }
+          } else {
+            btn.classList.remove('voted');
+            if (bar) bar.style.background = 'var(--border-soft)';
+          }
+        });
+        card.querySelectorAll('.poll-votes').forEach(el => { el.textContent = data.total_votes; });
+        const hint = card.querySelector('.poll-hint');
+        if (hint) hint.textContent = 'You voted — click another option to change your vote.';
+        if (pollWrap) pollWrap.classList.add('show-results');
+      }
+
+      if (pollWrap && confirmBar) {
+        pollOptions.forEach(optBtn => {
+          optBtn.addEventListener('click', () => {
+            clearPending();
+            pendingOption = optBtn;
+            optBtn.classList.add('selected');
+            if (confirmLabel) confirmLabel.textContent = optBtn.querySelector('.text-xs.font-semibold')?.textContent || '';
+            confirmBar.classList.remove('hidden');
+            initIcons(confirmBar);
+          });
+        });
+        cancelBtn && cancelBtn.addEventListener('click', clearPending);
+        submitBtn && submitBtn.addEventListener('click', () => {
+          if (!pendingOption) return;
+          const optionId = pendingOption.dataset.optionId;
+          apiPost('{% url "community_vote_poll" %}', { option_id: parseInt(optionId) }).then(data => {
+            if (data.error) { showToast(data.error); return; }
+            applyResults(data);
+            clearPending();
             showToast('Vote recorded!');
           });
         });
-      });
+        document.addEventListener('click', (e) => {
+          if (confirmBar.classList.contains('hidden')) return;
+          if (confirmBar.contains(e.target)) return;
+          let walk = e.target;
+          while (walk) { if (walk.classList && walk.classList.contains('poll-option')) return; walk = walk.parentNode; }
+          clearPending();
+        });
+      }
 
       // COMMENT TOGGLE
       const commentToggleBtn = card.querySelector('.comment-toggle-btn');
@@ -691,6 +746,54 @@
     // Bind interactions on all existing post cards
     document.querySelectorAll('#posts-container .post-card').forEach(card => {
       bindPostInteractions(card);
+    });
+
+    // === EDIT POST MODAL ===
+    const editModal = document.getElementById('edit-modal');
+    let editingCard = null;
+    function openEditPost(card) {
+      editingCard = card;
+      const h3 = card.querySelector('h3');
+      const body = card.querySelector('p[style*="--text-secondary"]');
+      document.getElementById('edit-title').value = h3 ? h3.textContent.trim() : '';
+      document.getElementById('edit-content').value = body ? body.textContent.trim() : '';
+      editModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    document.getElementById('close-edit-modal-btn').addEventListener('click', () => {
+      editModal.classList.remove('open');
+      document.body.style.overflow = '';
+      editingCard = null;
+    });
+    editModal.addEventListener('click', (e) => { if (e.target === editModal) { editModal.classList.remove('open'); document.body.style.overflow = ''; editingCard = null; } });
+    document.getElementById('edit-save-btn').addEventListener('click', () => {
+      if (!editingCard) return;
+      const postId = editingCard.dataset.postId;
+      const title = document.getElementById('edit-title').value.trim();
+      const content = document.getElementById('edit-content').value.trim();
+      if (!title && !content) { showToast('Fill in at least one field'); return; }
+      const btn = document.getElementById('edit-save-btn');
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+      apiPost('{% url "community_edit_post" %}', { post_id: parseInt(postId), title, content }).then(data => {
+        btn.textContent = 'Save Changes';
+        btn.disabled = false;
+        if (data.error) { showToast(data.error); return; }
+        const idx = Array.from(editingCard.parentNode.children).indexOf(editingCard);
+        const newCard = document.createElement('article');
+        newCard.innerHTML = data.post_html;
+        const card = newCard.firstElementChild;
+        card.parentNode.removeChild(newCard);
+        editingCard.replaceWith(card);
+        if (card.classList.contains('post-card')) {
+          initIcons(card);
+          bindPostInteractions(card);
+        }
+        editingCard = null;
+        editModal.classList.remove('open');
+        document.body.style.overflow = '';
+        showToast('Post updated');
+      });
     });
 
   })();

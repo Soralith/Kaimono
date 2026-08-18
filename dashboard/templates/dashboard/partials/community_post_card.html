@@ -22,7 +22,15 @@
         </div>
         <p class="text-[10px]" style="color: var(--text-muted);">Admin · {{ post.time_ago }} · {{ post.visibility }}</p>
       </div>
-      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+      {% if post.is_owner %}
+      <div class="relative">
+        <button class="post-menu-btn p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+        <div class="post-menu hidden absolute right-0 top-10 z-30 w-40 rounded-xl border shadow-lg py-1.5" style="background: var(--bg-card); border-color: var(--border-soft);">
+          <button class="post-edit-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: var(--text-secondary);"><i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Post</button>
+          <button class="post-delete-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: #ef4444;"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete Post</button>
+        </div>
+      </div>
+      {% endif %}
     </div>
     <h3 class="text-sm font-extrabold mb-1.5" style="color: var(--text-primary);">{{ post.title }}</h3>
     <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">{{ post.content }}</p>
@@ -59,17 +67,13 @@
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);">
         <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share
       </button>
-      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold {% if post.is_bookmarked %}btn-bookmarked{% endif %}" style="color: {% if post.is_bookmarked %}var(--brand){% else %}var(--text-secondary){% endif %}; {% if post.is_bookmarked %}background: var(--brand-soft);{% endif %}">
-        <i data-lucide="bookmark" class="w-3.5 h-3.5 {% if post.is_bookmarked %}fill-current{% endif %}"></i>
-        <span class="bookmark-label">{% if post.is_bookmarked %}Saved{% else %}Save{% endif %}</span>
-      </button>
     </div>
 
     <!-- Comment Section (hidden by default) -->
     <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
       <div class="comments-list flex flex-col gap-2 mb-3"></div>
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border-color: var(--border-soft); border: 1px solid;"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border-color: var(--border-soft); border: 1px solid;">{% if request.user.avatar_url %}<img src="{{ request.user.avatar_url }}" alt="me" class="w-full h-full object-cover">{% else %}<img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover">{% endif %}</div>
         <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
         <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
@@ -94,7 +98,15 @@
         </div>
         <p class="text-[10px]" style="color: var(--text-muted);">{{ post.time_ago }} · {{ post.visibility }}</p>
       </div>
-      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+      {% if post.is_owner %}
+      <div class="relative">
+        <button class="post-menu-btn p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+        <div class="post-menu hidden absolute right-0 top-10 z-30 w-40 rounded-xl border shadow-lg py-1.5" style="background: var(--bg-card); border-color: var(--border-soft);">
+          <button class="post-edit-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: var(--text-secondary);"><i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Post</button>
+          <button class="post-delete-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: #ef4444;"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete Post</button>
+        </div>
+      </div>
+      {% endif %}
     </div>
     <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">{{ post.content }}</p>
 
@@ -125,17 +137,13 @@
       </button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
-      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold {% if post.is_bookmarked %}btn-bookmarked{% endif %}" style="color: {% if post.is_bookmarked %}var(--brand){% else %}var(--text-secondary){% endif %}; {% if post.is_bookmarked %}background: var(--brand-soft);{% endif %}">
-        <i data-lucide="bookmark" class="w-3.5 h-3.5 {% if post.is_bookmarked %}fill-current{% endif %}"></i>
-        <span class="bookmark-label">{% if post.is_bookmarked %}Saved{% else %}Save{% endif %}</span>
-      </button>
     </div>
 
     <!-- Comment Section -->
     <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
       <div class="comments-list flex flex-col gap-2 mb-3"></div>
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);">{% if request.user.avatar_url %}<img src="{{ request.user.avatar_url }}" alt="me" class="w-full h-full object-cover">{% else %}<img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover">{% endif %}</div>
         <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
         <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
@@ -160,47 +168,65 @@
         </div>
         <p class="text-[10px]" style="color: var(--text-muted);">{{ post.time_ago }} · {{ post.visibility }}</p>
       </div>
-      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+      {% if post.is_owner %}
+      <div class="relative">
+        <button class="post-menu-btn p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+        <div class="post-menu hidden absolute right-0 top-10 z-30 w-40 rounded-xl border shadow-lg py-1.5" style="background: var(--bg-card); border-color: var(--border-soft);">
+          <button class="post-edit-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: var(--text-secondary);"><i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Post</button>
+          <button class="post-delete-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: #ef4444;"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete Post</button>
+        </div>
+      </div>
+      {% endif %}
     </div>
     {% if post.poll_obj %}
     <div class="flex items-center gap-2 mb-2">
       <i data-lucide="bar-chart-3" class="w-4 h-4 icon-brand"></i>
-      <span class="poll-meta text-[10px] font-bold uppercase tracking-wider" style="color: var(--brand);">Poll · <span class="poll-votes">{{ post.poll_obj.total_votes }}</span> votes · {{ post.poll_obj.time_left }}</span>
+      <span class="poll-meta text-[10px] font-bold uppercase tracking-wider" style="color: var(--brand);">Poll · <span class="poll-votes">{{ post.poll_total }}</span> votes{% if post.poll_obj.time_left %} · {{ post.poll_obj.time_left }}{% endif %}</span>
     </div>
     <h3 class="text-sm font-extrabold mb-3" style="color: var(--text-primary);">{{ post.poll_obj.question }}</h3>
-    <div class="poll-options flex flex-col gap-2 mb-3">
+    <div class="poll-options flex flex-col gap-2 mb-2 {% if post.poll_voted %}show-results{% endif %}">
       {% for opt in post.poll_options %}
-      <button class="poll-option relative border-2 rounded-xl p-3.5 text-left overflow-hidden {% if opt.is_selected %}voted{% endif %}" style="background: var(--bg-card); border-color: var(--border-soft);" data-option-id="{{ opt.id }}">
+      <button class="poll-option relative border rounded-xl overflow-hidden text-left transition-all duration-200 {% if opt.is_selected %}voted{% endif %}" style="background: var(--bg-card); border-color: {% if opt.is_selected %}var(--brand){% else %}var(--border-soft){% endif %};" data-option-id="{{ opt.id }}">
         <div class="poll-bar absolute inset-0 transition-all duration-300 ease-out" style="background: {% if opt.is_selected %}var(--brand-soft){% else %}var(--border-soft){% endif %}; width: {{ opt.percentage }}%"></div>
-        <div class="relative flex items-center justify-between">
-          {% if opt.is_selected %}
-          <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 icon-brand"></i><span class="text-xs font-bold" style="color: var(--text-primary);">{{ opt.label }}</span></div>
-          {% else %}
-          <span class="text-xs font-bold" style="color: var(--text-primary);">{{ opt.label }}</span>
-          {% endif %}
-          <span class="poll-pct text-xs font-extrabold px-2 py-0.5 rounded-full" style="color: var(--brand); background: var(--brand-soft);">{{ opt.percentage }}%</span>
+        <div class="relative flex items-center justify-between px-3.5 py-3 gap-3">
+          <span class="flex items-center gap-2 min-w-0">
+            {% if opt.is_selected %}
+            <i data-lucide="check-circle-2" class="w-4 h-4 icon-brand shrink-0"></i>
+            {% else %}
+            <span class="poll-radio w-4 h-4 rounded-full border-2 shrink-0" style="border-color: var(--text-muted);"></span>
+            {% endif %}
+            <span class="text-xs font-semibold truncate" style="color: var(--text-primary);">{{ opt.label }}</span>
+          </span>
+          <span class="poll-pct shrink-0 text-[11px] font-extrabold px-2 py-0.5 rounded-full" style="color: var(--brand); background: var(--brand-soft);">{{ opt.percentage }}%</span>
         </div>
       </button>
       {% endfor %}
     </div>
+    <div class="poll-confirm hidden flex items-center justify-between gap-2 rounded-xl px-3.5 py-2.5 mb-2" style="background: var(--brand-soft);">
+      <span class="text-[11px] font-semibold truncate" style="color: var(--text-primary);">Vote for <span class="poll-confirm-label font-extrabold" style="color: var(--brand);"></span>?</span>
+      <div class="flex items-center gap-2 shrink-0">
+        <button class="poll-cancel text-[11px] font-bold px-3 py-1.5 rounded-full transition-opacity hover:opacity-70" style="color: var(--text-muted);">Batal</button>
+        <button class="poll-submit btn-brand text-[11px] font-bold px-4 py-1.5 rounded-full flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 shrink-0"></i> Kirim</button>
+      </div>
+    </div>
+    <p class="poll-hint text-[10px] font-medium mb-3" style="color: var(--text-muted);">{% if post.poll_voted %}You voted — click another option to change your vote.{% else %}Select an option, then tap Kirim to cast your vote.{% endif %}</p>
     {% endif %}
 
     <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-      <span class="text-[10px] font-semibold" style="color: var(--text-muted);"><span class="poll-votes">{{ post.poll_obj.total_votes|default:"0" }}</span> votes{% if post.poll_obj %} · Your vote is counted{% endif %}</span>
+      <span class="text-[10px] font-semibold" style="color: var(--text-muted);"><span class="poll-votes">{{ post.poll_total|default:"0" }}</span> votes</span>
       <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
     </div>
     <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
       <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
-      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> <span class="bookmark-label">Save</span></button>
     </div>
 
     <!-- Comment Section -->
     <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
       <div class="comments-list flex flex-col gap-2 mb-3"></div>
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);">{% if request.user.avatar_url %}<img src="{{ request.user.avatar_url }}" alt="me" class="w-full h-full object-cover">{% else %}<img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover">{% endif %}</div>
         <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
         <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
@@ -225,7 +251,15 @@
         </div>
         <p class="text-[10px]" style="color: var(--text-muted);">{{ post.time_ago }} · {{ post.visibility }}</p>
       </div>
-      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+      {% if post.is_owner %}
+      <div class="relative">
+        <button class="post-menu-btn p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+        <div class="post-menu hidden absolute right-0 top-10 z-30 w-40 rounded-xl border shadow-lg py-1.5" style="background: var(--bg-card); border-color: var(--border-soft);">
+          <button class="post-edit-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: var(--text-secondary);"><i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Post</button>
+          <button class="post-delete-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: #ef4444;"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete Post</button>
+        </div>
+      </div>
+      {% endif %}
     </div>
     {% if post.title %}
     <h3 class="text-sm font-extrabold mb-2" style="color: var(--text-primary);">{{ post.title }}</h3>
@@ -260,14 +294,13 @@
       <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
-      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> <span class="bookmark-label">Save</span></button>
     </div>
 
     <!-- Comment Section -->
     <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
       <div class="comments-list flex flex-col gap-2 mb-3"></div>
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);">{% if request.user.avatar_url %}<img src="{{ request.user.avatar_url }}" alt="me" class="w-full h-full object-cover">{% else %}<img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover">{% endif %}</div>
         <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
         <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
@@ -295,7 +328,15 @@
         </div>
         <p class="text-[10px]" style="color: var(--text-muted);">{{ post.time_ago }} · {{ post.visibility }}</p>
       </div>
-      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+      {% if post.is_owner %}
+      <div class="relative">
+        <button class="post-menu-btn p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+        <div class="post-menu hidden absolute right-0 top-10 z-30 w-40 rounded-xl border shadow-lg py-1.5" style="background: var(--bg-card); border-color: var(--border-soft);">
+          <button class="post-edit-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: var(--text-secondary);"><i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Post</button>
+          <button class="post-delete-btn w-full flex items-center gap-2 px-3 py-2 text-[11px] font-semibold text-left transition-colors hover:opacity-80" style="color: #ef4444;"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete Post</button>
+        </div>
+      </div>
+      {% endif %}
     </div>
     <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">{{ post.content }}</p>
 
@@ -335,14 +376,13 @@
       <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
-      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> <span class="bookmark-label">Save</span></button>
     </div>
 
     <!-- Comment Section -->
     <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
       <div class="comments-list flex flex-col gap-2 mb-3"></div>
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);">{% if request.user.avatar_url %}<img src="{{ request.user.avatar_url }}" alt="me" class="w-full h-full object-cover">{% else %}<img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover">{% endif %}</div>
         <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
         <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
           <i data-lucide="send" class="w-3.5 h-3.5"></i>

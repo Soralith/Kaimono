@@ -200,6 +200,19 @@ class PollOption(models.Model):
 from django.conf import settings
 
 
+class PollVote(models.Model):
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="votes")
+    option = models.ForeignKey(PollOption, on_delete=models.CASCADE, related_name="votes")
+    user_name = models.CharField(max_length=80)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("poll", "user_name")
+
+    def __str__(self):
+        return f"{self.user_name} → {self.option.label}"
+
+
 class CommunityComment(models.Model):
     post = models.ForeignKey(CommunityPost, on_delete=models.CASCADE, related_name="comments")
     author_name = models.CharField(max_length=80)
