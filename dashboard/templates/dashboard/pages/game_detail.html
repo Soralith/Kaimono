@@ -921,7 +921,7 @@
     // ===== Media gallery =====
     function buildGallery() {
       var gl = [];
-      (p.media || []).forEach(function (m) { gl.push({ type: "video", src: m.src, poster: m.poster, label: m.label }); });
+      (p.media || []).forEach(function (m) { gl.push({ type: "video", src: m.src, poster: m.poster, label: m.label, youtube: !!(m.youtube || (m.src && /youtu\.?be/.test(m.src))) }); });
       (p.screenshots || []).forEach(function (sn) { gl.push({ type: "image", src: sn, label: "Screenshot" }); });
       if (gl.length === 0) gl.push({ type: "image", src: p.image, label: p.type });
       return gl;
@@ -933,7 +933,16 @@
       main.style.opacity = "0";
       setTimeout(function () {
         main.innerHTML = "";
-        if (item.type === "video") {
+        if (item.type === "video" && item.youtube) {
+          var ifr = document.createElement("iframe");
+          ifr.src = item.src + (item.src.indexOf("?") === -1 ? "?autoplay=0&rel=0" : "&rel=0");
+          ifr.title = item.label || "Trailer";
+          ifr.className = "w-full h-full";
+          ifr.setAttribute("frameborder", "0");
+          ifr.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+          ifr.setAttribute("allowfullscreen", "");
+          main.appendChild(ifr);
+        } else if (item.type === "video") {
           var v = document.createElement("video");
           v.src = item.src;
           v.poster = item.poster;

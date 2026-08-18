@@ -3,12 +3,16 @@ import math
 import os
 import re
 from django.conf import settings
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.db.models import Q, Count
 from collections import defaultdict
+
+from accounts.models import User
 from .models import (
     WishlistItem, LibraryGame, ShopProduct,
     CommunityStory, CommunityChannel, CommunityGame, CommunityPost,
@@ -16,6 +20,7 @@ from .models import (
     CommunityComment,
     CommunityMember, UserFollowedGame,
 )
+from .forms import AdminProductForm, AdminUserForm, AdminChannelForm, AdminMemberForm
 
 POSTS_PER_PAGE = 5
 
@@ -119,7 +124,7 @@ def dashboard(request):
 
 
 def shop(request):
-    products = [p.data for p in ShopProduct.objects.order_by('id')]
+    products = [p.data for p in ShopProduct.objects.order_by('id') if p.data.get('active', True)]
     return render(request, 'dashboard/pages/shop.html', {
         'products_json': json.dumps(products),
     })
@@ -128,7 +133,9 @@ def shop(request):
 def game_detail(request, product_id):
     product = None
     try:
-        product = ShopProduct.objects.get(id=int(product_id)).data
+        candidate = ShopProduct.objects.get(id=int(product_id))
+        if candidate.data.get('active', True):
+            product = candidate.data
     except (ShopProduct.DoesNotExist, ValueError):
         product = None
     return render(request, 'dashboard/pages/game_detail.html', {
@@ -569,6 +576,341 @@ def community_toggle_follow_game(request):
     ).exists()
     count = UserFollowedGame.objects.filter(user_name=username).count()
     return JsonResponse({'followed': is_followed, 'count': count})
+
+# ── Admin Panel ─────────────────────────────────────────────────────
+
+def _admin_required(view_func):
+    """Login + staff-only gate for admin panel routes."""
+    from django.contrib.auth.decorators import login_required
+    from django.core.exceptions import PermissionDenied
+
+    @login_required
+    def _wrapped(request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise PermissionDenied("Admin access only")
+        return view_func(request, *args, **kwargs)
+    return _wrapped
+
+
+def _admin_section(request):
+    """Current admin tab, e.g. products, users, community."""
+    section = request.GET.get("section") or request.POST.get("section") or "overview"
+    if section not in ("overview", "products", "users", "community"):
+        section = "overview"
+    return section
+
+
+def _build_admin_context(request, section):
+    products = list(ShopProduct.objects.order_by("id"))
+    posts = list(CommunityPost.objects.select_related("channel").order_by("-created_at"))
+    comments = list(CommunityComment.objects.select_related("post").order_by("-created_at"))
+    return {
+        "section": section,
+        "products": products,
+        "products_count": len(products),
+        "active_products_count": sum(1 for p in products if p.data.get("active", True)),
+        "users": list(User.objects.order_by("-date_joined")),
+        "users_count": User.objects.count(),
+        "staff_count": User.objects.filter(is_staff=True).count(),
+        "posts": posts,
+        "posts_count": len(posts),
+        "channels": list(CommunityChannel.objects.order_by("name")),
+        "channels_count": CommunityChannel.objects.count(),
+        "comments": comments,
+        "comments_count": len(comments),
+        "members": list(CommunityMember.objects.all()),
+        "members_count": CommunityMember.objects.count(),
+        "library_count": LibraryGame.objects.count(),
+        "wishlist_count": WishlistItem.objects.count(),
+        "recent_posts": posts[:5],
+        "recent_users": list(User.objects.all().order_by("-date_joined")[:5]),
+    }
+
+
+@_admin_required
+def admin_panel(request):
+    section = _admin_section(request)
+    if request.method == "POST":
+        action = request.POST.get("action")
+        if action == "product_save":
+            return _admin_product_save(request)
+        if action == "product_delete":
+            pid = request.POST.get("id")
+            ShopProduct.objects.filter(id=pid).delete()
+            messages.success(request, "Product deleted.")
+            return redirect(reverse("admin_panel") + "?section=products")
+        if action == "product_toggle":
+            try:
+                p = ShopProduct.objects.get(id=request.POST.get("id"))
+                p.data = dict(p.data)
+                p.data["active"] = not p.data.get("active", True)
+                p.save(update_fields=["data"])
+                messages.success(request, "Product visibility updated.")
+            except ShopProduct.DoesNotExist:
+                messages.error(request, "Product not found.")
+            return redirect(reverse("admin_panel") + "?section=products")
+        if action == "user_save":
+            return _admin_user_save(request)
+        if action == "user_delete":
+            try:
+                target = User.objects.get(id=request.POST.get("id"))
+                if target.pk == request.user.pk:
+                    messages.error(request, "You cannot delete your own account.")
+                else:
+                    target.delete()
+                    messages.success(request, "User deleted.")
+            except User.DoesNotExist:
+                messages.error(request, "User not found.")
+            return redirect(reverse("admin_panel") + "?section=users")
+        if action == "user_toggle":
+            try:
+                target = User.objects.get(id=request.POST.get("id"))
+                if target.pk == request.user.pk:
+                    messages.error(request, "You cannot change your own admin status.")
+                else:
+                    target.is_staff = not target.is_staff
+                    target.save(update_fields=["is_staff"])
+                    messages.success(request, "Admin status updated.")
+            except User.DoesNotExist:
+                messages.error(request, "User not found.")
+            return redirect(reverse("admin_panel") + "?section=users")
+        if action == "channel_save":
+            return _admin_channel_save(request)
+        if action == "channel_toggle":
+            ch = CommunityChannel.objects.filter(id=request.POST.get("id")).first()
+            if ch:
+                ch.is_active = not ch.is_active
+                ch.save(update_fields=["is_active"])
+                messages.success(request, "Channel updated.")
+            return redirect(reverse("admin_panel") + "?section=community")
+        if action == "channel_delete":
+            CommunityChannel.objects.filter(id=request.POST.get("id")).delete()
+            messages.success(request, "Channel deleted.")
+            return redirect(reverse("admin_panel") + "?section=community")
+        if action == "post_delete":
+            try:
+                post = CommunityPost.objects.get(id=request.POST.get("id"))
+                channel = post.channel
+                post.delete()
+                if channel:
+                    channel.post_count = max(0, channel.post_count - 1)
+                    channel.save(update_fields=["post_count"])
+                messages.success(request, "Post deleted.")
+            except CommunityPost.DoesNotExist:
+                messages.error(request, "Post not found.")
+            return redirect(reverse("admin_panel") + "?section=community")
+        if action == "post_pin":
+            post = CommunityPost.objects.filter(id=request.POST.get("id")).first()
+            if post:
+                post.is_pinned = not post.is_pinned
+                post.save(update_fields=["is_pinned"])
+                messages.success(request, "Pin updated.")
+            return redirect(reverse("admin_panel") + "?section=community")
+        if action == "comment_delete":
+            CommunityComment.objects.filter(id=request.POST.get("id")).delete()
+            return redirect(reverse("admin_panel") + "?section=community")
+        if action == "member_save":
+            return _admin_member_save(request)
+        if action == "member_delete":
+            CommunityMember.objects.filter(id=request.POST.get("id")).delete()
+            messages.success(request, "Member removed.")
+            return redirect(reverse("admin_panel") + "?section=community")
+        messages.error(request, "Unknown action.")
+        return redirect(reverse("admin_panel") + f"?section={section}")
+
+    ctx = _build_admin_context(request, section)
+    # Prefill the product/user create+edit form.
+    if section == "products":
+        edit_id = request.GET.get("edit")
+        product = None
+        if edit_id:
+            product = ShopProduct.objects.filter(id=edit_id).first()
+        ctx["product_form"] = _admin_product_form(product)
+        ctx["edit_product_id"] = product.pk if product else None
+        ctx["edit_screenshots"] = (product.data or {}).get("screenshots", []) if product else []
+    elif section == "users":
+        edit_id = request.GET.get("edit")
+        edit_user = None
+        if edit_id:
+            edit_user = User.objects.filter(id=edit_id).first()
+        ctx["user_form"] = AdminUserForm(instance=edit_user)
+        ctx["edit_user_id"] = edit_user.pk if edit_user else None
+    elif section == "community":
+        ctx["channel_form"] = AdminChannelForm()
+        ctx["member_form"] = AdminMemberForm()
+    return render(request, "dashboard/pages/admin_panel.html", ctx)
+
+
+def _admin_product_save(request):
+    form = AdminProductForm(request.POST, request.FILES)
+    if not form.is_valid():
+        for field in form.errors.values():
+            for err in field:
+                messages.error(request, f"{err}")
+        return redirect(reverse("admin_panel") + "?section=products")
+
+    pid = request.POST.get("id")
+    product = ShopProduct.objects.filter(id=pid).first() if pid else None
+
+    from accounts import storage
+
+    # If a new image file was uploaded, push it to Supabase Storage and use its
+    # public URL. Otherwise keep the posted URL (or the product's existing one).
+    uploaded = form.cleaned_data.get("image_file")
+    image_url = form.cleaned_data.get("image", "").strip()
+    if uploaded:
+        image_url = storage.upload_image(uploaded, folder="products") or image_url
+
+    data = form.build_data(product.id if product else None)
+    data["image"] = image_url
+    if not image_url and product:
+        data["image"] = (product.data or {}).get("image", "")
+
+    # Multi-image screenshots: any newly uploaded files are pushed to storage and
+    # appended; otherwise the product's current screenshots are preserved.
+    shot_files = form.cleaned_data.get("screenshot_files") or []
+    if shot_files:
+        screenshots = []
+        for f in shot_files:
+            url = storage.upload_image(f, folder="products")
+            if url:
+                screenshots.append(url)
+        data["screenshots"] = screenshots
+    elif product and (product.data or {}).get("screenshots"):
+        data["screenshots"] = (product.data or {}).get("screenshots", [])
+    elif data["image"] and not data["screenshots"]:
+        data["screenshots"] = [data["image"]]
+
+    if product:
+        # Preserve extras (friends, bundles) unless being edited away. Media is
+        # rebuilt via the form so the trailer (if provided) goes first.
+        old = product.data or {}
+        data["media"] = form.build_media(old.get("media", []))
+        data["friends"] = old.get("friends", [])
+        data["bundles"] = old.get("bundles", [])
+        product.name = data["name"]
+        product.category = data["category"]
+        product.price = data.get("price")
+        product.original_price = data.get("originalPrice")
+        product.image = data.get("image") or ""
+        product.data = data
+        product.save()
+        messages.success(request, "Product updated.")
+    else:
+        data["media"] = form.build_media([])
+        product = ShopProduct.objects.create(
+            name=data["name"],
+            category=data["category"],
+            price=data.get("price"),
+            original_price=data.get("originalPrice"),
+            image=data.get("image") or "",
+            data=data,
+        )
+        # Keep data['id'] in sync with the real DB id (shop/cart/checkout depend on it).
+        product.data = dict(product.data)
+        product.data["id"] = product.id
+        product.save(update_fields=["data"])
+        messages.success(request, "Product created.")
+    return redirect(reverse("admin_panel") + "?section=products")
+
+
+def _admin_user_save(request):
+    form = AdminUserForm(request.POST)
+    if not form.is_valid():
+        for err in form.errors.values():
+            for msg in err:
+                messages.error(request, f"{msg}")
+        return redirect(request.POST.get("next") or (reverse("admin_panel") + "?section=users"))
+    user = form.save()
+    messages.success(request, "User saved.")
+    return redirect(reverse("admin_panel") + "?section=users")
+
+
+def _admin_channel_save(request):
+    form = AdminChannelForm(request.POST)
+    if not form.is_valid():
+        for err in form.errors.values():
+            for msg in err:
+                messages.error(request, f"{msg}")
+        return redirect(reverse("admin_panel") + "?section=community")
+    channel, created = CommunityChannel.objects.update_or_create(
+        id=request.POST.get("id") or None,
+        defaults=form.cleaned_data,
+    )
+    messages.success(request, "Channel saved.")
+    return redirect(reverse("admin_panel") + "?section=community")
+
+
+def _admin_member_save(request):
+    form = AdminMemberForm(request.POST)
+    if not form.is_valid():
+        for err in form.errors.values():
+            for msg in err:
+                messages.error(request, f"{msg}")
+        return redirect(reverse("admin_panel") + "?section=community")
+    cd = form.cleaned_data
+    member_id = request.POST.get("id")
+    if member_id:
+        member = CommunityMember.objects.filter(id=member_id).first()
+        if member:
+            for k, v in cd.items():
+                setattr(member, k, v)
+            member.save()
+    else:
+        CommunityMember.objects.create(
+            **cd,
+            last_active="Just now",
+            level=1,
+            games_played=0,
+            achievements=0,
+            followers=0,
+            member_since="",
+        )
+    messages.success(request, "Member saved.")
+    return redirect(reverse("admin_panel") + "?section=community")
+
+
+def _admin_product_form(product):
+    """Return a bound AdminProductForm for editing an existing product."""
+    from .forms import AdminProductForm
+    if not product:
+        return AdminProductForm()
+    d = product.data or {}
+    initial = {
+        "name": product.name,
+        "category": product.category,
+        "brand": d.get("brand", ""),
+        "type": d.get("type", ""),
+        "price": product.price,
+        "original_price": product.original_price,
+        "stock": d.get("stock", ""),
+        "badges": ", ".join(d.get("badges", [])),
+        "rating": d.get("rating"),
+        "reviews": d.get("reviews"),
+        "popularity": d.get("popularity"),
+        "image": product.image or d.get("image", ""),
+        "description": d.get("description", ""),
+        "developer": d.get("developer", ""),
+        "publisher": d.get("publisher", ""),
+        "release_date": d.get("releaseDate", ""),
+        "tags": ", ".join(d.get("tags", [])),
+        "is_active": d.get("active", True),
+        "trailer_url": next((m.get("url", "") or m.get("src", "") for m in (d.get("media") or []) if m.get("youtube")), ""),
+    }
+    return AdminProductForm(initial=initial)
+
+
+def developer_panel(request):
+    """Developer panel placeholder (feature implemented later)."""
+    if not request.user.is_authenticated:
+        return redirect('login')
+    if request.user.role != 'developer':
+        messages.error(request, "Developer access only.")
+        return redirect('settings')
+    return render(request, 'dashboard/pages/developer_panel.html')
+
+
+# ── Wishlist ────────────────────────────────────────────────────────
 
 def wishlist(request):
     items = list(WishlistItem.objects.all().order_by('created_at'))

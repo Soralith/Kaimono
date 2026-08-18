@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaimono Developer Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root, [data-theme="silver"] {
+      --bg-primary: #E2E7EE; --bg-surface: #F7F9FC; --bg-card: #fff;
+      --text-primary: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
+      --border-color: #ffffff; --border-soft: #e2e8f0;
+      --brand: #323446; --on-brand: #fff; --brand-soft: rgba(50,52,70,.12);
+      --hover-bg: rgba(255,255,255,.7); --shadow-color: rgba(50,52,70,.1);
+    }
+    [data-theme="midnight"] {
+      --bg-primary: #0f172a; --bg-surface: #1e293b; --bg-card: #334155;
+      --text-primary: #f1f5f9; --text-secondary: #cbd5e1; --text-muted: #94a3b8;
+      --border-color: #334155; --border-soft: #475569;
+      --brand: #64748b; --on-brand: #fff; --brand-soft: rgba(148,163,184,.15);
+      --hover-bg: rgba(255,255,255,.03); --shadow-color: rgba(0,0,0,.3);
+    }
+    [data-theme="paper"] {
+      --bg-primary: #F5F1E8; --bg-surface: #FAF7F0; --bg-card: #fff;
+      --text-primary: #1c1917; --text-secondary: #57534e; --text-muted: #a8a29e;
+      --border-color: #e7e5e4; --border-soft: #d6d3d1;
+      --brand: #292524; --on-brand: #fff; --brand-soft: rgba(41,37,36,.1);
+      --hover-bg: rgba(255,255,255,.6); --shadow-color: rgba(41,37,36,.08);
+    }
+    [data-theme="obsidian"] {
+      --bg-primary: #0a0a0a; --bg-surface: #171717; --bg-card: #1f1f1f;
+      --text-primary: #fafafa; --text-secondary: #a3a3a3; --text-muted: #525252;
+      --border-color: #262626; --border-soft: #404040;
+      --brand: #fafafa; --on-brand: #0a0a0a; --brand-soft: rgba(255,255,255,.08);
+      --hover-bg: rgba(255,255,255,.03); --shadow-color: rgba(0,0,0,.5);
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-primary); color: var(--text-secondary); }
+    .surface-card { background-color: var(--bg-surface) !important; border-color: var(--border-color) !important; }
+    .dark-card { background-color: var(--bg-card) !important; }
+    [data-motion="reduced"] *, [data-motion="reduced"] *::before, [data-motion="reduced"] *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
+  </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-sm">
+  {% include "dashboard/partials/topbar.html" %}
+  <div class="flex flex-1 px-3 sm:px-6 pt-2 pb-4 sm:pb-6 gap-3 sm:gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+    {% include "dashboard/partials/sidebar.html" %}
+    <main class="flex-1 flex flex-col items-center justify-center gap-4 text-center p-6">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: var(--brand-soft); color: var(--brand);">
+        <i data-lucide="code-2" class="w-8 h-8"></i>
+      </div>
+      <h1 class="text-xl font-extrabold" style="color: var(--text-primary);">Developer Panel</h1>
+      <p class="text-sm max-w-md" style="color: var(--text-muted);">
+        Upload your game builds and manage your storefront.<br>This section is coming soon.
+      </p>
+      <a href="/dashboard/" class="btn px-6 py-2.5 rounded-full text-xs font-bold" style="background: var(--brand); color: var(--on-brand);">Back to Dashboard</a>
+    </main>
+  </div>
+  <script>
+    (function () {
+      const theme = localStorage.getItem('kaimono_theme');
+      const motion = localStorage.getItem('kaimono_motion');
+      const compact = localStorage.getItem('kaimono_compact');
+      if (theme) document.body.setAttribute('data-theme', theme);
+      if (motion === 'reduced') document.body.setAttribute('data-motion', 'reduced');
+      if (compact === '1') document.body.setAttribute('data-compact', '1');
+    })();
+    if (window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>

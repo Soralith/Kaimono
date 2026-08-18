@@ -31,7 +31,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         ShopProduct.objects.all().delete()
-        products = self._load_products()
+        products = [p for p in self._load_products() if p.get('category') == 'games']
 
         rows = []
         for p in products:
@@ -47,5 +47,16 @@ class Command(BaseCommand):
                 )
             )
         ShopProduct.objects.bulk_create(rows)
+        self._sync_sequence()
 
         self.stdout.write(self.style.SUCCESS(f"Seeded {len(rows)} shop products into dashboard_shop."))
+
+    def _sync_sequence(self):
+        """Re-sync the Postgres id sequence after row-level deletes + explicit
+        id inserts so future auto-incremented inserts never collide."""
+        from django.db import connection
+        with connection.cursor() as cur:
+            cur.execute(
+                "SELECT setval(pg_get_serial_sequence('dashboard_shopproduct', 'id'), "
+                "COALESCE((SELECT MAX(id) FROM dashboard_shopproduct), 1))")
+            self.stdout.write(self.style.SUCCESS("Shop product sequence re-synced."))

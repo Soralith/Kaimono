@@ -439,11 +439,11 @@
       <!-- BREADCRUMB + CONTROLS -->
       <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-2 pt-1 pb-1 shrink-0">
         <div class="flex items-baseline gap-1">
-          <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">ANIME MERCH E-COMMERCE <span class="font-bold" style="color: var(--text-primary);">SHOP</span> / <span class="font-bold" style="color: var(--text-primary);">HOSHINO ICHIKA</span></h1>
+          <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">GAME E-COMMERCE <span class="font-bold" style="color: var(--text-primary);">SHOP</span> / <span class="font-bold" style="color: var(--text-primary);">HOSHINO ICHIKA</span></h1>
         </div>
         <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
           <div class="relative flex-1 min-w-[160px] sm:flex-none">
-            <input type="text" id="search-input" placeholder="Search games, figures, apparel..."
+            <input type="text" id="search-input" placeholder="Search games..."
                    class="themed-input w-full sm:w-72 pl-10 pr-4 py-2.5 rounded-full text-xs focus:outline-none border shadow-sm font-semibold transition-all">
             <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style="color: var(--text-muted);"></i>
             <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full btn-ghost flex items-center justify-center transition-colors">
@@ -481,7 +481,7 @@
             </h2>
 
             <p class="text-sm text-slate-300 leading-relaxed max-w-md">
-              Exclusive collection drops, up to <span class="text-white font-bold">70% off</span> rare figures, limited apparel & imported games. Free worldwide shipping on orders above $80.
+              Exclusive game drops, up to <span class="text-white font-bold">70% off</span> your favorite titles. Free worldwide shipping on orders above $80.
             </p>
 
             <div class="flex flex-wrap items-center gap-2.5 mt-1">
@@ -739,9 +739,6 @@
     const CATEGORIES = [
       { id: "all", label: "All Products", icon: "layout-grid", count: PRODUCTS.length },
       { id: "games", label: "Games", icon: "gamepad-2", count: PRODUCTS.filter(p => p.category === "games").length },
-      { id: "figures", label: "Figures", icon: "box", count: PRODUCTS.filter(p => p.category === "figures").length },
-      { id: "apparel", label: "Apparel", icon: "shirt", count: PRODUCTS.filter(p => p.category === "apparel").length },
-      { id: "accessories", label: "Accessories", icon: "key-round", count: PRODUCTS.filter(p => p.category === "accessories").length },
     ];
 
     // ===== STATE =====

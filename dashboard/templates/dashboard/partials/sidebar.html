@@ -322,10 +322,14 @@
   }
 
   var path = window.location.pathname;
+  var best = null;
   sidebar.querySelectorAll('[data-path]').forEach(function (a) {
     var p = a.getAttribute('data-path');
-    if (p && path.indexOf(p) === 0) a.classList.add('nav-active');
+    if (p && path.indexOf(p) === 0 && (!best || p.length > best.getAttribute('data-path').length)) {
+      best = a;
+    }
   });
+  if (best) best.classList.add('nav-active');
 
   function setTip() {
     tipEl.style.display = 'none';
