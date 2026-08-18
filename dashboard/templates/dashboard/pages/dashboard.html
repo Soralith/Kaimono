@@ -269,7 +269,7 @@
   {% include "dashboard/partials/topbar.html" %}
 
   <!-- MAIN WRAPPER -->
-  <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+  <div class="flex flex-1 px-3 sm:px-6 pt-2 pb-4 sm:pb-6 gap-3 sm:gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
 
     <!-- SIDEBAR (dari partial — auto handle collapse state & active link) -->
     {% include "dashboard/partials/sidebar.html" %}
@@ -288,7 +288,7 @@
       </div>
 
       <!-- 2 COLUMN GRID LAYOUT -->
-      <div class="grid grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)] gap-6 flex-1 h-full">
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)] gap-4 lg:gap-6 flex-1 h-full">
 
         <!-- ==================== COLUMN 1 (LEFT) ==================== -->
         <div class="flex flex-col gap-6 justify-between">

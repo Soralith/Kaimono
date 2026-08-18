@@ -259,18 +259,18 @@
 
   {% include "dashboard/partials/topbar.html" %}
 
-  <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+  <div class="flex flex-1 px-3 sm:px-6 pt-2 pb-4 sm:pb-6 gap-3 sm:gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
 
     {% include "dashboard/partials/sidebar.html" %}
 
     <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4">
 
       <!-- BREADCRUMB + SAVE ACTIONS -->
-      <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
+      <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-2 pt-1 pb-1 shrink-0">
         <div class="flex items-baseline gap-1">
           <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">ANIME MERCH E-COMMERCE <span class="font-bold" style="color: var(--text-primary);">SETTINGS</span> / <span class="font-bold" style="color: var(--text-primary);">HOSHINO ICHIKA</span></h1>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
           <span class="flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full" style="color: var(--text-muted); background: var(--bg-card); border: 1px solid var(--border-soft);">
             <span class="w-1.5 h-1.5 rounded-full" style="background: var(--text-muted);"></span>
             All changes saved
@@ -292,7 +292,7 @@
       </form>
 
       <!-- 2 COLUMN: NAV + PANELS -->
-      <div class="grid grid-cols-[260px_minmax(0,1fr)] gap-5 flex-1 min-h-0">
+      <div class="grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] gap-4 lg:gap-5 flex-1 min-h-0">
 
         <!-- ============ LEFT: SETTINGS NAV ============ -->
         <aside class="flex flex-col gap-4 overflow-y-auto pr-1">
@@ -386,7 +386,7 @@
                 </div>
               </div>
 
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="text-[10px] font-bold uppercase tracking-wider block mb-1.5">Display Name</label>
                   <input type="text" name="display_name" form="set-form" value="{{ form.display_name.value|default:'' }}" class="form-input">
@@ -416,7 +416,7 @@
               <h3 class="text-base font-semibold flex items-center gap-2 mb-6">
                 <i data-lucide="globe" class="w-4 h-4 icon-muted"></i> Regional Preferences
               </h3>
-              <div class="grid grid-cols-3 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label class="text-[10px] font-bold uppercase tracking-wider block mb-1.5">Language</label>
                   <select class="form-input">
@@ -449,7 +449,7 @@
               <h3 class="text-base font-semibold flex items-center gap-2 mb-6">
                 <i data-lucide="palette" class="w-4 h-4 icon-muted"></i> Profile Theme
               </h3>
-              <div class="grid grid-cols-4 gap-3">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <button type="button" data-theme="midnight" onclick="selectTheme('midnight', this)" class="theme-swatch relative aspect-[4/3] rounded-xl border bg-gradient-to-br from-slate-700 to-slate-900">
                   <span class="absolute bottom-2 left-3 text-[10px] font-bold text-white">Midnight</span>
                 </button>

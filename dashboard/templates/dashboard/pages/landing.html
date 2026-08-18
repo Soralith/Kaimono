@@ -307,6 +307,10 @@
       .release-badge {
         backdrop-filter: blur(6px);
       }
+      /* Mobile: let grid children shrink below content min-size */
+      @media (max-width: 1023px) {
+        .grid > * { min-width: 0; }
+      }
     </style>
   </head>
   <body class="text-slate-800 antialiased overflow-x-hidden">
@@ -825,7 +829,7 @@
               Get in touch <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
             </a>
 
-            <div class="grid grid-cols-2 gap-5 mt-20">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-20">
               <div
                 class="num-card bg-white border border-slate-200 rounded-2xl p-7"
                 data-cat="0"
@@ -1485,7 +1489,7 @@
           </a>
 
           <div
-            class="flex items-center gap-9 text-[15px] font-semibold text-slate-400"
+            class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 sm:gap-x-9 text-[15px] font-semibold text-slate-400"
           >
             <a href="#top" class="hover:text-white transition-colors">Home</a>
             <a href="#features" class="hover:text-white transition-colors"

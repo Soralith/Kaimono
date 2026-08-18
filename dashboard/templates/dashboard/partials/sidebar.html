@@ -146,6 +146,45 @@
   #sidebar.expanded .sidebar-text.fill {
     flex: 1 1 auto;
   }
+
+  /* ===== MOBILE: let grid children shrink below content min-size (prevents horizontal overflow) ===== */
+  @media (max-width: 1023px) {
+    .grid > * { min-width: 0; }
+  }
+
+  /* ===== MOBILE DRAWER (< 1024px): sidebar slides in over content ===== */
+  @media (max-width: 1023px) {
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      height: 100vh;
+      z-index: 60;
+      border-radius: 0 2rem 2rem 0;
+      transform: translateX(-110%);
+      box-shadow: 0 18px 44px -18px rgba(50, 52, 70, 0.35);
+      transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #sidebar.mobile-open {
+      transform: translateX(0);
+    }
+    #sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      z-index: 55;
+    }
+    #sidebar-backdrop.show {
+      display: block;
+    }
+  }
+  @media (min-width: 1024px) {
+    #sidebar-backdrop {
+      display: none !important;
+    }
+  }
 </style>
 
 <aside id="sidebar" class="shrink-0 h-full bg-[#F7F9FC] text-slate-700 rounded-[2rem] border border-white flex flex-col justify-between">
@@ -205,6 +244,9 @@
   </div>
 </aside>
 
+<!-- Mobile drawer backdrop -->
+<div id="sidebar-backdrop" aria-hidden="true"></div>
+
 <div id="sidebar-tip" role="tooltip" aria-hidden="true">
   <span class="sidebar-tip-arrow"></span>
   <span id="sidebar-tip-label"></span>
@@ -227,6 +269,33 @@
   var label      = document.getElementById('collapse-label');
   var tipEl      = document.getElementById('sidebar-tip');
   var tipLabel   = document.getElementById('sidebar-tip-label');
+  var backdrop   = document.getElementById('sidebar-backdrop');
+
+  function isMobile() { return window.matchMedia('(max-width: 1023px)').matches; }
+
+  function openDrawer() {
+    sidebar.classList.add('mobile-open', 'expanded');
+    if (backdrop) backdrop.classList.add('show');
+  }
+  function closeDrawer() {
+    sidebar.classList.remove('mobile-open');
+    if (backdrop) backdrop.classList.remove('show');
+    render();
+  }
+  function toggleDrawer() {
+    if (sidebar.classList.contains('mobile-open')) closeDrawer(); else openDrawer();
+  }
+  if (backdrop) backdrop.addEventListener('click', closeDrawer);
+  sidebar.querySelectorAll('a.nav-item').forEach(function (a) {
+    a.addEventListener('click', function () { if (isMobile()) closeDrawer(); });
+  });
+  window.addEventListener('resize', function () {
+    if (!isMobile() && sidebar.classList.contains('mobile-open')) {
+      sidebar.classList.remove('mobile-open');
+      if (backdrop) backdrop.classList.remove('show');
+      render();
+    }
+  });
   var expandedDefault = {{ request.user.sidebar_expanded|yesno:"true,false" }};
   var stored = localStorage.getItem('kaimono_sidebar_collapsed');
   var isCollapsed = stored !== null ? stored !== 'false' : !expandedDefault;
@@ -269,7 +338,9 @@
   });
 
   function render() {
-    sidebar.classList.toggle('expanded', !isCollapsed);
+    if (!(isMobile() && sidebar.classList.contains('mobile-open'))) {
+      sidebar.classList.toggle('expanded', !isCollapsed);
+    }
     if (iconHolder) {
       iconHolder.innerHTML = '<i data-lucide="' + (isCollapsed ? 'panel-left-open' : 'panel-left-close') + '" class="w-5 h-5 shrink-0"></i>';
     }
@@ -281,12 +352,14 @@
   render();
 
   if (toggleBtn) toggleBtn.addEventListener('click', function () {
+    if (isMobile()) { closeDrawer(); return; }
     isCollapsed = !isCollapsed;
     localStorage.setItem('kaimono_sidebar_collapsed', String(isCollapsed));
     render();
   });
 
   window.__kaimonoToggleSidebar = function () {
+    if (isMobile()) { toggleDrawer(); return; }
     isCollapsed = !isCollapsed;
     localStorage.setItem('kaimono_sidebar_collapsed', String(isCollapsed));
     render();

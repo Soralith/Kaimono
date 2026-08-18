@@ -1,23 +1,23 @@
-<div class="pt-5 pb-3 px-6 relative w-full shrink-0">
-  <header style="background-color: var(--brand); color: var(--on-brand); border: 1px solid color-mix(in srgb, var(--on-brand) 15%, transparent);" class="px-6 py-4 flex justify-between items-center shadow-md rounded-xl">
-    <div class="flex items-center gap-6">
-      <div class="flex items-center gap-2">
+<div class="pt-3 sm:pt-5 pb-2 sm:pb-3 px-3 sm:px-6 relative w-full shrink-0">
+  <header style="background-color: var(--brand); color: var(--on-brand); border: 1px solid color-mix(in srgb, var(--on-brand) 15%, transparent);" class="px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shadow-md rounded-xl gap-3 sm:gap-6">
+    <div class="flex items-center gap-3 sm:gap-6 min-w-0">
+      <div class="flex items-center gap-2 shrink-0">
         <i data-lucide="user" class="w-4 h-4 text-[var(--on-brand)]"></i>
-        <span class="font-bold text-[var(--on-brand)] tracking-widest uppercase text-sm">@{{ request.user.username|default:'guest' }}</span>
+        <span class="font-bold text-[var(--on-brand)] tracking-widest uppercase text-sm truncate">@{{ request.user.username|default:'guest' }}</span>
       </div>
-      <span class="text-[var(--on-brand)] opacity-40">|</span>
-      <div class="flex items-center gap-3 text-[var(--on-brand)] tracking-wider">
+      <span class="text-[var(--on-brand)] opacity-40 hidden sm:inline">|</span>
+      <div class="hidden md:flex items-center gap-3 text-[var(--on-brand)] tracking-wider">
         <span class="font-semibold text-[var(--on-brand)] text-sm">Kaimono</span>
         <span class="text-[var(--on-brand)] opacity-40">//</span>
         <span class="text-[var(--on-brand)] opacity-80 text-xs">What's on your mind today?</span>
       </div>
     </div>
-    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-3 sm:gap-6 shrink-0">
       <div class="flex items-center gap-0 opacity-70">
       </div>
-      <div class="flex items-center gap-4 pl-4">
-        <span class="font-bold text-[var(--on-brand)] tracking-widest text-sm">{{ request.user.display_name|default:request.user.username|upper }}</span>
-        <button type="button" onclick="if(window.__kaimonoToggleSidebar) window.__kaimonoToggleSidebar()" class="p-1 transition-colors text-[var(--on-brand)] hover:opacity-70 cursor-pointer" aria-label="Toggle sidebar">
+      <div class="flex items-center gap-3 sm:gap-4 pl-2 sm:pl-4">
+        <span class="font-bold text-[var(--on-brand)] tracking-widest text-sm hidden sm:block">{{ request.user.display_name|default:request.user.username|upper }}</span>
+        <button type="button" onclick="if(window.__kaimonoToggleSidebar) window.__kaimonoToggleSidebar()" class="p-2 sm:p-1 transition-colors text-[var(--on-brand)] hover:opacity-70 cursor-pointer" aria-label="Toggle navigation">
           <i data-lucide="list" class="w-5 h-5"></i>
         </button>
       </div>

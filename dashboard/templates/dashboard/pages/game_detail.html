@@ -165,7 +165,7 @@
 
   {% include "dashboard/partials/topbar.html" %}
 
-  <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+  <div class="flex flex-1 px-3 sm:px-6 pt-2 pb-4 sm:pb-6 gap-3 sm:gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
 
     {% include "dashboard/partials/sidebar.html" %}
 
@@ -208,7 +208,7 @@
       <div class="grid lg:grid-cols-[1.6fr_1fr] gap-6 items-start mt-6">
 
         <!-- Media gallery -->
-        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-4 lg:p-5 animate-fadeInUp">
+        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-4 lg:p-5 animate-fadeInUp min-w-0">
           <div class="flex items-center justify-between mb-3">
             <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
               <i data-lucide="monitor-play" class="w-4 h-4 text-[#6366F1]"></i> Trailer & Screenshots
@@ -233,7 +233,7 @@
         </div>
 
         <!-- Summary info box -->
-        <div class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 80ms">
+        <div class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp min-w-0" style="animation-delay: 80ms">
           <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
             <i data-lucide="info" class="w-4 h-4 text-[#6366F1]"></i> About This Product
           </h3>
@@ -687,6 +687,7 @@
       var banner = (p.media && p.media[0] && p.media[0].poster) || p.image;
 
       $g("gd-banner").src = banner;
+      document.title = p.name + " — Kaimono";
       $g("gd-title").textContent = p.name;
       $g("page-cat").textContent = p.category;
       $g("gd-rating").textContent = p.rating;
@@ -731,6 +732,21 @@
       $g("media-next").addEventListener("click", function () {
         mIdx = (mIdx + 1) % gallery.length;
         renderGallery();
+      });
+
+      // Hide prev/next arrows when the gallery has a single media item
+      if (gallery.length < 2) {
+        $g("media-prev").style.display = "none";
+        $g("media-next").style.display = "none";
+      }
+
+      // Keyboard navigation for the media carousel (← / →)
+      document.addEventListener("keydown", function (ev) {
+        if (!$g("checkout-overlay").classList.contains("hidden")) return;
+        var tag = (ev.target && ev.target.tagName) || "";
+        if (/^(INPUT|SELECT|TEXTAREA)$/.test(tag)) return;
+        if (ev.key === "ArrowLeft") { mIdx = (mIdx - 1 + gallery.length) % gallery.length; renderGallery(); }
+        else if (ev.key === "ArrowRight") { mIdx = (mIdx + 1) % gallery.length; renderGallery(); }
       });
 
       // Purchase box
@@ -882,13 +898,13 @@
           v.src = item.src;
           v.poster = item.poster;
           v.controls = true;
-          v.className = "w-full h-full object-cover";
+          v.className = "w-full h-full object-cover max-w-full";
           main.appendChild(v);
         } else {
           var im = document.createElement("img");
           im.src = item.src;
           im.alt = p.name;
-          im.className = "w-full h-full object-cover";
+          im.className = "w-full h-full object-cover max-w-full";
           main.appendChild(im);
         }
         main.style.opacity = "1";

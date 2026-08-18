@@ -9,6 +9,8 @@ window.KAIMONO_PRODUCTS = [
     media: [
       { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", poster: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80",
       label: "Official Launch Trailer" },
+      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", poster: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80",
+      label: "Gameplay Preview" },
     ],
     screenshots: [
       "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80",
@@ -34,7 +36,8 @@ window.KAIMONO_PRODUCTS = [
     releaseDate: "December 15, 2026", developer: "HoYoverse", publisher: "HoYoverse",
     tags: ["Turn-based", "RPG", "Sci-Fi", "Fantasy", "Singleplayer"],
     media: [
-      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", poster: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80", label: "Star Rail — Launch Trailer" }
+      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", poster: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80", label: "Star Rail — Launch Trailer" },
+      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", poster: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80", label: "Gameplay Preview" }
     ],
     screenshots: [
       "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80",
@@ -85,7 +88,8 @@ window.KAIMONO_PRODUCTS = [
     releaseDate: "December 2025", developer: "CAPCOM", publisher: "CAPCOM",
     tags: ["Action", "Multiplayer", "Co-op", "Open World", "Hunting"],
     media: [
-      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", poster: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1200&q=80", label: "Iceborne Launch Trailer" }
+      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", poster: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1200&q=80", label: "Iceborne Launch Trailer" },
+      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", poster: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80", label: "Gameplay Preview" }
     ],
     screenshots: [
       "https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1200&q=80",
@@ -186,7 +190,8 @@ window.KAIMONO_PRODUCTS = [
     releaseDate: "May 2026", developer: "FromSoftware", publisher: "Bandai Namco",
     tags: ["Action RPG", "Soulslike", "Singleplayer", "Open World"],
     media: [
-      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", poster: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80", label: "Shadow Trailer" }
+      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", poster: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80", label: "Shadow Trailer" },
+      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4", poster: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80", label: "Gameplay Preview" }
     ],
     screenshots: [
       "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80",

@@ -430,21 +430,21 @@
 
   {% include "dashboard/partials/topbar.html" %}
 
-  <div class="flex flex-1 px-6 pt-2 pb-6 gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+  <div class="flex flex-1 px-3 sm:px-6 pt-2 pb-4 sm:pb-6 gap-3 sm:gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
 
     {% include "dashboard/partials/sidebar.html" %}
 
     <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4" id="main-content">
 
       <!-- BREADCRUMB + CONTROLS -->
-      <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
+      <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-2 pt-1 pb-1 shrink-0">
         <div class="flex items-baseline gap-1">
           <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">ANIME MERCH E-COMMERCE <span class="font-bold" style="color: var(--text-primary);">SHOP</span> / <span class="font-bold" style="color: var(--text-primary);">HOSHINO ICHIKA</span></h1>
         </div>
-        <div class="flex items-center gap-2.5">
-          <div class="relative">
+        <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+          <div class="relative flex-1 min-w-[160px] sm:flex-none">
             <input type="text" id="search-input" placeholder="Search games, figures, apparel..."
-                   class="themed-input w-72 pl-10 pr-4 py-2.5 rounded-full text-xs focus:outline-none border shadow-sm font-semibold transition-all">
+                   class="themed-input w-full sm:w-72 pl-10 pr-4 py-2.5 rounded-full text-xs focus:outline-none border shadow-sm font-semibold transition-all">
             <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style="color: var(--text-muted);"></i>
             <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full btn-ghost flex items-center justify-center transition-colors">
               <i data-lucide="x" class="w-3 h-3"></i>
@@ -469,14 +469,14 @@
         <div class="absolute -top-32 -right-32 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="relative z-10 grid grid-cols-[1.2fr_1fr] gap-8 p-8 items-center">
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-6 md:gap-8 p-5 md:p-8 items-center">
           <div class="flex flex-col gap-5">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-white pulse-dot"></span>
               <span class="text-[10px] font-bold text-white/80 uppercase tracking-[0.2em]">Limited Event · Live Now</span>
             </div>
 
-            <h2 class="text-5xl font-extrabold text-white leading-[1.05] tracking-tight">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-[1.05] tracking-tight">
               Summer Anime<br>Festival <span class="italic font-serif">2026</span>
             </h2>
 
@@ -484,7 +484,7 @@
               Exclusive collection drops, up to <span class="text-white font-bold">70% off</span> rare figures, limited apparel & imported games. Free worldwide shipping on orders above $80.
             </p>
 
-            <div class="flex items-center gap-2.5 mt-1">
+            <div class="flex flex-wrap items-center gap-2.5 mt-1">
               <span class="text-[10px] font-bold text-white/60 uppercase tracking-wider mr-1">Ends in</span>
               <div class="bg-white/10 backdrop-blur rounded-xl px-3 py-2 text-center min-w-[52px] border border-white/10">
                 <p id="cd-days" class="text-xl font-extrabold text-white leading-none">03</p>
@@ -507,7 +507,7 @@
               </div>
             </div>
 
-            <div class="flex items-center gap-2.5 mt-2">
+            <div class="flex flex-wrap items-center gap-2.5 mt-2">
               <button id="explore-btn" class="bg-white hover:bg-slate-100 text-[#1a1c2a] font-bold px-6 py-3 rounded-full text-xs flex items-center gap-2 shadow-lg transition-all hover:-translate-y-0.5">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Explore Collection
               </button>
@@ -516,7 +516,7 @@
               </button>
             </div>
 
-            <div class="flex items-center gap-4 mt-1 pt-4 border-t border-white/10">
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1 pt-4 border-t border-white/10">
               <div class="flex items-center gap-1.5">
                 <i data-lucide="truck" class="w-3.5 h-3.5 text-white/70"></i>
                 <span class="text-[10px] font-semibold text-white/70">Free shipping $80+</span>
@@ -674,7 +674,7 @@
   <!-- QUICK VIEW MODAL -->
   <div id="modal-backdrop" class="modal-backdrop"></div>
   <div id="quick-view-modal" class="modal-content rounded-3xl border shadow-2xl w-[900px] max-w-[95vw]">
-    <div id="modal-content" class="grid grid-cols-2 gap-0">
+    <div id="modal-content" class="grid grid-cols-1 md:grid-cols-2 gap-0">
       <!-- Rendered by JS -->
     </div>
   </div>
@@ -1250,7 +1250,7 @@
           </div>
         </div>
 
-        <div class="p-8 flex flex-col">
+        <div class="p-5 sm:p-8 flex flex-col">
           <p class="text-[10px] font-bold uppercase tracking-[0.2em]" style="color: var(--text-muted);">${p.brand}</p>
           <h2 class="text-2xl font-extrabold leading-tight mt-1" style="color: var(--text-primary);">${p.name}</h2>
           <div class="flex items-center gap-2 mt-2">
