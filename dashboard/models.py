@@ -131,11 +131,23 @@ class GameSubmission(models.Model):
 
     def to_product_data(self):
         """Build the ShopProduct.data dict from this submission."""
+        from .forms import youtube_info
         tags_list = [t.strip() for t in self.tags.split(',') if t.strip()]
         badges_list = [b.strip() for b in self.badges.split(',') if b.strip()]
         media = []
         if self.trailer_url:
-            media.append({'url': self.trailer_url, 'youtube': True})
+            info = youtube_info(self.trailer_url)
+            if info:
+                media.append({
+                    'type': 'video',
+                    'src': info['embed'],
+                    'poster': info['thumb'],
+                    'label': 'Trailer',
+                    'youtube': True,
+                    'url': self.trailer_url,
+                })
+            else:
+                media.append({'url': self.trailer_url, 'youtube': True})
         return {
             'name': self.name,
             'category': self.category,
