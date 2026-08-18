@@ -1,0 +1,7 @@
+main/
+db.sqlite3
+.git/
+*.png
+.env
+.env.local
+staticfiles/
