@@ -1,0 +1,355 @@
+{% load static %}
+{# Individual post card partial – used by main page loop and AJAX responses #}
+
+{% if post.post_type == 'announcement' %}
+<article class="post-card rounded-2xl border shadow-sm shrink-0 relative overflow-hidden" data-post-id="{{ post.id }}">
+  <div class="absolute left-0 top-0 bottom-0 w-1" style="background: var(--brand);"></div>
+  <div class="p-4 pl-5 sm:p-5 sm:pl-5">
+    <div class="flex items-center gap-2 mb-2">
+      {% if post.is_pinned %}
+      <span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Pinned</span>
+      {% endif %}
+      <span class="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase" style="color: var(--text-secondary); background: var(--border-soft);">Announcement</span>
+    </div>
+    <div class="flex items-center gap-2.5 mb-2">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background: var(--brand); color: var(--on-brand);"><i data-lucide="megaphone" class="w-4 h-4"></i></div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-extrabold" style="color: var(--text-primary);">{{ post.author_name }}</span>
+          {% if post.author_badge == 'verified' %}
+          <i data-lucide="badge-check" class="w-3.5 h-3.5 icon-brand"></i>
+          {% endif %}
+        </div>
+        <p class="text-[10px]" style="color: var(--text-muted);">Admin · {{ post.time_ago }} · {{ post.visibility }}</p>
+      </div>
+      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+    </div>
+    <h3 class="text-sm font-extrabold mb-1.5" style="color: var(--text-primary);">{{ post.title }}</h3>
+    <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">{{ post.content }}</p>
+
+    {% if post.images.all %}
+    <div class="rounded-xl overflow-hidden mb-3 border" style="border-color: var(--border-soft);">
+      <img src="{{ post.images.first.url }}" alt="" class="w-full h-40 object-cover">
+    </div>
+    {% endif %}
+
+    <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
+      <div class="flex items-center gap-1.5">
+        <span class="flex items-center -space-x-1">
+          {% for r in post.reactions %}
+          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="{{ r.reaction_type }}" class="w-2.5 h-2.5 fill-current"></i></span>
+          {% endfor %}
+        </span>
+        <span class="reaction-count text-[10px] font-semibold" style="color: var(--text-muted);">{{ post.reaction_count }} reactions</span>
+      </div>
+      <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);">
+        <span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold {% if post.is_liked %}btn-liked{% endif %}" style="color: {% if post.is_liked %}var(--brand){% else %}var(--text-secondary){% endif %}; {% if post.is_liked %}background: var(--brand-soft);{% endif %}">
+        <i data-lucide="thumbs-up" class="w-3.5 h-3.5 {% if post.is_liked %}fill-current{% endif %}"></i>
+        <span class="like-label">{% if post.is_liked %}Liked{% else %}Like{% endif %}</span>
+      </button>
+      <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);">
+        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment
+      </button>
+      <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);">
+        <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share
+      </button>
+      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold {% if post.is_bookmarked %}btn-bookmarked{% endif %}" style="color: {% if post.is_bookmarked %}var(--brand){% else %}var(--text-secondary){% endif %}; {% if post.is_bookmarked %}background: var(--brand-soft);{% endif %}">
+        <i data-lucide="bookmark" class="w-3.5 h-3.5 {% if post.is_bookmarked %}fill-current{% endif %}"></i>
+        <span class="bookmark-label">{% if post.is_bookmarked %}Saved{% else %}Save{% endif %}</span>
+      </button>
+    </div>
+
+    <!-- Comment Section (hidden by default) -->
+    <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <div class="comments-list flex flex-col gap-2 mb-3"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border-color: var(--border-soft); border: 1px solid;"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
+        <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% elif post.post_type == 'image' %}
+<article class="post-card rounded-2xl border shadow-sm shrink-0" data-post-id="{{ post.id }}">
+  <div class="p-4 sm:p-5">
+    <div class="flex items-center gap-2.5 mb-3">
+      <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);"><img src="{{ post.author_avatar }}" alt="{{ post.author_name }}" class="w-full h-full object-cover"></div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-extrabold" style="color: var(--text-primary);">{{ post.author_name }}</span>
+          {% if post.channel %}
+          <span class="text-[10px]" style="color: var(--text-muted);">in</span>
+          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="color: var(--text-secondary); background: var(--border-soft);">#{{ post.channel.name }}</span>
+          {% endif %}
+        </div>
+        <p class="text-[10px]" style="color: var(--text-muted);">{{ post.time_ago }} · {{ post.visibility }}</p>
+      </div>
+      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+    </div>
+    <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">{{ post.content }}</p>
+
+    {% if post.images.all %}
+    <div class="grid grid-cols-2 gap-1.5 rounded-xl overflow-hidden mb-3">
+      {% for img in post.images.all %}
+      <img src="{{ img.url }}" alt="" class="w-full h-32 object-cover">
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
+      <div class="flex items-center gap-1.5">
+        <span class="flex items-center -space-x-1">
+          {% for r in post.reactions %}
+          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="{{ r.reaction_type }}" class="w-2.5 h-2.5 fill-current"></i></span>
+          {% endfor %}
+        </span>
+        <span class="reaction-count text-[10px] font-semibold" style="color: var(--text-muted);">{{ post.reaction_count }} reactions</span>
+      </div>
+      <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
+    </div>
+
+    <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold {% if post.is_liked %}btn-liked{% endif %}" style="color: {% if post.is_liked %}var(--brand){% else %}var(--text-secondary){% endif %}; {% if post.is_liked %}background: var(--brand-soft);{% endif %}">
+        <i data-lucide="thumbs-up" class="w-3.5 h-3.5 {% if post.is_liked %}fill-current{% endif %}"></i>
+        <span class="like-label">{% if post.is_liked %}Liked{% else %}Like{% endif %}</span>
+      </button>
+      <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
+      <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
+      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold {% if post.is_bookmarked %}btn-bookmarked{% endif %}" style="color: {% if post.is_bookmarked %}var(--brand){% else %}var(--text-secondary){% endif %}; {% if post.is_bookmarked %}background: var(--brand-soft);{% endif %}">
+        <i data-lucide="bookmark" class="w-3.5 h-3.5 {% if post.is_bookmarked %}fill-current{% endif %}"></i>
+        <span class="bookmark-label">{% if post.is_bookmarked %}Saved{% else %}Save{% endif %}</span>
+      </button>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <div class="comments-list flex flex-col gap-2 mb-3"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
+        <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% elif post.post_type == 'poll' %}
+<article class="post-card rounded-2xl border shadow-sm shrink-0" data-post-id="{{ post.id }}">
+  <div class="p-4 sm:p-5">
+    <div class="flex items-center gap-2.5 mb-3">
+      <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);"><img src="{{ post.author_avatar }}" alt="{{ post.author_name }}" class="w-full h-full object-cover"></div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-extrabold" style="color: var(--text-primary);">{{ post.author_name }}</span>
+          {% if post.channel %}
+          <span class="text-[10px]" style="color: var(--text-muted);">in</span>
+          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="color: var(--text-secondary); background: var(--border-soft);">#{{ post.channel.name }}</span>
+          {% endif %}
+        </div>
+        <p class="text-[10px]" style="color: var(--text-muted);">{{ post.time_ago }} · {{ post.visibility }}</p>
+      </div>
+      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+    </div>
+    {% if post.poll_obj %}
+    <div class="flex items-center gap-2 mb-2">
+      <i data-lucide="bar-chart-3" class="w-4 h-4 icon-brand"></i>
+      <span class="poll-meta text-[10px] font-bold uppercase tracking-wider" style="color: var(--brand);">Poll · <span class="poll-votes">{{ post.poll_obj.total_votes }}</span> votes · {{ post.poll_obj.time_left }}</span>
+    </div>
+    <h3 class="text-sm font-extrabold mb-3" style="color: var(--text-primary);">{{ post.poll_obj.question }}</h3>
+    <div class="poll-options flex flex-col gap-2 mb-3">
+      {% for opt in post.poll_options %}
+      <button class="poll-option relative border-2 rounded-xl p-3.5 text-left overflow-hidden {% if opt.is_selected %}voted{% endif %}" style="background: var(--bg-card); border-color: var(--border-soft);" data-option-id="{{ opt.id }}">
+        <div class="poll-bar absolute inset-0 transition-all duration-300 ease-out" style="background: {% if opt.is_selected %}var(--brand-soft){% else %}var(--border-soft){% endif %}; width: {{ opt.percentage }}%"></div>
+        <div class="relative flex items-center justify-between">
+          {% if opt.is_selected %}
+          <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 icon-brand"></i><span class="text-xs font-bold" style="color: var(--text-primary);">{{ opt.label }}</span></div>
+          {% else %}
+          <span class="text-xs font-bold" style="color: var(--text-primary);">{{ opt.label }}</span>
+          {% endif %}
+          <span class="poll-pct text-xs font-extrabold px-2 py-0.5 rounded-full" style="color: var(--brand); background: var(--brand-soft);">{{ opt.percentage }}%</span>
+        </div>
+      </button>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
+      <span class="text-[10px] font-semibold" style="color: var(--text-muted);"><span class="poll-votes">{{ post.poll_obj.total_votes|default:"0" }}</span> votes{% if post.poll_obj %} · Your vote is counted{% endif %}</span>
+      <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
+    </div>
+    <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
+      <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
+      <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
+      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> <span class="bookmark-label">Save</span></button>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <div class="comments-list flex flex-col gap-2 mb-3"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
+        <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% elif post.post_type == 'discussion' %}
+<article class="post-card rounded-2xl border shadow-sm shrink-0" data-post-id="{{ post.id }}">
+  <div class="p-4 sm:p-5">
+    <div class="flex items-center gap-2.5 mb-3">
+      <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);"><img src="{{ post.author_avatar }}" alt="{{ post.author_name }}" class="w-full h-full object-cover"></div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-extrabold" style="color: var(--text-primary);">{{ post.author_name }}</span>
+          {% if post.channel %}
+          <span class="text-[10px]" style="color: var(--text-muted);">in</span>
+          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="color: var(--text-secondary); background: var(--border-soft);">#{{ post.channel.name }}</span>
+          {% endif %}
+        </div>
+        <p class="text-[10px]" style="color: var(--text-muted);">{{ post.time_ago }} · {{ post.visibility }}</p>
+      </div>
+      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+    </div>
+    {% if post.title %}
+    <h3 class="text-sm font-extrabold mb-2" style="color: var(--text-primary);">{{ post.title }}</h3>
+    {% endif %}
+    <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">{{ post.content }}</p>
+    {% if post.tags.all %}
+    <div class="flex items-center gap-1.5 mb-3 flex-wrap">
+      {% for tag in post.tags.all %}
+      {% if tag.is_highlighted %}
+      <span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full">#{{ tag.name }}</span>
+      {% else %}
+      <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="color: var(--text-secondary); background: var(--border-soft);">#{{ tag.name }}</span>
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
+      <div class="flex items-center gap-1.5">
+        <span class="flex items-center -space-x-1">
+          {% for r in post.reactions %}
+          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="{{ r.reaction_type }}" class="w-2.5 h-2.5"></i></span>
+          {% empty %}
+          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="thumbs-up" class="w-2.5 h-2.5"></i></span>
+          {% endfor %}
+        </span>
+        <span class="reaction-count text-[10px] font-semibold" style="color: var(--text-muted);">{{ post.reaction_count }} reactions</span>
+      </div>
+      <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
+    </div>
+    <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
+      <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
+      <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
+      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> <span class="bookmark-label">Save</span></button>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <div class="comments-list flex flex-col gap-2 mb-3"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
+        <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% elif post.post_type == 'guide' %}
+<article class="post-card rounded-2xl border shadow-sm shrink-0" data-post-id="{{ post.id }}">
+  <div class="p-4 sm:p-5">
+    <div class="flex items-center gap-2.5 mb-3">
+      <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);"><img src="{{ post.author_avatar }}" alt="{{ post.author_name }}" class="w-full h-full object-cover"></div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-extrabold" style="color: var(--text-primary);">{{ post.author_name }}</span>
+          {% if post.author_badge == 'verified' %}
+          <i data-lucide="badge-check" class="w-3.5 h-3.5 icon-brand"></i>
+          {% endif %}
+          {% if post.channel %}
+          <span class="text-[10px]" style="color: var(--text-muted);">in</span>
+          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="color: var(--text-secondary); background: var(--border-soft);">#{{ post.channel.name }}</span>
+          {% endif %}
+        </div>
+        <p class="text-[10px]" style="color: var(--text-muted);">{{ post.time_ago }} · {{ post.visibility }}</p>
+      </div>
+      <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+    </div>
+    <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">{{ post.content }}</p>
+
+    {% if post.images.all %}
+    {% with guide_img=post.images.first %}
+    <div class="rounded-xl overflow-hidden border mb-3 group cursor-pointer transition-colors" style="border-color: var(--border-soft);">
+      <div class="relative h-32 overflow-hidden">
+        <img src="{{ guide_img.url }}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent"></div>
+        <div class="absolute bottom-3 left-3 right-3"><span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Guide · 15 min read</span></div>
+      </div>
+      <div class="p-3">
+        <h4 class="text-xs font-extrabold mb-1" style="color: var(--text-primary);">{{ guide_img.caption }}</h4>
+        <p class="text-[10px] line-clamp-2" style="color: var(--text-muted);">Complete breakdown of optimal farming routes, team compositions, and weekly reset strategies...</p>
+        <div class="flex items-center gap-2 mt-2 text-[10px]" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> {{ post.view_count }}</span>
+          <span class="flex items-center gap-1"><i data-lucide="thumbs-up" class="w-3 h-3"></i> {{ post.reaction_count }}</span>
+          <span class="flex items-center gap-1"><i data-lucide="bookmark" class="w-3 h-3"></i> {{ post.bookmark_count }}</span>
+        </div>
+      </div>
+    </div>
+    {% endwith %}
+    {% endif %}
+
+    <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
+      <div class="flex items-center gap-1.5">
+        <span class="flex items-center -space-x-1">
+          {% for r in post.reactions %}
+          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="{{ r.reaction_type }}" class="w-2.5 h-2.5 fill-current"></i></span>
+          {% endfor %}
+        </span>
+        <span class="reaction-count text-[10px] font-semibold" style="color: var(--text-muted);">{{ post.reaction_count }} reactions</span>
+      </div>
+      <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
+    </div>
+    <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
+      <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
+      <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
+      <button class="bookmark-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> <span class="bookmark-label">Save</span></button>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="comment-section hidden mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
+      <div class="comments-list flex flex-col gap-2 mb-3"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=60&q=80" alt="me" class="w-full h-full object-cover"></div>
+        <input type="text" class="comment-input flex-1 text-[11px] px-3 py-2 rounded-full border focus:outline-none themed-input" placeholder="Write a comment...">
+        <button class="submit-comment-btn p-2 rounded-full btn-brand transition-all" style="opacity: 0.5;" disabled>
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% endif %}

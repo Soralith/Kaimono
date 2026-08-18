@@ -1,9 +1,13 @@
 from django.core.management.base import BaseCommand
-from dashboard.models import WishlistItem, LibraryGame
+from django.contrib.auth import get_user_model
+from dashboard.models import (
+    WishlistItem, LibraryGame,
+    CommunityGame, CommunityMember, UserFollowedGame,
+)
 
 
 class Command(BaseCommand):
-    help = "Seed the database with demo wishlist items and library games."
+    help = "Seed the database with demo wishlist items, library games, community members, and followed games."
 
     def handle(self, *args, **options):
         WishlistItem.objects.all().delete()
@@ -217,9 +221,81 @@ class Command(BaseCommand):
         for game in games:
             LibraryGame.objects.create(**game)
 
+        # ── Community: friends ─────────────────────────────────────
+        CommunityMember.objects.all().delete()
+        UserFollowedGame.objects.all().delete()
+
+        members = [
+            {
+                "username": "shiro_kun", "display_name": "Shiro", "role": "gamer",
+                "avatar_url": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=100&q=80",
+                "bio": "Collecting every Genshin figure and rhythm game day-one. Ask me about the latest figure polls.",
+                "is_online": True, "last_active": "Now", "level": 42,
+                "games_played": 128, "achievements": 96, "followers": 1204,
+                "member_since": "Mar 2024", "order": 1,
+            },
+            {
+                "username": "hana_illustrator", "display_name": "Hana", "role": "developer",
+                "avatar_url": "https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=100&q=80",
+                "bio": "Character illustrator & co-op captain. I draw what I play.",
+                "is_online": True, "last_active": "Now", "level": 38,
+                "games_played": 87, "achievements": 71, "followers": 2891,
+                "member_since": "Jan 2023", "order": 2,
+            },
+            {
+                "username": "yuki_tactics", "display_name": "Yuki", "role": "gamer",
+                "avatar_url": "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=100&q=80",
+                "bio": "Turn-based tactics 4 life. Persona and Fire Emblem enjoyer.",
+                "is_online": False, "last_active": "1h ago", "level": 51,
+                "games_played": 176, "achievements": 142, "followers": 866,
+                "member_since": "Jun 2022", "order": 3,
+            },
+            {
+                "username": "ren_dev", "display_name": "Ren", "role": "developer",
+                "avatar_url": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=100&q=80",
+                "bio": "Indie dev sharing devlogs and playtests. Lore is my love language.",
+                "is_online": False, "last_active": "3h ago", "level": 29,
+                "games_played": 54, "achievements": 40, "followers": 1520,
+                "member_since": "Nov 2024", "order": 4,
+            },
+            {
+                "username": "mei_star", "display_name": "Mei", "role": "gamer",
+                "avatar_url": "https://images.unsplash.com/photo-1518725522904-4b3939358342?auto=format&fit=crop&w=100&q=80",
+                "bio": "Burnout enjoyer. Screenshot queen of the fan-art channel.",
+                "is_online": True, "last_active": "5m ago", "level": 33,
+                "games_played": 92, "achievements": 78, "followers": 432,
+                "member_since": "Aug 2025", "order": 5,
+            },
+            {
+                "username": "aoi_vinyl", "display_name": "Aoi", "role": "gamer",
+                "avatar_url": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=100&q=80",
+                "bio": "Vinyl spins + ost collector. Currently deep-diving Persona 5.",
+                "is_online": False, "last_active": "Last seen 2d ago", "level": 45,
+                "games_played": 113, "achievements": 89, "followers": 977,
+                "member_since": "Feb 2023", "order": 6,
+            },
+        ]
+        for m in members:
+            CommunityMember.objects.create(**m)
+
+        # ── Community: per-user followed games ─────────────────────
+        game_names = ["Project Sekai", "Genshin Impact", "Elden Ring", "Persona 3 Reload"]
+        games_map = {g.name: g for g in CommunityGame.objects.filter(name__in=game_names)}
+        User = get_user_model()
+        for user in User.objects.all():
+            user_name = user.display_name or user.username
+            # Each user follows a couple of the demo games so the card isn't empty.
+            for name in game_names[:3]:
+                if name in games_map:
+                    UserFollowedGame.objects.get_or_create(
+                        user_name=user_name, game=games_map[name]
+                    )
+
         self.stdout.write(
             self.style.SUCCESS(
-                f"Seeded {WishlistItem.objects.count()} wishlist items and "
-                f"{LibraryGame.objects.count()} library games."
+                f"Seeded {WishlistItem.objects.count()} wishlist items, "
+                f"{LibraryGame.objects.count()} library games, "
+                f"{CommunityMember.objects.count()} members, and "
+                f"{UserFollowedGame.objects.count()} game follows."
             )
         )

@@ -162,6 +162,7 @@
   </style>
 </head>
 <body data-product-id="{{ product_id }}" class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+  <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
 
   {% include "dashboard/partials/topbar.html" %}
 
@@ -786,9 +787,21 @@
       $g("gd-follow").addEventListener("click", function () {
         var f = readLS("kaimono_follows");
         var i = f.indexOf(p.id);
-        if (i > -1) { f.splice(i, 1); $g("gd-follow").classList.remove("active"); openToast("Unfollowed — updates stopped", "bell-off"); }
-        else { f.push(p.id); $g("gd-follow").classList.add("active"); openToast("Following — you'll get restock alerts", "bell-plus"); }
+        var following;
+        if (i > -1) { f.splice(i, 1); $g("gd-follow").classList.remove("active"); openToast("Unfollowed — updates stopped", "bell-off"); following = false; }
+        else { f.push(p.id); $g("gd-follow").classList.add("active"); openToast("Following — you'll get restock alerts", "bell-plus"); following = true; }
         writeLS("kaimono_follows", f);
+        // Sync with community "Games You Follow"
+        if (p.category === "games") {
+          try {
+            var img = (p.media && p.media[0] && p.media[0].poster) || p.image || "";
+            fetch("{% url 'community_toggle_follow_game' %}", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "X-CSRFToken": document.getElementById("csrf-token").value },
+              body: JSON.stringify({ name: p.name, image: img, followed: following })
+            }).catch(function () {});
+          } catch (e) {}
+        }
       });
 
       $g("gd-buy").addEventListener("click", function () {

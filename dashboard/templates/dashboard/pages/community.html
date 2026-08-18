@@ -8,158 +8,79 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ===== THEME VARIABLES (GLOBAL) ===== */
     :root, [data-theme="silver"] {
-      --bg-primary: #E2E7EE;
-      --bg-surface: #F7F9FC;
-      --bg-card: #ffffff;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #94a3b8;
-      --border-color: #ffffff;
-      --border-soft: #e2e8f0;
-      --brand: #323446;
-      --on-brand: #ffffff;
-      --brand-soft: rgba(50, 52, 70, 0.12);
-      --hover-bg: rgba(255, 255, 255, 0.7);
-      --shadow-color: rgba(50, 52, 70, 0.1);
+      --bg-primary: #E2E7EE; --bg-surface: #F7F9FC; --bg-card: #ffffff;
+      --text-primary: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
+      --border-color: #ffffff; --border-soft: #e2e8f0;
+      --brand: #323446; --on-brand: #ffffff; --brand-soft: rgba(50,52,70,0.12);
+      --hover-bg: rgba(255,255,255,0.7); --shadow-color: rgba(50,52,70,0.1);
     }
     [data-theme="midnight"] {
-      --bg-primary: #0f172a;
-      --bg-surface: #1e293b;
-      --bg-card: #334155;
-      --text-primary: #f1f5f9;
-      --text-secondary: #cbd5e1;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
-      --border-soft: #475569;
-      --brand: #64748b;
-      --on-brand: #ffffff;
-      --brand-soft: rgba(148, 163, 184, 0.15);
-      --hover-bg: rgba(255,255,255,0.03);
-      --shadow-color: rgba(0, 0, 0, 0.3);
+      --bg-primary: #0f172a; --bg-surface: #1e293b; --bg-card: #334155;
+      --text-primary: #f1f5f9; --text-secondary: #cbd5e1; --text-muted: #94a3b8;
+      --border-color: #334155; --border-soft: #475569;
+      --brand: #64748b; --on-brand: #ffffff; --brand-soft: rgba(148,163,184,0.15);
+      --hover-bg: rgba(255,255,255,0.03); --shadow-color: rgba(0,0,0,0.3);
     }
     [data-theme="paper"] {
-      --bg-primary: #F5F1E8;
-      --bg-surface: #FAF7F0;
-      --bg-card: #ffffff;
-      --text-primary: #1c1917;
-      --text-secondary: #57534e;
-      --text-muted: #a8a29e;
-      --border-color: #e7e5e4;
-      --border-soft: #d6d3d1;
-      --brand: #292524;
-      --on-brand: #ffffff;
-      --brand-soft: rgba(41, 37, 36, 0.1);
-      --hover-bg: rgba(255, 255, 255, 0.6);
-      --shadow-color: rgba(41, 37, 36, 0.08);
+      --bg-primary: #F5F1E8; --bg-surface: #FAF7F0; --bg-card: #ffffff;
+      --text-primary: #1c1917; --text-secondary: #57534e; --text-muted: #a8a29e;
+      --border-color: #e7e5e4; --border-soft: #d6d3d1;
+      --brand: #292524; --on-brand: #ffffff; --brand-soft: rgba(41,37,36,0.1);
+      --hover-bg: rgba(255,255,255,0.6); --shadow-color: rgba(41,37,36,0.08);
     }
     [data-theme="obsidian"] {
-      --bg-primary: #0a0a0a;
-      --bg-surface: #171717;
-      --bg-card: #1f1f1f;
-      --text-primary: #fafafa;
-      --text-secondary: #a3a3a3;
-      --text-muted: #525252;
-      --border-color: #262626;
-      --border-soft: #404040;
-      --brand: #fafafa;
-      --on-brand: #0a0a0a;
-      --brand-soft: rgba(255, 255, 255, 0.08);
-      --hover-bg: rgba(255,255,255,0.03);
-      --shadow-color: rgba(0, 0, 0, 0.5);
+      --bg-primary: #0a0a0a; --bg-surface: #171717; --bg-card: #1f1f1f;
+      --text-primary: #fafafa; --text-secondary: #a3a3a3; --text-muted: #525252;
+      --border-color: #262626; --border-soft: #404040;
+      --brand: #fafafa; --on-brand: #0a0a0a; --brand-soft: rgba(255,255,255,0.08);
+      --hover-bg: rgba(255,255,255,0.03); --shadow-color: rgba(0,0,0,0.5);
     }
-
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-secondary);
-      transition: background-color 300ms ease, color 300ms ease;
-    }
-    [data-theme] h1, [data-theme] h2, [data-theme] h3, [data-theme] h4 { color: var(--text-primary); }
-
-    .surface-card {
-      background-color: var(--bg-surface) !important;
-      border-color: var(--border-color) !important;
-      color: var(--text-secondary);
-    }
-
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-secondary); transition: background 300ms ease, color 300ms ease; }
+    [data-theme] h1,[data-theme] h2,[data-theme] h3,[data-theme] h4 { color: var(--text-primary); }
+    .surface-card { background-color: var(--bg-surface) !important; border-color: var(--border-color) !important; color: var(--text-secondary); }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
-
     .pulse-dot { animation: pulse 2s ease-in-out infinite; }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    /* Story ring menggunakan brand color */
-    .story-ring {
-      background: linear-gradient(135deg, var(--brand) 0%, color-mix(in srgb, var(--brand) 60%, black) 50%, var(--brand) 100%);
-      padding: 2px;
-    }
-    .story-ring.seen {
-      background: var(--border-soft);
-      padding: 2px;
-    }
-    .story-ring-inner {
-      border-color: var(--bg-surface) !important;
-    }
-
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+    .story-ring { background: linear-gradient(135deg, var(--brand) 0%, color-mix(in srgb, var(--brand) 60%, black) 50%, var(--brand) 100%); padding: 2px; }
+    .story-ring.seen { background: var(--border-soft); padding: 2px; }
+    .story-ring-inner { border-color: var(--bg-surface) !important; }
     .post-card { transition: all 250ms ease; background-color: var(--bg-surface); border-color: var(--border-color); }
     .post-card:hover { border-color: var(--border-soft); }
-
-    .feed-filter {
-      transition: all 200ms ease;
-      color: var(--text-muted);
-    }
-    .feed-filter.active {
-      background-color: var(--brand);
-      color: var(--on-brand);
-    }
-    .feed-filter:not(.active):hover {
-      color: var(--text-primary);
-    }
-
-    .poll-option { transition: all 200ms ease; }
+    .feed-filter { transition: all 200ms ease; color: var(--text-muted); cursor: pointer; }
+    .feed-filter.active { background-color: var(--brand); color: var(--on-brand); }
+    .feed-filter:not(.active):hover { color: var(--text-primary); }
+    .poll-option { transition: all 200ms ease; cursor: pointer; }
     .poll-option:hover { background-color: var(--hover-bg); }
-
-    .rail-item { transition: background-color 200ms ease; color: var(--text-secondary); }
+    .rail-item { transition: background-color 200ms ease; color: var(--text-secondary); cursor: pointer; }
     .rail-item:hover { background: var(--hover-bg); }
-
-    /* Helper classes (FIXED untuk obsidian) */
-    .btn-brand {
-      background-color: var(--brand);
-      color: var(--on-brand);
-      transition: opacity 200ms ease;
-    }
+    .channel-link { color: var(--text-secondary); }
+    .channel-link .ch-name,
+    .channel-link .ch-icon { color: inherit; }
+    .channel-link.rail-item:hover { background: var(--hover-bg); color: var(--text-primary); }
+    .channel-link.btn-brand { background-color: var(--brand); color: var(--on-brand); }
+    .channel-link.btn-brand:hover { background-color: var(--brand); color: var(--on-brand); opacity: 0.9; }
+    .btn-brand { background-color: var(--brand); color: var(--on-brand); transition: opacity 200ms ease; }
     .btn-brand:hover { opacity: 0.9; }
-    .btn-ghost {
-      background-color: var(--bg-card);
-      color: var(--text-secondary);
-      border-color: var(--border-soft);
-    }
-    .btn-ghost:hover {
-      background-color: var(--hover-bg);
-      color: var(--text-primary);
-    }
     .icon-muted { color: var(--text-muted); }
     .icon-brand { color: var(--brand); fill: var(--brand); }
-
-    .themed-input {
-      background-color: var(--bg-surface);
-      color: var(--text-primary);
-      border-color: var(--border-color);
-    }
+    .themed-input { background-color: var(--bg-surface); color: var(--text-primary); border-color: var(--border-color); }
     .themed-input::placeholder { color: var(--text-muted); }
-    .themed-input:focus {
-      border-color: var(--brand);
-    }
+    .themed-input:focus { border-color: var(--brand); }
+    .badge-brand { background-color: var(--brand); color: var(--on-brand); }
 
-    /* Helper class untuk badge brand */
-    .badge-brand {
-      background-color: var(--brand);
-      color: var(--on-brand);
-    }
+    /* Modal overlay */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 200ms ease; }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 1rem; width: 90%; max-width: 560px; max-height: 85vh; overflow-y: auto; transform: translateY(20px); transition: transform 200ms ease; }
+    .modal-overlay.open .modal-content { transform: translateY(0); }
+
+    /* Comment animation */
+    .comment-section { transition: all 200ms ease; }
+
+    /* Toast notification */
+    .toast { position: fixed; bottom: 24px; right: 24px; z-index: 200; background: var(--brand); color: var(--on-brand); padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 600; transform: translateY(80px); opacity: 0; transition: all 300ms ease; }
+    .toast.show { transform: translateY(0); opacity: 1; }
   </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden text-sm">
@@ -167,12 +88,11 @@
   {% include "dashboard/partials/topbar.html" %}
 
   <div class="flex flex-1 px-3 sm:px-6 pt-2 pb-4 sm:pb-6 gap-3 sm:gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
-
     {% include "dashboard/partials/sidebar.html" %}
 
     <main class="flex-1 flex flex-col gap-4 overflow-hidden pr-1 pb-4">
 
-      <!-- HEADER ROW -->
+      <!-- HEADER -->
       <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
         <div class="flex items-baseline gap-1">
           <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">ANIME MERCH E-COMMERCE <span class="font-bold" style="color: var(--text-primary);">COMMUNITY</span> / <span class="font-bold" style="color: var(--text-primary);">HOSHINO ICHIKA</span></h1>
@@ -180,388 +100,100 @@
         <div class="flex items-center gap-2">
           <span class="flex items-center gap-1.5 text-[10px] font-bold surface-card px-3 py-1.5 rounded-full border shadow-sm" style="color: var(--text-secondary);">
             <span class="w-1.5 h-1.5 rounded-full pulse-dot" style="background: var(--brand);"></span>
-            12,480 members online
+            {{ total_members|floatformat:0 }} members online
           </span>
-          <button class="btn-brand font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all">
+          <button id="create-post-btn" class="btn-brand font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all">
             <i data-lucide="plus" class="w-3.5 h-3.5"></i> Create Post
           </button>
         </div>
       </div>
 
-      <!-- STORIES ROW -->
+      <!-- STORIES -->
       <div class="surface-card rounded-[1.8rem] p-4 border shadow-sm shrink-0">
         <div class="flex items-center gap-4 overflow-x-auto">
+
+          {% for story in stories %}
           <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="relative">
-              <div class="w-14 h-14 rounded-full border-2 border-dashed flex items-center justify-center" style="border-color: var(--border-soft); background: var(--bg-card);">
-                <i data-lucide="plus" class="w-5 h-5 icon-muted"></i>
+            <div class="story-ring {% if story.is_seen %}seen{% endif %} rounded-full">
+              <div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden">
+                <img src="{{ story.avatar_url }}" alt="{{ story.username }}" class="w-full h-full object-cover">
               </div>
             </div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-secondary);">Your Story</span>
+            <span class="text-[10px] font-semibold" style="color: {% if story.is_seen %}var(--text-muted){% else %}var(--text-secondary){% endif %};">@{{ story.username }}</span>
           </div>
-          <div class="w-px h-12 shrink-0" style="background: var(--border-soft);"></div>
-          <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="story-ring rounded-full"><div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=100&q=80" alt="u" class="w-full h-full object-cover"></div></div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-secondary);">@shiro</span>
-          </div>
-          <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="story-ring rounded-full"><div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden"><img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=100&q=80" alt="u" class="w-full h-full object-cover"></div></div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-secondary);">@hana</span>
-          </div>
-          <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="story-ring rounded-full"><div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden"><img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=100&q=80" alt="u" class="w-full h-full object-cover"></div></div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-secondary);">@mika</span>
-          </div>
-          <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="story-ring rounded-full"><div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=100&q=80" alt="u" class="w-full h-full object-cover"></div></div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-secondary);">@ren</span>
-          </div>
-          <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="story-ring seen rounded-full"><div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=100&q=80" alt="u" class="w-full h-full object-cover"></div></div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-muted);">@yuki</span>
-          </div>
-          <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="story-ring rounded-full"><div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden"><img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=100&q=80" alt="u" class="w-full h-full object-cover"></div></div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-secondary);">@kai</span>
-          </div>
-          <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="story-ring rounded-full"><div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=100&q=80" alt="u" class="w-full h-full object-cover"></div></div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-secondary);">@aoi</span>
-          </div>
-          <div class="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
-            <div class="story-ring seen rounded-full"><div class="story-ring-inner w-[52px] h-[52px] rounded-full border-2 overflow-hidden"><img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=100&q=80" alt="u" class="w-full h-full object-cover"></div></div>
-            <span class="text-[10px] font-semibold" style="color: var(--text-muted);">@takumi</span>
-          </div>
+          {% endfor %}
         </div>
       </div>
 
-      <!-- 2 COLUMN: FEED (LEFT) + RAIL (RIGHT) -->
+      <!-- 2-COLUMN LAYOUT -->
       <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-4 flex-1 min-h-0">
 
-        <!-- ============ LEFT: FEED ============ -->
+        <!-- LEFT: FEED -->
         <section class="flex flex-col gap-3 overflow-y-auto pr-1">
 
           <!-- Feed Filters -->
           <div class="flex items-center gap-2 shrink-0 surface-card rounded-2xl border shadow-sm p-1.5">
-            <button class="feed-filter active text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all">For You</button>
-            <button class="feed-filter text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all">Following</button>
-            <button class="feed-filter text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all">Trending</button>
-            <button class="feed-filter text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all">Latest</button>
-            <button class="feed-filter text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all">Media</button>
-            <div class="ml-auto flex items-center gap-1.5">
-              <button class="p-1.5 rounded-full transition-all icon-muted hover:opacity-70"><i data-lucide="filter" class="w-3.5 h-3.5"></i></button>
-            </div>
+            <button class="feed-filter {% if current_feed == 'for-you' or not current_feed %}active{% endif %} text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all" data-feed="for-you">For You</button>
+            <button class="feed-filter {% if current_feed == 'following' %}active{% endif %} text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all" data-feed="following">Following</button>
+            <button class="feed-filter {% if current_feed == 'trending' %}active{% endif %} text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all" data-feed="trending">Trending</button>
+            <button class="feed-filter {% if current_feed == 'latest' %}active{% endif %} text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all" data-feed="latest">Latest</button>
+            <button class="feed-filter {% if current_feed == 'media' %}active{% endif %} text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all" data-feed="media">Media</button>
           </div>
 
-          <!-- Quick Post Composer -->
-          <div class="surface-card rounded-2xl border shadow-sm p-4 shrink-0">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);">
-                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=100&q=80" alt="me">
-              </div>
-              <button class="flex-1 text-left px-4 py-2.5 rounded-full text-xs transition-colors" style="background: var(--bg-card); color: var(--text-muted);">What's on your mind, Ichika?</button>
+          <!-- POSTS -->
+          <div id="posts-container" class="flex flex-col gap-3">
+            {% for post in posts %}
+              {% include "dashboard/partials/community_post_card.html" %}
+            {% empty %}
+            <div class="text-center py-8" style="color: var(--text-muted);">
+              <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+              <p class="text-xs font-semibold">No posts yet. Be the first to post!</p>
             </div>
-            <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-              <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="image" class="w-3.5 h-3.5"></i> Photo</button>
-              <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="video" class="w-3.5 h-3.5"></i> Video</button>
-              <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bar-chart" class="w-3.5 h-3.5"></i> Poll</button>
-              <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="smile" class="w-3.5 h-3.5"></i> Feeling</button>
-            </div>
+            {% endfor %}
           </div>
 
-          <!-- POST 1: PINNED ANNOUNCEMENT -->
-          <article class="post-card rounded-2xl border shadow-sm shrink-0 relative overflow-hidden">
-            <div class="absolute left-0 top-0 bottom-0 w-1" style="background: var(--brand);"></div>
-            <div class="p-4 pl-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Pinned</span>
-                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase" style="color: var(--text-secondary); background: var(--border-soft);">Announcement</span>
-              </div>
-              <div class="flex items-center gap-2.5 mb-2">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background: var(--brand); color: var(--on-brand);"><i data-lucide="megaphone" class="w-4 h-4"></i></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs font-extrabold" style="color: var(--text-primary);">Kaimono Official</span>
-                    <i data-lucide="badge-check" class="w-3.5 h-3.5 icon-brand"></i>
-                  </div>
-                  <p class="text-[10px]" style="color: var(--text-muted);">Admin · 2 hours ago · Public</p>
-                </div>
-                <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
-              </div>
-              <h3 class="text-sm font-extrabold mb-1.5" style="color: var(--text-primary);">🎮 Summer Sale 2026 is HERE — Up to 80% off!</h3>
-              <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">The biggest sale of the year just dropped. Get exclusive discounts on games, figures, and merch from your favorite anime series. Sale ends August 31st.</p>
-              <div class="rounded-xl overflow-hidden mb-3 border" style="border-color: var(--border-soft);">
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="sale" class="w-full h-40 object-cover">
-              </div>
-              <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-                <div class="flex items-center gap-1.5">
-                  <span class="flex items-center -space-x-1">
-                    <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="heart" class="w-2.5 h-2.5 fill-current"></i></span>
-                    <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--bg-card); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="thumbs-up" class="w-2.5 h-2.5"></i></span>
-                  </span>
-                  <span class="text-[10px] font-semibold" style="color: var(--text-muted);">2,481 reactions</span>
-                </div>
-                <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);">
-                  <span>342 comments</span><span>·</span><span>1,204 shares</span>
-                </div>
-              </div>
-              <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> Like</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Save</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- POST 2: IMAGE POST -->
-          <article class="post-card rounded-2xl border shadow-sm shrink-0">
-            <div class="p-4">
-              <div class="flex items-center gap-2.5 mb-3">
-                <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=100&q=80" alt="u"></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs font-extrabold" style="color: var(--text-primary);">shiro_kun</span>
-                    <span class="text-[10px]" style="color: var(--text-muted);">in</span>
-                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="color: var(--text-secondary); background: var(--border-soft);">#screenshots</span>
-                  </div>
-                  <p class="text-[10px]" style="color: var(--text-muted);">3 hours ago · Public</p>
-                </div>
-                <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
-              </div>
-              <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">Finally got the perfect shot of the new event stage! The lighting in this update is absolutely stunning 📸 <span style="color: var(--text-muted);">#ProjectSekai</span></p>
-              <div class="grid grid-cols-2 gap-1.5 rounded-xl overflow-hidden mb-3">
-                <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=400&q=80" alt="" class="w-full h-32 object-cover">
-                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80" alt="" class="w-full h-32 object-cover">
-                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80" alt="" class="w-full h-32 object-cover">
-                <img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=400&q=80" alt="" class="w-full h-32 object-cover">
-              </div>
-              <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-                <div class="flex items-center gap-1.5">
-                  <span class="flex items-center -space-x-1">
-                    <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="heart" class="w-2.5 h-2.5 fill-current"></i></span>
-                    <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--bg-card); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="camera" class="w-2.5 h-2.5"></i></span>
-                  </span>
-                  <span class="text-[10px] font-semibold" style="color: var(--text-muted);">You and 341 others</span>
-                </div>
-                <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span>42 comments</span><span>·</span><span>88 shares</span></div>
-              </div>
-              <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-bold" style="background: var(--brand-soft); color: var(--brand);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5 fill-current"></i> Liked</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Save</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- POST 3: POLL -->
-          <article class="post-card rounded-2xl border shadow-sm shrink-0">
-            <div class="p-4">
-              <div class="flex items-center gap-2.5 mb-3">
-                <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);"><img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=100&q=80" alt="u"></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs font-extrabold" style="color: var(--text-primary);">hana_illustrator</span>
-                    <span class="text-[10px]" style="color: var(--text-muted);">in</span>
-                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="color: var(--text-secondary); background: var(--border-soft);">#general</span>
-                  </div>
-                  <p class="text-[10px]" style="color: var(--text-muted);">5 hours ago · Public</p>
-                </div>
-                <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
-              </div>
-              <div class="flex items-center gap-2 mb-2">
-                <i data-lucide="bar-chart-3" class="w-4 h-4 icon-brand"></i>
-                <span class="text-[10px] font-bold uppercase tracking-wider" style="color: var(--brand);">Poll · 1,284 votes · 3 days left</span>
-              </div>
-              <h3 class="text-sm font-extrabold mb-3" style="color: var(--text-primary);">Which upcoming game are you most hyped for?</h3>
-              <div class="flex flex-col gap-2 mb-3">
-                <button class="poll-option relative border rounded-xl p-3 text-left overflow-hidden" style="background: var(--bg-card); border-color: var(--border-soft);">
-                  <div class="absolute inset-0" style="background: var(--brand-soft); width: 48%"></div>
-                  <div class="relative flex items-center justify-between">
-                    <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 icon-brand"></i><span class="text-xs font-bold" style="color: var(--text-primary);">Silksong</span></div>
-                    <span class="text-xs font-extrabold" style="color: var(--text-primary);">48%</span>
-                  </div>
-                </button>
-                <button class="poll-option relative border rounded-xl p-3 text-left overflow-hidden" style="background: var(--bg-card); border-color: var(--border-soft);">
-                  <div class="absolute inset-0" style="background: var(--border-soft); width: 29%"></div>
-                  <div class="relative flex items-center justify-between"><span class="text-xs font-bold" style="color: var(--text-primary);">GTA VI</span><span class="text-xs font-extrabold" style="color: var(--text-primary);">29%</span></div>
-                </button>
-                <button class="poll-option relative border rounded-xl p-3 text-left overflow-hidden" style="background: var(--bg-card); border-color: var(--border-soft);">
-                  <div class="absolute inset-0" style="background: var(--border-soft); width: 15%"></div>
-                  <div class="relative flex items-center justify-between"><span class="text-xs font-bold" style="color: var(--text-primary);">Metroid Prime 4</span><span class="text-xs font-extrabold" style="color: var(--text-primary);">15%</span></div>
-                </button>
-                <button class="poll-option relative border rounded-xl p-3 text-left overflow-hidden" style="background: var(--bg-card); border-color: var(--border-soft);">
-                  <div class="absolute inset-0" style="background: var(--border-soft); width: 8%"></div>
-                  <div class="relative flex items-center justify-between"><span class="text-xs font-bold" style="color: var(--text-primary);">Fable</span><span class="text-xs font-extrabold" style="color: var(--text-primary);">8%</span></div>
-                </button>
-              </div>
-              <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-                <span class="text-[10px] font-semibold" style="color: var(--text-muted);">1,284 votes · Your vote is counted</span>
-                <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span>128 comments</span><span>·</span><span>42 shares</span></div>
-              </div>
-              <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> Like</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Save</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- POST 4: DISCUSSION -->
-          <article class="post-card rounded-2xl border shadow-sm shrink-0">
-            <div class="p-4">
-              <div class="flex items-center gap-2.5 mb-3">
-                <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);"><img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=100&q=80" alt="u"></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs font-extrabold" style="color: var(--text-primary);">mikaelle</span>
-                    <span class="text-[10px]" style="color: var(--text-muted);">in</span>
-                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="color: var(--text-secondary); background: var(--border-soft);">#merch-trading</span>
-                  </div>
-                  <p class="text-[10px]" style="color: var(--text-muted);">8 hours ago · Public</p>
-                </div>
-                <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
-              </div>
-              <h3 class="text-sm font-extrabold mb-2" style="color: var(--text-primary);">LF: Authentic Nendoroid Ichika (1st press) — WTB or Trade</h3>
-              <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">Hey everyone! I've been hunting for the first press edition of the Ichika Nendoroid for months now. I'm willing to pay a fair price or trade for my duplicate Miku V4X figure.</p>
-              <div class="flex items-center gap-1.5 mb-3 flex-wrap">
-                <span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full">#LF</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="color: var(--text-secondary); background: var(--border-soft);">#nendoroid</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="color: var(--text-secondary); background: var(--border-soft);">#projectsekai</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="color: var(--text-secondary); background: var(--border-soft);">#trading</span>
-              </div>
-              <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-                <div class="flex items-center gap-1.5">
-                  <span class="flex items-center -space-x-1">
-                    <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="thumbs-up" class="w-2.5 h-2.5"></i></span>
-                  </span>
-                  <span class="text-[10px] font-semibold" style="color: var(--text-muted);">87 reactions</span>
-                </div>
-                <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span>32 comments</span><span>·</span><span>12 shares</span></div>
-              </div>
-              <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> Like</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="send" class="w-3.5 h-3.5"></i> DM</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Save</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- POST 5: GUIDE LINK -->
-          <article class="post-card rounded-2xl border shadow-sm shrink-0">
-            <div class="p-4">
-              <div class="flex items-center gap-2.5 mb-3">
-                <div class="w-9 h-9 rounded-full border overflow-hidden shrink-0" style="border-color: var(--border-soft);"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=100&q=80" alt="u"></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs font-extrabold" style="color: var(--text-primary);">ren_dev</span>
-                    <i data-lucide="badge-check" class="w-3.5 h-3.5 icon-brand"></i>
-                    <span class="text-[10px]" style="color: var(--text-muted);">in</span>
-                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="color: var(--text-secondary); background: var(--border-soft);">#guides</span>
-                  </div>
-                  <p class="text-[10px]" style="color: var(--text-muted);">Yesterday · Public</p>
-                </div>
-                <button class="p-1 transition-colors icon-muted hover:opacity-70"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
-              </div>
-              <p class="text-[11px] leading-relaxed mb-3" style="color: var(--text-secondary);">Just published my comprehensive guide on maximizing crystal farming in the new Honkai update.</p>
-              <div class="rounded-xl overflow-hidden border mb-3 group cursor-pointer transition-colors" style="border-color: var(--border-soft);">
-                <div class="relative h-32 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent"></div>
-                  <div class="absolute bottom-3 left-3 right-3"><span class="badge-brand text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Guide · 15 min read</span></div>
-                </div>
-                <div class="p-3">
-                  <h4 class="text-xs font-extrabold mb-1" style="color: var(--text-primary);">Ultimate Crystal Farming Guide v2.4 — 10x Efficiency</h4>
-                  <p class="text-[10px] line-clamp-2" style="color: var(--text-muted);">Complete breakdown of optimal farming routes, team compositions, and weekly reset strategies...</p>
-                  <div class="flex items-center gap-2 mt-2 text-[10px]" style="color: var(--text-muted);">
-                    <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> 18K</span>
-                    <span class="flex items-center gap-1"><i data-lucide="thumbs-up" class="w-3 h-3"></i> 2.3K</span>
-                    <span class="flex items-center gap-1"><i data-lucide="bookmark" class="w-3 h-3"></i> 842</span>
-                  </div>
-                </div>
-              </div>
-              <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-                <div class="flex items-center gap-1.5">
-                  <span class="flex items-center -space-x-1">
-                    <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="heart" class="w-2.5 h-2.5 fill-current"></i></span>
-                    <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--bg-card); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></span>
-                  </span>
-                  <span class="text-[10px] font-semibold" style="color: var(--text-muted);">2,341 reactions</span>
-                </div>
-                <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span>198 comments</span><span>·</span><span>487 shares</span></div>
-              </div>
-              <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> Like</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
-                <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Save</button>
-              </div>
-            </div>
-          </article>
-
-          <div class="flex justify-center shrink-0 py-2">
-            <button class="surface-card font-semibold px-5 py-2.5 rounded-full text-xs border shadow-sm flex items-center gap-2 transition-all" style="color: var(--text-secondary);">
+          <!-- Load More -->
+          <div id="load-more-wrap" class="flex justify-center shrink-0 py-2 {% if not has_next %}hidden{% endif %}">
+            <button id="load-more-btn" class="surface-card font-semibold px-5 py-2.5 rounded-full text-xs border shadow-sm flex items-center gap-2 transition-all hover:opacity-80" style="color: var(--text-secondary);">
               <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Load more posts
             </button>
           </div>
 
         </section>
 
-        <!-- ============ RIGHT: RAIL ============ -->
+        <!-- RIGHT: RAIL -->
         <aside class="flex flex-col gap-4 overflow-y-auto pr-1">
 
           <!-- Search -->
-          <div class="relative shrink-0">
-            <input type="text" placeholder="Search community..."
-                   class="themed-input w-full pl-10 pr-4 py-3 rounded-full text-xs focus:outline-none border shadow-sm font-medium transition-colors">
+          <form id="search-form" class="relative shrink-0" method="GET" action="{% url 'community' %}">
+            {% if current_feed %}<input type="hidden" name="feed" value="{{ current_feed }}">{% endif %}
+            {% if current_channel %}<input type="hidden" name="channel" value="{{ current_channel }}">{% endif %}
+            <input type="text" name="q" placeholder="Search community..." value="{{ search_query }}"
+                   class="themed-input w-full pl-10 pr-10 py-3 rounded-full text-xs focus:outline-none border shadow-sm font-medium transition-colors">
             <i data-lucide="search" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 icon-muted"></i>
-          </div>
+            {% if search_query %}
+            <a href="{% url 'community' %}" class="absolute right-3 top-1/2 -translate-y-1/2 icon-muted hover:opacity-70"><i data-lucide="x" class="w-4 h-4"></i></a>
+            {% endif %}
+          </form>
 
           <!-- Channels -->
           <div class="surface-card rounded-2xl border shadow-sm p-2.5 shrink-0">
             <div class="flex items-center justify-between px-3 py-2">
               <span class="text-[10px] font-bold uppercase tracking-widest" style="color: var(--text-muted);">Channels</span>
-              <button class="p-1 rounded-md transition-colors icon-muted hover:opacity-70"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>
             </div>
-            <div class="flex flex-col gap-1">
-              <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left shadow-sm btn-brand">
-                <i data-lucide="hash" class="w-4 h-4 shrink-0"></i>
-                <span class="flex-1 text-xs font-bold truncate">general</span>
-                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style="background: color-mix(in srgb, var(--on-brand) 20%, transparent); color: var(--on-brand);">24</span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left">
-                <i data-lucide="image" class="w-4 h-4 shrink-0 icon-muted"></i>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">screenshots</span>
-                <span class="text-[9px] font-bold" style="color: var(--text-muted);">128</span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left">
-                <i data-lucide="palette" class="w-4 h-4 shrink-0 icon-muted"></i>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">fan-art</span>
-                <span class="text-[9px] font-bold" style="color: var(--text-muted);">87</span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left">
-                <i data-lucide="book-open" class="w-4 h-4 shrink-0 icon-muted"></i>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">guides</span>
-                <span class="text-[9px] font-bold" style="color: var(--text-muted);">42</span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left">
-                <i data-lucide="gamepad-2" class="w-4 h-4 shrink-0 icon-muted"></i>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">lfg</span>
-                <span class="text-[9px] font-bold" style="color: var(--text-muted);">18</span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left">
-                <i data-lucide="shopping-bag" class="w-4 h-4 shrink-0 icon-muted"></i>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">merch-trading</span>
-                <span class="text-[9px] font-bold" style="color: var(--text-muted);">56</span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left">
-                <i data-lucide="sparkles" class="w-4 h-4 shrink-0 icon-muted"></i>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">cosplay</span>
-                <span class="text-[9px] font-bold" style="color: var(--text-muted);">34</span>
-              </button>
+<div class="flex flex-col gap-1">
+              <a href="{% url 'community' %}{% if current_feed %}?feed={{ current_feed }}{% endif %}"
+                 class="channel-link w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left shadow-sm {% if not current_channel %}btn-brand{% else %}rail-item{% endif %}" data-channel="">
+                <i data-lucide="hash" class="ch-icon w-4 h-4 shrink-0"></i>
+                <span class="ch-name flex-1 text-xs font-bold truncate">all</span>
+              </a>
+              {% for ch in channels %}
+              <a href="{% url 'community' %}?channel={{ ch.slug }}{% if current_feed %}&feed={{ current_feed }}{% endif %}"
+                 class="channel-link w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left {% if current_channel == ch.slug %}btn-brand shadow-sm{% else %}rail-item{% endif %}" data-channel="{{ ch.slug }}">
+                <i data-lucide="{{ ch.icon }}" class="ch-icon w-4 h-4 shrink-0"></i>
+                <span class="ch-name flex-1 text-xs font-bold truncate">{{ ch.name }}</span>
+              </a>
+              {% endfor %}
             </div>
           </div>
 
@@ -569,38 +201,25 @@
           <div class="surface-card rounded-2xl border shadow-sm p-2.5 shrink-0">
             <div class="flex items-center justify-between px-3 py-2">
               <span class="text-[10px] font-bold uppercase tracking-widest" style="color: var(--text-muted);">Games You Follow</span>
-              <a href="#" class="text-[10px] font-bold transition-colors" style="color: var(--text-muted);">view all</a>
             </div>
             <div class="flex flex-col gap-1">
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left">
-                <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0" style="background: var(--border-soft);"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80" alt="" class="w-full h-full object-cover"></div>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">Project Sekai</span>
-                <span class="w-1.5 h-1.5 rounded-full pulse-dot shrink-0" style="background: var(--brand);"></span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left">
-                <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0" style="background: var(--border-soft);"><img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=80&q=80" alt="" class="w-full h-full object-cover"></div>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">Genshin Impact</span>
-                <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background: var(--border-soft);"></span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left">
-                <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0" style="background: var(--border-soft);"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=80&q=80" alt="" class="w-full h-full object-cover"></div>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">Honkai: Star Rail</span>
-                <span class="w-1.5 h-1.5 rounded-full pulse-dot shrink-0" style="background: var(--brand);"></span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left">
-                <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0" style="background: var(--border-soft);"><img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=80&q=80" alt="" class="w-full h-full object-cover"></div>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">Elden Ring</span>
-                <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background: var(--border-soft);"></span>
-              </button>
-              <button class="rail-item w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left">
-                <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0" style="background: var(--border-soft);"><img src="https://images.unsplash.com/photo-1592853625601-bb9d23da12fc?auto=format&fit=crop&w=80&q=80" alt="" class="w-full h-full object-cover"></div>
-                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">Persona 3 Reload</span>
-                <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background: var(--border-soft);"></span>
-              </button>
+              {% for game in games %}
+              <div class="rail-item w-full flex items-center gap-2.5 px-3 py-2 rounded-xl">
+                <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0" style="background: var(--border-soft);"><img src="{{ game.image_url }}" alt="{{ game.name }}" class="w-full h-full object-cover"></div>
+                <span class="flex-1 text-xs font-bold truncate" style="color: var(--text-secondary);">{{ game.name }}</span>
+                <button class="game-follow-btn p-1.5 rounded-full transition-colors" data-game-id="{{ game.id }}" title="Unfollow" style="color: var(--brand); background: var(--brand-soft);">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+              {% empty %}
+              <div class="px-3 py-6 text-center">
+                <p class="text-[10px]" style="color: var(--text-muted);">Following a game from its detail page or with the button below will show it here.</p>
+              </div>
+              {% endfor %}
             </div>
           </div>
 
-          <!-- Discover (fixed dark CTA card — background selalu brand, text selalu kontras) -->
+          <!-- Discover -->
           <div class="rounded-2xl p-5 relative overflow-hidden shrink-0" style="background: var(--brand); color: var(--on-brand);">
             <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none" style="background: color-mix(in srgb, var(--on-brand) 5%, transparent);"></div>
             <div class="absolute -bottom-12 -left-10 w-32 h-32 rounded-full pointer-events-none" style="background: color-mix(in srgb, var(--on-brand) 5%, transparent);"></div>
@@ -608,7 +227,6 @@
             <p class="text-sm font-bold leading-snug relative" style="color: var(--on-brand);">Discover more communities</p>
             <p class="text-[11px] mt-1.5 leading-relaxed relative" style="color: color-mix(in srgb, var(--on-brand) 70%, transparent);">Find collectors, co-op partners, and trade circles that match your shelf.</p>
             <button class="mt-4 w-full text-[11px] font-bold py-2.5 rounded-full hover:-translate-y-0.5 transition-all relative" style="background: var(--on-brand); color: var(--brand);">Browse Communities</button>
-            <button class="mt-2 w-full border text-[11px] font-bold py-2.5 rounded-full transition-colors relative" style="border-color: color-mix(in srgb, var(--on-brand) 20%, transparent); color: var(--on-brand);">Upcoming Events</button>
           </div>
 
         </aside>
@@ -616,23 +234,521 @@
     </main>
   </div>
 
+  <!-- ===== CREATE POST MODAL ===== -->
+  <div id="create-post-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="flex items-center justify-between p-4 border-b" style="border-color: var(--border-soft);">
+        <h3 class="text-sm font-extrabold" style="color: var(--text-primary);">Create Post</h3>
+        <button id="close-modal-btn" class="p-1.5 rounded-full icon-muted hover:opacity-70"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <div class="p-4">
+        <!-- Post type selector -->
+        <div class="flex items-center gap-2 mb-3">
+          <button class="post-type-btn active badge-brand text-[10px] font-bold px-3 py-1.5 rounded-full" data-type="discussion">Discussion</button>
+          <button class="post-type-btn text-[10px] font-bold px-3 py-1.5 rounded-full border" style="color: var(--text-secondary); border-color: var(--border-soft);" data-type="image">Image</button>
+          <button class="post-type-btn text-[10px] font-bold px-3 py-1.5 rounded-full border" style="color: var(--text-secondary); border-color: var(--border-soft);" data-type="poll">Poll</button>
+        </div>
+
+        <!-- Channel selector -->
+        <div class="mb-3">
+          <label class="text-[10px] font-bold uppercase tracking-wider mb-1 block" style="color: var(--text-muted);">Channel</label>
+          <select id="post-channel" class="themed-input w-full px-3 py-2 rounded-xl text-xs border focus:outline-none">
+            <option value="">No channel</option>
+            {% for ch in channels %}
+            <option value="{{ ch.slug }}">{{ ch.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Title -->
+        <div class="mb-3">
+          <input type="text" id="post-title" class="themed-input w-full px-3 py-2 rounded-xl text-xs border focus:outline-none" placeholder="Title (optional)">
+        </div>
+
+        <!-- Content -->
+        <div class="mb-3">
+          <textarea id="post-content" class="themed-input w-full px-3 py-2 rounded-xl text-xs border focus:outline-none resize-none" rows="4" placeholder="What's on your mind? Use #hashtags to tag your post."></textarea>
+        </div>
+
+        <!-- Image URLs (for image posts) -->
+        <div id="image-urls-section" class="mb-3 hidden">
+          <label class="text-[10px] font-bold uppercase tracking-wider mb-1 block" style="color: var(--text-muted);">Image URLs</label>
+          <input type="text" id="post-image-url" class="themed-input w-full px-3 py-2 rounded-xl text-xs border focus:outline-none mb-2" placeholder="Paste image URL...">
+          <div id="image-preview-list" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Poll fields (for poll posts) -->
+        <div id="poll-creation-section" class="mb-3 hidden">
+          <label class="text-[10px] font-bold uppercase tracking-wider mb-1 block" style="color: var(--text-muted);">Poll Question</label>
+          <input type="text" id="poll-question" class="themed-input w-full px-3 py-2 rounded-xl text-xs border focus:outline-none mb-2" placeholder="Ask a question...">
+          <label class="text-[10px] font-bold uppercase tracking-wider mb-1 block" style="color: var(--text-muted);">Options (min 2)</label>
+          <div id="poll-options-list" class="flex flex-col gap-2 mb-2">
+            <div class="flex items-center gap-2">
+              <input type="text" class="poll-option-input themed-input flex-1 px-3 py-2 rounded-xl text-xs border focus:outline-none" placeholder="Option 1">
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="text" class="poll-option-input themed-input flex-1 px-3 py-2 rounded-xl text-xs border focus:outline-none" placeholder="Option 2">
+            </div>
+          </div>
+          <button id="add-poll-option-btn" class="text-[11px] font-semibold flex items-center gap-1 transition-colors" style="color: var(--brand);">
+            <i data-lucide="plus" class="w-3 h-3"></i> Add option
+          </button>
+        </div>
+
+        <button id="submit-post-btn" class="btn-brand w-full py-2.5 rounded-xl text-xs font-bold transition-all">
+          Post
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
   <script>
-    // ===== LOAD THEME FROM LOCALSTORAGE =====
-    (function() {
-      const theme = localStorage.getItem('kaimono_theme');
-      if (theme) document.body.setAttribute('data-theme', theme);
-    })();
+  (function() {
+    // === CSRF TOKEN ===
+    const CSRF_TOKEN = '{{ csrf_token }}';
 
-    lucide.createIcons();
+    // === PERFORMANCE: Only init icons inside a given root ===
+    function initIcons(root) {
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons({ root: root || document.body, nameAttr: 'data-lucide' });
+      }
+    }
 
-    // ===== FEED FILTERS =====
-    const filters = document.querySelectorAll('.feed-filter');
-    filters.forEach(f => {
-      f.addEventListener('click', () => {
-        filters.forEach(x => x.classList.remove('active'));
-        f.classList.add('active');
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    let _fetching = false;
+    function apiPost(url, data) {
+      if (_fetching) return Promise.resolve({});
+      _fetching = true;
+      return fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+        body: JSON.stringify(data),
+      }).then(r => r.json()).finally(() => { _fetching = false; });
+    }
+
+    // === THEME ===
+    const theme = localStorage.getItem('kaimono_theme');
+    if (theme) document.body.setAttribute('data-theme', theme);
+    initIcons();
+
+    // === FEED LOADER (AJAX, no full page reload) — used by tabs & channels ===
+    function applyFeed(data, url) {
+      history.pushState({}, '', url);
+      const container = document.getElementById('posts-container');
+      container.innerHTML = '';
+      if (data.posts_html) {
+        container.innerHTML = data.posts_html;
+        container.querySelectorAll('.post-card').forEach(card => {
+          initIcons(card);
+          bindPostInteractions(card);
+        });
+      } else {
+        container.innerHTML = '<div class="text-center py-10" style="color: var(--text-muted);"><i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-50"></i><p class="text-xs font-semibold">No posts in this feed yet.</p></div>';
+        initIcons(container);
+      }
+      currentPage = 1;
+      const wrap = document.getElementById('load-more-wrap');
+      if (wrap) wrap.classList.toggle('hidden', !data.has_next);
+    }
+
+    function loadingFeed() {
+      const container = document.getElementById('posts-container');
+      container.innerHTML = '<div class="text-center py-12" style="color: var(--text-muted);"><i data-lucide="loader-2" class="w-6 h-6 mx-auto mb-2 animate-spin"></i><p class="text-xs font-semibold">Loading posts...</p></div>';
+      initIcons(container);
+    }
+
+    function fetchFeed() {
+      const params = new URLSearchParams(window.location.search);
+      params.delete('page');
+      const url = window.location.pathname + '?' + params.toString();
+      loadingFeed();
+      fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.json())
+        .then(data => applyFeed(data, url));
+    }
+
+    // === FEED FILTERS (tabs) ===
+    function switchFeed(feed) {
+      const params = new URLSearchParams(window.location.search);
+      params.set('feed', feed);
+      params.delete('page');
+      history.pushState({}, '', window.location.pathname + '?' + params.toString());
+      document.querySelectorAll('.feed-filter').forEach(b => {
+        b.classList.toggle('active', b.dataset.feed === feed);
+      });
+      fetchFeed();
+    }
+
+    document.querySelectorAll('.feed-filter').forEach(btn => {
+      btn.addEventListener('click', () => switchFeed(btn.dataset.feed));
+    });
+
+    // === CHANNEL FILTERS (AJAX) ===
+    document.querySelectorAll('.channel-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const slug = link.dataset.channel; // '' = all
+        const params = new URLSearchParams(window.location.search);
+        if (slug) params.set('channel', slug); else params.delete('channel');
+        params.delete('page');
+        history.pushState({}, '', window.location.pathname + '?' + params.toString());
+        // active rail state
+        document.querySelectorAll('.channel-link').forEach(c => { c.classList.remove('btn-brand', 'shadow-sm'); c.classList.add('rail-item'); });
+        link.classList.add('btn-brand', 'shadow-sm');
+        link.classList.remove('rail-item');
+        fetchFeed();
       });
     });
+
+    // === SEARCH ===
+    const searchForm = document.getElementById('search-form');
+    const searchInput = searchForm.querySelector('input[name="q"]');
+    let searchTimeout;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => searchForm.submit(), 600);
+    });
+
+    // === CREATE POST MODAL ===
+    const modal = document.getElementById('create-post-modal');
+    const openModal = () => { modal.classList.add('open'); document.body.style.overflow = 'hidden'; };
+    const closeModal = () => { modal.classList.remove('open'); document.body.style.overflow = ''; };
+
+    document.getElementById('create-post-btn').addEventListener('click', openModal);
+    document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // Post type toggle
+    let selectedPostType = 'discussion';
+    document.querySelectorAll('.post-type-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.post-type-btn').forEach(b => {
+          b.classList.remove('active', 'badge-brand');
+          b.style.background = '';
+          b.style.color = 'var(--text-secondary)';
+          b.style.borderColor = 'var(--border-soft)';
+        });
+        btn.classList.add('active', 'badge-brand');
+        btn.style.background = 'var(--brand)';
+        btn.style.color = 'var(--on-brand)';
+        selectedPostType = btn.dataset.type;
+        document.getElementById('image-urls-section').classList.toggle('hidden', selectedPostType !== 'image');
+        document.getElementById('poll-creation-section').classList.toggle('hidden', selectedPostType !== 'poll');
+      });
+    });
+
+    // Add poll option
+    document.getElementById('add-poll-option-btn').addEventListener('click', () => {
+      const list = document.getElementById('poll-options-list');
+      if (list.children.length >= 6) { showToast('Max 6 options'); return; }
+      const n = list.children.length + 1;
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-2';
+      div.innerHTML = '<input type="text" class="poll-option-input themed-input flex-1 px-3 py-2 rounded-xl text-xs border focus:outline-none" placeholder="Option ' + n + '"><button class="remove-poll-option p-1 icon-muted hover:opacity-70"><i data-lucide="x" class="w-3 h-3"></i></button>';
+      list.appendChild(div);
+      initIcons(div);
+      div.querySelector('.remove-poll-option').addEventListener('click', () => { div.remove(); });
+    });
+
+    // Submit post
+    document.getElementById('submit-post-btn').addEventListener('click', () => {
+      const title = document.getElementById('post-title').value.trim();
+      const content = document.getElementById('post-content').value.trim();
+      const channel = document.getElementById('post-channel').value;
+      const imageUrl = document.getElementById('post-image-url').value.trim();
+
+      if (!content && !title) { showToast('Please write something!'); return; }
+
+      const payload = {
+        post_type: selectedPostType,
+        title,
+        content,
+        channel,
+        image_urls: imageUrl ? [imageUrl] : [],
+      };
+
+      // Poll data
+      if (selectedPostType === 'poll') {
+        const question = document.getElementById('poll-question').value.trim();
+        const opts = Array.from(document.querySelectorAll('.poll-option-input')).map(i => i.value.trim()).filter(Boolean);
+        if (!question) { showToast('Poll question is required!'); return; }
+        if (opts.length < 2) { showToast('Need at least 2 options!'); return; }
+        payload.poll_question = question;
+        payload.poll_options = opts;
+        payload.content = question; // for display
+      }
+
+      document.getElementById('submit-post-btn').textContent = 'Posting...';
+      document.getElementById('submit-post-btn').disabled = true;
+
+      apiPost('{% url "community_create_post" %}', payload).then(data => {
+        if (data.success) {
+          const container = document.getElementById('posts-container');
+          container.insertAdjacentHTML('afterbegin', data.post_html);
+          initIcons(container.firstElementChild);
+          closeModal();
+          document.getElementById('post-title').value = '';
+          document.getElementById('post-content').value = '';
+          document.getElementById('post-image-url').value = '';
+          document.getElementById('image-preview-list').innerHTML = '';
+          document.getElementById('poll-question').value = '';
+          document.getElementById('poll-options-list').innerHTML = '<div class="flex items-center gap-2"><input type="text" class="poll-option-input themed-input flex-1 px-3 py-2 rounded-xl text-xs border focus:outline-none" placeholder="Option 1"></div><div class="flex items-center gap-2"><input type="text" class="poll-option-input themed-input flex-1 px-3 py-2 rounded-xl text-xs border focus:outline-none" placeholder="Option 2"></div>';
+          showToast('Post created!');
+          bindPostInteractions(container.firstElementChild);
+        } else {
+          showToast(data.error || 'Failed to create post');
+        }
+        document.getElementById('submit-post-btn').textContent = 'Post';
+        document.getElementById('submit-post-btn').disabled = false;
+      });
+    });
+
+    // === LOAD MORE ===
+    let currentPage = {{ current_page|default:"1" }};
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => {
+        currentPage++;
+        const params = new URLSearchParams(window.location.search);
+        params.set('page', currentPage);
+        loadMoreBtn.innerHTML = '<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> Loading...';
+        initIcons(loadMoreBtn);
+
+        fetch(window.location.pathname + '?' + params.toString(), {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(r => r.json()).then(data => {
+          if (data.posts_html) {
+            const container = document.getElementById('posts-container');
+            container.insertAdjacentHTML('beforeend', data.posts_html);
+            // Init icons ONLY inside new post cards
+            container.querySelectorAll('.post-card:not([data-bound])').forEach(card => {
+              initIcons(card);
+              bindPostInteractions(card);
+            });
+          }
+          if (!data.has_next) {
+            loadMoreBtn.parentElement.remove();
+          } else {
+            loadMoreBtn.innerHTML = '<i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Load more posts';
+            initIcons(loadMoreBtn);
+          }
+        });
+      });
+    }
+
+    // === POST INTERACTIONS (Like, Bookmark, Vote, Comment, Share) ===
+    function bindPostInteractions(card) {
+      if (card.dataset.bound) return;
+      card.dataset.bound = '1';
+
+      const postId = card.dataset.postId;
+      if (!postId) return;
+
+      // LIKE
+      const likeBtn = card.querySelector('.like-btn');
+      if (likeBtn) {
+        likeBtn.addEventListener('click', () => {
+          const icon = likeBtn.querySelector('i');
+          const label = likeBtn.querySelector('.like-label');
+          const countEl = card.querySelector('.reaction-count');
+          // Optimistic UI
+          const wasLiked = likeBtn.classList.contains('btn-liked');
+          if (wasLiked) {
+            likeBtn.classList.remove('btn-liked');
+            likeBtn.style.color = 'var(--text-secondary)';
+            likeBtn.style.background = '';
+            icon.classList.remove('fill-current');
+            label.textContent = 'Like';
+            if (countEl) { const c = parseInt(countEl) - 1; countEl.textContent = Math.max(0,c) + ' reactions'; }
+          } else {
+            likeBtn.classList.add('btn-liked');
+            likeBtn.style.color = 'var(--brand)';
+            likeBtn.style.background = 'var(--brand-soft)';
+            icon.classList.add('fill-current');
+            label.textContent = 'Liked';
+          }
+          apiPost('{% url "community_toggle_like" %}', { post_id: parseInt(postId) }).then(data => {
+            if (data.error) { showToast(data.error); return; }
+            if (countEl) countEl.textContent = data.count + ' reactions';
+          });
+        });
+      }
+
+      // BOOKMARK
+      const bookmarkBtn = card.querySelector('.bookmark-btn');
+      if (bookmarkBtn) {
+        bookmarkBtn.addEventListener('click', () => {
+          const icon = bookmarkBtn.querySelector('i');
+          const label = bookmarkBtn.querySelector('.bookmark-label');
+          const wasSaved = bookmarkBtn.classList.contains('btn-bookmarked');
+          // Optimistic UI
+          if (wasSaved) {
+            bookmarkBtn.classList.remove('btn-bookmarked');
+            bookmarkBtn.style.color = 'var(--text-secondary)';
+            bookmarkBtn.style.background = '';
+            icon.classList.remove('fill-current');
+            label.textContent = 'Save';
+          } else {
+            bookmarkBtn.classList.add('btn-bookmarked');
+            bookmarkBtn.style.color = 'var(--brand)';
+            bookmarkBtn.style.background = 'var(--brand-soft)';
+            icon.classList.add('fill-current');
+            label.textContent = 'Saved';
+            showToast('Post saved!');
+          }
+          apiPost('{% url "community_toggle_bookmark" %}', { post_id: parseInt(postId) }).then(data => {
+            if (data.error) showToast(data.error);
+          });
+        });
+      }
+
+      // SHARE
+      const shareBtn = card.querySelector('.share-btn');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+          apiPost('{% url "community_share_post" %}', { post_id: parseInt(postId) }).then(data => {
+            if (data.success) {
+              const countEl = card.querySelector('.share-count');
+              if (countEl) countEl.textContent = data.count + ' shares';
+              navigator.clipboard.writeText(window.location.href).catch(() => {});
+              showToast('Link copied to clipboard!');
+            }
+          });
+        });
+      }
+
+      // POLL VOTING
+      const pollOptions = card.querySelectorAll('.poll-option');
+      pollOptions.forEach(optBtn => {
+        optBtn.addEventListener('click', () => {
+          const optionId = optBtn.dataset.optionId;
+          if (!optionId || optBtn.classList.contains('voted')) return;
+
+          // Optimistic: highlight selected immediately
+          pollOptions.forEach(b => { b.style.pointerEvents = 'none'; });
+          optBtn.classList.add('voted');
+          const bar = optBtn.querySelector('.poll-bar');
+          if (bar) bar.style.background = 'var(--brand-soft)';
+
+          apiPost('{% url "community_vote_poll" %}', { option_id: parseInt(optionId) }).then(data => {
+            if (data.error) { showToast(data.error); pollOptions.forEach(b => { b.style.pointerEvents = ''; }); return; }
+            data.options.forEach(opt => {
+              const btn = card.querySelector(`.poll-option[data-option-id="${opt.id}"]`);
+              if (!btn) return;
+              const b = btn.querySelector('.poll-bar');
+              const p = btn.querySelector('.poll-pct');
+              if (b) b.style.width = opt.percentage + '%';
+              if (p) p.textContent = opt.percentage + '%';
+              if (opt.is_selected) {
+                if (b) b.style.background = 'var(--brand-soft)';
+                btn.classList.add('voted');
+                btn.style.pointerEvents = '';
+                if (!btn.querySelector('.icon-brand')) {
+                  const label = btn.querySelector('.text-xs.font-bold');
+                  if (label) {
+                    const chk = document.createElement('i');
+                    chk.setAttribute('data-lucide', 'check-circle-2');
+                    chk.className = 'w-4 h-4 icon-brand';
+                    label.parentNode.insertBefore(chk, label);
+                    initIcons(btn);
+                  }
+                }
+              } else {
+                if (b) b.style.background = 'var(--border-soft)';
+                btn.classList.remove('voted');
+                btn.style.pointerEvents = '';
+              }
+            });
+            card.querySelectorAll('.poll-votes').forEach(el => { el.textContent = data.total_votes; });
+            showToast('Vote recorded!');
+          });
+        });
+      });
+
+      // COMMENT TOGGLE
+      const commentToggleBtn = card.querySelector('.comment-toggle-btn');
+      const commentSection = card.querySelector('.comment-section');
+      if (commentToggleBtn && commentSection) {
+        commentToggleBtn.addEventListener('click', () => {
+          const isHidden = commentSection.classList.contains('hidden');
+          commentSection.classList.toggle('hidden');
+          if (isHidden) {
+            fetch(`{% url "community_get_comments" %}?post_id=${postId}`).then(r => r.json()).then(data => {
+              const list = commentSection.querySelector('.comments-list');
+              list.innerHTML = '';
+              data.comments.forEach(c => {
+                list.insertAdjacentHTML('beforeend', `<div class="flex items-start gap-2"><div class="w-6 h-6 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="${c.author_avatar}" alt="" class="w-full h-full object-cover"></div><div class="flex-1 rounded-xl px-3 py-2" style="background: var(--bg-card);"><span class="text-[10px] font-extrabold" style="color: var(--text-primary);">${c.author_name}</span><p class="text-[11px]" style="color: var(--text-secondary);">${c.content}</p></div></div>`);
+              });
+            });
+            commentSection.querySelector('.comment-input').focus();
+          }
+        });
+      }
+
+      // COMMENT INPUT
+      const commentInput = card.querySelector('.comment-input');
+      const submitCommentBtn = card.querySelector('.submit-comment-btn');
+      if (commentInput && submitCommentBtn) {
+        commentInput.addEventListener('input', () => {
+          submitCommentBtn.style.opacity = commentInput.value.trim() ? '1' : '0.5';
+          submitCommentBtn.disabled = !commentInput.value.trim();
+        });
+
+        const submitComment = () => {
+          const content = commentInput.value.trim();
+          if (!content) return;
+          submitCommentBtn.disabled = true;
+          apiPost('{% url "community_add_comment" %}', { post_id: parseInt(postId), content }).then(data => {
+            if (data.error) { showToast(data.error); return; }
+            const list = card.querySelector('.comments-list');
+            list.insertAdjacentHTML('beforeend', `<div class="flex items-start gap-2"><div class="w-6 h-6 rounded-full overflow-hidden shrink-0" style="border: 1px solid var(--border-soft);"><img src="${data.comment.author_avatar}" alt="" class="w-full h-full object-cover"></div><div class="flex-1 rounded-xl px-3 py-2" style="background: var(--bg-card);"><span class="text-[10px] font-extrabold" style="color: var(--text-primary);">${data.comment.author_name}</span><p class="text-[11px]" style="color: var(--text-secondary);">${data.comment.content}</p></div></div>`);
+            commentInput.value = '';
+            submitCommentBtn.style.opacity = '0.5';
+            const countEl = card.querySelector('.comment-count');
+            if (countEl) countEl.textContent = data.total_comments + ' comments';
+            showToast('Comment posted!');
+          });
+        };
+
+        submitCommentBtn.addEventListener('click', submitComment);
+        commentInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitComment(); }
+        });
+      }
+    }
+
+    // Bind interactions on all existing post cards
+    document.querySelectorAll('#posts-container .post-card').forEach(card => {
+      bindPostInteractions(card);
+    });
+
+    // === GAMES YOU FOLLOW: unfollow toggle ===
+    document.querySelectorAll('.game-follow-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const gameId = btn.dataset.gameId;
+        if (!gameId) return;
+        apiPost('{% url "community_toggle_follow_game" %}', { game_id: parseInt(gameId) }).then(data => {
+          if (data.error) { showToast(data.error); return; }
+          if (!data.followed) {
+            const row = btn.closest('div.rail-item');
+            row.remove();
+            showToast('Unfollowed game');
+          }
+        });
+      });
+    });
+
+  })();
   </script>
 </body>
 </html>
