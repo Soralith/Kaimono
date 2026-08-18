@@ -8,10 +8,91 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* ===== THEME VARIABLES (GLOBAL) ===== */
+    :root, [data-theme="silver"] {
+      --bg-primary: #E2E7EE;
+      --bg-surface: #F7F9FC;
+      --bg-card: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border-color: #ffffff;
+      --border-soft: #e2e8f0;
+      --brand: #323446;
+      --on-brand: #ffffff;
+      --brand-soft: rgba(50, 52, 70, 0.12);
+      --hover-bg: rgba(255, 255, 255, 0.7);
+      --shadow-color: rgba(50, 52, 70, 0.1);
+      --toggle-knob: #ffffff;
+    }
+    [data-theme="midnight"] {
+      --bg-primary: #0f172a;
+      --bg-surface: #1e293b;
+      --bg-card: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --border-soft: #475569;
+      --brand: #64748b;
+      --on-brand: #ffffff;
+      --brand-soft: rgba(148, 163, 184, 0.15);
+      --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --toggle-knob: #ffffff;
+    }
+    [data-theme="paper"] {
+      --bg-primary: #F5F1E8;
+      --bg-surface: #FAF7F0;
+      --bg-card: #ffffff;
+      --text-primary: #1c1917;
+      --text-secondary: #57534e;
+      --text-muted: #a8a29e;
+      --border-color: #e7e5e4;
+      --border-soft: #d6d3d1;
+      --brand: #292524;
+      --on-brand: #ffffff;
+      --brand-soft: rgba(41, 37, 36, 0.1);
+      --hover-bg: rgba(255, 255, 255, 0.6);
+      --shadow-color: rgba(41, 37, 36, 0.08);
+      --toggle-knob: #ffffff;
+    }
+    [data-theme="obsidian"] {
+      --bg-primary: #0a0a0a;
+      --bg-surface: #171717;
+      --bg-card: #1f1f1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a3a3a3;
+      --text-muted: #737373;
+      --border-color: #262626;
+      --border-soft: #404040;
+      --brand: #fafafa;
+      --on-brand: #0a0a0a;
+      --brand-soft: rgba(255, 255, 255, 0.08);
+      --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      --toggle-knob: #0a0a0a;
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #E2E7EE;
+      background-color: var(--bg-primary);
+      color: var(--text-secondary);
+      transition: background-color 300ms ease, color 300ms ease;
     }
+
+    /* ===== HELPER CLASSES ===== */
+    .bg-brand { background-color: var(--brand); color: var(--on-brand); }
+    .text-brand { color: var(--brand); }
+    .fill-brand { fill: var(--brand); }
+    .border-brand { border-color: var(--brand); }
+    .bg-brand-soft { background-color: var(--brand-soft); }
+    .text-on-brand { color: var(--on-brand); }
+    
+    .brand-btn { color: var(--on-brand) !important; }
+    .brand-btn i, .brand-btn svg { color: var(--on-brand) !important; stroke: var(--on-brand) !important; }
+    .brand-btn .fill-white { fill: var(--on-brand) !important; }
+
     ::-webkit-scrollbar { width: 0px; background: transparent; }
 
     /* ===== EDIT MODE ===== */
@@ -44,7 +125,7 @@
                   opacity 250ms ease,
                   border-color 200ms ease;
     }
-    #upload-circle:hover { border-color: #323446; }
+    #upload-circle:hover { border-color: var(--brand); }
     #upload-circle.flying { z-index: 40; }
 
     /* ===== GAP DECORATION ===== */
@@ -89,30 +170,30 @@
     /* ===== TOGGLE SWITCH ===== */
     .toggle-track {
       width: 36px; height: 20px;
-      background-color: #cbd5e1;
+      background-color: var(--border-soft);
       border-radius: 999px;
       position: relative;
       cursor: pointer;
       transition: background-color 250ms;
       flex-shrink: 0;
     }
-    .toggle-track.active { background-color: #323446; }
+    .toggle-track.active { background-color: var(--brand); }
     .toggle-knob {
       width: 16px; height: 16px;
-      background: white;
+      background: var(--toggle-knob, white);
       border-radius: 50%;
       position: absolute;
       top: 2px; left: 2px;
       transition: left 250ms cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     .toggle-track.active .toggle-knob { left: 18px; }
 
     /* ===== EDIT TAB ===== */
     .edit-tab { transition: all 200ms; position: relative; }
     .edit-tab.active {
-      color: #323446;
-      background-color: white;
+      color: var(--brand);
+      background-color: var(--bg-card);
       box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     .edit-tab.active::after {
@@ -120,13 +201,13 @@
       position: absolute;
       bottom: -1px; left: 20%; right: 20%;
       height: 2px;
-      background: #323446;
+      background: var(--brand);
       border-radius: 2px;
     }
 
     /* ===== CARD HOVER ===== */
     .stat-card { transition: all 250ms ease; }
-    .stat-card:hover { transform: translateY(-2px); border-color: #cbd5e1; }
+    .stat-card:hover { transform: translateY(-2px); border-color: var(--border-soft); }
     .badge-item { transition: all 250ms ease; }
     .badge-item:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 16px -8px rgba(50,52,70,0.15); }
     .game-card { transition: all 300ms ease; }
@@ -140,13 +221,13 @@
       position: absolute;
       left: 23px; top: 56px; bottom: -12px;
       width: 2px;
-      background: linear-gradient(to bottom, #e2e8f0, transparent);
+      background: linear-gradient(to bottom, var(--border-soft), transparent);
     }
     .timeline-item:last-child::before { display: none; }
 
     /* ===== AVATAR RING ===== */
     .avatar-ring {
-      background: conic-gradient(from 0deg, #323446, #1a1c2a, #323446, #4a4c5e, #323446);
+      background: conic-gradient(from 0deg, var(--brand), #1a1c2a, var(--brand), #4a4c5e, var(--brand));
       padding: 3px;
       border-radius: 50%;
     }
@@ -154,31 +235,58 @@
     /* ===== CAROUSEL SCROLLBAR ===== */
     .game-scroll::-webkit-scrollbar { height: 4px; }
     .game-scroll::-webkit-scrollbar-track { background: transparent; }
-    .game-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .game-scroll::-webkit-scrollbar-thumb { background: var(--border-soft); border-radius: 4px; }
 
     .genre-tag { transition: all 200ms; }
-    .genre-tag:hover { background-color: #323446; color: white; }
+    .genre-tag:hover { background-color: var(--brand); color: var(--on-brand); }
 
     /* ===== FORM INPUT ===== */
     .form-input {
       width: 100%;
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
       border-radius: 10px;
       padding: 8px 12px;
       font-size: 12px;
       font-weight: 600;
-      color: #1e293b;
+      color: var(--text-primary);
       outline: none;
       transition: all 200ms;
     }
     .form-input:focus {
-      border-color: #323446;
-      box-shadow: 0 0 0 3px rgba(50, 52, 70, 0.12);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-soft);
+    }
+
+    /* ===== CUSTOM RANGE SLIDER ===== */
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: var(--brand);
+      cursor: pointer;
+      margin-top: -6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: var(--border-soft);
+      border-radius: 2px;
+    }
+    input[type=range]:focus {
+      outline: none;
     }
   </style>
 </head>
-<body class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
+<body class="h-screen flex flex-col overflow-hidden text-sm">
 
   {% include "dashboard/partials/topbar.html" %}
 
@@ -192,26 +300,26 @@
       <!-- BREADCRUMB + ACTIONS -->
       <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
         <div class="flex items-baseline gap-1">
-          <h1 class="text-base font-medium text-slate-600 tracking-wide">ANIME MERCH E-COMMERCE <span class="font-bold text-slate-800">PROFILE</span> / <span class="font-bold text-slate-800">HOSHINO ICHIKA</span></h1>
+          <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary)">ANIME MERCH E-COMMERCE <span class="font-bold" style="color: var(--text-primary)">PROFILE</span> / <span class="font-bold" style="color: var(--text-primary)">HOSHINO ICHIKA</span></h1>
         </div>
         <div class="flex items-center gap-2">
-          <span class="edit-only items-center gap-1.5 text-[10px] font-bold text-[#323446] bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#323446] pulse-dot"></span>
+          <span class="edit-only items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full border shadow-sm" style="color: var(--text-primary); background: var(--bg-card); border-color: var(--border-soft);">
+            <span class="w-1.5 h-1.5 rounded-full bg-brand pulse-dot"></span>
             EDITING MODE
           </span>
-          <button id="btn-edit" class="view-only bg-[#323446] hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all hover:shadow-md">
+          <button id="btn-edit" class="view-only brand-btn bg-brand hover:opacity-90 font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all hover:shadow-md">
             <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Profile
           </button>
-          <button id="btn-cancel" class="edit-only bg-white hover:bg-slate-100 text-slate-700 font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 border border-slate-200 transition-colors">
+          <button id="btn-cancel" class="edit-only hover:bg-[var(--brand-soft)] font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 border transition-colors" style="background: var(--bg-card); color: var(--text-primary); border-color: var(--border-soft);">
             <i data-lucide="x" class="w-3.5 h-3.5"></i> Cancel
           </button>
-          <button id="btn-save" form="profile-form" class="edit-only bg-[#323446] hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-colors">
+          <button id="btn-save" form="profile-form" class="edit-only brand-btn bg-brand hover:opacity-90 font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-colors">
             <i data-lucide="check" class="w-3.5 h-3.5"></i> Save Changes
           </button>
         </div>
       </div>
 
-      <!-- Hidden profile-save form (fields reference it via form="profile-form") -->
+      <!-- Hidden profile-save form -->
       <form id="profile-form" method="post" action="{% url 'profile' %}" enctype="multipart/form-data" class="hidden">
         {% csrf_token %}
         {% if form.non_field_errors %}<p>{{ form.non_field_errors.0 }}</p>{% endif %}
@@ -219,36 +327,36 @@
       </form>
 
       <!-- PROFILE HERO -->
-      <div class="bg-[#F7F9FC] rounded-[2.2rem] relative overflow-hidden shadow-sm border border-white shrink-0">
+      <div class="rounded-[2.2rem] relative overflow-hidden shadow-sm border shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
 
         <!-- BANNER -->
-        <div class="h-44 w-full relative">
-          <img id="banner-img" src="{{ form.instance.banner_url|default:'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1600&q=80' }}" alt="banner" class="w-full h-full object-cover">
+        <div class="aspect-[41/9] w-full relative overflow-hidden">
+          <img id="banner-img" src="{{ form.instance.banner_url|default:'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1600&q=80' }}" alt="banner" class="w-full h-full object-cover" style="object-position: 50% {{ form.banner_position.value|default:50 }}%">
           <div class="absolute inset-0 bg-gradient-to-b from-slate-900/10 via-slate-900/25 to-slate-900/60"></div>
 
           <label class="banner-overlay absolute inset-0 bg-slate-900/40 items-center justify-center z-20">
-            <div class="bg-white/95 backdrop-blur-md rounded-full px-5 py-2.5 flex items-center gap-2 shadow-xl">
-              <i data-lucide="image" class="w-4 h-4 text-[#323446]"></i>
-              <span class="text-xs font-bold text-[#323446]">Change Cover Photo</span>
+            <div class="backdrop-blur-md rounded-full px-5 py-2.5 flex items-center gap-2 shadow-xl" style="background: var(--bg-card);">
+              <i data-lucide="image" class="w-4 h-4 text-brand"></i>
+              <span class="text-xs font-bold" style="color: var(--text-primary)">Change Cover Photo</span>
             </div>
             <input type="file" name="banner" accept="image/*" class="hidden" form="profile-form" onchange="previewImage(event, 'banner-img')">
           </label>
 
           <div class="absolute top-4 left-5 z-10">
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5 flex items-center gap-1.5">
+            <div class="bg-black/30 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5 flex items-center gap-1.5">
               <i data-lucide="calendar" class="w-3 h-3 text-white"></i>
               <span class="text-[10px] font-bold text-white uppercase tracking-wider">Member since Aug 2025</span>
             </div>
           </div>
 
           <div class="absolute top-4 right-5 z-10 flex items-center gap-2">
-            <div class="edit-only items-center gap-1.5 bg-[#323446] text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
+            <div class="edit-only items-center gap-1.5 brand-btn bg-brand px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
               <i data-lucide="pencil" class="w-3 h-3"></i> Editing Cover
             </div>
-            <button class="view-only bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold p-2.5 rounded-full border border-white/20 transition-colors">
+            <button class="view-only bg-black/30 hover:bg-black/50 backdrop-blur-md text-white font-semibold p-2.5 rounded-full border border-white/20 transition-colors">
               <i data-lucide="share-2" class="w-4 h-4"></i>
             </button>
-            <button class="view-only bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold p-2.5 rounded-full border border-white/20 transition-colors">
+            <button class="view-only bg-black/30 hover:bg-black/50 backdrop-blur-md text-white font-semibold p-2.5 rounded-full border border-white/20 transition-colors">
               <i data-lucide="more-horizontal" class="w-4 h-4"></i>
             </button>
           </div>
@@ -265,40 +373,35 @@
             <!-- ============ AVATAR COLUMN ============ -->
             <div id="avatar-wrap" class="relative shrink-0 flex flex-col items-center">
 
-              <!-- Avatar (PFP asli) -->
+              <!-- Avatar -->
               <div class="relative">
                 <div class="avatar-ring" id="avatar-ring">
-                  <div id="avatar-box" class="w-28 h-28 rounded-full border-4 border-[#F7F9FC] overflow-hidden shadow-xl bg-slate-200">
+                  <div id="avatar-box" class="w-28 h-28 rounded-full border-4 overflow-hidden shadow-xl" style="border-color: var(--bg-surface); background: var(--border-soft);">
                     <img id="avatar-img" src="{{ form.instance.avatar_url|default:'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80' }}" alt="avatar" class="w-full h-full object-cover">
                   </div>
                 </div>
                 <!-- Premium crown -->
-                <div class="absolute -top-1 -right-1 w-9 h-9 rounded-full bg-[#323446] border-4 border-[#F7F9FC] flex items-center justify-center shadow-lg">
-                  <i data-lucide="crown" class="w-3.5 h-3.5 text-white"></i>
-                </div>
-                <!-- LVL badge (VIEW MODE) -->
-                <div class="view-only absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#323446] border-4 border-[#F7F9FC] rounded-full px-3 py-1 flex items-center gap-1 shadow-lg">
-                  <i data-lucide="zap" class="w-3 h-3 text-white fill-white"></i>
-                  <span class="text-[10px] font-extrabold text-white">LVL 42</span>
+                <div class="absolute -top-1 -right-1 w-9 h-9 rounded-full brand-btn bg-brand border-4 flex items-center justify-center shadow-lg" style="border-color: var(--bg-surface);">
+                  <i data-lucide="crown" class="w-3.5 h-3.5"></i>
                 </div>
               </div>
 
-              <!-- Gap decoration: titik-titik + panah ke atas (EDIT MODE) -->
+              <!-- Gap decoration -->
               <div class="edit-only flex-col items-center gap-1.5 py-3">
-                <i data-lucide="arrow-up" class="rise-arrow w-4 h-4 text-[#323446]"></i>
-                <span class="rise-dot w-1 h-1 rounded-full bg-slate-400"></span>
-                <span class="rise-dot w-1 h-1 rounded-full bg-slate-400" style="animation-delay: 0.15s"></span>
-                <span class="rise-dot w-1 h-1 rounded-full bg-slate-400" style="animation-delay: 0.3s"></span>
+                <i data-lucide="arrow-up" class="rise-arrow w-4 h-4 text-brand"></i>
+                <span class="rise-dot w-1 h-1 rounded-full" style="background: var(--text-muted)"></span>
+                <span class="rise-dot w-1 h-1 rounded-full" style="background: var(--text-muted); animation-delay: 0.15s"></span>
+                <span class="rise-dot w-1 h-1 rounded-full" style="background: var(--text-muted); animation-delay: 0.3s"></span>
               </div>
 
-              <!-- Upload circle (EDIT MODE) -->
-              <label id="upload-circle" class="edit-only relative w-28 h-28 rounded-full bg-white border-2 border-dashed border-slate-300 items-center justify-center cursor-pointer overflow-hidden shadow-lg" title="Ganti foto profil">
+              <!-- Upload circle -->
+              <label id="upload-circle" class="edit-only relative w-28 h-28 rounded-full border-2 border-dashed items-center justify-center cursor-pointer overflow-hidden shadow-lg" style="background: var(--bg-card); border-color: var(--border-soft);" title="Ganti foto profil">
                 <img id="upload-preview" class="absolute inset-0 w-full h-full object-cover hidden" alt="">
                 <span id="upload-icon" class="flex flex-col items-center justify-center gap-1.5 pointer-events-none">
-                  <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
-                    <i data-lucide="camera" class="w-5 h-5 text-[#323446]"></i>
+                  <div class="w-10 h-10 rounded-full bg-brand-soft flex items-center justify-center">
+                    <i data-lucide="camera" class="w-5 h-5 text-brand"></i>
                   </div>
-                  <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Ganti Foto</span>
+                  <span class="text-[8px] font-bold uppercase tracking-widest" style="color: var(--text-muted)">Ganti Foto</span>
                 </span>
                 <input type="file" name="avatar" accept="image/*" id="avatar-input" class="hidden" form="profile-form">
               </label>
@@ -311,59 +414,110 @@
               <!-- VIEW MODE -->
               <div class="view-only">
                 <div class="flex items-center gap-2.5 flex-wrap">
-                  <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">{{ form.instance.display_name|default:form.instance.username }}</h2>
-                  <i data-lucide="badge-check" class="w-5 h-5 text-[#323446] fill-[#323446]"></i>
-                  <span class="bg-[#323446] text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">{{ form.instance.get_role_display }}</span>
+                  <h2 class="text-2xl font-extrabold tracking-tight" style="color: var(--text-primary)">{{ form.instance.display_name|default:form.instance.username }}</h2>
+                  <i data-lucide="badge-check" class="w-5 h-5 text-brand fill-brand"></i>
+                  <span class="brand-btn bg-brand text-[10px] font-extrabold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                    <i data-lucide="zap" class="w-3 h-3"></i> LVL 42
+                  </span>
+                  <span class="brand-btn bg-brand text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">{{ form.instance.get_role_display }}</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium mt-1.5 flex items-center gap-1.5 flex-wrap">
+                <p class="text-xs font-medium mt-1.5 flex items-center gap-1.5 flex-wrap" style="color: var(--text-secondary)">
                   <span class="font-semibold">@{{ form.instance.username }}</span>
-                  <span class="text-slate-300">·</span>
+                  <span style="color: var(--text-muted)">·</span>
                   <span class="flex items-center gap-1"><i data-lucide="mail" class="w-3 h-3"></i> {{ form.instance.email }}</span>
-                  <span class="text-slate-300">·</span>
+                  <span style="color: var(--text-muted)">·</span>
                   <span class="flex items-center gap-1"><i data-lucide="cake" class="w-3 h-3"></i> Age {{ form.instance.age|default:'—' }}</span>
                 </p>
-                <p class="text-xs text-slate-600 mt-2.5 max-w-2xl leading-relaxed">
+                <p class="text-xs mt-2.5 max-w-2xl leading-relaxed" style="color: var(--text-secondary)">
                   {{ form.instance.bio|default:'No bio yet — click Edit Profile to add one.' }}
                 </p>
                 <div class="flex items-center gap-1.5 mt-3 flex-wrap">
-                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">Rhythm</span>
-                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">JRPG</span>
-                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">Action RPG</span>
-                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">Figure Collector</span>
-                  <span class="genre-tag text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-1 rounded-full cursor-pointer">Anime</span>
+                  <a href="{{ form.instance.twitter|default:'#' }}" class="genre-tag text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer flex items-center gap-1.5" style="color: var(--text-primary); background: var(--brand-soft);">
+                    <i data-lucide="twitter" class="w-3.5 h-3.5"></i>{{ form.instance.twitter|default:'Twitter' }}
+                  </a>
+                  <a href="{{ form.instance.instagram|default:'#' }}" class="genre-tag text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer flex items-center gap-1.5" style="color: var(--text-primary); background: var(--brand-soft);">
+                    <i data-lucide="instagram" class="w-3.5 h-3.5"></i>{{ form.instance.instagram|default:'Instagram' }}
+                  </a>
+                  <a href="{{ form.instance.youtube|default:'#' }}" class="genre-tag text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer flex items-center gap-1.5" style="color: var(--text-primary); background: var(--brand-soft);">
+                    <i data-lucide="youtube" class="w-3.5 h-3.5"></i>{{ form.instance.youtube|default:'YouTube' }}
+                  </a>
+                  <a href="{{ form.instance.twitch|default:'#' }}" class="genre-tag text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer flex items-center gap-1.5" style="color: var(--text-primary); background: var(--brand-soft);">
+                    <i data-lucide="twitch" class="w-3.5 h-3.5"></i>{{ form.instance.twitch|default:'Twitch' }}
+                  </a>
                 </div>
               </div>
 
               <!-- EDIT MODE -->
-              <div class="edit-only flex-col gap-3 max-w-3xl">
-                <div class="grid grid-cols-2 gap-3">
+              <div class="edit-only flex-col gap-4 max-w-3xl">
+                
+                <!-- Grid Nama & Username -->
+                <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Display Name</label>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Display Name</label>
                     <input type="text" name="display_name" form="profile-form" value="{{ form.display_name.value|default:'' }}" class="form-input font-bold">
-                    {% if form.display_name.errors %}<p class="text-[9px] font-bold text-red-600 mt-1">{{ form.display_name.errors.0 }}</p>{% endif %}
+                    {% if form.display_name.errors %}<p class="text-[9px] font-bold text-red-500 mt-1">{{ form.display_name.errors.0 }}</p>{% endif %}
                   </div>
                   <div>
-                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Username</label>
-                    <div class="flex bg-white rounded-[10px] overflow-hidden border border-slate-200 focus-within:border-[#323446] focus-within:ring-2 focus-within:ring-[#323446]/12">
-                      <span class="bg-slate-100 text-slate-500 px-3 text-xs font-semibold flex items-center">@</span>
-                      <input type="text" name="username" form="profile-form" value="{{ form.username.value|default:'' }}" class="flex-1 bg-transparent px-2 py-2 text-xs font-semibold focus:outline-none">
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Username</label>
+                    <div class="flex rounded-[10px] overflow-hidden border focus-within:border-[var(--brand)] focus-within:ring-2 focus-within:ring-[var(--brand-soft)]" style="background: var(--bg-card); border-color: var(--border-soft);">
+                      <span class="bg-brand-soft px-3 text-xs font-semibold flex items-center" style="color: var(--text-secondary)">@</span>
+                      <input type="text" name="username" form="profile-form" value="{{ form.username.value|default:'' }}" class="flex-1 bg-transparent px-2 py-2 text-xs font-semibold focus:outline-none" style="color: var(--text-primary)">
                     </div>
-                    {% if form.username.errors %}<p class="text-[9px] font-bold text-red-600 mt-1">{{ form.username.errors.0 }}</p>{% endif %}
+                    {% if form.username.errors %}<p class="text-[9px] font-bold text-red-500 mt-1">{{ form.username.errors.0 }}</p>{% endif %}
                   </div>
                 </div>
+
+                <!-- Banner Position (Simetris Full Width) -->
                 <div>
-                  <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Bio</label>
-                  <textarea rows="2" name="bio" form="profile-form" class="form-input resize-none font-medium">{{ form.bio.value|default:'' }}</textarea>
-                  <p class="text-[9px] text-slate-400 mt-1">{{ form.instance.bio|length }} / 200 characters</p>
+                  <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Banner Position</label>
+                  <div class="flex items-center gap-4 border rounded-[10px] px-4 py-3" style="background: var(--bg-card); border-color: var(--border-soft);">
+                    <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                      <i data-lucide="move-vertical" class="w-4 h-4 text-brand"></i>
+                    </div>
+                    <input id="banner-pos" type="range" name="banner_position" form="profile-form" min="0" max="100" value="{{ form.banner_position.value|default:50 }}" class="flex-1" oninput="setBannerPos(this.value)">
+                    <div class="w-12 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                      <span id="banner-pos-label" class="text-[11px] font-bold text-brand">{{ form.banner_position.value|default:50 }}</span>
+                    </div>
+                  </div>
+                  <p class="text-[9px] mt-1.5" style="color: var(--text-muted)">Geser slider untuk mengatur posisi vertikal gambar banner.</p>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
+
+                <!-- Bio -->
+                <div>
+                  <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Bio</label>
+                  <textarea rows="2" name="bio" form="profile-form" class="form-input resize-none font-medium">{{ form.bio.value|default:'' }}</textarea>
+                  <p class="text-[9px] mt-1.5" style="color: var(--text-muted)">{{ form.instance.bio|length|default:'0' }} / 200 characters</p>
+                </div>
+
+                <!-- Role -->
+                <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Role</label>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Role</label>
                     <select name="role" form="profile-form" class="form-input">
                       {% for value, label in form.fields.role.choices %}
                       <option value="{{ value }}" {% if form.role.value == value %}selected{% endif %}>{{ label }}</option>
                       {% endfor %}
                     </select>
+                  </div>
+                </div>
+
+                <!-- Socials -->
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><i data-lucide="twitter" class="w-3 h-3 inline-block"></i> Twitter</label>
+                    <input type="text" name="twitter" form="profile-form" value="{{ form.twitter.value|default:'' }}" placeholder="@handle" class="form-input">
+                  </div>
+                  <div>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><i data-lucide="instagram" class="w-3 h-3 inline-block"></i> Instagram</label>
+                    <input type="text" name="instagram" form="profile-form" value="{{ form.instagram.value|default:'' }}" placeholder="@handle" class="form-input">
+                  </div>
+                  <div>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><i data-lucide="youtube" class="w-3 h-3 inline-block"></i> YouTube</label>
+                    <input type="text" name="youtube" form="profile-form" value="{{ form.youtube.value|default:'' }}" placeholder="channel / @handle" class="form-input">
+                  </div>
+                  <div>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><i data-lucide="twitch" class="w-3 h-3 inline-block"></i> Twitch</label>
+                    <input type="text" name="twitch" form="profile-form" value="{{ form.twitch.value|default:'' }}" placeholder="/channel" class="form-input">
                   </div>
                 </div>
               </div>
@@ -372,10 +526,10 @@
 
             <!-- QUICK ACTIONS -->
             <div class="view-only pt-5 shrink-0 flex items-start gap-2">
-              <button class="bg-[#323446] hover:bg-slate-800 text-white font-bold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-md transition-all hover:shadow-lg">
+              <button class="brand-btn bg-brand hover:opacity-90 font-bold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-md transition-all hover:shadow-lg">
                 <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Follow
               </button>
-              <button class="bg-white hover:bg-slate-100 text-slate-700 font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 border border-slate-200 transition-colors">
+              <button class="hover:bg-[var(--brand-soft)] font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 border transition-colors" style="background: var(--bg-card); color: var(--text-primary); border-color: var(--border-soft);">
                 <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Message
               </button>
             </div>
@@ -386,117 +540,117 @@
 
       <!-- STATS ROW -->
       <div class="grid grid-cols-5 gap-3 shrink-0">
-        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
           <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="gamepad-2" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+3</span>
+            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="gamepad-2" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+3</span>
           </div>
-          <p class="text-2xl font-extrabold text-slate-800 leading-none">48</p>
-          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Games Owned</span>
+          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">48</p>
+          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Games Owned</span>
           <div class="flex items-end gap-0.5 h-4 mt-2">
-            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 40%"></div>
-            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 60%"></div>
-            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 45%"></div>
-            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 80%"></div>
-            <div class="flex-1 bg-slate-200 rounded-sm" style="height: 65%"></div>
-            <div class="flex-1 bg-[#323446] rounded-sm" style="height: 100%"></div>
+            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 40%"></div>
+            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 60%"></div>
+            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 45%"></div>
+            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 80%"></div>
+            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 65%"></div>
+            <div class="flex-1 bg-brand rounded-sm" style="height: 100%"></div>
           </div>
         </div>
-        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
           <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="users" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+12</span>
+            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="users" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+12</span>
           </div>
-          <p class="text-2xl font-extrabold text-slate-800 leading-none">126</p>
-          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Friends</span>
+          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">126</p>
+          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Friends</span>
           <div class="flex -space-x-1.5 mt-2">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2 border-[#F7F9FC]" alt="">
-            <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2 border-[#F7F9FC]" alt="">
-            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2 border-[#F7F9FC]" alt="">
-            <div class="w-5 h-5 rounded-full bg-slate-200 border-2 border-[#F7F9FC] flex items-center justify-center text-[8px] font-bold text-slate-600">+123</div>
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2" style="border-color: var(--bg-surface)" alt="">
+            <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2" style="border-color: var(--bg-surface)" alt="">
+            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2" style="border-color: var(--bg-surface)" alt="">
+            <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center text-[8px] font-bold" style="background: var(--border-soft); border-color: var(--bg-surface); color: var(--text-secondary)">+123</div>
           </div>
         </div>
-        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
           <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="medal" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+2</span>
+            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="medal" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+2</span>
           </div>
-          <p class="text-2xl font-extrabold text-slate-800 leading-none">32</p>
-          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Badges</span>
+          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">32</p>
+          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Badges</span>
           <div class="flex items-center gap-0.5 mt-2">
-            <i data-lucide="award" class="w-3.5 h-3.5 text-[#323446]"></i>
-            <i data-lucide="crown" class="w-3.5 h-3.5 text-[#323446]"></i>
-            <i data-lucide="flame" class="w-3.5 h-3.5 text-[#323446]"></i>
-            <i data-lucide="trophy" class="w-3.5 h-3.5 text-[#323446]"></i>
-            <span class="text-[9px] font-bold text-slate-500 ml-1">+28</span>
+            <i data-lucide="award" class="w-3.5 h-3.5 text-brand"></i>
+            <i data-lucide="crown" class="w-3.5 h-3.5 text-brand"></i>
+            <i data-lucide="flame" class="w-3.5 h-3.5 text-brand"></i>
+            <i data-lucide="trophy" class="w-3.5 h-3.5 text-brand"></i>
+            <span class="text-[9px] font-bold ml-1" style="color: var(--text-muted)">+28</span>
           </div>
         </div>
-        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
           <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="clock" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+48h</span>
+            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="clock" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+48h</span>
           </div>
-          <p class="text-2xl font-extrabold text-slate-800 leading-none">1,240<span class="text-xs text-slate-400 font-bold ml-0.5">h</span></p>
-          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Total Playtime</span>
-          <div class="h-1 bg-slate-200 rounded-full overflow-hidden mt-3">
-            <div class="h-full bg-[#323446] rounded-full" style="width: 72%"></div>
+          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">1,240<span class="text-xs font-bold ml-0.5" style="color: var(--text-muted)">h</span></p>
+          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Total Playtime</span>
+          <div class="h-1 rounded-full overflow-hidden mt-3" style="background: var(--border-soft)">
+            <div class="h-full bg-brand rounded-full" style="width: 72%"></div>
           </div>
         </div>
-        <div class="stat-card bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm">
+        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
           <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-slate-100 rounded-xl text-slate-600"><i data-lucide="heart" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">4 sale</span>
+            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="heart" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">4 sale</span>
           </div>
-          <p class="text-2xl font-extrabold text-slate-800 leading-none">12</p>
-          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">Wishlist</span>
-          <p class="text-[9px] text-slate-500 mt-2 leading-snug">Save <span class="font-bold text-[#323446]">$87.20</span> with current discounts</p>
+          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">12</p>
+          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Wishlist</span>
+          <p class="text-[9px] mt-2 leading-snug" style="color: var(--text-secondary)">Save <span class="font-bold text-brand">$87.20</span> with current discounts</p>
         </div>
       </div>
 
       <!-- EDIT TABBED PANEL -->
-      <div class="edit-only bg-[#F7F9FC] rounded-2xl border border-white shadow-sm shrink-0 flex-col">
-        <div class="flex items-center gap-1 p-2 border-b border-slate-200/60">
+      <div class="edit-only rounded-2xl border shadow-sm shrink-0 flex-col" style="background: var(--bg-surface); border-color: var(--border-color);">
+        <div class="flex items-center gap-1 p-2 border-b" style="border-color: var(--border-soft)">
           <button class="edit-tab active text-xs font-bold px-4 py-2 rounded-full" data-tab="privacy">
             <i data-lucide="shield" class="w-3.5 h-3.5 inline mr-1"></i> Privacy
           </button>
-          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full text-slate-500" data-tab="appearance">
+          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full" style="color: var(--text-secondary)" data-tab="appearance">
             <i data-lucide="palette" class="w-3.5 h-3.5 inline mr-1"></i> Appearance
           </button>
-          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full text-slate-500" data-tab="connections">
+          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full" style="color: var(--text-secondary)" data-tab="connections">
             <i data-lucide="link" class="w-3.5 h-3.5 inline mr-1"></i> Connections
           </button>
-          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full text-slate-500" data-tab="notifications">
+          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full" style="color: var(--text-secondary)" data-tab="notifications">
             <i data-lucide="bell" class="w-3.5 h-3.5 inline mr-1"></i> Notifications
           </button>
         </div>
 
         <div class="edit-tab-content p-5 flex flex-col gap-3" data-content="privacy">
-          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <i data-lucide="eye" class="w-4 h-4 text-slate-500"></i>
+              <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted)"></i>
               <div>
-                <p class="text-xs font-bold text-slate-800">Public Profile</p>
-                <p class="text-[10px] text-slate-400">Anyone can view your profile and activity</p>
+                <p class="text-xs font-bold" style="color: var(--text-primary)">Public Profile</p>
+                <p class="text-[10px]" style="color: var(--text-muted)">Anyone can view your profile and activity</p>
               </div>
             </div>
             <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
           </div>
-          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <i data-lucide="activity" class="w-4 h-4 text-slate-500"></i>
+              <i data-lucide="activity" class="w-4 h-4" style="color: var(--text-muted)"></i>
               <div>
-                <p class="text-xs font-bold text-slate-800">Show Online Status</p>
-                <p class="text-[10px] text-slate-400">Let friends see when you're online</p>
+                <p class="text-xs font-bold" style="color: var(--text-primary)">Show Online Status</p>
+                <p class="text-[10px]" style="color: var(--text-muted)">Let friends see when you're online</p>
               </div>
             </div>
             <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
           </div>
-          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <i data-lucide="gamepad-2" class="w-4 h-4 text-slate-500"></i>
+              <i data-lucide="gamepad-2" class="w-4 h-4" style="color: var(--text-muted)"></i>
               <div>
-                <p class="text-xs font-bold text-slate-800">Show Game Activity</p>
-                <p class="text-[10px] text-slate-400">Display your recently played games publicly</p>
+                <p class="text-xs font-bold" style="color: var(--text-primary)">Show Game Activity</p>
+                <p class="text-[10px]" style="color: var(--text-muted)">Display your recently played games publicly</p>
               </div>
             </div>
             <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
@@ -505,61 +659,61 @@
 
         <div class="edit-tab-content p-5 flex-col gap-4 hidden" data-content="appearance">
           <div>
-            <p class="text-xs font-bold text-slate-800 mb-2">Profile Theme</p>
+            <p class="text-xs font-bold mb-2" style="color: var(--text-primary)">Profile Theme</p>
             <div class="grid grid-cols-5 gap-2">
-              <button class="aspect-square rounded-xl border-2 border-[#323446] bg-gradient-to-br from-slate-700 to-slate-900 relative">
+              <button class="aspect-square rounded-xl border-2 border-brand bg-gradient-to-br from-slate-700 to-slate-900 relative">
                 <i data-lucide="check" class="w-4 h-4 text-white absolute top-1 right-1"></i>
               </button>
-              <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-200 to-slate-400"></button>
-              <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 to-slate-200"></button>
-              <button class="aspect-square rounded-xl border-2 border-slate-200 bg-gradient-to-br from-slate-800 to-black"></button>
-              <button class="aspect-square rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center hover:border-slate-400 transition-colors">
-                <i data-lucide="plus" class="w-4 h-4 text-slate-400"></i>
+              <button class="aspect-square rounded-xl border-2 bg-gradient-to-br from-slate-200 to-slate-400" style="border-color: var(--border-soft)"></button>
+              <button class="aspect-square rounded-xl border-2 bg-gradient-to-br from-stone-50 to-stone-200" style="border-color: var(--border-soft)"></button>
+              <button class="aspect-square rounded-xl border-2 bg-gradient-to-br from-neutral-800 to-black" style="border-color: var(--border-soft)"></button>
+              <button class="aspect-square rounded-xl border-2 border-dashed flex items-center justify-center hover:border-brand transition-colors" style="border-color: var(--border-soft)">
+                <i data-lucide="plus" class="w-4 h-4" style="color: var(--text-muted)"></i>
               </button>
             </div>
           </div>
         </div>
 
         <div class="edit-tab-content p-5 flex-col gap-3 hidden" data-content="connections">
-          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="twitter" class="w-4 h-4 text-slate-600"></i></div>
+              <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center"><i data-lucide="twitter" class="w-4 h-4" style="color: var(--text-secondary)"></i></div>
               <div class="flex-1 min-w-0">
-                <p class="text-xs font-bold text-slate-800">Twitter</p>
-                <p class="text-[10px] text-slate-400 truncate">@hoshino_ichika</p>
+                <p class="text-xs font-bold" style="color: var(--text-primary)">Twitter</p>
+                <p class="text-[10px] truncate" style="color: var(--text-muted)">@hoshino_ichika</p>
               </div>
             </div>
-            <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-1 rounded-full uppercase">Connected</span>
+            <span class="text-[9px] font-bold bg-brand-soft px-2 py-1 rounded-full uppercase text-brand">Connected</span>
           </div>
-          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="youtube" class="w-4 h-4 text-slate-600"></i></div>
+              <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center"><i data-lucide="youtube" class="w-4 h-4" style="color: var(--text-secondary)"></i></div>
               <div class="flex-1 min-w-0">
-                <p class="text-xs font-bold text-slate-800">YouTube</p>
-                <p class="text-[10px] text-slate-400">Not connected</p>
+                <p class="text-xs font-bold" style="color: var(--text-primary)">YouTube</p>
+                <p class="text-[10px]" style="color: var(--text-muted)">Not connected</p>
               </div>
             </div>
-            <button class="text-[9px] font-bold text-white bg-[#323446] px-3 py-1 rounded-full uppercase hover:bg-slate-800 transition-colors">Connect</button>
+            <button class="brand-btn text-[9px] font-bold bg-brand px-3 py-1 rounded-full uppercase hover:opacity-90 transition-colors">Connect</button>
           </div>
         </div>
 
         <div class="edit-tab-content p-5 flex-col gap-3 hidden" data-content="notifications">
-          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <i data-lucide="shopping-bag" class="w-4 h-4 text-slate-500"></i>
+              <i data-lucide="shopping-bag" class="w-4 h-4" style="color: var(--text-muted)"></i>
               <div>
-                <p class="text-xs font-bold text-slate-800">Wishlist Price Drops</p>
-                <p class="text-[10px] text-slate-400">Get notified when wishlist items go on sale</p>
+                <p class="text-xs font-bold" style="color: var(--text-primary)">Wishlist Price Drops</p>
+                <p class="text-[10px]" style="color: var(--text-muted)">Get notified when wishlist items go on sale</p>
               </div>
             </div>
             <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
           </div>
-          <div class="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-slate-100">
+          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <i data-lucide="mail" class="w-4 h-4 text-slate-500"></i>
+              <i data-lucide="mail" class="w-4 h-4" style="color: var(--text-muted)"></i>
               <div>
-                <p class="text-xs font-bold text-slate-800">Email Newsletter</p>
-                <p class="text-[10px] text-slate-400">Weekly digest of activity and deals</p>
+                <p class="text-xs font-bold" style="color: var(--text-primary)">Email Newsletter</p>
+                <p class="text-[10px]" style="color: var(--text-muted)">Weekly digest of activity and deals</p>
               </div>
             </div>
             <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
@@ -568,55 +722,55 @@
       </div>
 
       <!-- FAVORITE GAMES -->
-      <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-5 shrink-0">
+      <div class="rounded-2xl border shadow-sm p-5 shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
-            <i data-lucide="star" class="w-4 h-4 text-slate-600"></i> Favorite Games
+          <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
+            <i data-lucide="star" class="w-4 h-4" style="color: var(--text-muted)"></i> Favorite Games
           </h3>
-          <a href="#" class="view-only text-xs text-slate-400 font-medium hover:text-slate-600 flex items-center gap-1">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
+          <a href="#" class="view-only text-xs font-medium hover:text-[var(--text-primary)] flex items-center gap-1" style="color: var(--text-muted)">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
         </div>
         <div class="flex gap-4 overflow-x-auto game-scroll pb-2">
           <div class="game-card shrink-0 w-40 relative group">
-            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
               <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#1</div>
+              <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#1</div>
               <div class="absolute bottom-2 left-2 right-2">
                 <p class="text-[11px] font-extrabold text-white leading-tight truncate">Project Sekai</p>
-                <p class="text-[9px] text-slate-200 truncate">320 hrs played</p>
+                <p class="text-[9px] text-slate-300 truncate">320 hrs played</p>
               </div>
             </div>
           </div>
           <div class="game-card shrink-0 w-40 relative group">
-            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
               <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#2</div>
+              <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#2</div>
               <div class="absolute bottom-2 left-2 right-2">
                 <p class="text-[11px] font-extrabold text-white leading-tight truncate">NieR:Automata</p>
-                <p class="text-[9px] text-slate-200 truncate">85 hrs played</p>
+                <p class="text-[9px] text-slate-300 truncate">85 hrs played</p>
               </div>
             </div>
           </div>
           <div class="game-card shrink-0 w-40 relative group">
-            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
               <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#3</div>
+              <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#3</div>
               <div class="absolute bottom-2 left-2 right-2">
                 <p class="text-[11px] font-extrabold text-white leading-tight truncate">Honkai: Star Rail</p>
-                <p class="text-[9px] text-slate-200 truncate">140 hrs played</p>
+                <p class="text-[9px] text-slate-300 truncate">140 hrs played</p>
               </div>
             </div>
           </div>
           <div class="game-card shrink-0 w-40 relative group">
-            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
               <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2 right-2 bg-[#323446] text-white text-[8px] font-bold px-2 py-0.5 rounded-full">#4</div>
+              <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#4</div>
               <div class="absolute bottom-2 left-2 right-2">
                 <p class="text-[11px] font-extrabold text-white leading-tight truncate">Elden Ring</p>
-                <p class="text-[9px] text-slate-200 truncate">210 hrs played</p>
+                <p class="text-[9px] text-slate-300 truncate">210 hrs played</p>
               </div>
             </div>
           </div>
@@ -627,12 +781,12 @@
       <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-5 flex-1 min-h-0">
         <!-- LEFT -->
         <div class="flex flex-col gap-5 overflow-y-auto pr-1">
-          <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-5 shrink-0">
+          <div class="rounded-2xl border shadow-sm p-5 shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
-                <i data-lucide="trophy" class="w-4 h-4 text-slate-600"></i> Achievement Showcase
+              <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
+                <i data-lucide="trophy" class="w-4 h-4" style="color: var(--text-muted)"></i> Achievement Showcase
               </h3>
-              <span class="text-[10px] font-bold text-slate-500">32 / 85 unlocked</span>
+              <span class="text-[10px] font-bold" style="color: var(--text-muted)">32 / 85 unlocked</span>
             </div>
             <div class="relative bg-gradient-to-br from-[#323446] to-slate-800 rounded-2xl p-5 mb-4 overflow-hidden">
               <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
@@ -651,61 +805,61 @@
               </div>
             </div>
             <div class="grid grid-cols-4 gap-2.5">
-              <div class="badge-item bg-white/80 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center cursor-pointer">
-                <i data-lucide="award" class="w-6 h-6 text-[#323446] mb-1.5"></i>
-                <span class="text-[9px] font-bold text-slate-700 leading-tight">OG Player</span>
+              <div class="badge-item p-3 rounded-xl border flex flex-col items-center text-center cursor-pointer" style="background: var(--bg-card); border-color: var(--border-soft)">
+                <i data-lucide="award" class="w-6 h-6 text-brand mb-1.5"></i>
+                <span class="text-[9px] font-bold leading-tight" style="color: var(--text-primary)">OG Player</span>
               </div>
-              <div class="badge-item bg-white/80 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center cursor-pointer">
-                <i data-lucide="flame" class="w-6 h-6 text-[#323446] mb-1.5"></i>
-                <span class="text-[9px] font-bold text-slate-700 leading-tight">Streak 30</span>
+              <div class="badge-item p-3 rounded-xl border flex flex-col items-center text-center cursor-pointer" style="background: var(--bg-card); border-color: var(--border-soft)">
+                <i data-lucide="flame" class="w-6 h-6 text-brand mb-1.5"></i>
+                <span class="text-[9px] font-bold leading-tight" style="color: var(--text-primary)">Streak 30</span>
               </div>
-              <div class="badge-item bg-white/80 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center cursor-pointer">
-                <i data-lucide="zap" class="w-6 h-6 text-[#323446] mb-1.5"></i>
-                <span class="text-[9px] font-bold text-slate-700 leading-tight">Speedrun</span>
+              <div class="badge-item p-3 rounded-xl border flex flex-col items-center text-center cursor-pointer" style="background: var(--bg-card); border-color: var(--border-soft)">
+                <i data-lucide="zap" class="w-6 h-6 text-brand mb-1.5"></i>
+                <span class="text-[9px] font-bold leading-tight" style="color: var(--text-primary)">Speedrun</span>
               </div>
-              <div class="badge-item bg-white/80 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center cursor-pointer">
-                <i data-lucide="music" class="w-6 h-6 text-[#323446] mb-1.5"></i>
-                <span class="text-[9px] font-bold text-slate-700 leading-tight">Rhythm Pro</span>
+              <div class="badge-item p-3 rounded-xl border flex flex-col items-center text-center cursor-pointer" style="background: var(--bg-card); border-color: var(--border-soft)">
+                <i data-lucide="music" class="w-6 h-6 text-brand mb-1.5"></i>
+                <span class="text-[9px] font-bold leading-tight" style="color: var(--text-primary)">Rhythm Pro</span>
               </div>
             </div>
           </div>
 
           <div>
             <div class="flex justify-between items-center mb-3 px-1">
-              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
-                <i data-lucide="activity" class="w-4 h-4 text-slate-600"></i> Activity Timeline
+              <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
+                <i data-lucide="activity" class="w-4 h-4" style="color: var(--text-muted)"></i> Activity Timeline
               </h3>
-              <a href="#" class="text-xs text-slate-400 font-medium hover:text-slate-600 flex items-center gap-1">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
+              <a href="#" class="text-xs font-medium hover:text-[var(--text-primary)] flex items-center gap-1" style="color: var(--text-muted)">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
             </div>
             <div class="flex flex-col gap-3">
               <div class="timeline-item flex gap-3.5">
-                <div class="w-12 h-12 rounded-2xl bg-[#323446] flex items-center justify-center shrink-0 shadow-md">
-                  <i data-lucide="gamepad-2" class="w-5 h-5 text-white"></i>
+                <div class="w-12 h-12 rounded-2xl brand-btn bg-brand flex items-center justify-center shrink-0 shadow-md">
+                  <i data-lucide="gamepad-2" class="w-5 h-5"></i>
                 </div>
-                <div class="flex-1 bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm min-w-0">
+                <div class="flex-1 p-4 rounded-2xl border shadow-sm min-w-0" style="background: var(--bg-surface); border-color: var(--border-color)">
                   <div class="flex items-start justify-between gap-3 mb-1.5">
-                    <h5 class="text-xs font-extrabold text-slate-800">Played Project Sekai for 2 hours</h5>
-                    <span class="text-[9px] font-bold text-slate-400 shrink-0">2h ago</span>
+                    <h5 class="text-xs font-extrabold" style="color: var(--text-primary)">Played Project Sekai for 2 hours</h5>
+                    <span class="text-[9px] font-bold shrink-0" style="color: var(--text-muted)">2h ago</span>
                   </div>
-                  <p class="text-[10px] text-slate-500 leading-relaxed">Completed Chapter 42 · Cleared 12 songs on Master difficulty</p>
+                  <p class="text-[10px] leading-relaxed" style="color: var(--text-secondary)">Completed Chapter 42 · Cleared 12 songs on Master difficulty</p>
                   <div class="flex items-center gap-2 mt-2.5">
-                    <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+24 XP</span>
+                    <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+24 XP</span>
                   </div>
                 </div>
               </div>
               <div class="timeline-item flex gap-3.5">
-                <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0">
-                  <i data-lucide="trophy" class="w-5 h-5 text-[#323446]"></i>
+                <div class="w-12 h-12 rounded-2xl border flex items-center justify-center shrink-0" style="background: var(--bg-card); border-color: var(--border-soft)">
+                  <i data-lucide="trophy" class="w-5 h-5 text-brand"></i>
                 </div>
-                <div class="flex-1 bg-[#F7F9FC] p-4 rounded-2xl border border-white shadow-sm min-w-0">
+                <div class="flex-1 p-4 rounded-2xl border shadow-sm min-w-0" style="background: var(--bg-surface); border-color: var(--border-color)">
                   <div class="flex items-start justify-between gap-3 mb-1.5">
-                    <h5 class="text-xs font-extrabold text-slate-800">Earned "Rhythm Master" achievement</h5>
-                    <span class="text-[9px] font-bold text-slate-400 shrink-0">Yesterday</span>
+                    <h5 class="text-xs font-extrabold" style="color: var(--text-primary)">Earned "Rhythm Master" achievement</h5>
+                    <span class="text-[9px] font-bold shrink-0" style="color: var(--text-muted)">Yesterday</span>
                   </div>
-                  <p class="text-[10px] text-slate-500 leading-relaxed">Rare achievement — only 3.2% of players have unlocked this</p>
+                  <p class="text-[10px] leading-relaxed" style="color: var(--text-secondary)">Rare achievement — only 3.2% of players have unlocked this</p>
                   <div class="flex items-center gap-2 mt-2.5">
-                    <span class="text-[9px] font-bold text-[#323446] bg-slate-100 px-2 py-0.5 rounded-full">+40 XP</span>
-                    <span class="text-[9px] font-bold text-white bg-[#323446] px-2 py-0.5 rounded-full">Rare</span>
+                    <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+40 XP</span>
+                    <span class="brand-btn text-[9px] font-bold bg-brand px-2 py-0.5 rounded-full">Rare</span>
                   </div>
                 </div>
               </div>
@@ -715,70 +869,101 @@
 
         <!-- RIGHT -->
         <div class="flex flex-col gap-4 overflow-y-auto pr-1">
-          <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-4 shrink-0">
+          <div class="rounded-2xl border shadow-sm p-4 shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
             <div class="flex items-center justify-between mb-3">
-              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
-                <i data-lucide="users" class="w-4 h-4 text-slate-600"></i> Friends Online
+              <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
+                <i data-lucide="users" class="w-4 h-4" style="color: var(--text-muted)"></i> Friends Online
               </h3>
-              <span class="flex items-center gap-1 text-[10px] font-bold text-[#323446]">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#323446] pulse-dot"></span> 12 of 126
+              <span class="flex items-center gap-1 text-[10px] font-bold text-brand">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand pulse-dot"></span> 12 of 126
               </span>
             </div>
             <div class="flex flex-col gap-1.5">
-              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors cursor-pointer">
+              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors cursor-pointer">
                 <div class="relative shrink-0">
-                  <div class="w-9 h-9 rounded-full border border-slate-200 overflow-hidden">
+                  <div class="w-9 h-9 rounded-full border overflow-hidden" style="border-color: var(--border-soft)">
                     <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80" alt="">
                   </div>
-                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#323446] border-2 border-[#F7F9FC]"></span>
+                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-brand border-2" style="border-color: var(--bg-surface)"></span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold text-slate-800 truncate">shiro_kun</p>
-                  <p class="text-[9px] text-slate-400 truncate">Playing Project Sekai</p>
+                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">shiro_kun</p>
+                  <p class="text-[9px] truncate" style="color: var(--text-muted)">Playing Project Sekai</p>
                 </div>
               </div>
-              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors cursor-pointer">
+              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors cursor-pointer">
                 <div class="relative shrink-0">
-                  <div class="w-9 h-9 rounded-full border border-slate-200 overflow-hidden">
+                  <div class="w-9 h-9 rounded-full border overflow-hidden" style="border-color: var(--border-soft)">
                     <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=80&q=80" alt="">
                   </div>
-                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#323446] border-2 border-[#F7F9FC]"></span>
+                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-brand border-2" style="border-color: var(--bg-surface)"></span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold text-slate-800 truncate">hana_illustrator</p>
-                  <p class="text-[9px] text-slate-400 truncate">Drawing fan art</p>
+                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">hana_illustrator</p>
+                  <p class="text-[9px] truncate" style="color: var(--text-muted)">Drawing fan art</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="bg-[#F7F9FC] rounded-2xl border border-white shadow-sm p-4 shrink-0">
+          <div class="rounded-2xl border shadow-sm p-4 shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
             <div class="flex items-center justify-between mb-3">
-              <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
-                <i data-lucide="link" class="w-4 h-4 text-slate-600"></i> Social Links
+              <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
+                <i data-lucide="link" class="w-4 h-4" style="color: var(--text-muted)"></i> Social Links
               </h3>
             </div>
             <div class="flex flex-col gap-1.5">
-              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors">
-                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
-                  <i data-lucide="twitter" class="w-4 h-4 text-slate-600"></i>
+              {% if form.instance.twitter %}
+              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                  <i data-lucide="twitter" class="w-4 h-4" style="color: var(--text-primary)"></i>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold text-slate-800 truncate">@hoshino_ichika</p>
-                  <p class="text-[9px] text-slate-400 truncate">Twitter</p>
+                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">{{ form.instance.twitter }}</p>
+                  <p class="text-[9px] font-semibold truncate" style="color: var(--text-secondary)">Twitter</p>
                 </div>
-                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+                <i data-lucide="external-link" class="w-3 h-3" style="color: var(--text-muted)"></i>
               </a>
-              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white transition-colors">
-                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
-                  <i data-lucide="globe" class="w-4 h-4 text-slate-600"></i>
+              {% endif %}
+              {% if form.instance.instagram %}
+              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                  <i data-lucide="instagram" class="w-4 h-4" style="color: var(--text-primary)"></i>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold text-slate-800 truncate">hoshino-ichika.dev</p>
-                  <p class="text-[9px] text-slate-400 truncate">Website</p>
+                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">{{ form.instance.instagram }}</p>
+                  <p class="text-[9px] font-semibold truncate" style="color: var(--text-secondary)">Instagram</p>
                 </div>
-                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+                <i data-lucide="external-link" class="w-3 h-3" style="color: var(--text-muted)"></i>
               </a>
+              {% endif %}
+              {% if form.instance.youtube %}
+              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                  <i data-lucide="youtube" class="w-4 h-4" style="color: var(--text-primary)"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">{{ form.instance.youtube }}</p>
+                  <p class="text-[9px] font-semibold truncate" style="color: var(--text-secondary)">YouTube</p>
+                </div>
+                <i data-lucide="external-link" class="w-3 h-3" style="color: var(--text-muted)"></i>
+              </a>
+              {% endif %}
+              {% if form.instance.twitch %}
+              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                  <i data-lucide="twitch" class="w-4 h-4" style="color: var(--text-primary)"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">{{ form.instance.twitch }}</p>
+                  <p class="text-[9px] font-semibold truncate" style="color: var(--text-secondary)">Twitch</p>
+                </div>
+                <i data-lucide="external-link" class="w-3 h-3" style="color: var(--text-muted)"></i>
+              </a>
+              {% endif %}
+              {% if not form.instance.twitter and not form.instance.instagram and not form.instance.youtube and not form.instance.twitch %}
+              <p class="text-[9px] px-2 py-1.5" style="color: var(--text-muted)">No social links yet — edit your profile to add them.</p>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -788,6 +973,12 @@
   </div>
 
   <script>
+    // ===== LOAD GLOBAL THEME =====
+    (function loadTheme() {
+      const theme = localStorage.getItem('kaimono_theme');
+      if (theme) document.body.setAttribute('data-theme', theme);
+    })();
+
     lucide.createIcons();
 
     // ===== EDIT MODE =====
@@ -858,6 +1049,11 @@
       }
     }
 
+    function setBannerPos(value) {
+      document.getElementById('banner-img').style.objectPosition = '50% ' + value + '%';
+      document.getElementById('banner-pos-label').textContent = value;
+    }
+
     // ===== AVATAR UPLOAD (fly-up) =====
     const avatarInput = document.getElementById('avatar-input');
     const uploadCircle = document.getElementById('upload-circle');
@@ -878,7 +1074,7 @@
         uploadPreview.src = url;
         uploadPreview.classList.remove('hidden');
         uploadIcon.classList.add('hidden');
-        uploadCircle.style.borderColor = '#323446';
+        uploadCircle.style.borderColor = 'var(--brand)';
         uploadCircle.style.borderStyle = 'solid';
 
         setTimeout(function () {

@@ -1,30 +1,30 @@
 <div class="pt-5 pb-3 px-6 relative w-full shrink-0">
-  <header class="bg-[#323446] text-slate-300 px-6 py-4 flex justify-between items-center shadow-md rounded-xl border border-slate-700/60">
+  <header style="background-color: var(--brand); color: var(--on-brand); border: 1px solid color-mix(in srgb, var(--on-brand) 15%, transparent);" class="px-6 py-4 flex justify-between items-center shadow-md rounded-xl">
     <div class="flex items-center gap-6">
       <div class="flex items-center gap-2">
-        <i data-lucide="user" class="w-4 h-4 text-white"></i>
-        <span class="font-bold text-white tracking-widest uppercase text-sm">@{{ request.user.username|default:'guest' }}</span>
+        <i data-lucide="user" class="w-4 h-4 text-[var(--on-brand)]"></i>
+        <span class="font-bold text-[var(--on-brand)] tracking-widest uppercase text-sm">@{{ request.user.username|default:'guest' }}</span>
       </div>
-      <div class="px-3 py-1 text-slate-300 font-serif italic text-sm tracking-wider opacity-90">LazyStudio</div>
-      <span class="text-slate-500">|</span>
-      <div class="flex items-center gap-3 text-slate-400 tracking-wider">
-        <span class="text-xs bg-slate-800/80 px-3 py-1 rounded text-slate-300 font-mono">CURRENT PROJECT</span>
-        <span class="text-slate-500">|</span>
-        <span class="font-semibold text-slate-200 text-sm">ANIME MERCH E-COMMERCE DASHBOARD</span>
-        <span class="text-slate-500">//</span>
-        <span class="text-slate-300 text-xs">PROJECT SEKAI STYLE</span>
+      <div class="px-3 py-1 text-[var(--on-brand)] font-serif italic text-sm tracking-wider opacity-80">LazyStudio</div>
+      <span class="text-[var(--on-brand)] opacity-40">|</span>
+      <div class="flex items-center gap-3 text-[var(--on-brand)] tracking-wider">
+        <span class="text-xs bg-[var(--on-brand)]/15 px-3 py-1 rounded text-[var(--on-brand)] font-mono">CURRENT PROJECT</span>
+        <span class="text-[var(--on-brand)] opacity-40">|</span>
+        <span class="font-semibold text-[var(--on-brand)] text-sm">ANIME MERCH E-COMMERCE DASHBOARD</span>
+        <span class="text-[var(--on-brand)] opacity-40">//</span>
+        <span class="text-[var(--on-brand)] opacity-80 text-xs">PROJECT SEKAI STYLE</span>
       </div>
     </div>
     <div class="flex items-center gap-6">
       <div class="flex items-center gap-0 opacity-70">
-        <div class="w-48 bg-slate-500/50 h-[2px] rounded-l-full relative">
-          <div class="absolute right-0 -top-1 w-2.5 h-3 bg-white shadow-sm"></div>
+        <div class="w-48 bg-[var(--on-brand)]/40 h-[2px] rounded-l-full relative">
+          <div class="absolute right-0 -top-1 w-2.5 h-3 bg-[var(--on-brand)] shadow-sm"></div>
         </div>
-        <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white rotate-180 -ml-1"></i>
+        <i data-lucide="play" class="w-3.5 h-3.5 text-[var(--on-brand)] fill-[var(--on-brand)] rotate-180 -ml-1"></i>
       </div>
       <div class="flex items-center gap-4 pl-4">
-        <span class="font-bold text-white tracking-widest text-sm">{{ request.user.display_name|default:request.user.username|upper }}</span>
-        <button class="p-1 transition-colors text-white"><i data-lucide="list" class="w-5 h-5"></i></button>
+        <span class="font-bold text-[var(--on-brand)] tracking-widest text-sm">{{ request.user.display_name|default:request.user.username|upper }}</span>
+        <button class="p-1 transition-colors text-[var(--on-brand)]"><i data-lucide="list" class="w-5 h-5"></i></button>
       </div>
     </div>
   </header>

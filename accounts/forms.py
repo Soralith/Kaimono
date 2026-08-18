@@ -53,7 +53,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('display_name', 'username', 'role', 'bio')
+        fields = ('display_name', 'username', 'role', 'bio', 'twitter', 'instagram', 'youtube', 'twitch', 'banner_position')
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -67,4 +67,4 @@ class SettingsForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('display_name', 'bio', 'theme', 'sidebar_expanded', 'reduce_animations', 'compact_mode')
+        fields = ('display_name', 'bio', 'theme', 'sidebar_expanded', 'reduce_animations', 'compact_mode', 'twitter', 'instagram', 'youtube', 'twitch')

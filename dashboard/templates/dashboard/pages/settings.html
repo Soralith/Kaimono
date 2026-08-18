@@ -568,51 +568,34 @@
           <!-- ===== PANEL: CONNECTIONS ===== -->
           <div class="set-panel flex flex-col gap-5 hidden" data-panel="connections">
             <div class="surface-card rounded-2xl border shadow-sm p-6 shrink-0">
-              <h3 class="text-base font-semibold flex items-center gap-2 mb-5">
-                <i data-lucide="link" class="w-4 h-4 icon-muted"></i> Linked Accounts
+              <h3 class="text-base font-semibold flex items-center gap-2 mb-1">
+                <i data-lucide="link" class="w-4 h-4 icon-muted"></i> Connections
               </h3>
-              <div class="flex flex-col gap-2.5">
-                <div class="setting-row flex items-center gap-3 p-4 rounded-xl">
-                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--bg-card);">
-                    <i data-lucide="twitter" class="w-4 h-4 icon-muted"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold" style="color: var(--text-primary);">Twitter</p>
-                    <p class="text-[10px] truncate" style="color: var(--text-muted);">@hoshino_ichika · Connected since Mar 2026</p>
-                  </div>
-                  <span class="text-[9px] font-bold px-2.5 py-1 rounded-full uppercase shrink-0 text-brand-badge">Connected</span>
-                  <button class="btn-ghost text-[10px] font-bold px-3 py-1.5 rounded-full shrink-0">Disconnect</button>
+              <p class="text-[11px] mb-5" style="color: var(--text-muted);">These link to your profile — edit them here or from your profile's edit mode.</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-secondary);">
+                    <i data-lucide="twitter" class="w-3 h-3 inline-block"></i> Twitter
+                  </label>
+                  <input type="text" name="twitter" form="set-form" value="{{ form.twitter.value|default:'' }}" placeholder="@handle" class="themed-input w-full">
                 </div>
-                <div class="setting-row flex items-center gap-3 p-4 rounded-xl">
-                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--bg-card);">
-                    <i data-lucide="instagram" class="w-4 h-4 icon-muted"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold" style="color: var(--text-primary);">Instagram</p>
-                    <p class="text-[10px] truncate" style="color: var(--text-muted);">@ichika.figures · Connected since May 2026</p>
-                  </div>
-                  <span class="text-[9px] font-bold px-2.5 py-1 rounded-full uppercase shrink-0 text-brand-badge">Connected</span>
-                  <button class="btn-ghost text-[10px] font-bold px-3 py-1.5 rounded-full shrink-0">Disconnect</button>
+                <div>
+                  <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-secondary);">
+                    <i data-lucide="instagram" class="w-3 h-3 inline-block"></i> Instagram
+                  </label>
+                  <input type="text" name="instagram" form="set-form" value="{{ form.instagram.value|default:'' }}" placeholder="@handle" class="themed-input w-full">
                 </div>
-                <div class="setting-row flex items-center gap-3 p-4 rounded-xl">
-                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--bg-card);">
-                    <i data-lucide="youtube" class="w-4 h-4 icon-muted"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold" style="color: var(--text-primary);">YouTube</p>
-                    <p class="text-[10px] truncate" style="color: var(--text-muted);">Share your gameplay clips automatically</p>
-                  </div>
-                  <button class="btn-brand text-[10px] font-bold px-4 py-1.5 rounded-full shrink-0">Connect</button>
+                <div>
+                  <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-secondary);">
+                    <i data-lucide="youtube" class="w-3 h-3 inline-block"></i> YouTube
+                  </label>
+                  <input type="text" name="youtube" form="set-form" value="{{ form.youtube.value|default:'' }}" placeholder="channel / @handle" class="themed-input w-full">
                 </div>
-                <div class="setting-row flex items-center gap-3 p-4 rounded-xl">
-                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--bg-card);">
-                    <i data-lucide="twitch" class="w-4 h-4 icon-muted"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold" style="color: var(--text-primary);">Twitch</p>
-                    <p class="text-[10px] truncate" style="color: var(--text-muted);">Show live streams on your profile</p>
-                  </div>
-                  <button class="btn-brand text-[10px] font-bold px-4 py-1.5 rounded-full shrink-0">Connect</button>
+                <div>
+                  <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-secondary);">
+                    <i data-lucide="twitch" class="w-3 h-3 inline-block"></i> Twitch
+                  </label>
+                  <input type="text" name="twitch" form="set-form" value="{{ form.twitch.value|default:'' }}" placeholder="/channel" class="themed-input w-full">
                 </div>
               </div>
             </div>
