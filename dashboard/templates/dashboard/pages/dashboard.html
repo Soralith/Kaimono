@@ -309,8 +309,11 @@
               <div class="z-10 max-w-[320px] relative">
                 <span class="text-sm font-semibold tracking-wide" style="color: var(--text-secondary);">Featured & Recommendations</span>
                 <h2 class="text-2xl font-bold mt-2 leading-snug" style="color: var(--text-primary);">{{ p.name }}</h2>
-                <a href="/shop/{{ p.id }}/" class="btn-brand mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
-                  Explore Collection <i data-lucide="play-circle" class="w-4 h-4 fill-current"></i>
+                <a href="/shop/{{ p.id }}/" class="mt-6 group inline-flex items-center gap-2.5 rounded-full py-2 pl-2 pr-5 text-xs font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:brightness-110 active:translate-y-0 shadow-lg" style="background: var(--brand); color: var(--on-brand);">
+                  <span class="w-9 h-9 shrink-0 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-12" style="background: var(--on-brand); color: var(--brand);">
+                    <i data-lucide="arrow-right" class="w-4 h-4" stroke-width="2.5"></i>
+                  </span>
+                  Explore Collection
                 </a>
               </div>
               <img src="{{ p.image }}" alt="{{ p.name }}" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
