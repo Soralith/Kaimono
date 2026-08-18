@@ -117,6 +117,7 @@ class GameSubmission(models.Model):
     developer_name = models.CharField(max_length=100, blank=True, help_text='Developer credit shown on product')
     publisher = models.CharField(max_length=100, blank=True)
     release_date = models.CharField(max_length=60, blank=True)
+    screenshots = models.JSONField(default=list, blank=True, help_text='List of screenshot image URLs')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     admin_note = models.TextField(blank=True, help_text='Admin feedback note')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -154,7 +155,7 @@ class GameSubmission(models.Model):
             'reviews': 0,
             'popularity': 0,
             'date': str(self.created_at.date()) if self.created_at else '',
-            'screenshots': [self.image] if self.image else [],
+            'screenshots': (self.screenshots if self.screenshots else []) or ([self.image] if self.image else []),
             'media': media,
             'friends': [],
             'bundles': [],

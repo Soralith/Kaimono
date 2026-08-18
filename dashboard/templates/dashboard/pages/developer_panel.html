@@ -246,6 +246,18 @@
                   <p class="text-[9px] mt-1" style="color: var(--text-muted);">YouTube watch, short, or embed link.</p>
                 </div>
 
+                <!-- Screenshots -->
+                <div class="md:col-span-2">
+                  <label class="text-[10px] font-bold uppercase tracking-wider block mb-1">Screenshots</label>
+                  <label class="flex items-center justify-center gap-2 cursor-pointer rounded-xl border-2 border-dashed px-4 py-3 text-[11px] font-bold transition-colors" style="border-color: var(--border-soft); color: var(--text-muted);" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='var(--border-soft)'">
+                    <i data-lucide="images" class="w-4 h-4"></i>
+                    Click to upload screenshots (multiple)
+                    <input type="file" name="screenshot_files" id="sub-shots" accept="image/*" multiple class="hidden" onchange="previewSubShots(this)">
+                  </label>
+                  <div id="sub-shot-preview" class="flex flex-wrap gap-2 mt-2"></div>
+                  <p class="text-[9px] mt-1.5" style="color: var(--text-muted);">JPG, PNG, WebP or GIF. Upload multiple screenshots to showcase your game.</p>
+                </div>
+
                 <!-- Submit -->
                 <div class="md:col-span-3 flex items-end justify-end pt-2">
                   <button type="submit" class="btn-brand font-semibold px-8 py-3 rounded-full text-xs flex items-center gap-2 shadow-sm">
@@ -392,6 +404,23 @@
         preview.innerHTML = '<img src="' + url + '" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML=\'<i data-lucide=\\\'image\\\' class=\\\'w-5 h-5\\\' style=\\\'color: var(--text-muted);\\\'></i>\'; lucide.createIcons();">';
         lucide.createIcons();
       }
+    }
+    function previewSubShots(input) {
+      const files = input.files || [];
+      const container = document.getElementById('sub-shot-preview');
+      if (!container) return;
+      container.innerHTML = '';
+      Array.from(files).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'w-16 h-16 rounded-lg object-cover';
+          img.style.border = '1px solid var(--border-soft)';
+          container.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
     lucide.createIcons();

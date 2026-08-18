@@ -1000,6 +1000,16 @@ def developer_panel_submit(request):
         from accounts import storage
         image_url = storage.upload_image(uploaded, folder='submissions') or image_url
 
+    # Handle screenshot uploads
+    screenshots = []
+    screenshot_files = request.FILES.getlist('screenshot_files')
+    if screenshot_files:
+        from accounts import storage
+        for f in screenshot_files:
+            url = storage.upload_image(f, folder='submissions')
+            if url:
+                screenshots.append(url)
+
     GameSubmission.objects.create(
         developer=request.user,
         name=name,
@@ -1017,6 +1027,7 @@ def developer_panel_submit(request):
         developer_name=request.POST.get('developer_name', '').strip(),
         publisher=request.POST.get('publisher', '').strip(),
         release_date=request.POST.get('release_date', '').strip(),
+        screenshots=screenshots,
     )
     messages.success(request, f"'{name}' submitted for review!")
     return redirect('developer_panel')
