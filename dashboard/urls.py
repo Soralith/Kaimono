@@ -18,4 +18,5 @@ urlpatterns = [
     path('wishlist/', views.wishlist, name='wishlist'),
     path('library/', views.library, name='library'),
     path('settings/', login_required(auth.settings_view), name='settings'),
+    path('settings/delete-account/', login_required(auth.delete_account_view), name='delete_account'),
 ]

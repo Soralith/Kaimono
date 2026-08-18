@@ -101,3 +101,22 @@ def settings_view(request):
         return redirect('settings')
 
     return render(request, 'dashboard/pages/settings.html', {'form': form})
+
+
+@never_cache
+def delete_account_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method == 'POST':
+        # Get the current user before logout
+        user = request.user
+        # Logout first to avoid session issues
+        logout(request)
+        # Delete the user permanently
+        user.delete()
+        messages.success(request, 'Your account has been permanently deleted.')
+        return redirect('landing')
+
+    # If GET, redirect to settings
+    return redirect('settings')
