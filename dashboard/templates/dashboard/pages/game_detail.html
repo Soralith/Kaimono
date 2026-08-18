@@ -313,15 +313,10 @@
           <button id="gd-buy" class="w-full bg-[#323446] hover:bg-slate-800 text-white font-bold py-3.5 rounded-full text-sm flex items-center justify-center gap-2 transition-all btn-dark">
             <i data-lucide="zap" class="w-4 h-4"></i> <span id="gd-buy-label">Buy Now</span>
           </button>
-
-          <div class="grid grid-cols-2 gap-2 mt-3">
-            <button id="gd-wish" class="w-full bg-[#F7F9FC] hover:bg-[var(--border-soft)]/60 text-[var(--text-secondary)] font-bold py-3 rounded-full text-xs flex items-center justify-center gap-2 border border-[var(--border-soft)] transition-colors">
-              <i data-lucide="heart" class="w-3.5 h-3.5"></i> Wishlist
-            </button>
-            <button id="gd-follow" class="follow-btn w-full bg-[#F7F9FC] hover:bg-[var(--border-soft)]/60 text-[var(--text-secondary)] font-bold py-3 rounded-full text-xs flex items-center justify-center gap-2 border border-[var(--border-soft)] transition-colors">
-              <i data-lucide="bell-plus" class="w-3.5 h-3.5"></i> Follow
-            </button>
-          </div>
+          <br>
+          <button id="gd-wish" class="w-full bg-[#F7F9FC] hover:bg-[var(--border-soft)]/60 text-[var(--text-secondary)] font-bold py-3 rounded-full text-xs flex items-center justify-center gap-2 border border-[var(--border-soft)] transition-colors">
+            <i data-lucide="heart" class="w-3.5 h-3.5"></i> Wishlist
+          </button>
 
           <div class="flex items-center gap-4 mt-4 pt-4 border-t border-[var(--border-soft)]">
             <span class="flex items-center gap-1.5 text-[10px] font-semibold text-[var(--text-secondary)]"><i data-lucide="shield-check" class="w-3 h-3 text-[var(--text-muted)]"></i> Authentic keys</span>
@@ -351,116 +346,10 @@
               </div>
             </div>
           </div>
-
-          <!-- Bundles / packages -->
-          <div class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 160ms">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2">
-                <i data-lucide="package-plus" class="w-4 h-4 text-[#6366F1]"></i> Bundles & Editions
-              </h3>
-              <span id="gd-bundle-count" class="text-[10px] font-bold text-[var(--text-muted)]"></span>
-            </div>
-            <div id="gd-bundles" class="grid sm:grid-cols-2 gap-3"></div>
-          </div>
         </div>
       </div>
 
-      <!-- ============ STAGE 3: DETAILS & FEATURES ============ -->
-      <div class="grid lg:grid-cols-[1.6fr_1fr] gap-6 mt-6">
-
-        <!-- About this game -->
-        <div class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 lg:p-8 animate-fadeInUp">
-          <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2 mb-4">
-            <i data-lucide="book-open" class="w-4 h-4 text-[#6366F1]"></i> About This Game
-          </h3>
-          <div id="gd-about" class="space-y-4 text-[13px] text-[var(--text-secondary)] leading-relaxed"></div>
-          <div id="gd-about-images" class="grid grid-cols-2 gap-3 mt-6"></div>
-          <div id="gd-keyfeatures" class="grid sm:grid-cols-2 gap-2.5 mt-6"></div>
-        </div>
-
-        <div class="flex flex-col gap-6">
-
-          <!-- Downloadable content -->
-          <div id="gd-dlc-wrap" class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 80ms">
-            <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2 mb-4">
-              <i data-lucide="package-open" class="w-4 h-4 text-[#6366F1]"></i> Downloadable Content
-            </h3>
-            <div id="gd-dlc" class="space-y-3"></div>
-          </div>
-
-          <!-- Steam features -->
-          <div id="gd-features-wrap" class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 140ms">
-            <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2 mb-4">
-              <i data-lucide="gamepad-2" class="w-4 h-4 text-[#6366F1]"></i> Steam Features
-            </h3>
-            <div id="gd-features" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- ============ STAGE 4: TECHNICAL & REVIEWS ============ -->
-      <div class="mt-6 space-y-6">
-
-        <!-- System requirements -->
-        <div id="gd-req-wrap" class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 lg:p-8 animate-fadeInUp">
-          <div class="flex items-center justify-between gap-3 mb-1">
-            <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2">
-              <i data-lucide="cpu" class="w-4 h-4 text-[#6366F1]"></i> System Requirements
-            </h3>
-            <span class="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">PC · Windows</span>
-          </div>
-          <p class="text-[11px] text-[var(--text-muted)] mb-5">Minimum and recommended hardware specifications.</p>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="rounded-2xl border border-[var(--border-soft)] bg-[#F7F9FC] p-5">
-              <h4 class="text-xs font-extrabold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                <span class="w-6 h-6 rounded-full bg-[var(--border-soft)]/70 text-[var(--text-secondary)] flex items-center justify-center"><i data-lucide="monitor" class="w-3 h-3"></i></span> Minimum
-              </h4>
-              <table class="w-full"><tbody id="gd-req-minimum"></tbody></table>
-            </div>
-            <div class="rounded-2xl border border-[var(--border-soft)] bg-[#F7F9FC] p-5">
-              <h4 class="text-xs font-extrabold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                <span class="w-6 h-6 rounded-full bg-[#6366F1]/15 text-[#6366F1] flex items-center justify-center"><i data-lucide="rocket" class="w-3 h-3"></i></span> Recommended
-              </h4>
-              <table class="w-full"><tbody id="gd-req-recommended"></tbody></table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Accolades & media reviews -->
-        <div id="gd-accolade-wrap" class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 lg:p-8 animate-fadeInUp">
-          <div class="flex items-center justify-between gap-3 mb-5">
-            <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2">
-              <i data-lucide="award" class="w-4 h-4 text-[#6366F1]"></i> Accolades & Media Reviews
-            </h3>
-            <div id="gd-metacritic"></div>
-          </div>
-          <div id="gd-accolades" class="grid sm:grid-cols-3 gap-3"></div>
-        </div>
-
-        <!-- User reviews -->
-        <div class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 lg:p-8 animate-fadeInUp">
-          <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
-            <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2">
-              <i data-lucide="message-square-quote" class="w-4 h-4 text-[#6366F1]"></i> User Reviews
-            </h3>
-            <div id="gd-review-summary" class="flex items-center gap-3"></div>
-          </div>
-
-          <!-- Filters: language / play time / date -->
-          <div class="flex flex-wrap items-center gap-2.5 mb-5 p-3 bg-[#F7F9FC] rounded-2xl">
-            <select id="gd-filter-lang" class="text-[11px] font-bold text-[var(--text-secondary)] bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-full px-3.5 py-2 outline-none focus:border-black cursor-pointer"></select>
-            <select id="gd-filter-time" class="text-[11px] font-bold text-[var(--text-secondary)] bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-full px-3.5 py-2 outline-none focus:border-black cursor-pointer"></select>
-            <select id="gd-filter-date" class="text-[11px] font-bold text-[var(--text-secondary)] bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-full px-3.5 py-2 outline-none focus:border-black cursor-pointer"></select>
-            <span id="gd-review-count" class="ml-auto text-[10px] font-bold text-[var(--text-muted)]"></span>
-          </div>
-
-          <div id="gd-reviews-list" class="space-y-3"></div>
-        </div>
-      </div>
-
-    </main>
-  </div>
+      
 
   <!-- TOAST CONTAINER -->
   <div id="toast-container" class="toast-container"></div>
