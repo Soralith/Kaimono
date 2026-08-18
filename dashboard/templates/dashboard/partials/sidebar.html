@@ -226,6 +226,18 @@
         <i data-lucide="settings" class="w-5 h-5 shrink-0"></i>
         <span class="sidebar-text text-xs">Settings</span>
       </a>
+      {% if request.user.is_authenticated and request.user.is_staff %}
+      <a href="/settings/admin/" data-path="/settings/admin/" data-tip="Admin Panel" class="nav-item">
+        <i data-lucide="shield" class="w-5 h-5 shrink-0"></i>
+        <span class="sidebar-text text-xs">Admin Panel</span>
+      </a>
+      {% endif %}
+      {% if request.user.is_authenticated and request.user.role == 'developer' %}
+      <a href="/settings/developer/" data-path="/settings/developer/" data-tip="Developer Panel" class="nav-item">
+        <i data-lucide="code-2" class="w-5 h-5 shrink-0"></i>
+        <span class="sidebar-text text-xs">Developer Panel</span>
+      </a>
+      {% endif %}
     </nav>
   </div>
 
