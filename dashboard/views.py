@@ -16,6 +16,7 @@ from collections import defaultdict
 from accounts.models import User
 from .models import (
     WishlistItem, UserWishlistItem, LibraryGame, ShopProduct,
+    GameSubmission,
     CommunityStory, CommunityChannel, CommunityGame, CommunityPost,
     PostImage, PostTag, PostReaction, Poll, PollOption, PollVote,
     CommunityComment,
@@ -594,9 +595,9 @@ def _admin_required(view_func):
 
 
 def _admin_section(request):
-    """Current admin tab, e.g. products, users, community."""
+    """Current admin tab, e.g. products, users, community, submissions."""
     section = request.GET.get("section") or request.POST.get("section") or "overview"
-    if section not in ("overview", "products", "users", "community"):
+    if section not in ("overview", "products", "users", "community", "submissions"):
         section = "overview"
     return section
 
@@ -605,6 +606,8 @@ def _build_admin_context(request, section):
     products = list(ShopProduct.objects.order_by("id"))
     posts = list(CommunityPost.objects.select_related("channel").order_by("-created_at"))
     comments = list(CommunityComment.objects.select_related("post").order_by("-created_at"))
+    submissions = list(GameSubmission.objects.select_related('developer').order_by('-created_at'))
+    pending_subs = [s for s in submissions if s.status == 'pending']
     return {
         "section": section,
         "products": products,
@@ -625,6 +628,9 @@ def _build_admin_context(request, section):
         "wishlist_count": WishlistItem.objects.count(),
         "recent_posts": posts[:5],
         "recent_users": list(User.objects.all().order_by("-date_joined")[:5]),
+        "submissions": submissions,
+        "submissions_count": len(submissions),
+        "pending_submissions_count": len(pending_subs),
     }
 
 
@@ -716,6 +722,10 @@ def admin_panel(request):
             CommunityMember.objects.filter(id=request.POST.get("id")).delete()
             messages.success(request, "Member removed.")
             return redirect(reverse("admin_panel") + "?section=community")
+        if action == "submission_accept":
+            return _admin_submission_accept(request)
+        if action == "submission_reject":
+            return _admin_submission_reject(request)
         messages.error(request, "Unknown action.")
         return redirect(reverse("admin_panel") + f"?section={section}")
 
@@ -871,6 +881,52 @@ def _admin_member_save(request):
     return redirect(reverse("admin_panel") + "?section=community")
 
 
+def _admin_submission_accept(request):
+    """Accept a game submission: create a ShopProduct and mark as accepted."""
+    try:
+        sub = GameSubmission.objects.get(id=request.POST.get('id'))
+    except GameSubmission.DoesNotExist:
+        messages.error(request, "Submission not found.")
+        return redirect(reverse('admin_panel') + '?section=submissions')
+
+    data = sub.to_product_data()
+    product = ShopProduct.objects.create(
+        name=sub.name,
+        category=sub.category,
+        price=sub.price,
+        original_price=sub.original_price,
+        image=sub.image,
+        data=data,
+    )
+    # Keep data['id'] in sync with the real DB id
+    data['id'] = product.id
+    product.data = data
+    product.save(update_fields=['data'])
+
+    sub.status = 'accepted'
+    sub.admin_note = request.POST.get('note', '').strip()
+    sub.save(update_fields=['status', 'admin_note', 'reviewed_at'])
+
+    messages.success(request, f"'{sub.name}' accepted and added to the shop!")
+    return redirect(reverse('admin_panel') + '?section=submissions')
+
+
+def _admin_submission_reject(request):
+    """Reject a game submission with an optional admin note."""
+    try:
+        sub = GameSubmission.objects.get(id=request.POST.get('id'))
+    except GameSubmission.DoesNotExist:
+        messages.error(request, "Submission not found.")
+        return redirect(reverse('admin_panel') + '?section=submissions')
+
+    sub.status = 'rejected'
+    sub.admin_note = request.POST.get('note', '').strip()
+    sub.save(update_fields=['status', 'admin_note', 'reviewed_at'])
+
+    messages.success(request, f"'{sub.name}' rejected.")
+    return redirect(reverse('admin_panel') + '?section=submissions')
+
+
 def _admin_product_form(product):
     """Return a bound AdminProductForm for editing an existing product."""
     from .forms import AdminProductForm
@@ -902,13 +958,68 @@ def _admin_product_form(product):
 
 
 def developer_panel(request):
-    """Developer panel placeholder (feature implemented later)."""
+    """Developer panel: submit games for admin review."""
     if not request.user.is_authenticated:
         return redirect('login')
     if request.user.role != 'developer':
         messages.error(request, "Developer access only.")
         return redirect('settings')
-    return render(request, 'dashboard/pages/developer_panel.html')
+
+    my_submissions = list(
+        GameSubmission.objects.filter(developer=request.user).order_by('-created_at')
+    )
+    ctx = {
+        'submissions': my_submissions,
+        'pending_count': sum(1 for s in my_submissions if s.status == 'pending'),
+        'accepted_count': sum(1 for s in my_submissions if s.status == 'accepted'),
+        'rejected_count': sum(1 for s in my_submissions if s.status == 'rejected'),
+    }
+    return render(request, 'dashboard/pages/developer_panel.html', ctx)
+
+
+def developer_panel_submit(request):
+    """Handle game submission POST from the developer panel."""
+    if not request.user.is_authenticated:
+        return redirect('login')
+    if request.user.role != 'developer':
+        messages.error(request, "Developer access only.")
+        return redirect('settings')
+
+    if request.method != 'POST':
+        return redirect('developer_panel')
+
+    name = request.POST.get('name', '').strip()
+    if not name:
+        messages.error(request, "Game title is required.")
+        return redirect('developer_panel')
+
+    # Handle image upload via Supabase storage
+    image_url = request.POST.get('image', '').strip()
+    uploaded = request.FILES.get('image_file')
+    if uploaded:
+        from accounts import storage
+        image_url = storage.upload_image(uploaded, folder='submissions') or image_url
+
+    GameSubmission.objects.create(
+        developer=request.user,
+        name=name,
+        category='games',
+        type=request.POST.get('type', '').strip(),
+        brand=request.POST.get('brand', '').strip(),
+        price=request.POST.get('price') or None,
+        original_price=request.POST.get('original_price') or None,
+        image=image_url,
+        description=request.POST.get('description', '').strip(),
+        tags=request.POST.get('tags', '').strip(),
+        trailer_url=request.POST.get('trailer_url', '').strip(),
+        stock=request.POST.get('stock', 'In Stock').strip(),
+        badges=request.POST.get('badges', '').strip(),
+        developer_name=request.POST.get('developer_name', '').strip(),
+        publisher=request.POST.get('publisher', '').strip(),
+        release_date=request.POST.get('release_date', '').strip(),
+    )
+    messages.success(request, f"'{name}' submitted for review!")
+    return redirect('developer_panel')
 
 
 # ── Wishlist ────────────────────────────────────────────────────────

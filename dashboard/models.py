@@ -89,6 +89,79 @@ class ShopProduct(models.Model):
         return self.name
 
 
+# ── Developer Submissions ───────────────────────────────────────
+
+class GameSubmission(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending Review'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    ]
+    developer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='game_submissions',
+    )
+    name = models.CharField(max_length=200)
+    category = models.CharField(max_length=30, default='games')
+    type = models.CharField(max_length=100, blank=True, help_text='e.g. Action RPG, Metroidvania')
+    brand = models.CharField(max_length=100, blank=True, help_text='Studio / publisher name')
+    price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    original_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    image = models.URLField(blank=True, help_text='Banner / capsule image URL')
+    description = models.TextField(blank=True)
+    tags = models.CharField(max_length=300, blank=True, help_text='Comma-separated tags')
+    trailer_url = models.URLField(blank=True, help_text='YouTube trailer URL')
+    stock = models.CharField(max_length=100, blank=True, default='In Stock')
+    badges = models.CharField(max_length=200, blank=True, help_text='Comma-separated badges')
+    developer_name = models.CharField(max_length=100, blank=True, help_text='Developer credit shown on product')
+    publisher = models.CharField(max_length=100, blank=True)
+    release_date = models.CharField(max_length=60, blank=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    admin_note = models.TextField(blank=True, help_text='Admin feedback note')
+    created_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.name} ({self.status}) by {self.developer}"
+
+    def to_product_data(self):
+        """Build the ShopProduct.data dict from this submission."""
+        tags_list = [t.strip() for t in self.tags.split(',') if t.strip()]
+        badges_list = [b.strip() for b in self.badges.split(',') if b.strip()]
+        media = []
+        if self.trailer_url:
+            media.append({'url': self.trailer_url, 'youtube': True})
+        return {
+            'name': self.name,
+            'category': self.category,
+            'type': self.type,
+            'brand': self.brand,
+            'price': float(self.price) if self.price else 0,
+            'originalPrice': float(self.original_price) if self.original_price else None,
+            'image': self.image,
+            'description': self.description,
+            'tags': tags_list,
+            'badges': badges_list,
+            'stock': self.stock or 'In Stock',
+            'developer': self.developer_name or self.brand,
+            'publisher': self.publisher,
+            'releaseDate': self.release_date,
+            'rating': 0,
+            'reviews': 0,
+            'popularity': 0,
+            'date': str(self.created_at.date()) if self.created_at else '',
+            'screenshots': [self.image] if self.image else [],
+            'media': media,
+            'friends': [],
+            'bundles': [],
+            'active': True,
+        }
+
+
 # ── Community ──────────────────────────────────────────────────────
 
 class CommunityStory(models.Model):

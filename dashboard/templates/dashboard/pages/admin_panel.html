@@ -248,6 +248,13 @@
                   <span class="adm-tab-desc block text-[10px] truncate">Posts, channels & more</span>
                 </span>
               </a>
+              <a href="{% url 'admin_panel' %}?section=submissions" data-section="submissions" class="adm-tab flex items-center gap-3 px-3.5 py-3 rounded-xl text-left w-full {% if section == 'submissions' %}active{% endif %}">
+                <i data-lucide="inbox" class="adm-tab-icon w-4 h-4 shrink-0"></i>
+                <span class="flex-1 min-w-0">
+                  <span class="block text-xs font-bold">Submissions</span>
+                  <span class="adm-tab-desc block text-[10px] truncate">{% if pending_submissions_count %}<span style="color: #f59e0b;">{{ pending_submissions_count }} pending</span>{% else %}Dev game requests{% endif %}</span>
+                </span>
+              </a>
             </nav>
           </div>
 
@@ -952,6 +959,115 @@
             </div>
           </div>
 
+          <!-- ================= SUBMISSIONS ================= -->
+          <div class="flex flex-col gap-4 {% if section != 'submissions' %}hidden{% endif %}" data-panel="submissions">
+            <!-- Pending submissions -->
+            <div class="surface-card rounded-2xl border shadow-sm p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold flex items-center gap-2">
+                  <i data-lucide="inbox" class="w-4 h-4" style="color: var(--brand);"></i> Game Submissions
+                  {% if pending_submissions_count %}
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background: #f59e0b20; color: #f59e0b;">{{ pending_submissions_count }} pending</span>
+                  {% endif %}
+                </h3>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="adm-table">
+                  <thead>
+                    <tr>
+                      <th>Game</th>
+                      <th>Developer</th>
+                      <th>Type</th>
+                      <th>Price</th>
+                      <th>Status</th>
+                      <th>Submitted</th>
+                      <th class="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for s in submissions %}
+                    <tr>
+                      <td>
+                        <div class="flex items-center gap-3 min-w-0">
+                          {% if s.image %}
+                          <img src="{{ s.image }}" class="w-10 h-10 rounded-lg object-cover shrink-0" style="border: 1px solid var(--border-soft);" alt="">
+                          {% else %}
+                          <div class="w-10 h-10 rounded-lg shrink-0 flex items-center justify-center" style="background: var(--brand-soft);">
+                            <i data-lucide="gamepad-2" class="w-4 h-4" style="color: var(--brand);"></i>
+                          </div>
+                          {% endif %}
+                          <div class="min-w-0">
+                            <p class="text-xs font-bold truncate max-w-[200px]" style="color: var(--text-primary);">{{ s.name }}</p>
+                            {% if s.brand %}<p class="text-[10px] truncate" style="color: var(--text-muted);">{{ s.brand }}</p>{% endif %}
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="flex items-center gap-2">
+                          <img src="{{ s.developer.avatar_url|default:'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=80&q=60' }}" class="w-6 h-6 rounded-full object-cover" alt="">
+                          <span class="text-[11px] font-semibold">{{ s.developer.display_name|default:s.developer.username }}</span>
+                        </div>
+                      </td>
+                      <td><span class="text-[10px] font-bold uppercase tracking-wider">{{ s.type|default:"—" }}</span></td>
+                      <td>
+                        {% if s.price %}
+                        <span class="font-bold" style="color: var(--text-primary);">${{ s.price }}</span>
+                        {% else %}
+                        <span style="color: var(--text-muted);">—</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if s.status == 'pending' %}
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full" style="background: #f59e0b20; color: #f59e0b;">
+                          <span class="status-chip" style="background: #f59e0b;"></span> Pending
+                        </span>
+                        {% elif s.status == 'accepted' %}
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full" style="background: #22c55e20; color: #22c55e;">
+                          <span class="status-chip" style="background: #22c55e;"></span> Accepted
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full" style="background: #ef444420; color: #ef4444;">
+                          <span class="status-chip" style="background: #ef4444;"></span> Rejected
+                        </span>
+                        {% endif %}
+                      </td>
+                      <td><span class="text-[10px]" style="color: var(--text-muted);">{{ s.created_at|date:"M j, Y" }}</span></td>
+                      <td>
+                        {% if s.status == 'pending' %}
+                        <div class="flex items-center justify-end gap-2">
+                          <form method="post" action="{% url 'admin_panel' %}" class="inline" onsubmit="return confirm('Accept \'{{ s.name|escapejs }}\' and publish it to the shop?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="submission_accept">
+                            <input type="hidden" name="id" value="{{ s.id }}">
+                            <button class="btn-ghost !p-1.5 rounded-lg" style="color: #22c55e;" title="Accept & publish"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i></button>
+                          </form>
+                          <form method="post" action="{% url 'admin_panel' %}" class="inline" onsubmit="return confirm('Reject \'{{ s.name|escapejs }}\'?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="submission_reject">
+                            <input type="hidden" name="id" value="{{ s.id }}">
+                            <button class="btn-ghost !p-1.5 rounded-lg text-red-500" title="Reject"><i data-lucide="x-circle" class="w-3.5 h-3.5"></i></button>
+                          </form>
+                        </div>
+                        {% else %}
+                        <span class="text-[10px]" style="color: var(--text-muted);">{% if s.admin_note %}{{ s.admin_note|truncatechars:30 }}{% else %}Reviewed{% endif %}</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7" class="text-center py-10">
+                      <div class="flex flex-col items-center gap-2">
+                        <i data-lucide="inbox" class="w-8 h-8" style="color: var(--text-muted);"></i>
+                        <p class="text-xs font-semibold" style="color: var(--text-muted);">No submissions yet</p>
+                      </div>
+                    </td></tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
         </section>
       </div>
     </main>
@@ -998,6 +1114,28 @@
         reader.readAsDataURL(file);
       });
     }
+
+    // ===== SUBMISSION ACCEPT/REJECT WITH NOTE =====
+    document.querySelectorAll('form[action*="admin_panel"]').forEach(form => {
+      const action = form.querySelector('input[name="action"]');
+      if (!action) return;
+      const val = action.value;
+      if (val === 'submission_accept' || val === 'submission_reject') {
+        form.addEventListener('submit', function(e) {
+          const label = val === 'submission_accept' ? 'Accept' : 'Reject';
+          const note = prompt(label + ' note (optional):');
+          if (note === null) { e.preventDefault(); return; }
+          let noteInput = form.querySelector('input[name="note"]');
+          if (!noteInput) {
+            noteInput = document.createElement('input');
+            noteInput.type = 'hidden';
+            noteInput.name = 'note';
+            form.appendChild(noteInput);
+          }
+          noteInput.value = note;
+        });
+      }
+    });
 
     // ===== LOAD THEME FROM LOCALSTORAGE =====
     (function () {

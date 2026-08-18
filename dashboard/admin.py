@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import (
     WishlistItem, UserWishlistItem, LibraryGame, ShopProduct,
+    GameSubmission,
     CommunityStory, CommunityChannel, CommunityGame,
     CommunityPost, PostImage, PostTag, PostReaction,
     Poll, PollOption, CommunityMember, UserFollowedGame,
@@ -33,6 +34,13 @@ class ShopProductAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     fields = ("id", "name", "category", "price", "original_price", "image", "data")
     readonly_fields = ("id",)
+
+
+@admin.register(GameSubmission)
+class GameSubmissionAdmin(admin.ModelAdmin):
+    list_display = ("name", "developer", "status", "price", "created_at")
+    list_filter = ("status",)
+    search_fields = ("name", "developer__username")
 
 
 # ── Community ──────────────────────────────────────────────────────
