@@ -28,4 +28,5 @@ urlpatterns = [
     path('api/community/comments/', views.community_get_comments, name='community_get_comments'),
     path('api/community/share/', views.community_share_post, name='community_share_post'),
     path('api/community/games/follow/', views.community_toggle_follow_game, name='community_toggle_follow_game'),
+    path('api/shop/checkout/', views.checkout_complete, name='checkout_complete'),
 ]

@@ -631,6 +631,7 @@
   </div>
 
   <script src="{% static 'dashboard/js/products.js' %}"></script>
+  <script>window.KAIMONO_PRODUCTS = {{ product_json|safe }};</script>
   <script>
     (function loadTheme() {
       const theme = localStorage.getItem('kaimono_theme');

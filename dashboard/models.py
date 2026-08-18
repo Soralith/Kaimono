@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 # ── Wishlist & Library (existing) ──────────────────────────────────
@@ -36,10 +37,34 @@ class LibraryGame(models.Model):
     status = models.CharField(max_length=20, default="Installed")
     badge = models.CharField(max_length=50, blank=True)
     favorite = models.BooleanField(default=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="library_games",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+class ShopProduct(models.Model):
+    name = models.CharField(max_length=200)
+    category = models.CharField(max_length=30)
+    price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    original_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    image = models.URLField(blank=True)
+    data = models.JSONField(default=dict, help_text="Full product object (badges, media, screenshots, bundles, etc.)")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["id"]
+        verbose_name = "Shop product"
+
+    def __str__(self):
+        return self.name
 
 
 # ── Community ──────────────────────────────────────────────────────

@@ -218,8 +218,15 @@ class Command(BaseCommand):
             },
         ]
 
+        User = get_user_model()
+        demo_user = User.objects.filter(is_superuser=True).exclude(username='admin').first()
+        if demo_user is None:
+            demo_user = User.objects.filter(is_superuser=True).first()
+        if demo_user is None:
+            demo_user = User.objects.first()
+
         for game in games:
-            LibraryGame.objects.create(**game)
+            LibraryGame.objects.create(user=demo_user, **game)
 
         # ── Community: friends ─────────────────────────────────────
         CommunityMember.objects.all().delete()

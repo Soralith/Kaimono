@@ -723,6 +723,8 @@
   <div id="toast-container" class="toast-container"></div>
 
   <script src="{% static 'dashboard/js/products.js' %}"></script>
+  <script>window.KAIMONO_PRODUCTS = {{ products_json|safe }};</script>
+  <script>const CSRF_TOKEN = "{{ csrf_token }}";</script>
 
   <script>
     // ===== LOAD THEME FROM LOCALSTORAGE =====
@@ -1604,9 +1606,27 @@
       $("close-cart").addEventListener("click", closeCart);
       $("cart-drawer-backdrop").addEventListener("click", closeCart);
       $("continue-shopping").addEventListener("click", closeCart);
-      $("checkout-btn").addEventListener("click", () => {
+      $("checkout-btn").addEventListener("click", async () => {
         if (state.cart.length === 0) return;
-        showToast("Proceeding to checkout...", "credit-card", "info");
+        const ids = state.cart.map(i => i.id);
+        try {
+          const res = await fetch("{% url 'checkout_complete' %}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-CSRFToken": CSRF_TOKEN },
+            body: JSON.stringify({ product_ids: ids }),
+          });
+          const data = await res.json();
+          state.cart = [];
+          localStorage.setItem("kaimono_cart", "[]");
+          renderCart();
+          renderCategories();
+          showToast(
+            data.added > 0 ? `Checkout done — ${data.added} game(s) added to your library.` : "Checkout done.",
+            "credit-card", "success"
+          );
+        } catch (e) {
+          showToast("Checkout failed. Please try again.", "alert-triangle", "error");
+        }
       });
 
       $("clear-all-filters").addEventListener("click", () => {

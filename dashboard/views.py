@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.db.models import Q, Count
 from collections import defaultdict
 from .models import (
-    WishlistItem, LibraryGame,
+    WishlistItem, LibraryGame, ShopProduct,
     CommunityStory, CommunityChannel, CommunityGame, CommunityPost,
     PostImage, PostTag, PostReaction, Poll, PollOption, PollVote,
     CommunityComment,
@@ -119,11 +119,60 @@ def dashboard(request):
 
 
 def shop(request):
-    return render(request, 'dashboard/pages/shop.html')
+    products = [p.data for p in ShopProduct.objects.order_by('id')]
+    return render(request, 'dashboard/pages/shop.html', {
+        'products_json': json.dumps(products),
+    })
 
 
 def game_detail(request, product_id):
-    return render(request, 'dashboard/pages/game_detail.html', {'product_id': product_id})
+    product = None
+    try:
+        product = ShopProduct.objects.get(id=int(product_id)).data
+    except (ShopProduct.DoesNotExist, ValueError):
+        product = None
+    return render(request, 'dashboard/pages/game_detail.html', {
+        'product_id': product_id,
+        'product_json': json.dumps([product]) if product else '[]',
+    })
+
+
+def checkout_complete(request):
+    """Create library entries when a user completes checkout (games only)."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'ok': False, 'detail': 'login'}, status=401)
+    try:
+        body = json.loads(request.body)
+    except (ValueError, TypeError):
+        body = {}
+    ids = body.get('product_ids') or []
+    if isinstance(ids, int):
+        ids = [ids]
+
+    added = 0
+    skipped = 0
+    for pid in ids:
+        try:
+            sp = ShopProduct.objects.get(id=int(pid))
+        except (ShopProduct.DoesNotExist, ValueError):
+            continue
+        if sp.category != 'games':
+            skipped += 1
+            continue
+        if request.user.library_games.filter(title=sp.name).exists():
+            continue
+        LibraryGame.objects.create(
+            user=request.user,
+            title=sp.name,
+            studio=sp.data.get('brand', ''),
+            image_url=sp.image or sp.data.get('image', ''),
+            meta='',
+            status='Not Installed',
+            badge='',
+            favorite=False,
+        )
+        added += 1
+    return JsonResponse({'ok': True, 'added': added, 'skipped': skipped})
 
 
 def community(request):
@@ -542,7 +591,10 @@ def wishlist(request):
     return render(request, 'dashboard/pages/wishlist.html', ctx)
 
 def library(request):
-    games = list(LibraryGame.objects.order_by('created_at'))
+    if request.user.is_authenticated:
+        games = list(request.user.library_games.all().order_by('created_at'))
+    else:
+        games = list(LibraryGame.objects.all().order_by('created_at'))
     installed = [g for g in games if g.status != "Not Installed"]
     favorites = [g for g in games if g.favorite]
     now_playing = next((g for g in games if g.status == "Now Playing"), installed[0] if installed else None)
