@@ -210,7 +210,7 @@
 
     /* ===== CARD HOVER ===== */
     .stat-card { transition: all 250ms ease; }
-    .stat-card:hover { transform: translateY(-2px); border-color: var(--border-soft); }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -12px var(--shadow-color); border-color: var(--border-soft); }
     .badge-item { transition: all 250ms ease; }
     .badge-item:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 16px -8px rgba(50,52,70,0.15); }
     .game-card { transition: all 300ms ease; }
@@ -287,6 +287,13 @@
     input[type=range]:focus {
       outline: none;
     }
+
+    /* ===== REDESIGNED STATS: PROGRESS RING ANIMATION ===== */
+    .progress-ring-circle {
+      transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
   </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden text-sm">
@@ -356,12 +363,6 @@
             <div class="edit-only items-center gap-1.5 brand-btn bg-brand px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
               <i data-lucide="pencil" class="w-3 h-3"></i> Editing Cover
             </div>
-            <button class="view-only bg-black/30 hover:bg-black/50 backdrop-blur-md text-white font-semibold p-2.5 rounded-full border border-white/20 transition-colors">
-              <i data-lucide="share-2" class="w-4 h-4"></i>
-            </button>
-            <button class="view-only bg-black/30 hover:bg-black/50 backdrop-blur-md text-white font-semibold p-2.5 rounded-full border border-white/20 transition-colors">
-              <i data-lucide="more-horizontal" class="w-4 h-4"></i>
-            </button>
           </div>
 
           <div class="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-10">
@@ -418,7 +419,6 @@
               <div class="view-only">
                 <div class="flex items-center gap-2.5 flex-wrap">
                   <h2 class="text-2xl font-extrabold tracking-tight" style="color: var(--text-primary)">{{ form.instance.display_name|default:form.instance.username }}</h2>
-                  <i data-lucide="badge-check" class="w-5 h-5 text-brand fill-brand"></i>
                   <span class="brand-btn bg-brand text-[10px] font-extrabold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
                     <i data-lucide="zap" class="w-3 h-3"></i> LVL 42
                   </span>
@@ -436,16 +436,16 @@
                 </p>
                 <div class="flex items-center gap-1.5 mt-3 flex-wrap">
                   <a href="{{ form.instance.twitter|default:'#' }}" class="genre-tag text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer flex items-center gap-1.5" style="color: var(--text-primary); background: var(--brand-soft);">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-3.5 h-3.5"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>{{ form.instance.twitter|default:'Twitter' }}
+                    <svg viewBox="0 0 24 24" fill="#1DA1F2" aria-hidden="true" class="w-3.5 h-3.5"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>{{ form.instance.twitter|default:'Twitter' }}
                   </a>
                   <a href="{{ form.instance.instagram|default:'#' }}" class="genre-tag text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer flex items-center gap-1.5" style="color: var(--text-primary); background: var(--brand-soft);">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-3.5 h-3.5"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.789.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.789-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0Zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03Zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162ZM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4Zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439Z"/></svg>{{ form.instance.instagram|default:'Instagram' }}
+                    <svg viewBox="0 0 24 24" fill="#E4405F" aria-hidden="true" class="w-3.5 h-3.5"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.789.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.789-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0Zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03Zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162ZM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4Zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439Z"/></svg>{{ form.instance.instagram|default:'Instagram' }}
                   </a>
                   <a href="{{ form.instance.youtube|default:'#' }}" class="genre-tag text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer flex items-center gap-1.5" style="color: var(--text-primary); background: var(--brand-soft);">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-3.5 h-3.5"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/></svg>{{ form.instance.youtube|default:'YouTube' }}
+                    <svg viewBox="0 0 24 24" fill="#FF0000" aria-hidden="true" class="w-3.5 h-3.5"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/><path fill="#fff" d="M9.75 15.02l5.75-3.02-5.75-3.02v6.04z"/></svg>{{ form.instance.youtube|default:'YouTube' }}
                   </a>
                   <a href="{{ form.instance.twitch|default:'#' }}" class="genre-tag text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer flex items-center gap-1.5" style="color: var(--text-primary); background: var(--brand-soft);">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-3.5 h-3.5"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>{{ form.instance.twitch|default:'Twitch' }}
+                    <svg viewBox="0 0 24 24" fill="#9146FF" aria-hidden="true" class="w-3.5 h-3.5"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>{{ form.instance.twitch|default:'Twitch' }}
                   </a>
                 </div>
               </div>
@@ -473,14 +473,19 @@
                 <!-- Banner Position (Simetris Full Width) -->
                 <div>
                   <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Banner Position</label>
-                  <div class="flex items-center gap-4 border rounded-[10px] px-4 py-3" style="background: var(--bg-card); border-color: var(--border-soft);">
+                  <div class="flex items-center gap-3 rounded-[10px] px-3 py-3" style="background: var(--bg-card); border-color: var(--border-soft);">
                     <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
                       <i data-lucide="move-vertical" class="w-4 h-4 text-brand"></i>
                     </div>
-                    <input id="banner-pos" type="range" name="banner_position" form="profile-form" min="0" max="100" value="{{ form.banner_position.value|default:50 }}" class="flex-1" oninput="setBannerPos(this.value)">
+                    <input id="banner-pos" type="range" name="banner_position" form="profile-form" min="0" max="100" value="{{ form.banner_position.value|default:50 }}" class="flex-1 banner-range" oninput="setBannerPos(this.value)">
                     <div class="w-12 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
-                      <span id="banner-pos-label" class="text-[11px] font-bold text-brand">{{ form.banner_position.value|default:50 }}</span>
+                      <span id="banner-pos-label" class="text-[11px] font-extrabold text-brand">{{ form.banner_position.value|default:50 }}<span class="text-[8px] font-bold">%</span></span>
                     </div>
+                  </div>
+                  <div class="flex items-center gap-1.5 mt-2 text-[8px] font-bold uppercase tracking-wider" style="color: var(--text-muted)">
+                    <span>Top</span>
+                    <span class="flex-1 h-1 rounded-full overflow-hidden" style="background: var(--border-soft)"><span id="banner-fill" class="block h-full bg-brand" style="width: {{ form.banner_position.value|default:50 }}%"></span></span>
+                    <span>Bottom</span>
                   </div>
                   <p class="text-[9px] mt-1.5" style="color: var(--text-muted)">Geser slider untuk mengatur posisi vertikal gambar banner.</p>
                 </div>
@@ -492,34 +497,37 @@
                   <p class="text-[9px] mt-1.5" style="color: var(--text-muted)">{{ form.instance.bio|length|default:'0' }} / 200 characters</p>
                 </div>
 
-                <!-- Role -->
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Role</label>
-                    <select name="role" form="profile-form" class="form-input">
-                      {% for value, label in form.fields.role.choices %}
-                      <option value="{{ value }}" {% if form.role.value == value %}selected{% endif %}>{{ label }}</option>
-                      {% endfor %}
-                    </select>
+                <!-- Role (read-only) -->
+                <div>
+                  <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Role</label>
+                  <div class="flex items-center gap-2.5 rounded-[10px] px-4 py-3 border" style="background: var(--bg-card); border-color: var(--border-soft);">
+                    {% if form.role.value|default:'gamer' == 'developer' %}
+                    <i data-lucide="code-xml" class="w-4 h-4 text-brand"></i>
+                    <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-primary)">{{ form.instance.get_role_display }}</span>
+                    {% else %}
+                    <i data-lucide="gamepad-2" class="w-4 h-4 text-brand"></i>
+                    <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-primary)">{{ form.instance.get_role_display }}</span>
+                    {% endif %}
+                    <span class="ml-auto text-[9px] font-semibold uppercase tracking-wider" style="color: var(--text-muted)">tidak dapat diubah</span>
                   </div>
                 </div>
 
                 <!-- Socials -->
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-3 h-3 inline-block"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg> Twitter</label>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><svg viewBox="0 0 24 24" fill="#1DA1F2" aria-hidden="true" class="w-3 h-3 inline-block"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg> Twitter</label>
                     <input type="text" name="twitter" form="profile-form" value="{{ form.twitter.value|default:'' }}" placeholder="@handle" class="form-input">
                   </div>
                   <div>
-                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-3 h-3 inline-block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.789.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.789-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0Zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03Zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162ZM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4Zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439Z"/></svg> Instagram</label>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><svg viewBox="0 0 24 24" fill="#E4405F" aria-hidden="true" class="w-3 h-3 inline-block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.789.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.789-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0Zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03Zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162ZM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4Zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439Z"/></svg> Instagram</label>
                     <input type="text" name="instagram" form="profile-form" value="{{ form.instagram.value|default:'' }}" placeholder="@handle" class="form-input">
                   </div>
                   <div>
-                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-3 h-3 inline-block"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/></svg> YouTube</label>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><svg viewBox="0 0 24 24" fill="#FF0000" aria-hidden="true" class="w-3 h-3 inline-block"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/><path fill="#fff" d="M9.75 15.02l5.75-3.02-5.75-3.02v6.04z"/></svg> YouTube</label>
                     <input type="text" name="youtube" form="profile-form" value="{{ form.youtube.value|default:'' }}" placeholder="channel / @handle" class="form-input">
                   </div>
                   <div>
-                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-3 h-3 inline-block"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg> Twitch</label>
+                    <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)"><svg viewBox="0 0 24 24" fill="#9146FF" aria-hidden="true" class="w-3 h-3 inline-block"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg> Twitch</label>
                     <input type="text" name="twitch" form="profile-form" value="{{ form.twitch.value|default:'' }}" placeholder="/channel" class="form-input">
                   </div>
                 </div>
@@ -527,86 +535,162 @@
 
             </div>
 
-            <!-- QUICK ACTIONS -->
-            <div class="view-only pt-5 shrink-0 flex items-start gap-2">
-              <button class="brand-btn bg-brand hover:opacity-90 font-bold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-md transition-all hover:shadow-lg">
-                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Follow
-              </button>
-              <button class="hover:bg-[var(--brand-soft)] font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 border transition-colors" style="background: var(--bg-card); color: var(--text-primary); border-color: var(--border-soft);">
-                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Message
-              </button>
             </div>
-
-          </div>
         </div>
       </div>
 
-      <!-- STATS ROW -->
-      <div class="grid grid-cols-5 gap-3 shrink-0">
-        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
-          <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="gamepad-2" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+3</span>
+      <!-- NEW LAYOUT: 2 COLUMN GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-5 flex-1 min-h-0">
+        
+        <!-- LEFT COLUMN: FAVORITE GAMES -->
+        <div class="rounded-2xl border shadow-sm p-5 flex flex-col" style="background: var(--bg-surface); border-color: var(--border-color);">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
+              <i data-lucide="star" class="w-4 h-4" style="color: var(--text-muted)"></i> Favorite Games
+            </h3>
+            <a href="#" class="view-only text-xs font-medium hover:text-[var(--text-primary)] flex items-center gap-1" style="color: var(--text-muted)">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
           </div>
-          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">48</p>
-          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Games Owned</span>
-          <div class="flex items-end gap-0.5 h-4 mt-2">
-            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 40%"></div>
-            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 60%"></div>
-            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 45%"></div>
-            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 80%"></div>
-            <div class="flex-1 rounded-sm" style="background: var(--border-soft); height: 65%"></div>
-            <div class="flex-1 bg-brand rounded-sm" style="height: 100%"></div>
+          
+          <!-- Scrollable container for games to fill height -->
+          <div class="flex gap-4 overflow-x-auto game-scroll pb-2 flex-1 items-start">
+            <div class="game-card shrink-0 w-40 relative group">
+              <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#1</div>
+                <div class="absolute bottom-2 left-2 right-2">
+                  <p class="text-[11px] font-extrabold text-white leading-tight truncate">Project Sekai</p>
+                  <p class="text-[9px] text-slate-300 truncate">320 hrs played</p>
+                </div>
+              </div>
+            </div>
+            <div class="game-card shrink-0 w-40 relative group">
+              <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#2</div>
+                <div class="absolute bottom-2 left-2 right-2">
+                  <p class="text-[11px] font-extrabold text-white leading-tight truncate">NieR:Automata</p>
+                  <p class="text-[9px] text-slate-300 truncate">85 hrs played</p>
+                </div>
+              </div>
+            </div>
+            <div class="game-card shrink-0 w-40 relative group">
+              <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
+                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#3</div>
+                <div class="absolute bottom-2 left-2 right-2">
+                  <p class="text-[11px] font-extrabold text-white leading-tight truncate">Honkai: Star Rail</p>
+                  <p class="text-[9px] text-slate-300 truncate">140 hrs played</p>
+                </div>
+              </div>
+            </div>
+            <div class="game-card shrink-0 w-40 relative group">
+              <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
+                <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#4</div>
+                <div class="absolute bottom-2 left-2 right-2">
+                  <p class="text-[11px] font-extrabold text-white leading-tight truncate">Elden Ring</p>
+                  <p class="text-[9px] text-slate-300 truncate">210 hrs played</p>
+                </div>
+              </div>
+            </div>
+            <div class="game-card shrink-0 w-40 relative group">
+              <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
+                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#5</div>
+                <div class="absolute bottom-2 left-2 right-2">
+                  <p class="text-[11px] font-extrabold text-white leading-tight truncate">Persona 5 Royal</p>
+                  <p class="text-[9px] text-slate-300 truncate">115 hrs played</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
-          <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="users" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+12</span>
+
+        <!-- RIGHT COLUMN: GAMES OWNED & WISHLIST STACKED -->
+        <div class="flex flex-col gap-5">
+          
+          <!-- GAMES OWNED CARD -->
+          <div class="stat-card p-5 rounded-2xl border shadow-sm flex items-center gap-5" style="background: var(--bg-surface); border-color: var(--border-color);">
+            <!-- Left Content -->
+            <div class="flex-1 flex flex-col justify-center">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="p-1.5 bg-brand-soft rounded-lg" style="color: var(--brand)"><i data-lucide="gamepad-2" class="w-4 h-4"></i></div>
+                <span class="text-[10px] font-bold uppercase tracking-wider" style="color: var(--text-muted)">Games Owned</span>
+              </div>
+              
+              <div class="flex items-end gap-2 mb-3">
+                <p class="text-3xl font-extrabold leading-none" style="color: var(--text-primary)">48</p>
+                <span class="text-[10px] font-bold bg-brand-soft px-1.5 py-0.5 rounded-md text-brand mb-1">+3 this month</span>
+              </div>
+
+              <!-- Mini Bar Chart -->
+              <div class="flex items-end gap-1 h-6 w-full max-w-[140px]">
+                <div class="flex-1 rounded-sm transition-all duration-300 hover:opacity-80" style="background: var(--border-soft); height: 40%" title="Apr: 2 games"></div>
+                <div class="flex-1 rounded-sm transition-all duration-300 hover:opacity-80" style="background: var(--border-soft); height: 60%" title="May: 3 games"></div>
+                <div class="flex-1 rounded-sm transition-all duration-300 hover:opacity-80" style="background: var(--border-soft); height: 45%" title="Jun: 2 games"></div>
+                <div class="flex-1 rounded-sm transition-all duration-300 hover:opacity-80" style="background: var(--border-soft); height: 80%" title="Jul: 4 games"></div>
+                <div class="flex-1 rounded-sm transition-all duration-300 hover:opacity-80" style="background: var(--border-soft); height: 65%" title="Aug: 3 games"></div>
+                <div class="flex-1 bg-brand rounded-sm transition-all duration-300 hover:opacity-80" style="height: 100%" title="Sep: 5 games"></div>
+              </div>
+            </div>
+
+            <!-- Right Content: Circular Progress -->
+            <div class="relative w-24 h-24 shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full" viewBox="0 0 100 100">
+                <!-- Background Circle -->
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border-soft)" stroke-width="8" />
+                <!-- Progress Circle (75% of 263.89 circumference = 197.9, offset = 65.97) -->
+                <circle class="progress-ring-circle" cx="50" cy="50" r="42" fill="none" stroke="var(--brand)" stroke-width="8" stroke-linecap="round" stroke-dasharray="263.89" stroke-dashoffset="263.89" data-target="65.97" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-lg font-extrabold leading-none" style="color: var(--text-primary)">75%</span>
+                <span class="text-[8px] font-bold uppercase" style="color: var(--text-muted)">Played</span>
+              </div>
+            </div>
           </div>
-          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">126</p>
-          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Friends</span>
-          <div class="flex -space-x-1.5 mt-2">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2" style="border-color: var(--bg-surface)" alt="">
-            <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2" style="border-color: var(--bg-surface)" alt="">
-            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=40&q=80" class="w-5 h-5 rounded-full border-2" style="border-color: var(--bg-surface)" alt="">
-            <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center text-[8px] font-bold" style="background: var(--border-soft); border-color: var(--bg-surface); color: var(--text-secondary)">+123</div>
+
+          <!-- WISHLIST CARD -->
+          <div class="stat-card p-5 rounded-2xl border shadow-sm flex flex-col justify-between flex-1" style="background: var(--bg-surface); border-color: var(--border-color);">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <div class="p-1.5 bg-brand-soft rounded-lg" style="color: var(--brand)"><i data-lucide="heart" class="w-4 h-4"></i></div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider" style="color: var(--text-muted)">Wishlist</span>
+                </div>
+                <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand flex items-center gap-1">
+                  <i data-lucide="flame" class="w-3 h-3"></i> 4 on sale
+                </span>
+              </div>
+              
+              <div class="flex items-end justify-between mb-3">
+                <div>
+                  <p class="text-3xl font-extrabold leading-none" style="color: var(--text-primary)">12 <span class="text-sm font-bold" style="color: var(--text-muted)">items</span></p>
+                </div>
+                <div class="text-right">
+                  <p class="text-[10px] line-through leading-none" style="color: var(--text-muted)">$371.20</p>
+                  <p class="text-lg font-extrabold leading-none text-brand">$284.00</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Savings Progress Bar -->
+            <div class="w-full mt-auto">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-[9px] font-bold uppercase" style="color: var(--text-muted)">Total Savings</span>
+                <span class="text-[10px] font-extrabold text-brand">$87.20 saved</span>
+              </div>
+              <div class="w-full h-2 rounded-full overflow-hidden" style="background: var(--border-soft)">
+                <!-- 87.20 / 371.20 = ~23.5% -->
+                <div class="h-full bg-brand rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-target-width="23.5%"></div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
-          <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="medal" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+2</span>
-          </div>
-          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">32</p>
-          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Badges</span>
-          <div class="flex items-center gap-0.5 mt-2">
-            <i data-lucide="award" class="w-3.5 h-3.5 text-brand"></i>
-            <i data-lucide="crown" class="w-3.5 h-3.5 text-brand"></i>
-            <i data-lucide="flame" class="w-3.5 h-3.5 text-brand"></i>
-            <i data-lucide="trophy" class="w-3.5 h-3.5 text-brand"></i>
-            <span class="text-[9px] font-bold ml-1" style="color: var(--text-muted)">+28</span>
-          </div>
-        </div>
-        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
-          <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="clock" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+48h</span>
-          </div>
-          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">1,240<span class="text-xs font-bold ml-0.5" style="color: var(--text-muted)">h</span></p>
-          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Total Playtime</span>
-          <div class="h-1 rounded-full overflow-hidden mt-3" style="background: var(--border-soft)">
-            <div class="h-full bg-brand rounded-full" style="width: 72%"></div>
-          </div>
-        </div>
-        <div class="stat-card p-4 rounded-2xl border shadow-sm" style="background: var(--bg-surface); border-color: var(--border-color);">
-          <div class="flex items-start justify-between mb-2">
-            <div class="p-2 bg-brand-soft rounded-xl" style="color: var(--text-secondary)"><i data-lucide="heart" class="w-4 h-4"></i></div>
-            <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">4 sale</span>
-          </div>
-          <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary)">12</p>
-          <span class="text-[10px] font-bold uppercase tracking-wider block mt-1" style="color: var(--text-muted)">Wishlist</span>
-          <p class="text-[9px] mt-2 leading-snug" style="color: var(--text-secondary)">Save <span class="font-bold text-brand">$87.20</span> with current discounts</p>
+
         </div>
       </div>
 
@@ -680,7 +764,7 @@
         <div class="edit-tab-content p-5 flex-col gap-3 hidden" data-content="connections">
           <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4" style="color: var(--text-secondary)"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></div>
+              <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center"><svg viewBox="0 0 24 24" fill="#1DA1F2" aria-hidden="true" class="w-4 h-4" style="color: var(--text-secondary)"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></div>
               <div class="flex-1 min-w-0">
                 <p class="text-xs font-bold" style="color: var(--text-primary)">Twitter</p>
                 <p class="text-[10px] truncate" style="color: var(--text-muted)">@hoshino_ichika</p>
@@ -690,7 +774,7 @@
           </div>
           <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4" style="color: var(--text-secondary)"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/></svg></div>
+              <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center"><svg viewBox="0 0 24 24" fill="#FF0000" aria-hidden="true" class="w-4 h-4" style="color: var(--text-secondary)"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/><path fill="#fff" d="M9.75 15.02l5.75-3.02-5.75-3.02v6.04z"/></svg></div>
               <div class="flex-1 min-w-0">
                 <p class="text-xs font-bold" style="color: var(--text-primary)">YouTube</p>
                 <p class="text-[10px]" style="color: var(--text-muted)">Not connected</p>
@@ -720,254 +804,6 @@
               </div>
             </div>
             <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- FAVORITE GAMES -->
-      <div class="rounded-2xl border shadow-sm p-5 shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
-            <i data-lucide="star" class="w-4 h-4" style="color: var(--text-muted)"></i> Favorite Games
-          </h3>
-          <a href="#" class="view-only text-xs font-medium hover:text-[var(--text-primary)] flex items-center gap-1" style="color: var(--text-muted)">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
-        </div>
-        <div class="flex gap-4 overflow-x-auto game-scroll pb-2">
-          <div class="game-card shrink-0 w-40 relative group">
-            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
-              <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#1</div>
-              <div class="absolute bottom-2 left-2 right-2">
-                <p class="text-[11px] font-extrabold text-white leading-tight truncate">Project Sekai</p>
-                <p class="text-[9px] text-slate-300 truncate">320 hrs played</p>
-              </div>
-            </div>
-          </div>
-          <div class="game-card shrink-0 w-40 relative group">
-            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
-              <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#2</div>
-              <div class="absolute bottom-2 left-2 right-2">
-                <p class="text-[11px] font-extrabold text-white leading-tight truncate">NieR:Automata</p>
-                <p class="text-[9px] text-slate-300 truncate">85 hrs played</p>
-              </div>
-            </div>
-          </div>
-          <div class="game-card shrink-0 w-40 relative group">
-            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
-              <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#3</div>
-              <div class="absolute bottom-2 left-2 right-2">
-                <p class="text-[11px] font-extrabold text-white leading-tight truncate">Honkai: Star Rail</p>
-                <p class="text-[9px] text-slate-300 truncate">140 hrs played</p>
-              </div>
-            </div>
-          </div>
-          <div class="game-card shrink-0 w-40 relative group">
-            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-md" style="background: var(--border-soft)">
-              <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=300&q=80" alt="" class="game-img w-full h-full object-cover transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2 right-2 brand-btn bg-brand text-[8px] font-bold px-2 py-0.5 rounded-full">#4</div>
-              <div class="absolute bottom-2 left-2 right-2">
-                <p class="text-[11px] font-extrabold text-white leading-tight truncate">Elden Ring</p>
-                <p class="text-[9px] text-slate-300 truncate">210 hrs played</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2 COLUMN -->
-      <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-5 flex-1 min-h-0">
-        <!-- LEFT -->
-        <div class="flex flex-col gap-5 overflow-y-auto pr-1">
-          <div class="rounded-2xl border shadow-sm p-5 shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
-                <i data-lucide="trophy" class="w-4 h-4" style="color: var(--text-muted)"></i> Achievement Showcase
-              </h3>
-              <span class="text-[10px] font-bold" style="color: var(--text-muted)">32 / 85 unlocked</span>
-            </div>
-            <div class="relative bg-gradient-to-br from-[#323446] to-slate-800 rounded-2xl p-5 mb-4 overflow-hidden">
-              <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
-              <div class="relative flex items-center gap-4">
-                <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center shrink-0 border border-white/20">
-                  <i data-lucide="crown" class="w-8 h-8 text-white"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="text-[9px] font-bold text-white bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Featured</span>
-                    <span class="text-[9px] font-bold text-white bg-white/10 px-2 py-0.5 rounded-full">Rare · 3.2%</span>
-                  </div>
-                  <h4 class="text-base font-extrabold text-white">Rhythm Master</h4>
-                  <p class="text-[11px] text-slate-300 mt-0.5">Completed all Master difficulty songs in Project Sekai</p>
-                </div>
-              </div>
-            </div>
-            <div class="grid grid-cols-4 gap-2.5">
-              <div class="badge-item p-3 rounded-xl border flex flex-col items-center text-center cursor-pointer" style="background: var(--bg-card); border-color: var(--border-soft)">
-                <i data-lucide="award" class="w-6 h-6 text-brand mb-1.5"></i>
-                <span class="text-[9px] font-bold leading-tight" style="color: var(--text-primary)">OG Player</span>
-              </div>
-              <div class="badge-item p-3 rounded-xl border flex flex-col items-center text-center cursor-pointer" style="background: var(--bg-card); border-color: var(--border-soft)">
-                <i data-lucide="flame" class="w-6 h-6 text-brand mb-1.5"></i>
-                <span class="text-[9px] font-bold leading-tight" style="color: var(--text-primary)">Streak 30</span>
-              </div>
-              <div class="badge-item p-3 rounded-xl border flex flex-col items-center text-center cursor-pointer" style="background: var(--bg-card); border-color: var(--border-soft)">
-                <i data-lucide="zap" class="w-6 h-6 text-brand mb-1.5"></i>
-                <span class="text-[9px] font-bold leading-tight" style="color: var(--text-primary)">Speedrun</span>
-              </div>
-              <div class="badge-item p-3 rounded-xl border flex flex-col items-center text-center cursor-pointer" style="background: var(--bg-card); border-color: var(--border-soft)">
-                <i data-lucide="music" class="w-6 h-6 text-brand mb-1.5"></i>
-                <span class="text-[9px] font-bold leading-tight" style="color: var(--text-primary)">Rhythm Pro</span>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div class="flex justify-between items-center mb-3 px-1">
-              <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
-                <i data-lucide="activity" class="w-4 h-4" style="color: var(--text-muted)"></i> Activity Timeline
-              </h3>
-              <a href="#" class="text-xs font-medium hover:text-[var(--text-primary)] flex items-center gap-1" style="color: var(--text-muted)">view all <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
-            </div>
-            <div class="flex flex-col gap-3">
-              <div class="timeline-item flex gap-3.5">
-                <div class="w-12 h-12 rounded-2xl brand-btn bg-brand flex items-center justify-center shrink-0 shadow-md">
-                  <i data-lucide="gamepad-2" class="w-5 h-5"></i>
-                </div>
-                <div class="flex-1 p-4 rounded-2xl border shadow-sm min-w-0" style="background: var(--bg-surface); border-color: var(--border-color)">
-                  <div class="flex items-start justify-between gap-3 mb-1.5">
-                    <h5 class="text-xs font-extrabold" style="color: var(--text-primary)">Played Project Sekai for 2 hours</h5>
-                    <span class="text-[9px] font-bold shrink-0" style="color: var(--text-muted)">2h ago</span>
-                  </div>
-                  <p class="text-[10px] leading-relaxed" style="color: var(--text-secondary)">Completed Chapter 42 · Cleared 12 songs on Master difficulty</p>
-                  <div class="flex items-center gap-2 mt-2.5">
-                    <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+24 XP</span>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item flex gap-3.5">
-                <div class="w-12 h-12 rounded-2xl border flex items-center justify-center shrink-0" style="background: var(--bg-card); border-color: var(--border-soft)">
-                  <i data-lucide="trophy" class="w-5 h-5 text-brand"></i>
-                </div>
-                <div class="flex-1 p-4 rounded-2xl border shadow-sm min-w-0" style="background: var(--bg-surface); border-color: var(--border-color)">
-                  <div class="flex items-start justify-between gap-3 mb-1.5">
-                    <h5 class="text-xs font-extrabold" style="color: var(--text-primary)">Earned "Rhythm Master" achievement</h5>
-                    <span class="text-[9px] font-bold shrink-0" style="color: var(--text-muted)">Yesterday</span>
-                  </div>
-                  <p class="text-[10px] leading-relaxed" style="color: var(--text-secondary)">Rare achievement — only 3.2% of players have unlocked this</p>
-                  <div class="flex items-center gap-2 mt-2.5">
-                    <span class="text-[9px] font-bold bg-brand-soft px-2 py-0.5 rounded-full text-brand">+40 XP</span>
-                    <span class="brand-btn text-[9px] font-bold bg-brand px-2 py-0.5 rounded-full">Rare</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT -->
-        <div class="flex flex-col gap-4 overflow-y-auto pr-1">
-          <div class="rounded-2xl border shadow-sm p-4 shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
-                <i data-lucide="users" class="w-4 h-4" style="color: var(--text-muted)"></i> Friends Online
-              </h3>
-              <span class="flex items-center gap-1 text-[10px] font-bold text-brand">
-                <span class="w-1.5 h-1.5 rounded-full bg-brand pulse-dot"></span> 12 of 126
-              </span>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors cursor-pointer">
-                <div class="relative shrink-0">
-                  <div class="w-9 h-9 rounded-full border overflow-hidden" style="border-color: var(--border-soft)">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80" alt="">
-                  </div>
-                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-brand border-2" style="border-color: var(--bg-surface)"></span>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">shiro_kun</p>
-                  <p class="text-[9px] truncate" style="color: var(--text-muted)">Playing Project Sekai</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors cursor-pointer">
-                <div class="relative shrink-0">
-                  <div class="w-9 h-9 rounded-full border overflow-hidden" style="border-color: var(--border-soft)">
-                    <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=80&q=80" alt="">
-                  </div>
-                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-brand border-2" style="border-color: var(--bg-surface)"></span>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">hana_illustrator</p>
-                  <p class="text-[9px] truncate" style="color: var(--text-muted)">Drawing fan art</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="rounded-2xl border shadow-sm p-4 shrink-0" style="background: var(--bg-surface); border-color: var(--border-color);">
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="text-sm font-semibold flex items-center gap-1.5" style="color: var(--text-primary)">
-                <i data-lucide="link" class="w-4 h-4" style="color: var(--text-muted)"></i> Social Links
-              </h3>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              {% if form.instance.twitter %}
-              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors">
-                <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4" style="color: var(--text-primary)"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">{{ form.instance.twitter }}</p>
-                  <p class="text-[9px] font-semibold truncate" style="color: var(--text-secondary)">Twitter</p>
-                </div>
-                <i data-lucide="external-link" class="w-3 h-3" style="color: var(--text-muted)"></i>
-              </a>
-              {% endif %}
-              {% if form.instance.instagram %}
-              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors">
-                <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4" style="color: var(--text-primary)"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.789.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.789-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0Zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03Zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162ZM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4Zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439Z"/></svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">{{ form.instance.instagram }}</p>
-                  <p class="text-[9px] font-semibold truncate" style="color: var(--text-secondary)">Instagram</p>
-                </div>
-                <i data-lucide="external-link" class="w-3 h-3" style="color: var(--text-muted)"></i>
-              </a>
-              {% endif %}
-              {% if form.instance.youtube %}
-              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors">
-                <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4" style="color: var(--text-primary)"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/></svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">{{ form.instance.youtube }}</p>
-                  <p class="text-[9px] font-semibold truncate" style="color: var(--text-secondary)">YouTube</p>
-                </div>
-                <i data-lucide="external-link" class="w-3 h-3" style="color: var(--text-muted)"></i>
-              </a>
-              {% endif %}
-              {% if form.instance.twitch %}
-              <a href="#" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--bg-card)] transition-colors">
-                <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4" style="color: var(--text-primary)"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-[11px] font-bold truncate" style="color: var(--text-primary)">{{ form.instance.twitch }}</p>
-                  <p class="text-[9px] font-semibold truncate" style="color: var(--text-secondary)">Twitch</p>
-                </div>
-                <i data-lucide="external-link" class="w-3 h-3" style="color: var(--text-muted)"></i>
-              </a>
-              {% endif %}
-              {% if not form.instance.twitter and not form.instance.instagram and not form.instance.youtube and not form.instance.twitch %}
-              <p class="text-[9px] px-2 py-1.5" style="color: var(--text-muted)">No social links yet — edit your profile to add them.</p>
-              {% endif %}
-            </div>
           </div>
         </div>
       </div>
@@ -1054,8 +890,17 @@
 
     function setBannerPos(value) {
       document.getElementById('banner-img').style.objectPosition = '50% ' + value + '%';
-      document.getElementById('banner-pos-label').textContent = value;
+      document.getElementById('banner-pos-label').innerHTML = value + '<span class="text-[8px] font-bold">%</span>';
+      const fill = document.getElementById('banner-fill');
+      if (fill) fill.style.width = value + '%';
+      const pos = document.getElementById('banner-pos');
+      if (pos) pos.style.background = 'linear-gradient(to right, var(--brand) ' + value + '%, var(--border-soft) ' + value + '%)';
     }
+
+    (function initBannerPos() {
+      const pos = document.getElementById('banner-pos');
+      if (pos) setBannerPos(pos.value);
+    })();
 
     // ===== AVATAR UPLOAD (fly-up) =====
     const avatarInput = document.getElementById('avatar-input');
@@ -1113,6 +958,26 @@
         }, 450);
       };
       reader.readAsDataURL(file);
+    });
+
+    // ===== ANIMATE STATS ON LOAD =====
+    window.addEventListener('DOMContentLoaded', () => {
+      // Animate Circular Progress (Games Owned)
+      setTimeout(() => {
+        const progressCircle = document.querySelector('.progress-ring-circle');
+        if (progressCircle) {
+          const targetOffset = progressCircle.getAttribute('data-target');
+          progressCircle.style.strokeDashoffset = targetOffset;
+        }
+      }, 300);
+
+      // Animate Wishlist Savings Bar
+      setTimeout(() => {
+        const savingsBar = document.querySelector('[data-target-width]');
+        if (savingsBar) {
+          savingsBar.style.width = savingsBar.getAttribute('data-target-width');
+        }
+      }, 400);
     });
   </script>
 </body>
