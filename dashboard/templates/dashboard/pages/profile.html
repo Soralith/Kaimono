@@ -1,3 +1,6 @@
+{% load static %}
+{% static 'dashboard/images/accsetup.jpg' as default_avatar %}
+{% static 'dashboard/images/banner.jpg' as default_banner %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -223,7 +226,7 @@
 
         <!-- BANNER -->
         <div class="h-44 w-full relative">
-          <img id="banner-img" src="{{ form.instance.banner_url|default:'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1600&q=80' }}" alt="banner" class="w-full h-full object-cover">
+          <img id="banner-img" src="{{ form.instance.banner_url|default:default_banner }}" alt="banner" class="w-full h-full object-cover">
           <div class="absolute inset-0 bg-gradient-to-b from-slate-900/10 via-slate-900/25 to-slate-900/60"></div>
 
           <label class="banner-overlay absolute inset-0 bg-slate-900/40 items-center justify-center z-20">
@@ -269,7 +272,7 @@
               <div class="relative">
                 <div class="avatar-ring" id="avatar-ring">
                   <div id="avatar-box" class="w-28 h-28 rounded-full border-4 border-[#F7F9FC] overflow-hidden shadow-xl bg-slate-200">
-                    <img id="avatar-img" src="{{ form.instance.avatar_url|default:'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80' }}" alt="avatar" class="w-full h-full object-cover">
+                    <img id="avatar-img" src="{{ form.instance.avatar_url|default:default_avatar }}" alt="avatar" class="w-full h-full object-cover">
                   </div>
                 </div>
                 <!-- Premium crown -->

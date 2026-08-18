@@ -1,3 +1,6 @@
+{% load static %}
+{% static 'dashboard/images/accsetup.jpg' as default_avatar %}
+{% static 'dashboard/images/banner.jpg' as default_banner %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +70,7 @@
           <div>
             <label class="block text-[10px] uppercase tracking-wider font-bold text-black/50 mb-2">Profile Picture</label>
             <label class="relative w-[120px] h-[120px] rounded-full border-2 border-dashed border-black/20 bg-white/70 flex items-center justify-center overflow-hidden cursor-pointer">
-<img id="avatar-picker-preview" src="{{ form.instance.avatar_url|default:'https://i.pravatar.cc/150?img=13' }}" alt="Avatar" class="w-full h-full object-cover">
+<img id="avatar-picker-preview" src="{{ form.instance.avatar_url|default:default_avatar }}" alt="Avatar" class="w-full h-full object-cover">
               <div class="absolute inset-0 bg-black/25 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                 <span class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow">
                   <i data-lucide="camera" class="w-4 h-4 text-black"></i>
@@ -83,7 +86,7 @@
           <div>
             <label class="block text-[10px] uppercase tracking-wider font-bold text-black/50 mb-2">Profile Banner</label>
             <label class="relative h-[120px] rounded-2xl border-2 border-dashed border-black/20 bg-white/70 overflow-hidden block cursor-pointer">
-              <img id="banner-picker-preview" src="{{ form.instance.banner_url|default:'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80' }}" alt="Banner" class="w-full h-full object-cover">
+              <img id="banner-picker-preview" src="{{ form.instance.banner_url|default:default_banner }}" alt="Banner" class="w-full h-full object-cover">
               <div class="absolute inset-0 bg-black/25 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                 <span class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow">
                   <i data-lucide="image" class="w-4 h-4 text-black"></i>
@@ -111,13 +114,14 @@
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-[10px] uppercase tracking-wider font-bold text-black/50 mb-1">Age</label>
-              <input type="number" name="age" value="{{ form.age.value|default:'' }}" class="w-full bg-white/80 border border-white shadow-sm rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-black/20 outline-none transition-all placeholder:text-black/40">
+              <label class="block text-[10px] uppercase tracking-wider font-bold text-black/50 mb-1">Age, must be 18 or older.</label>
+              <input type="number" name="age" value="{{ form.age.value|default:'' }}" min="18" max="120" required class="w-full bg-white/80 border border-white shadow-sm rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-black/20 outline-none transition-all placeholder:text-black/40">
+              {% if form.age.errors %}<p class="text-[11px] font-bold text-red-600 mt-1">{{ form.age.errors.0 }}</p>{% endif %}
             </div>
             <div>
               <label class="block text-[10px] uppercase tracking-wider font-bold text-black/50 mb-1">Role</label>
               <div>
-                <select name="role" class="w-full appearance-none bg-white/80 border border-white shadow-sm rounded-xl px-4 py-2.5 text-sm outline-none">
+                <select name="role" required class="w-full appearance-none bg-white/80 border border-white shadow-sm rounded-xl px-4 py-2.5 text-sm outline-none">
                   {% for value, label in form.fields.role.choices %}
                   <option value="{{ value }}" {% if form.role.value == value %}selected{% endif %}>{{ label }}</option>
                   {% endfor %}
@@ -153,7 +157,7 @@
         <div class="bg-white/80 backdrop-blur-xl border border-white/60 rounded-[24px] overflow-hidden shadow-lg shadow-black/5">
           <!-- Banner -->
           <div class="relative h-32 sm:h-36">
-            <img id="profile-banner-preview" src="{{ form.instance.banner_url|default:'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1000&q=80' }}" alt="Banner" class="w-full h-full object-cover">
+            <img id="profile-banner-preview" src="{{ form.instance.banner_url|default:default_banner }}" alt="Banner" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
             <span class="absolute top-3 right-3 bg-white/15 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1 rounded-full border border-white/30 uppercase tracking-wider">Online</span>
           </div>
@@ -161,7 +165,7 @@
           <div class="px-6 pb-6">
             <div class="-mt-10 mb-3 flex items-end justify-between">
               <div class="relative z-20 w-20 h-20 rounded-full border-4 border-white overflow-hidden shadow-lg">
-<img id="profile-avatar-preview" src="{{ form.instance.avatar_url|default:'https://i.pravatar.cc/150?img=13' }}" alt="Avatar" class="w-full h-full object-cover">
+<img id="profile-avatar-preview" src="{{ form.instance.avatar_url|default:default_avatar }}" alt="Avatar" class="w-full h-full object-cover">
               </div>
               <span class="bg-emerald-500/10 text-emerald-700 text-[10px] font-extrabold px-3 py-1 rounded-full border border-emerald-200 inline-flex items-center gap-1.5">
                 <i data-lucide="badge-check" class="w-3.5 h-3.5"></i> {{ form.instance.get_role_display }}
@@ -186,16 +190,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Tip card -->
-        <div class="bg-gradient-to-br from-slate-800 to-slate-950 rounded-[24px] p-6 text-white shadow-lg">
-          <div class="flex items-center gap-2 text-amber-400 text-xs font-extrabold uppercase tracking-wider mb-3">
-            <i data-lucide="sparkles" class="w-4 h-4"></i> Pro tip
-          </div>
-          <p class="text-sm text-white/85 leading-relaxed">
-            Add a recognizable avatar and a clean banner so your profile stands out on friends lists and in the community.
-          </p>
         </div>
       </div>
     </div>
@@ -222,6 +216,38 @@
     }
     bindImagePreview('input[name="avatar"]', 'avatar-picker-preview', 'profile-avatar-preview');
     bindImagePreview('input[name="banner"]', 'banner-picker-preview', 'profile-banner-preview');
+
+    // ===== REQUIRED FIELDS VALIDATION =====
+    var requiredInputs = document.querySelectorAll('input[required], select[required], input[type="number"][min]');
+    var submitBtn = document.querySelector('button[type="submit"]');
+
+    function checkAllFilled() {
+      var filled = true;
+      requiredInputs.forEach(function (el) {
+        var val = el.value.trim();
+        if (!val) {
+          filled = false;
+          return;
+        }
+        if (el.type === 'number' && el.hasAttribute('min')) {
+          var min = parseInt(el.getAttribute('min'), 10);
+          if (isNaN(parseInt(val, 10)) || parseInt(val, 10) < min) {
+            filled = false;
+          }
+        }
+      });
+      submitBtn.disabled = !filled;
+      submitBtn.style.opacity = filled ? '1' : '0.45';
+      submitBtn.style.cursor = filled ? 'pointer' : 'not-allowed';
+    }
+
+    requiredInputs.forEach(function (el) {
+      el.addEventListener('input', checkAllFilled);
+      el.addEventListener('change', checkAllFilled);
+    });
+
+    // Run on load (age field may be empty)
+    checkAllFilled();
   </script>
 </body>
 </html>
