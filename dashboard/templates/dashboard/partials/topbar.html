@@ -17,7 +17,9 @@
       </div>
       <div class="flex items-center gap-4 pl-4">
         <span class="font-bold text-[var(--on-brand)] tracking-widest text-sm">{{ request.user.display_name|default:request.user.username|upper }}</span>
-        <button class="p-1 transition-colors text-[var(--on-brand)]"><i data-lucide="list" class="w-5 h-5"></i></button>
+        <button type="button" onclick="if(window.__kaimonoToggleSidebar) window.__kaimonoToggleSidebar()" class="p-1 transition-colors text-[var(--on-brand)] hover:opacity-70 cursor-pointer" aria-label="Toggle sidebar">
+          <i data-lucide="list" class="w-5 h-5"></i>
+        </button>
       </div>
     </div>
   </header>
