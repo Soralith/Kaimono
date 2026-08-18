@@ -140,6 +140,25 @@
       pointer-events: none;
     }
     .toast { pointer-events: auto; min-width: 260px; }
+
+    /* ===== Checkout modal (payment section) ===== */
+    .co-progress { height: 5px; border-radius: 999px; background: #E2E8F0; overflow: hidden; width: 100%; max-width: 220px; margin-top: 14px; }
+    .co-progress-bar { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, #6366F1, #8B5CF6); transition: width 400ms ease; }
+    .co-method-btn { border: 2px solid #E2E8F0; background: #fff; color: #64748B; transition: all 180ms ease; }
+    .co-method-btn:hover { border-color: #111827; color: #111827; }
+    .co-method-on { border-color: #111827 !important; background: rgba(17, 24, 39, 0.06) !important; color: #111827 !important; }
+    .co-wallet-chip { border: 2px solid #E2E8F0; background: #fff; transition: all 180ms ease; }
+    .co-wallet-chip:hover { border-color: #111827; }
+    .co-wallet-on { border-color: #111827 !important; background: rgba(17, 24, 39, 0.06) !important; }
+
+    @keyframes popIn { 0% { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.12); } 100% { transform: scale(1); opacity: 1; } }
+    .co-check { animation: popIn 550ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+    /* ===== Game detail page polish ===== */
+    .card-hover { transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -16px rgba(50, 52, 70, 0.16); }
+    .req-row { transition: background 150ms ease; }
+    .req-row:hover { background: #fff; }
   </style>
 </head>
 <body data-product-id="{{ product_id }}" class="h-screen flex flex-col text-slate-700 overflow-hidden text-sm">
@@ -214,7 +233,7 @@
         </div>
 
         <!-- Summary info box -->
-        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 80ms">
+        <div class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 80ms">
           <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
             <i data-lucide="info" class="w-4 h-4 text-[#6366F1]"></i> About This Product
           </h3>
@@ -251,7 +270,7 @@
       <div class="grid lg:grid-cols-[1fr_1.4fr] gap-6 mt-6">
 
         <!-- Purchase box -->
-        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 h-fit animate-fadeInUp">
+        <div class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 h-fit animate-fadeInUp">
           <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
             <i data-lucide="shopping-cart" class="w-4 h-4 text-[#6366F1]"></i> Purchase
           </h3>
@@ -287,7 +306,7 @@
         <div class="flex flex-col gap-6">
 
           <!-- Wishlist & friends status -->
-          <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 100ms">
+          <div class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 100ms">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
                 <i data-lucide="users" class="w-4 h-4 text-[#6366F1]"></i> Wishlist & Friends Status
@@ -307,7 +326,7 @@
           </div>
 
           <!-- Bundles / packages -->
-          <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 160ms">
+          <div class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 160ms">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
                 <i data-lucide="package-plus" class="w-4 h-4 text-[#6366F1]"></i> Bundles & Editions
@@ -319,11 +338,270 @@
         </div>
       </div>
 
+      <!-- ============ STAGE 3: DETAILS & FEATURES ============ -->
+      <div class="grid lg:grid-cols-[1.6fr_1fr] gap-6 mt-6">
+
+        <!-- About this game -->
+        <div class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 lg:p-8 animate-fadeInUp">
+          <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
+            <i data-lucide="book-open" class="w-4 h-4 text-[#6366F1]"></i> About This Game
+          </h3>
+          <div id="gd-about" class="space-y-4 text-[13px] text-slate-500 leading-relaxed"></div>
+          <div id="gd-about-images" class="grid grid-cols-2 gap-3 mt-6"></div>
+          <div id="gd-keyfeatures" class="grid sm:grid-cols-2 gap-2.5 mt-6"></div>
+        </div>
+
+        <div class="flex flex-col gap-6">
+
+          <!-- Downloadable content -->
+          <div id="gd-dlc-wrap" class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 80ms">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
+              <i data-lucide="package-open" class="w-4 h-4 text-[#6366F1]"></i> Downloadable Content
+            </h3>
+            <div id="gd-dlc" class="space-y-3"></div>
+          </div>
+
+          <!-- Steam features -->
+          <div id="gd-features-wrap" class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 140ms">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
+              <i data-lucide="gamepad-2" class="w-4 h-4 text-[#6366F1]"></i> Steam Features
+            </h3>
+            <div id="gd-features" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ STAGE 4: TECHNICAL & REVIEWS ============ -->
+      <div class="mt-6 space-y-6">
+
+        <!-- System requirements -->
+        <div id="gd-req-wrap" class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 lg:p-8 animate-fadeInUp">
+          <div class="flex items-center justify-between gap-3 mb-1">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i data-lucide="cpu" class="w-4 h-4 text-[#6366F1]"></i> System Requirements
+            </h3>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">PC · Windows</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mb-5">Minimum and recommended hardware specifications.</p>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="rounded-2xl border border-slate-200 bg-[#F7F9FC] p-5">
+              <h4 class="text-xs font-extrabold text-slate-800 mb-3 flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-slate-200/70 text-slate-600 flex items-center justify-center"><i data-lucide="monitor" class="w-3 h-3"></i></span> Minimum
+              </h4>
+              <table class="w-full"><tbody id="gd-req-minimum"></tbody></table>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-[#F7F9FC] p-5">
+              <h4 class="text-xs font-extrabold text-slate-800 mb-3 flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-[#6366F1]/15 text-[#6366F1] flex items-center justify-center"><i data-lucide="rocket" class="w-3 h-3"></i></span> Recommended
+              </h4>
+              <table class="w-full"><tbody id="gd-req-recommended"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accolades & media reviews -->
+        <div id="gd-accolade-wrap" class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 lg:p-8 animate-fadeInUp">
+          <div class="flex items-center justify-between gap-3 mb-5">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i data-lucide="award" class="w-4 h-4 text-[#6366F1]"></i> Accolades & Media Reviews
+            </h3>
+            <div id="gd-metacritic"></div>
+          </div>
+          <div id="gd-accolades" class="grid sm:grid-cols-3 gap-3"></div>
+        </div>
+
+        <!-- User reviews -->
+        <div class="card-hover bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 lg:p-8 animate-fadeInUp">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i data-lucide="message-square-quote" class="w-4 h-4 text-[#6366F1]"></i> User Reviews
+            </h3>
+            <div id="gd-review-summary" class="flex items-center gap-3"></div>
+          </div>
+
+          <!-- Filters: language / play time / date -->
+          <div class="flex flex-wrap items-center gap-2.5 mb-5 p-3 bg-[#F7F9FC] rounded-2xl">
+            <select id="gd-filter-lang" class="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 rounded-full px-3.5 py-2 outline-none focus:border-black cursor-pointer"></select>
+            <select id="gd-filter-time" class="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 rounded-full px-3.5 py-2 outline-none focus:border-black cursor-pointer"></select>
+            <select id="gd-filter-date" class="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 rounded-full px-3.5 py-2 outline-none focus:border-black cursor-pointer"></select>
+            <span id="gd-review-count" class="ml-auto text-[10px] font-bold text-slate-400"></span>
+          </div>
+
+          <div id="gd-reviews-list" class="space-y-3"></div>
+        </div>
+      </div>
+
     </main>
   </div>
 
   <!-- TOAST CONTAINER -->
   <div id="toast-container" class="toast-container"></div>
+
+  <!-- CHECKOUT MODAL · DEBIT CARD PAYMENT -->
+  <div id="checkout-overlay" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[92vh] overflow-y-auto hide-scroll animate-fadeInUp">
+
+      <!-- Header -->
+      <div class="sticky top-0 z-10 bg-white flex items-center justify-between px-6 pt-6 pb-4 border-b border-slate-100">
+        <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-2">
+          <span class="w-8 h-8 rounded-xl bg-[#6366F1]/10 text-[#6366F1] flex items-center justify-center"><i data-lucide="credit-card" class="w-4 h-4"></i></span> Payment
+        </h3>
+        <button id="co-close" class="w-8 h-8 rounded-full bg-[#F7F9FC] hover:bg-slate-200/70 text-slate-500 flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Order summary -->
+      <div class="mx-6 mt-4 rounded-2xl bg-[#F7F9FC] border border-slate-200 p-4 flex items-center gap-3">
+        <img id="co-img" src="" alt="" class="w-12 h-12 rounded-xl object-cover shrink-0">
+        <div class="flex-1 min-w-0">
+          <p id="co-name" class="text-xs font-extrabold text-slate-800 truncate"></p>
+          <p id="co-meta" class="text-[10px] font-bold text-slate-400 mt-0.5"></p>
+        </div>
+        <div class="text-right shrink-0">
+          <div class="flex items-baseline justify-end gap-1.5">
+            <span id="co-old-price" class="hidden text-[10px] text-slate-400 line-through"></span>
+            <span id="co-save" class="hidden bg-[#323446] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full"></span>
+          </div>
+          <p id="co-price" class="text-sm font-extrabold text-slate-900"></p>
+          <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">incl. tax</p>
+        </div>
+      </div>
+
+      <p id="co-pre-note" class="hidden mx-6 mt-3 text-[11px] font-semibold text-[#6366F1] bg-[#6366F1]/5 border border-[#6366F1]/20 rounded-xl px-3.5 py-2.5 flex items-center gap-2">
+        <i data-lucide="clock-3" class="w-3.5 h-3.5 shrink-0"></i><span id="co-pre-note-text"></span>
+      </p>
+
+      <!-- Payment method selector -->
+      <div id="co-methods" class="mx-6 mt-4">
+        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Payment method</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" id="co-method-card" class="co-method-btn co-method-on rounded-xl px-3 py-2.5 text-xs font-bold flex items-center justify-center gap-2">
+            <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Debit Card
+          </button>
+          <button type="button" id="co-method-wallet" class="co-method-btn rounded-xl px-3 py-2.5 text-xs font-bold flex items-center justify-center gap-2">
+            <i data-lucide="wallet" class="w-3.5 h-3.5"></i> E-Wallet
+          </button>
+        </div>
+      </div>
+
+      <!-- Card form -->
+      <form id="co-form" class="mx-6 mt-4 space-y-3" autocomplete="off">
+        <div id="co-card-panel">
+          <!-- Debit card mini steps -->
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[10px] font-bold text-slate-500 pb-3">
+            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[#6366F1] text-white text-[8px] flex items-center justify-center shrink-0">1</span> Enter details</span>
+            <i data-lucide="arrow-right" class="w-3 h-3 text-slate-300"></i>
+            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[#6366F1] text-white text-[8px] flex items-center justify-center shrink-0">2</span> Bank OTP</span>
+            <i data-lucide="arrow-right" class="w-3 h-3 text-slate-300"></i>
+            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[#6366F1] text-white text-[8px] flex items-center justify-center shrink-0">3</span> Confirmed</span>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Cardholder name</label>
+              <input id="co-holder" type="text" placeholder="e.g. Jane Doe" class="mt-1 w-full bg-[#F7F9FC] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-700 outline-none focus:border-black placeholder:text-slate-300">
+            </div>
+            <div>
+              <div class="flex items-center justify-between">
+                <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Card number</label>
+                <span id="co-brand" class="text-[9px] font-extrabold text-[#6366F1] uppercase tracking-wider">Debit Card</span>
+              </div>
+              <input id="co-number" inputmode="numeric" placeholder="1234 5678 9012 3456" class="mt-1 w-full bg-[#F7F9FC] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-700 outline-none focus:border-black placeholder:text-slate-300">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Expiry (MM/YY)</label>
+                <input id="co-expiry" inputmode="numeric" placeholder="08/29" class="mt-1 w-full bg-[#F7F9FC] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-700 outline-none focus:border-black placeholder:text-slate-300">
+              </div>
+              <div>
+                <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">CVV</label>
+                <input id="co-cvv" inputmode="numeric" placeholder="123" maxlength="4" class="mt-1 w-full bg-[#F7F9FC] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-700 outline-none focus:border-black placeholder:text-slate-300">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="co-wallet-panel" class="hidden space-y-3">
+          <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Choose your e-wallet</p>
+          <div class="grid grid-cols-4 gap-2" id="co-wallets">
+            <button type="button" data-wallet="OVO" class="co-wallet-chip co-wallet-on rounded-xl px-2 py-2.5 text-[11px] font-extrabold flex items-center justify-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#5B2C8E] shrink-0"></span> OVO
+            </button>
+            <button type="button" data-wallet="GoPay" class="co-wallet-chip rounded-xl px-2 py-2.5 text-[11px] font-extrabold flex items-center justify-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#00AED6] shrink-0"></span> GoPay
+            </button>
+            <button type="button" data-wallet="Dana" class="co-wallet-chip rounded-xl px-2 py-2.5 text-[11px] font-extrabold flex items-center justify-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#108EE9] shrink-0"></span> Dana
+            </button>
+            <button type="button" data-wallet="QRIS" class="co-wallet-chip rounded-xl px-2 py-2.5 text-[11px] font-extrabold flex items-center justify-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#D02026] shrink-0"></span> QRIS
+            </button>
+          </div>
+          <div id="co-phone-wrap">
+            <div>
+              <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Phone number</label>
+              <input id="co-phone" inputmode="numeric" placeholder="0812 3456 7890" class="mt-1 w-full bg-[#F7F9FC] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-700 outline-none focus:border-black placeholder:text-slate-300">
+            </div>
+            <p class="text-[10px] font-medium text-slate-500 flex items-center gap-1.5 mt-3">
+              <i data-lucide="smartphone" class="w-3 h-3 shrink-0"></i> We'll send an OTP to your OVO app to confirm the payment.
+            </p>
+          </div>
+          <div id="co-qris-panel" class="hidden">
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 flex flex-col items-center">
+              <div id="co-qris-code" class="w-40 h-40 rounded-lg bg-white"></div>
+              <p class="text-[10px] font-extrabold text-slate-700 mt-3 flex items-center gap-1.5">
+                <i data-lucide="scan-line" class="w-3.5 h-3.5 text-[#D02026]"></i> Scan with any e-wallet or banking app
+              </p>
+              <p class="text-[9px] font-medium text-slate-400 mt-1 text-center leading-relaxed">
+                Open your e-wallet app, tap "Scan QRIS", then confirm the payment inside the app.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p id="co-error" class="hidden text-[11px] font-bold text-rose-500 bg-rose-50 border border-rose-200 rounded-xl px-3.5 py-2.5"></p>
+
+        <button type="submit" id="co-pay" class="w-full bg-[#323446] hover:bg-slate-800 text-white font-bold py-4 rounded-2xl text-sm flex items-center justify-between px-6 transition-all btn-dark">
+          <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4"></i> <span id="co-pay-label">Pay Now</span></span>
+          <span class="h-5 w-px bg-white/20"></span>
+          <span id="co-pay-amount" class="font-extrabold"></span>
+        </button>
+
+        <p class="text-[10px] text-slate-400 font-medium flex items-center gap-1.5 pt-1">
+          <i data-lucide="info" class="w-3 h-3 shrink-0"></i> Demo checkout — no real payment is processed.
+        </p>
+      </form>
+
+      <!-- Processing -->
+      <div id="co-processing" class="hidden mx-6 my-8 flex flex-col items-center text-center">
+        <div class="w-14 h-14 rounded-full bg-[#6366F1]/10 flex items-center justify-center mb-4">
+          <div class="w-6 h-6 border-2 border-[#6366F1] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        <p class="text-sm font-extrabold text-slate-800">Contacting your bank…</p>
+        <p id="co-processing-step" class="text-[11px] text-slate-400 font-medium mt-1.5"></p>
+        <div class="co-progress"><div class="co-progress-bar" id="co-progress-bar"></div></div>
+      </div>
+
+      <!-- Success -->
+      <div id="co-success" class="hidden mx-6 my-8 flex flex-col items-center text-center">
+        <div class="co-check w-20 h-20 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-4 shadow-lg shadow-emerald-200/60">
+          <i data-lucide="check" class="w-9 h-9 text-emerald-500"></i>
+        </div>
+        <p class="text-base font-extrabold text-slate-800">Payment authorized</p>
+        <p class="text-[12px] text-slate-500 mt-1.5 max-w-xs leading-relaxed" id="co-success-msg"></p>
+        <div class="mt-4 rounded-xl bg-[#F7F9FC] border border-slate-200 px-4 py-2.5">
+          <p class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Order number</p>
+          <p id="co-order-no" class="text-xs font-extrabold text-slate-800 font-mono mt-0.5"></p>
+        </div>
+        <button id="co-done" class="mt-6 bg-[#323446] hover:bg-slate-800 text-white font-bold px-8 py-3 rounded-full text-xs flex items-center gap-2 transition-all btn-dark">
+          <i data-lucide="check" class="w-4 h-4"></i> Done
+        </button>
+      </div>
+
+      <div class="h-6"></div>
+    </div>
+  </div>
 
   <script src="{% static 'dashboard/js/products.js' %}"></script>
   <script>
@@ -339,6 +617,42 @@
 
     var $g = function (id) { return document.getElementById(id); };
     var fmt = function (n) { return "$" + n.toFixed(2); };
+    var gallery = [];
+    var mIdx = 0;
+
+    // Stage 3 & 4 metadata (declared up top so the render calls in the product
+    // branch below see them — var declarations lower in the script are hoisted
+    // but only assigned after that branch has already run).
+    var FEATURE_META = {
+      achievements: { icon: "trophy", label: "Steam Achievements" },
+      cloud: { icon: "cloud", label: "Steam Cloud" },
+      controller: { icon: "gamepad-2", label: "Full Controller Support" },
+      "trading-cards": { icon: "layers", label: "Steam Trading Cards" },
+      multiplayer: { icon: "globe", label: "Online Multiplayer" },
+      singleplayer: { icon: "user", label: "Singleplayer" },
+      "co-op": { icon: "users", label: "Co-op" },
+      "remote-play": { icon: "monitor-play", label: "Remote Play" },
+      stats: { icon: "bar-chart-3", label: "Player Stats" },
+      workshop: { icon: "hammer", label: "Workshop Support" }
+    };
+    var REQ_ROWS = [
+      ["os", "OS"], ["cpu", "Processor"], ["ram", "Memory"],
+      ["gpu", "Graphics"], ["directx", "DirectX"], ["storage", "Storage"]
+    ];
+    var LANG_LABELS = { en: "English", ja: "Japanese", zh: "Simplified Chinese", es: "Spanish", fr: "French", de: "German", ko: "Korean", ru: "Russian" };
+    var TIME_FILTERS = [
+      { value: "all", label: "Any play time" },
+      { value: "1h", label: "Under 1 hour" },
+      { value: "10h", label: "1 – 10 hours" },
+      { value: "50h", label: "10 – 50 hours" },
+      { value: "100h", label: "50+ hours" }
+    ];
+    var DATE_FILTERS = [
+      { value: "all", label: "Any date" },
+      { value: "7d", label: "Last 7 days" },
+      { value: "30d", label: "Last 30 days" },
+      { value: "90d", label: "Last 90 days" }
+    ];
 
     function openToast(msg, icon) {
       var c = $g("toast-container");
@@ -431,7 +745,13 @@
       var isPre = /pre/i.test(p.stock);
       $g("gd-buy-label").textContent = isPre ? "Pre-Purchase" : "Buy Now";
       $g("gd-price-note").textContent = isPre ? "Pre-purchase now and receive the key on release." : (p.originalPrice ? "Promotional price — limited time only." : "Price includes all platform fees.");
-      $g("gd-buy").querySelector("i").setAttribute("data-lucide", isPre ? "clock-3" : "zap");
+      // lucide.createIcons() at the top of this script already replaced the
+      // <i> with an <svg data-lucide> — update that single icon so the final
+      // createIcons() renders the correct glyph without duplicating it.
+      var buyIcon = $g("gd-buy").querySelector("[data-lucide]");
+      if (buyIcon) {
+        buyIcon.setAttribute("data-lucide", isPre ? "clock-3" : "zap");
+      }
 
       // Wishlist + follow
       var wish = readLS("kaimono_wishlist");
@@ -456,7 +776,13 @@
       });
 
       $g("gd-buy").addEventListener("click", function () {
-        openToast(isPre ? "Pre-purchase initiated — " + p.name : "Adding to cart — " + p.name, "shopping-cart");
+        openCheckout({
+          name: p.name,
+          image: (p.media && p.media[0] && p.media[0].poster) || p.image,
+          meta: p.type + " · " + (p.brand || p.publisher || "Kaimono"),
+          price: p.price,
+          originalPrice: p.originalPrice || null
+        }, isPre);
       });
 
       // Friends status
@@ -475,7 +801,7 @@
       if (bundles.length === 0) {
         $g("gd-bundles").innerHTML = '<div class="sm:col-span-2 rounded-xl border border-dashed border-slate-200 py-8 text-center"><p class="text-xs text-slate-400 font-medium">No bundles available for this item.</p></div>';
       } else {
-        bundles.forEach(function (b) {
+        bundles.forEach(function (b, i) {
           var typeBadge = b.type === "dlc" ? "DLC" : b.type === "edition" ? "Edition" : "Bundle";
           var el = document.createElement("div");
           el.className = "rounded-xl border border-slate-200 bg-[#F7F9FC] p-4 flex flex-col";
@@ -493,16 +819,37 @@
                 (b.originalPrice ? '<span class="text-[10px] text-slate-400 line-through">' + fmt(b.originalPrice) + '</span>' : "") +
                 '<span class="text-sm font-extrabold text-slate-900">' + fmt(b.price) + '</span>' +
               '</div>' +
-              '<button class="bundle-buy bg-[#323446] hover:bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors" data-name="' + b.name + '">Buy</button>' +
+              '<button class="bundle-buy bg-[#323446] hover:bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors" data-index="' + i + '" data-name="' + b.name + '">Buy</button>' +
             '</div>';
           $g("gd-bundles").appendChild(el);
         });
         document.querySelectorAll(".bundle-buy").forEach(function (btn) {
           btn.addEventListener("click", function () {
-            openToast(btn.dataset.name + " added to cart", "package-plus");
+            var b = bundles[+btn.dataset.index];
+            openCheckout({
+              name: b.name,
+              image: (p.media && p.media[0] && p.media[0].poster) || p.image,
+              meta: (b.type === "dlc" ? "DLC" : b.type === "edition" ? "Edition" : "Bundle") + " · " + p.name,
+              price: b.price,
+              originalPrice: b.originalPrice || null
+            }, false);
           });
         });
       }
+
+      // ===== Stage 3 · Details & features =====
+      renderAbout();
+      renderDlc();
+      renderFeatures();
+
+      // ===== Stage 4 · Technical & reviews =====
+      renderRequirements();
+      renderAccolades();
+      renderReviewFilters();
+      applyReviews();
+      $g("gd-filter-lang").addEventListener("change", applyReviews);
+      $g("gd-filter-time").addEventListener("change", applyReviews);
+      $g("gd-filter-date").addEventListener("change", applyReviews);
 
       lucide.createIcons();
     }
@@ -516,9 +863,6 @@
     }
 
     // ===== Media gallery =====
-    var gallery = [];
-    var mIdx = 0;
-
     function buildGallery() {
       var gl = [];
       (p.media || []).forEach(function (m) { gl.push({ type: "video", src: m.src, poster: m.poster, label: m.label }); });
@@ -569,6 +913,463 @@
       });
       lucide.createIcons();
     }
+
+    // ==========================================================================
+    // STAGE 3 · About, DLC & Steam features
+    // ==========================================================================
+    function renderAbout() {
+      $g("gd-about").innerHTML = (p.about || [p.description]).map(function (para) {
+        return "<p>" + para + "</p>";
+      }).join("");
+      var imgs = (p.screenshots || []).slice(0, 2);
+      if (imgs.length) {
+        $g("gd-about-images").innerHTML = imgs.map(function (src) {
+          return '<img src="' + src + '" alt="" class="w-full h-36 sm:h-44 object-cover rounded-xl border border-slate-200 shadow-sm">';
+        }).join("");
+      }
+      $g("gd-keyfeatures").innerHTML = (p.keyFeatures || []).map(function (f) {
+        return '<div class="flex items-start gap-2 text-[12px] text-slate-600 bg-[#F7F9FC] border border-slate-200 rounded-xl px-3 py-2.5">' +
+               '<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0"></i><span>' + f + "</span></div>";
+      }).join("");
+    }
+
+    function renderDlc() {
+      var list = p.dlc;
+      if (!list) { $g("gd-dlc-wrap").classList.add("hidden"); return; }
+      if (!list.length) {
+        $g("gd-dlc").innerHTML = '<div class="rounded-xl border border-dashed border-slate-200 py-8 text-center"><p class="text-xs text-slate-400 font-medium">No additional downloadable content at this time.</p></div>';
+        return;
+      }
+      $g("gd-dlc").innerHTML = list.map(function (d, i) {
+        return '<div class="rounded-xl border border-slate-200 bg-[#F7F9FC] p-4">' +
+          '<div class="flex items-center justify-between gap-2">' +
+            '<h4 class="text-xs font-extrabold text-slate-800 leading-snug">' + d.name + "</h4>" +
+            '<div class="flex items-baseline gap-1.5 shrink-0">' +
+              (d.originalPrice ? '<span class="text-[10px] text-slate-400 line-through">' + fmt(d.originalPrice) + "</span>" : "") +
+              '<span class="text-sm font-extrabold text-slate-900">' + fmt(d.price) + "</span>" +
+            "</div>" +
+          "</div>" +
+          '<p class="text-[11px] text-slate-500 mt-1.5 leading-relaxed">' + d.desc + "</p>" +
+          '<div class="flex items-center justify-between mt-3">' +
+            '<span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">' + d.date + "</span>" +
+            '<button class="dlc-buy bg-[#323446] hover:bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors" data-index="' + i + '" data-name="' + d.name + '">Buy</button>' +
+          "</div>" +
+        "</div>";
+      }).join("");
+      document.querySelectorAll(".dlc-buy").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var d = list[+btn.dataset.index];
+          openCheckout({
+            name: d.name,
+            image: (p.media && p.media[0] && p.media[0].poster) || p.image,
+            meta: "DLC · " + p.name,
+            price: d.price,
+            originalPrice: d.originalPrice || null
+          }, false);
+        });
+      });
+    }
+
+    function renderFeatures() {
+      if (!p.features || !p.features.length) { $g("gd-features-wrap").classList.add("hidden"); return; }
+      $g("gd-features").innerHTML = p.features.map(function (k) {
+        var m = FEATURE_META[k] || { icon: "sparkles", label: k };
+        return '<div class="flex items-center gap-2.5 bg-[#F7F9FC] border border-slate-200 rounded-xl px-3 py-3">' +
+               '<i data-lucide="' + m.icon + '" class="w-4 h-4 text-[#6366F1] shrink-0"></i>' +
+               '<span class="text-[11px] font-bold text-slate-600">' + m.label + "</span></div>";
+      }).join("");
+    }
+
+    // ==========================================================================
+    // STAGE 4 · System requirements
+    // ==========================================================================
+    function renderRequirements() {
+      if (!p.requirements) { $g("gd-req-wrap").classList.add("hidden"); return; }
+      ["minimum", "recommended"].forEach(function (key) {
+        var spec = p.requirements[key] || {};
+        $g("gd-req-" + key).innerHTML = REQ_ROWS.map(function (r) {
+          return '<tr class="req-row border-b border-slate-200/60 last:border-0">' +
+            '<td class="py-2.5 pr-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap align-top">' + r[1] + "</td>" +
+            '<td class="py-2.5 text-[11.5px] font-semibold text-slate-700 leading-snug">' + (spec[r[0]] || "—") + "</td>" +
+          "</tr>";
+        }).join("");
+      });
+    }
+
+    // ==========================================================================
+    // STAGE 4 · Accolades & media reviews
+    // ==========================================================================
+    function renderAccolades() {
+      var acc = p.accolades || [];
+      if (!acc.length) { $g("gd-accolade-wrap").classList.add("hidden"); return; }
+      if (p.metacritic) {
+        $g("gd-metacritic").innerHTML =
+          '<div class="flex items-center gap-2.5 bg-[#F7F9FC] border border-slate-200 rounded-xl px-3.5 py-2.5">' +
+            '<span class="w-10 h-10 rounded-full bg-[#323446] text-white flex items-center justify-center text-sm font-extrabold">' + p.metacritic + "</span>" +
+            '<div><p class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Metacritic</p>' +
+            '<p class="text-[10px] font-bold text-slate-600">' + (p.metacritic >= 90 ? "Must-Play" : "Generally Favorable") + "</p></div>" +
+          "</div>";
+      }
+      $g("gd-accolades").innerHTML = acc.map(function (a) {
+        var num = parseFloat(a.score);
+        var chip = (!isNaN(num) && num >= 85) || /^10$/.test(a.score)
+          ? "bg-emerald-50 text-emerald-600"
+          : "bg-[#6366F1]/10 text-[#6366F1]";
+        return '<div class="card-hover rounded-2xl border border-slate-200 bg-[#F7F9FC] p-4 flex flex-col">' +
+          '<div class="flex items-center justify-between mb-2.5">' +
+            '<span class="text-[10px] font-extrabold text-slate-700 uppercase tracking-wider">' + a.outlet + "</span>" +
+            '<span class="' + chip + ' text-[10px] font-extrabold px-2 py-0.5 rounded-full">' + a.score + "</span>" +
+          "</div>" +
+          '<div class="flex gap-2">' +
+            '<i data-lucide="quote" class="w-3.5 h-3.5 text-[#6366F1] shrink-0 mt-0.5"></i>' +
+            '<p class="text-[11.5px] text-slate-500 italic leading-relaxed">' + a.quote + "</p>" +
+          "</div>" +
+        "</div>";
+      }).join("");
+    }
+
+    // ==========================================================================
+    // STAGE 4 · User reviews (filterable by language / play time / date)
+    // ==========================================================================
+    function renderReviewFilters() {
+      var seen = {};
+      (p.userReviews || []).forEach(function (r) { if (r.lang) seen[r.lang] = true; });
+      var langs = ['<option value="all">All languages</option>'];
+      Object.keys(seen).forEach(function (l) {
+        langs.push('<option value="' + l + '">' + (LANG_LABELS[l] || l) + "</option>");
+      });
+      $g("gd-filter-lang").innerHTML = langs.join("");
+      $g("gd-filter-time").innerHTML = TIME_FILTERS.map(function (f) {
+        return '<option value="' + f.value + '">' + f.label + "</option>";
+      }).join("");
+      $g("gd-filter-date").innerHTML = DATE_FILTERS.map(function (f) {
+        return '<option value="' + f.value + '">' + f.label + "</option>";
+      }).join("");
+    }
+
+    function reviewMatches(r) {
+      var lang = $g("gd-filter-lang").value;
+      var time = $g("gd-filter-time").value;
+      var date = $g("gd-filter-date").value;
+      if (lang !== "all" && r.lang !== lang) return false;
+      if (time !== "all") {
+        var h = r.hours == null ? -1 : r.hours;
+        if (time === "1h" && !(h >= 0 && h < 1)) return false;
+        if (time === "10h" && !(h >= 1 && h < 10)) return false;
+        if (time === "50h" && !(h >= 10 && h < 50)) return false;
+        if (time === "100h" && !(h >= 50)) return false;
+      }
+      if (date !== "all") {
+        var days = date === "7d" ? 7 : date === "30d" ? 30 : 90;
+        var age = Date.now() - new Date(r.date).getTime();
+        if (age > days * 86400000 || age < 0) return false;
+      }
+      return true;
+    }
+
+    function reviewCard(r) {
+      var dateStr = new Date(r.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+      var hours = r.hours != null
+        ? '<span class="text-[9px] font-extrabold text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1"><i data-lucide="clock" class="w-2.5 h-2.5"></i>' + r.hours.toFixed(1) + " hrs on record</span>"
+        : "";
+      return '<div class="card-hover rounded-2xl border border-slate-200 bg-[#F7F9FC] p-4 ' + (r.positive ? "border-l-4 border-l-emerald-400" : "border-l-4 border-l-rose-400") + '">' +
+        '<div class="flex items-start gap-3">' +
+          '<img src="' + r.avatar + '" alt="" class="w-9 h-9 rounded-full object-cover shrink-0 ring-2 ring-white shadow-sm">' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="flex flex-wrap items-center gap-x-2 gap-y-1">' +
+              '<span class="text-xs font-extrabold text-slate-800">' + r.author + "</span>" +
+              (r.positive
+                ? '<span class="text-[9px] font-extrabold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full uppercase tracking-wider">Recommended</span>'
+                : '<span class="text-[9px] font-extrabold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full uppercase tracking-wider">Not Recommended</span>') +
+              hours +
+              '<span class="text-[9px] font-extrabold text-slate-400 bg-white border border-slate-200 px-2 py-0.5 rounded-full uppercase tracking-wider">' + (LANG_LABELS[r.lang] || r.lang) + "</span>" +
+              '<span class="ml-auto text-[10px] text-slate-400 font-medium">' + dateStr + "</span>" +
+            "</div>" +
+            '<p class="text-[12px] text-slate-600 leading-relaxed mt-2">' + r.text + "</p>" +
+            '<button type="button" class="co-helpful flex items-center gap-1.5 mt-2.5 text-[10px] font-bold text-slate-500 hover:text-[#6366F1] transition-colors">' +
+              '<i data-lucide="thumbs-up" class="w-3 h-3"></i><span>' + r.helpful + "</span> people found this helpful" +
+            "</button>" +
+          "</div>" +
+        "</div>" +
+      "</div>";
+    }
+
+    function applyReviews() {
+      var all = p.userReviews || [];
+      var pos = all.filter(function (r) { return r.positive; }).length;
+      var pct = all.length ? Math.round((pos / all.length) * 100) : 0;
+      var label = p.reviewSummary || (pct >= 80 ? "Very Positive" : pct >= 60 ? "Positive" : "Mixed");
+      $g("gd-review-summary").innerHTML =
+        '<div class="text-right">' +
+          '<p class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Overall rating</p>' +
+          '<p class="text-sm font-extrabold text-slate-800 leading-tight">' + label + "</p>" +
+        "</div>" +
+        '<div class="w-44">' +
+          '<div class="flex items-center justify-between text-[10px] font-bold text-slate-500 mb-1">' +
+            '<span class="text-emerald-600">' + pct + "%</span><span>positive</span>" +
+          "</div>" +
+          '<div class="h-2 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full bg-emerald-500" style="width:' + pct + '%"></div></div>' +
+          '<p class="text-[10px] text-slate-400 mt-1">Based on ' + (p.reviews || all.length).toLocaleString() + " reviews</p>" +
+        "</div>";
+
+      var filtered = all.filter(reviewMatches);
+      $g("gd-review-count").textContent = filtered.length + " of " + all.length + " reviews";
+      $g("gd-reviews-list").innerHTML = filtered.length
+        ? filtered.map(reviewCard).join("")
+        : '<div class="rounded-2xl border border-dashed border-slate-200 py-10 text-center">' +
+          '<p class="text-xs font-semibold text-slate-400">No reviews match these filters.</p>' +
+          '<p class="text-[11px] text-slate-400 mt-1">Try adjusting your language, play time or date filters.</p></div>';
+      document.querySelectorAll(".co-helpful").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var span = btn.querySelector("span");
+          if (span) span.textContent = (+span.textContent + 1);
+          openToast("Thanks for the feedback!", "thumbs-up");
+        });
+      });
+      lucide.createIcons();
+    }
+
+    // ==========================================================================
+    // CHECKOUT · Debit card payment flow (dummy data, no real charge)
+    // ==========================================================================
+    var coItem = null;
+    var coIsPre = false;
+    var coTimer = null;
+    var coMethod = "card"; // "card" | "wallet"
+    var coWallet = "OVO";
+
+    function renderQris() {
+      // deterministic pseudo-random QR-like grid (21x21) with corner finder patterns
+      var n = 21, seed = 42, grid = [];
+      function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+      for (var r = 0; r < n; r++) { grid[r] = []; for (var c = 0; c < n; c++) grid[r][c] = rnd() > 0.5 ? 1 : 0; }
+      function finder(r0, c0) {
+        for (var r = 0; r < 7; r++) for (var c = 0; c < 7; c++) {
+          var edge = r === 0 || r === 6 || c === 0 || c === 6;
+          var core = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+          grid[r0 + r][c0 + c] = edge || core ? 1 : 0;
+        }
+      }
+      finder(0, 0); finder(0, n - 7); finder(n - 7, 0);
+      var html = "";
+      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) {
+        html += '<span style="display:inline-block;width:100%;height:100%;background:' + (grid[r][c] ? "#111827" : "#ffffff") + '"></span>';
+      }
+      $g("co-qris-code").innerHTML = html;
+      $g("co-qris-code").style.display = "grid";
+      $g("co-qris-code").style.gridTemplateColumns = "repeat(" + n + ", 1fr)";
+      $g("co-qris-code").style.gridTemplateRows = "repeat(" + n + ", 1fr)";
+    }
+
+    function updateWalletUI() {
+      var isQris = coWallet === "QRIS";
+      document.querySelectorAll(".co-wallet-chip").forEach(function (x) {
+        x.classList.toggle("co-wallet-on", x.getAttribute("data-wallet") === coWallet);
+      });
+      $g("co-phone-wrap").classList.toggle("hidden", isQris);
+      $g("co-qris-panel").classList.toggle("hidden", !isQris);
+      if (coMethod === "wallet") $g("co-pay-label").textContent = "Pay with " + coWallet;
+    }
+
+    function setCoMethod(m) {
+      coMethod = m;
+      var cardBtn = $g("co-method-card"), walBtn = $g("co-method-wallet");
+      cardBtn.classList.toggle("co-method-on", m === "card");
+      walBtn.classList.toggle("co-method-on", m === "wallet");
+      $g("co-card-panel").classList.toggle("hidden", m !== "card");
+      $g("co-wallet-panel").classList.toggle("hidden", m !== "wallet");
+      $g("co-pay-label").textContent = m === "wallet" ? "Pay with " + coWallet : (coIsPre ? "Confirm Pre-Purchase" : "Pay Now");
+    }
+
+    function closeCheckout() {
+      $g("checkout-overlay").classList.add("hidden");
+      document.body.style.overflow = "";
+      if (coTimer) { clearTimeout(coTimer); coTimer = null; }
+    }
+
+    function openCheckout(item, isPre) {
+      coIsPre = isPre;
+      coItem = item;
+      $g("co-img").src = item.image;
+      $g("co-name").textContent = item.name;
+      $g("co-meta").textContent = item.meta;
+      $g("co-price").textContent = fmt(item.price);
+      $g("co-pay-amount").textContent = fmt(item.price);
+      $g("co-pay-label").textContent = isPre ? "Confirm Pre-Purchase" : "Pay Now";
+
+      var old = item.originalPrice;
+      var oldEl = $g("co-old-price"), saveEl = $g("co-save");
+      if (old && old > item.price) {
+        oldEl.textContent = fmt(old);
+        oldEl.classList.remove("hidden");
+        saveEl.textContent = "Save " + Math.round((1 - item.price / old) * 100) + "%";
+        saveEl.classList.remove("hidden");
+      } else {
+        oldEl.classList.add("hidden");
+        saveEl.classList.add("hidden");
+      }
+
+      var preNote = $g("co-pre-note");
+      if (isPre) {
+        preNote.classList.remove("hidden");
+        $g("co-pre-note-text").textContent = "Pre-purchase — your activation key will be delivered on " + (p.releaseDate || "release day") + ".";
+      } else {
+        preNote.classList.add("hidden");
+      }
+
+      $g("co-form").classList.remove("hidden");
+      $g("co-methods").classList.remove("hidden");
+      $g("co-processing").classList.add("hidden");
+      $g("co-success").classList.add("hidden");
+      $g("co-error").classList.add("hidden");
+      $g("co-form").reset();
+      $g("co-number").value = "";
+      $g("co-expiry").value = "";
+      $g("co-cvv").value = "";
+      $g("co-phone").value = "";
+      $g("co-brand").textContent = "Debit Card";
+      coWallet = "OVO";
+      setCoMethod("card");
+      updateWalletUI();
+      renderQris();
+
+      // reset progress bar
+      $g("co-progress-bar").style.width = "0%";
+
+      $g("checkout-overlay").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      setTimeout(function () { $g("co-holder").focus(); }, 150);
+    }
+
+    function formatCardNumber(v) {
+      return v.replace(/\D/g, "").slice(0, 19).replace(/(.{4})/g, "$1 ").trim();
+    }
+    function formatExpiry(v) {
+      var d = v.replace(/\D/g, "").slice(0, 4);
+      return d.length <= 2 ? d : d.slice(0, 2) + "/" + d.slice(2);
+    }
+    function cardBrand(num) {
+      var d = num.replace(/\D/g, "");
+      if (/^4/.test(d)) return "Visa Debit";
+      if (/^5[1-5]/.test(d)) return "Mastercard Debit";
+      if (/^3[47]/.test(d)) return "Amex Debit";
+      return "Debit Card";
+    }
+    function showCoError(msg) {
+      var e = $g("co-error");
+      e.textContent = msg;
+      e.classList.remove("hidden");
+    }
+    function validExpiry(v) {
+      var m = /^(\d{2})\/(\d{2})$/.exec(v);
+      if (!m) return false;
+      var mon = +m[1], yr = 2000 + +m[2];
+      if (mon < 1 || mon > 12) return false;
+      var now = new Date();
+      return yr > now.getFullYear() || (yr === now.getFullYear() && mon >= now.getMonth() + 1);
+    }
+
+    $g("co-number").addEventListener("input", function () {
+      this.value = formatCardNumber(this.value);
+      $g("co-brand").textContent = cardBrand(this.value);
+    });
+    $g("co-expiry").addEventListener("input", function () { this.value = formatExpiry(this.value); });
+    $g("co-cvv").addEventListener("input", function () { this.value = this.value.replace(/\D/g, "").slice(0, 4); });
+    $g("co-phone").addEventListener("input", function () {
+      this.value = this.value.replace(/\D/g, "").slice(0, 13).replace(/(\d{4})(?=\d)/g, "$1 ").trim();
+    });
+
+    $g("co-method-card").addEventListener("click", function () { setCoMethod("card"); });
+    $g("co-method-wallet").addEventListener("click", function () { setCoMethod("wallet"); });
+    document.querySelectorAll(".co-wallet-chip").forEach(function (c) {
+      c.addEventListener("click", function () {
+        coWallet = c.getAttribute("data-wallet");
+        updateWalletUI();
+      });
+    });
+    renderQris();
+
+    $g("co-form").addEventListener("submit", function (ev) {
+      ev.preventDefault();
+
+      var steps, successMsg;
+
+      if (coMethod === "wallet") {
+        var phone = $g("co-phone").value.replace(/\D/g, "");
+        if (coWallet === "QRIS") {
+          steps = [
+            "Generating your QRIS code…",
+            "Waiting for you to scan & confirm in your e-wallet app…",
+            "Confirming payment…"
+          ];
+          successMsg = coIsPre
+            ? "Your pre-purchase of " + coItem.name + " is confirmed via QRIS. We'll email your activation key on " + (p.releaseDate || "release day") + "."
+            : "Your QRIS payment was approved. Your order for " + coItem.name + " is confirmed — a receipt has been emailed to you.";
+        } else {
+          if (phone.length < 10 || phone.length > 13) return showCoError("Please enter a valid e-wallet phone number (e.g. 0812 3456 7890).");
+          steps = [
+            "Contacting " + coWallet + "…",
+            "Sending an OTP to your " + coWallet + " app…",
+            "Waiting for you to confirm the payment…"
+          ];
+          successMsg = coIsPre
+            ? "Your pre-purchase of " + coItem.name + " is confirmed via " + coWallet + ". We'll email your activation key on " + (p.releaseDate || "release day") + "."
+            : "Your " + coWallet + " payment was approved. Your order for " + coItem.name + " is confirmed — a receipt has been emailed to you.";
+        }
+      } else {
+        var holder = $g("co-holder").value.trim();
+        var num = $g("co-number").value.replace(/\D/g, "");
+        var expiry = $g("co-expiry").value.trim();
+        var cvv = $g("co-cvv").value.trim();
+        if (holder.length < 3) return showCoError("Please enter the cardholder name as shown on your debit card.");
+        if (num.length < 15) return showCoError("Please enter a valid 16-digit debit card number.");
+        if (!validExpiry(expiry)) return showCoError("Please enter a valid expiry date (MM/YY) that is not in the past.");
+        if (cvv.length < 3) return showCoError("Please enter the 3-digit CVV from the back of your card.");
+        steps = [
+          "Sending payment details to " + $g("co-brand").textContent + "…",
+          "Waiting for your bank to authorize the payment…",
+          "Checking OTP / 3-D Secure confirmation…"
+        ];
+        successMsg = coIsPre
+          ? "Your pre-purchase of " + coItem.name + " is confirmed. We'll email your activation key on " + (p.releaseDate || "release day") + "."
+          : "Your debit card payment was approved by your bank. Your order for " + coItem.name + " is confirmed — a receipt has been emailed to you.";
+      }
+
+      $g("co-form").classList.add("hidden");
+      $g("co-methods").classList.add("hidden");
+      $g("co-error").classList.add("hidden");
+      $g("co-processing").classList.remove("hidden");
+
+      // progress bar
+      var bar = $g("co-progress-bar");
+      setTimeout(function () { bar.style.width = "45%"; }, 150);
+      setTimeout(function () { bar.style.width = "85%"; }, 1300);
+
+      var i = 0;
+      $g("co-processing-step").textContent = steps[0];
+      var st = setInterval(function () {
+        i++;
+        if (i < steps.length) $g("co-processing-step").textContent = steps[i];
+      }, 700);
+
+      coTimer = setTimeout(function () {
+        clearInterval(st);
+        $g("co-processing").classList.add("hidden");
+        $g("co-success").classList.remove("hidden");
+        $g("co-progress-bar").style.width = "100%";
+        $g("co-order-no").textContent = "KM-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+        $g("co-success-msg").textContent = successMsg;
+      }, 2400);
+    });
+
+    $g("co-close").addEventListener("click", closeCheckout);
+    $g("co-done").addEventListener("click", closeCheckout);
+    $g("checkout-overlay").addEventListener("click", function (ev) {
+      if (ev.target === this) closeCheckout();
+    });
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape" && !$g("checkout-overlay").classList.contains("hidden")) closeCheckout();
+    });
   </script>
 </body>
 </html>

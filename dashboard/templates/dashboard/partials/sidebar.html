@@ -285,5 +285,11 @@
     localStorage.setItem('kaimono_sidebar_collapsed', String(isCollapsed));
     render();
   });
+
+  window.__kaimonoToggleSidebar = function () {
+    isCollapsed = !isCollapsed;
+    localStorage.setItem('kaimono_sidebar_collapsed', String(isCollapsed));
+    render();
+  };
 })();
 </script>

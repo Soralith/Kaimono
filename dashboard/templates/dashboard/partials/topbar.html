@@ -5,26 +5,21 @@
         <i data-lucide="user" class="w-4 h-4 text-[var(--on-brand)]"></i>
         <span class="font-bold text-[var(--on-brand)] tracking-widest uppercase text-sm">@{{ request.user.username|default:'guest' }}</span>
       </div>
-      <div class="px-3 py-1 text-[var(--on-brand)] font-serif italic text-sm tracking-wider opacity-80">LazyStudio</div>
       <span class="text-[var(--on-brand)] opacity-40">|</span>
       <div class="flex items-center gap-3 text-[var(--on-brand)] tracking-wider">
-        <span class="text-xs bg-[var(--on-brand)]/15 px-3 py-1 rounded text-[var(--on-brand)] font-mono">CURRENT PROJECT</span>
-        <span class="text-[var(--on-brand)] opacity-40">|</span>
-        <span class="font-semibold text-[var(--on-brand)] text-sm">ANIME MERCH E-COMMERCE DASHBOARD</span>
+        <span class="font-semibold text-[var(--on-brand)] text-sm">Kaimono</span>
         <span class="text-[var(--on-brand)] opacity-40">//</span>
-        <span class="text-[var(--on-brand)] opacity-80 text-xs">PROJECT SEKAI STYLE</span>
+        <span class="text-[var(--on-brand)] opacity-80 text-xs">What's on your mind today?</span>
       </div>
     </div>
     <div class="flex items-center gap-6">
       <div class="flex items-center gap-0 opacity-70">
-        <div class="w-48 bg-[var(--on-brand)]/40 h-[2px] rounded-l-full relative">
-          <div class="absolute right-0 -top-1 w-2.5 h-3 bg-[var(--on-brand)] shadow-sm"></div>
-        </div>
-        <i data-lucide="play" class="w-3.5 h-3.5 text-[var(--on-brand)] fill-[var(--on-brand)] rotate-180 -ml-1"></i>
       </div>
       <div class="flex items-center gap-4 pl-4">
         <span class="font-bold text-[var(--on-brand)] tracking-widest text-sm">{{ request.user.display_name|default:request.user.username|upper }}</span>
-        <button class="p-1 transition-colors text-[var(--on-brand)]"><i data-lucide="list" class="w-5 h-5"></i></button>
+        <button type="button" onclick="if(window.__kaimonoToggleSidebar) window.__kaimonoToggleSidebar()" class="p-1 transition-colors text-[var(--on-brand)] hover:opacity-70 cursor-pointer" aria-label="Toggle sidebar">
+          <i data-lucide="list" class="w-5 h-5"></i>
+        </button>
       </div>
     </div>
   </header>
