@@ -1,3 +1,5 @@
+{% load static %}
+{% static 'dashboard/images/accsetup.jpg' as default_avatar %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -368,7 +370,7 @@
 
               <div class="flex items-center gap-5 p-4 rounded-xl mb-6" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
                 <div class="w-16 h-16 rounded-full overflow-hidden border-2 shrink-0" style="border-color: var(--border-soft);">
-                  <img id="set-avatar" src="{{ form.instance.avatar_url|default:'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=200&q=80' }}" alt="" class="w-full h-full object-cover">
+                  <img id="set-avatar" src="{{ form.instance.avatar_url|default:default_avatar }}" alt="" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-extrabold" style="color: var(--text-primary);">{{ form.instance.display_name|default:form.instance.username }}</p>
@@ -379,7 +381,7 @@
                     Change Photo
                     <input type="file" name="avatar" accept="image/*" form="set-form" class="hidden" onchange="setAvatarPreview(this)">
                   </label>
-                  <button type="button" onclick="document.getElementById('avatar-remove').value='1'; document.getElementById('set-avatar').src='https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&amp;fit=crop&amp;w=200&amp;q=80'" class="btn-ghost text-[11px] font-bold px-4 py-2 rounded-full">Remove</button>
+                  <button type="button" onclick="document.getElementById('avatar-remove').value='1'; document.getElementById('set-avatar').src='{{ default_avatar }}'" class="btn-ghost text-[11px] font-bold px-4 py-2 rounded-full">Remove</button>
                   <input type="hidden" name="avatar_remove" id="avatar-remove" form="set-form" value="">
                 </div>
               </div>
@@ -613,19 +615,19 @@
               </p>
 
               <div class="flex flex-col gap-3 mt-6 relative">
-                <div class="flex items-center justify-between p-4 rounded-xl accent-soft-bg border accent-border">
+                <!-- <div class="flex items-center justify-between p-4 rounded-xl accent-soft-bg border accent-border">
                   <div>
                     <p class="text-xs font-bold">Deactivate Account</p>
                     <p class="accent-muted text-[10px] mt-0.5">Temporarily hide your profile. You can reactivate anytime.</p>
                   </div>
                   <button class="text-xs font-bold px-4 py-2 rounded-full hover:-translate-y-0.5 transition-all shrink-0" style="background: var(--on-brand); color: var(--brand);">Deactivate</button>
-                </div>
+                </div> -->
                 <div class="flex items-center justify-between p-4 rounded-xl accent-soft-bg border accent-border">
                   <div>
                     <p class="text-xs font-bold">Delete Account Permanently</p>
                     <p class="accent-muted text-[10px] mt-0.5">Erase all data, including library, wishlist, and badges.</p>
                   </div>
-                  <button class="text-[11px] font-bold px-4 py-2 rounded-full transition-colors shrink-0" style="background: transparent; border: 1px solid color-mix(in srgb, var(--on-brand) 30%, transparent); color: var(--on-brand);">Delete Account</button>
+                  <button onclick="openDeleteModal()" class="text-[11px] font-bold px-4 py-2 rounded-full transition-colors shrink-0 hover:opacity-80" style="background: transparent; border: 1px solid color-mix(in srgb, var(--on-brand) 30%, transparent); color: var(--on-brand);">Delete Account</button>
                 </div>
               </div>
             </div>
@@ -634,6 +636,51 @@
         </section>
       </div>
     </main>
+  </div>
+
+  <!-- Delete Account Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+    <div class="w-full max-w-md p-6 rounded-2xl shadow-2xl transform scale-95 transition-transform duration-200" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: rgba(239, 68, 68, 0.15);">
+          <i data-lucide="alert-triangle" class="w-5 h-5" style="color: #ef4444;"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold" style="color: var(--text-primary);">Delete Account?</h3>
+          <p class="text-xs" style="color: var(--text-muted);">This action cannot be undone</p>
+        </div>
+      </div>
+      
+      <div class="mb-6 p-4 rounded-xl" style="background: var(--bg-surface); border: 1px solid var(--border-soft);">
+        <p class="text-sm mb-2" style="color: var(--text-primary);">You are about to permanently delete your account including:</p>
+        <ul class="text-xs space-y-1" style="color: var(--text-secondary);">
+          <li class="flex items-center gap-2">
+            <i data-lucide="x-circle" class="w-3 h-3" style="color: #ef4444;"></i>
+            <span>All personal information and profile data</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="x-circle" class="w-3 h-3" style="color: #ef4444;"></i>
+            <span>Game library, wishlist, and community posts</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="x-circle" class="w-3 h-3" style="color: #ef4444;"></i>
+            <span>Achievements, badges, and purchase history</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <form method="post" action="{% url 'delete_account' %}" class="flex-1" onsubmit="return confirmFinalDelete()">
+          {% csrf_token %}
+          <button type="submit" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90" style="background: #ef4444; color: #ffffff;">
+            Yes, Delete My Account
+          </button>
+        </form>
+        <button onclick="closeDeleteModal()" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-80" style="background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-soft);">
+          Cancel
+        </button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -750,6 +797,39 @@
       };
       reader.readAsDataURL(file);
     }
+
+    // ===== DELETE ACCOUNT MODAL =====
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteModalContent = deleteModal.querySelector('div');
+
+    function openDeleteModal() {
+      deleteModal.classList.remove('opacity-0', 'pointer-events-none');
+      deleteModalContent.classList.remove('scale-95');
+      deleteModalContent.classList.add('scale-100');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeDeleteModal() {
+      deleteModal.classList.add('opacity-0', 'pointer-events-none');
+      deleteModalContent.classList.remove('scale-100');
+      deleteModalContent.classList.add('scale-95');
+    }
+
+    function confirmFinalDelete() {
+      return confirm('FINAL WARNING: This will permanently delete your account and all associated data. This action is irreversible. Continue?');
+    }
+
+    // Close modal when clicking outside
+    deleteModal.addEventListener('click', (e) => {
+      if (e.target === deleteModal) closeDeleteModal();
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !deleteModal.classList.contains('opacity-0')) {
+        closeDeleteModal();
+      }
+    });
   </script>
 </body>
 </html>

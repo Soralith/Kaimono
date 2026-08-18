@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
+from django.templatetags.static import static
 from django.views.decorators.cache import never_cache
 
 from . import storage
@@ -56,8 +57,12 @@ def accsetup_view(request):
         user = form.save(commit=False)
         if form.cleaned_data.get('avatar'):
             user.avatar_url = storage.upload_image(form.cleaned_data['avatar'], folder='avatars')
+        elif not user.avatar_url:
+            user.avatar_url = static('dashboard/images/accsetup.jpg')
         if form.cleaned_data.get('banner'):
             user.banner_url = storage.upload_image(form.cleaned_data['banner'], folder='banners')
+        elif not user.banner_url:
+            user.banner_url = static('dashboard/images/banner.jpg')
         user.save()
         messages.success(request, 'Account updated.')
         return redirect('dashboard')
@@ -101,3 +106,22 @@ def settings_view(request):
         return redirect('settings')
 
     return render(request, 'dashboard/pages/settings.html', {'form': form})
+
+
+@never_cache
+def delete_account_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method == 'POST':
+        # Get the current user before logout
+        user = request.user
+        # Logout first to avoid session issues
+        logout(request)
+        # Delete the user permanently
+        user.delete()
+        messages.success(request, 'Your account has been permanently deleted.')
+        return redirect('landing')
+
+    # If GET, redirect to settings
+    return redirect('settings')
