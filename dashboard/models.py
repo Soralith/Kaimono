@@ -4,6 +4,28 @@ from django.conf import settings
 
 # ── Wishlist & Library (existing) ──────────────────────────────────
 
+class UserWishlistItem(models.Model):
+    """Per-user wishlist — links a user to a ShopProduct."""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="wishlist_items",
+    )
+    product = models.ForeignKey(
+        'ShopProduct',
+        on_delete=models.CASCADE,
+        related_name="wishlisted_by",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user} wishes {self.product}"
+
+
 class WishlistItem(models.Model):
     title = models.CharField(max_length=200)
     category = models.CharField(max_length=50)

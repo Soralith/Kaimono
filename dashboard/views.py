@@ -4,6 +4,7 @@ import os
 import re
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -14,7 +15,7 @@ from collections import defaultdict
 
 from accounts.models import User
 from .models import (
-    WishlistItem, LibraryGame, ShopProduct,
+    WishlistItem, UserWishlistItem, LibraryGame, ShopProduct,
     CommunityStory, CommunityChannel, CommunityGame, CommunityPost,
     PostImage, PostTag, PostReaction, Poll, PollOption, PollVote,
     CommunityComment,
@@ -912,17 +913,45 @@ def developer_panel(request):
 
 # ── Wishlist ────────────────────────────────────────────────────────
 
+@login_required
 def wishlist(request):
-    items = list(WishlistItem.objects.all().order_by('created_at'))
-    on_sale = [i for i in items if i.on_sale()]
-    total_value = sum((i.price or 0) for i in items if i.price)
-    savings = sum(((i.list_price or 0) - (i.price or 0)) for i in on_sale)
-    games = [i for i in items if "Game" in i.category or "Indie" in i.category]
-    merch = [i for i in items if "Figure" in i.category or "Artbook" in i.category]
-    bundles = [i for i in items if "Bundle" in i.category]
+    items = list(
+        UserWishlistItem.objects.filter(user=request.user)
+        .select_related('product')
+        .order_by('-created_at')
+    )
+    products = [wi.product for wi in items]
+    on_sale = [p for p in products if p.original_price and p.price and p.original_price > p.price]
+    total_value = sum((p.price or 0) for p in products if p.price)
+    savings = sum(((p.original_price or 0) - (p.price or 0)) for p in on_sale)
+    games = [p for p in products if p.category == 'games']
+    merch = [p for p in products if p.category != 'games']
+    bundles = []
+    # Build product data list for the template
+    product_data = []
+    for wi in items:
+        p = wi.product
+        d = p.data or {}
+        product_data.append({
+            'id': p.id,
+            'wishlist_id': wi.id,
+            'name': p.name,
+            'category': p.category,
+            'image': p.image or d.get('image', ''),
+            'brand': d.get('brand', ''),
+            'type': d.get('type', ''),
+            'price': float(p.price) if p.price else 0,
+            'original_price': float(p.original_price) if p.original_price else None,
+            'rating': d.get('rating', 0),
+            'reviews': d.get('reviews', 0),
+            'badges': d.get('badges', []),
+            'stock': d.get('stock', ''),
+            'description': d.get('description', ''),
+        })
     ctx = {
-        "items": items,
-        "total_count": len(items),
+        "products_json": json.dumps(product_data),
+        "items": product_data,
+        "total_count": len(product_data),
         "on_sale_count": len(on_sale),
         "total_value": total_value,
         "savings": savings,
@@ -931,6 +960,49 @@ def wishlist(request):
         "bundles_count": len(bundles),
     }
     return render(request, 'dashboard/pages/wishlist.html', ctx)
+
+
+# ── AJAX: Toggle Wishlist ────────────────────────────────────────
+
+@require_POST
+def api_wishlist_toggle(request):
+    """Add or remove a product from the current user's wishlist."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Login required'}, status=401)
+    try:
+        data = json.loads(request.body)
+        product_id = int(data.get('product_id'))
+    except (ValueError, TypeError, KeyError):
+        return JsonResponse({'error': 'Invalid product_id'}, status=400)
+
+    try:
+        product = ShopProduct.objects.get(id=product_id)
+    except ShopProduct.DoesNotExist:
+        return JsonResponse({'error': 'Product not found'}, status=404)
+
+    item, created = UserWishlistItem.objects.get_or_create(
+        user=request.user, product=product,
+    )
+    if not created:
+        item.delete()
+        wished = False
+    else:
+        wished = True
+
+    count = UserWishlistItem.objects.filter(user=request.user).count()
+    return JsonResponse({'wished': wished, 'count': count})
+
+
+@require_GET
+def api_wishlist_list(request):
+    """Return the current user's wishlist product IDs."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'product_ids': [], 'count': 0})
+    ids = list(
+        UserWishlistItem.objects.filter(user=request.user)
+        .values_list('product_id', flat=True)
+    )
+    return JsonResponse({'product_ids': ids, 'count': len(ids)})
 
 def library(request):
     if request.user.is_authenticated:

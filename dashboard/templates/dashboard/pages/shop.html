@@ -427,6 +427,7 @@
   </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden text-sm">
+  <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
 
   {% include "dashboard/partials/topbar.html" %}
 
@@ -750,7 +751,7 @@
       viewMode: "grid",
       showWishlistOnly: false,
       cart: JSON.parse(localStorage.getItem("kaimono_cart") || "[]"),
-      wishlist: JSON.parse(localStorage.getItem("kaimono_wishlist") || "[]"),
+      wishlist: [],
       displayedCount: 8,
     };
 
@@ -761,8 +762,29 @@
     const formatPrice = (n) => `$${n.toFixed(2)}`;
     const saveState = () => {
       localStorage.setItem("kaimono_cart", JSON.stringify(state.cart));
-      localStorage.setItem("kaimono_wishlist", JSON.stringify(state.wishlist));
     };
+
+    // Load wishlist from server on init
+    (async function loadWishlist() {
+      try {
+        const res = await fetch('/api/wishlist/list/');
+        const data = await res.json();
+        state.wishlist = data.product_ids || [];
+        updateCounters();
+        renderProducts();
+      } catch(e) { /* keep empty */ }
+    })();
+
+    async function toggleWishlistAPI(productId) {
+      try {
+        const res = await fetch('/api/wishlist/toggle/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.getElementById('csrf-token').value },
+          body: JSON.stringify({ product_id: productId }),
+        });
+        return await res.json();
+      } catch(e) { return { error: 'network' }; }
+    }
 
     const showToast = (message, icon = "check", variant = "success") => {
       const container = $("toast-container");
@@ -1021,22 +1043,23 @@
       });
 
       document.querySelectorAll(".heart-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
+        btn.addEventListener("click", async (e) => {
           e.stopPropagation();
           const id = Number(btn.dataset.id);
-          const idx = state.wishlist.indexOf(id);
-          if (idx > -1) {
-            state.wishlist.splice(idx, 1);
-            btn.classList.remove("active");
-            showToast("Removed from wishlist", "heart-off", "info");
-          } else {
-            state.wishlist.push(id);
-            btn.classList.add("active");
-            btn.classList.add("animate-heartPop");
-            setTimeout(() => btn.classList.remove("animate-heartPop"), 350);
-            showToast("Added to wishlist", "heart", "success");
+          const result = await toggleWishlistAPI(id);
+          if (result.wished !== undefined) {
+            if (result.wished) {
+              state.wishlist.push(id);
+              btn.classList.add("active");
+              btn.classList.add("animate-heartPop");
+              setTimeout(() => btn.classList.remove("animate-heartPop"), 350);
+              showToast("Added to wishlist", "heart", "success");
+            } else {
+              state.wishlist = state.wishlist.filter(wid => wid !== id);
+              btn.classList.remove("active");
+              showToast("Removed from wishlist", "heart-off", "info");
+            }
           }
-          saveState();
           updateCounters();
           if (state.showWishlistOnly) {
             renderProducts();

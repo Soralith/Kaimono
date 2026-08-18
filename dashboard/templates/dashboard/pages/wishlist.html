@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,167 +9,73 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ===== THEME VARIABLES (GLOBAL) ===== */
     :root, [data-theme="silver"] {
-      --bg-primary: #E2E7EE;
-      --bg-surface: #F7F9FC;
-      --bg-card: #ffffff;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #94a3b8;
-      --border-color: #ffffff;
-      --border-soft: #e2e8f0;
-      --brand: #323446;
-      --on-brand: #ffffff;
-      --brand-soft: rgba(50, 52, 70, 0.12);
-      --hover-bg: rgba(255, 255, 255, 0.7);
-      --shadow-color: rgba(50, 52, 70, 0.1);
+      --bg-primary: #E2E7EE; --bg-surface: #F7F9FC; --bg-card: #ffffff;
+      --text-primary: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
+      --border-color: #ffffff; --border-soft: #e2e8f0;
+      --brand: #323446; --on-brand: #ffffff; --brand-soft: rgba(50, 52, 70, 0.12);
+      --hover-bg: rgba(255, 255, 255, 0.7); --shadow-color: rgba(50, 52, 70, 0.1);
     }
     [data-theme="midnight"] {
-      --bg-primary: #0f172a;
-      --bg-surface: #1e293b;
-      --bg-card: #334155;
-      --text-primary: #f1f5f9;
-      --text-secondary: #cbd5e1;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
-      --border-soft: #475569;
-      --brand: #64748b;
-      --on-brand: #ffffff;
-      --brand-soft: rgba(148, 163, 184, 0.15);
-      --hover-bg: rgba(255,255,255,0.03);
-      --shadow-color: rgba(0, 0, 0, 0.3);
+      --bg-primary: #0f172a; --bg-surface: #1e293b; --bg-card: #334155;
+      --text-primary: #f1f5f9; --text-secondary: #cbd5e1; --text-muted: #94a3b8;
+      --border-color: #334155; --border-soft: #475569;
+      --brand: #64748b; --on-brand: #ffffff; --brand-soft: rgba(148, 163, 184, 0.15);
+      --hover-bg: rgba(255,255,255,0.03); --shadow-color: rgba(0, 0, 0, 0.3);
     }
     [data-theme="paper"] {
-      --bg-primary: #F5F1E8;
-      --bg-surface: #FAF7F0;
-      --bg-card: #ffffff;
-      --text-primary: #1c1917;
-      --text-secondary: #57534e;
-      --text-muted: #a8a29e;
-      --border-color: #e7e5e4;
-      --border-soft: #d6d3d1;
-      --brand: #292524;
-      --on-brand: #ffffff;
-      --brand-soft: rgba(41, 37, 36, 0.1);
-      --hover-bg: rgba(255, 255, 255, 0.6);
-      --shadow-color: rgba(41, 37, 36, 0.08);
+      --bg-primary: #F5F1E8; --bg-surface: #FAF7F0; --bg-card: #ffffff;
+      --text-primary: #1c1917; --text-secondary: #57534e; --text-muted: #a8a29e;
+      --border-color: #e7e5e4; --border-soft: #d6d3d1;
+      --brand: #292524; --on-brand: #ffffff; --brand-soft: rgba(41, 37, 36, 0.1);
+      --hover-bg: rgba(255, 255, 255, 0.6); --shadow-color: rgba(41, 37, 36, 0.08);
     }
     [data-theme="obsidian"] {
-      --bg-primary: #0a0a0a;
-      --bg-surface: #171717;
-      --bg-card: #1f1f1f;
-      --text-primary: #fafafa;
-      --text-secondary: #a3a3a3;
-      --text-muted: #525252;
-      --border-color: #262626;
-      --border-soft: #404040;
-      --brand: #fafafa;
-      --on-brand: #0a0a0a;
-      --brand-soft: rgba(255, 255, 255, 0.08);
-      --hover-bg: rgba(255,255,255,0.03);
-      --shadow-color: rgba(0, 0, 0, 0.5);
+      --bg-primary: #0a0a0a; --bg-surface: #171717; --bg-card: #1f1f1f;
+      --text-primary: #fafafa; --text-secondary: #a3a3a3; --text-muted: #525252;
+      --border-color: #262626; --border-soft: #404040;
+      --brand: #fafafa; --on-brand: #0a0a0a; --brand-soft: rgba(255, 255, 255, 0.08);
+      --hover-bg: rgba(255,255,255,0.03); --shadow-color: rgba(0, 0, 0, 0.5);
     }
-
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-secondary);
-      transition: background-color 300ms ease, color 300ms ease;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-primary); color: var(--text-secondary); transition: background-color 300ms ease, color 300ms ease; }
     [data-theme] h1, [data-theme] h2, [data-theme] h3, [data-theme] h4 { color: var(--text-primary); }
-
     ::-webkit-scrollbar { width: 0px; background: transparent; }
-
-    /* ===== Helper Classes ===== */
-    .surface-card {
-      background-color: var(--bg-surface) !important;
-      border-color: var(--border-color) !important;
-      color: var(--text-secondary);
-    }
-    .btn-brand {
-      background-color: var(--brand);
-      color: var(--on-brand);
-      transition: opacity 200ms ease;
-    }
+    .surface-card { background-color: var(--bg-surface) !important; border-color: var(--border-color) !important; color: var(--text-secondary); }
+    .btn-brand { background-color: var(--brand); color: var(--on-brand); transition: opacity 200ms ease; }
     .btn-brand:hover { opacity: 0.9; }
-    .btn-ghost {
-      background-color: var(--bg-card);
-      color: var(--text-secondary);
-      border-color: var(--border-soft);
-    }
-    .btn-ghost:hover {
-      background-color: var(--hover-bg);
-      color: var(--text-primary);
-    }
-    .themed-input {
-      background-color: var(--bg-surface);
-      color: var(--text-primary);
-      border-color: var(--border-color);
-    }
+    .btn-ghost { background-color: var(--bg-card); color: var(--text-secondary); border-color: var(--border-soft); }
+    .btn-ghost:hover { background-color: var(--hover-bg); color: var(--text-primary); }
+    .themed-input { background-color: var(--bg-surface); color: var(--text-primary); border-color: var(--border-color); }
     .themed-input::placeholder { color: var(--text-muted); }
-    .themed-input:focus {
-      border-color: var(--brand);
-      box-shadow: 0 0 0 3px var(--brand-soft);
-    }
-
-    /* Helper class untuk badge brand */
-    .badge-brand {
-      background-color: var(--brand);
-      color: var(--on-brand);
-    }
-
-    /* ===== Tabs ===== */
-    .wl-tab { 
-      color: var(--text-muted); 
-      transition: all 200ms ease;
-    }
-    .wl-tab.active { 
-      background-color: var(--brand); 
-      color: var(--on-brand); 
-    }
-    .wl-tab.active .tab-count { 
-      background-color: color-mix(in srgb, var(--on-brand) 20%, transparent); 
-      color: var(--on-brand); 
-    }
-    .wl-tab:not(.active):hover { 
-      color: var(--text-primary); 
-      background-color: var(--hover-bg); 
-    }
-    .tab-count { 
-      background-color: var(--border-soft); 
-      color: var(--text-secondary); 
-    }
-
-    /* ===== Cards ===== */
-    .wl-card { 
-      transition: all 300ms ease; 
-      background-color: var(--bg-surface);
-      border-color: var(--border-color);
-    }
-    .wl-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 24px -8px var(--shadow-color);
-      border-color: var(--border-soft);
-    }
+    .themed-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+    .badge-brand { background-color: var(--brand); color: var(--on-brand); }
+    .wl-tab { color: var(--text-muted); transition: all 200ms ease; }
+    .wl-tab.active { background-color: var(--brand); color: var(--on-brand); }
+    .wl-tab.active .tab-count { background-color: color-mix(in srgb, var(--on-brand) 20%, transparent); color: var(--on-brand); }
+    .wl-tab:not(.active):hover { color: var(--text-primary); background-color: var(--hover-bg); }
+    .tab-count { background-color: var(--border-soft); color: var(--text-secondary); }
+    .wl-card { transition: all 300ms ease; background-color: var(--bg-surface); border-color: var(--border-color); cursor: pointer; }
+    .wl-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -8px var(--shadow-color); border-color: var(--border-soft); }
     .wl-card:hover .wl-image { transform: scale(1.04); }
-    
-    .wl-buy { 
-      background-color: var(--bg-card); 
-      border: 1px solid var(--border-soft); 
-      color: var(--text-secondary); 
-      transition: all 250ms ease; 
-    }
-    .wl-card:hover .wl-buy { 
-      background-color: var(--brand); 
-      color: var(--on-brand); 
-      border-color: var(--brand);
-    }
+    .wl-buy { background-color: var(--bg-card); border: 1px solid var(--border-soft); color: var(--text-secondary); transition: all 250ms ease; }
+    .wl-card:hover .wl-buy { background-color: var(--brand); color: var(--on-brand); border-color: var(--brand); }
     .wl-card:hover .wl-buy i { transform: translateX(2px); }
     .wl-buy i { transition: transform 250ms ease; }
+    @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+    .animate-heartPop { animation: heartPop 300ms ease; }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: scale(0.95); } }
+    .animate-fadeOut { animation: fadeOut 300ms ease forwards; }
+    /* Toast */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 100; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast { pointer-events: auto; min-width: 260px; }
+    @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+    .animate-slideInRight { animation: slideInRight 350ms cubic-bezier(0.16, 1, 0.3, 1); }
+    .animate-slideOutRight { animation: slideOutRight 300ms ease-in forwards; }
   </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden text-sm">
+  <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
 
   {% include "dashboard/partials/topbar.html" %}
 
@@ -181,23 +88,124 @@
       <!-- BREADCRUMB -->
       <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-2 pt-1 pb-1 shrink-0">
         <div class="flex items-baseline gap-1">
-          <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">ANIME MERCH E-COMMERCE <span class="font-bold" style="color: var(--text-primary);">WISHLIST</span> / <span class="font-bold" style="color: var(--text-primary);">HOSHINO ICHIKA</span></h1>
+          <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">GAME E-COMMERCE <span class="font-bold" style="color: var(--text-primary);">WISHLIST</span></h1>
         </div>
         <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:gap-3">
           <div class="relative flex-1 min-w-[160px] sm:flex-none">
-            <input type="text" placeholder="Search your wishlist..."
+            <input type="text" id="search-input" placeholder="Search your wishlist..."
                    class="themed-input w-full sm:w-64 pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none border shadow-sm font-medium transition-all">
             <i data-lucide="search" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2" style="color: var(--text-muted);"></i>
           </div>
-          <button class="btn-brand font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all">
-            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Item
-          </button>
+          <a href="/shop/" class="btn-brand font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 shadow-sm transition-all no-underline">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Browse Shop
+          </a>
         </div>
       </div>
 
       <!-- HERO SUMMARY -->
       <div class="surface-card rounded-[2rem] p-5 border shadow-sm shrink-0">
-        {% if items %}
+        <div id="hero-section"></div>
+        <div class="flex items-center gap-2 mt-5 pt-4 border-t" style="border-color: var(--border-soft);">
+          <button id="btn-clear-all" class="btn-ghost font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 border transition-all">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear All
+          </button>
+          <button class="btn-ghost font-semibold px-4 py-2.5 rounded-full text-xs flex items-center gap-2 border transition-all">
+            <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div id="tabs-bar" class="flex items-center gap-1 px-1 overflow-x-auto shrink-0"></div>
+
+      <!-- WISHLIST GRID -->
+      <div id="wishlist-grid" class="grid grid-cols-2 gap-4"></div>
+
+      <!-- EMPTY STATE -->
+      <div id="empty-state" class="hidden surface-card rounded-2xl border shadow-sm p-10 text-center">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background: var(--border-soft);">
+          <i data-lucide="heart" class="w-8 h-8" style="color: var(--text-muted);"></i>
+        </div>
+        <p class="text-sm font-semibold mb-1" style="color: var(--text-secondary);">Your wishlist is empty</p>
+        <p class="text-xs mb-4" style="color: var(--text-muted);">Browse the shop and heart items you love.</p>
+        <a href="/shop/" class="btn-brand font-semibold px-5 py-2.5 rounded-full text-xs inline-flex items-center gap-2 transition-all no-underline">
+          <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Go to Shop
+        </a>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="flex justify-between items-center px-2 pt-2 pb-2 shrink-0">
+        <span id="showing-text" class="text-[10px] font-medium" style="color: var(--text-muted);"></span>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // ===== THEME =====
+    (function() { const t = localStorage.getItem('kaimono_theme'); if (t) document.body.setAttribute('data-theme', t); })();
+
+    // ===== DATA =====
+    const PRODUCTS = {{ products_json|safe }};
+    const CSRF = document.getElementById('csrf-token').value;
+
+    // ===== STATE =====
+    const state = {
+      searchQuery: '',
+      activeTab: 'all',
+      products: [...PRODUCTS],
+    };
+
+    // ===== UTILS =====
+    const $ = (id) => document.getElementById(id);
+    const fmt = (n) => '$' + Number(n).toFixed(2);
+
+    function showToast(message, icon, variant) {
+      const container = $('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast border shadow-xl rounded-2xl p-3 flex items-center gap-3 animate-slideInRight';
+      toast.innerHTML = `
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background: var(--brand-soft); color: var(--brand);">
+          <i data-lucide="${icon || 'check'}" class="w-4 h-4"></i>
+        </div>
+        <p class="text-xs font-semibold flex-1" style="color: var(--text-primary);">${message}</p>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.classList.remove('animate-slideInRight');
+        toast.classList.add('animate-slideOutRight');
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+
+    async function apiToggle(productId) {
+      try {
+        const res = await fetch('/api/wishlist/toggle/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
+          body: JSON.stringify({ product_id: productId }),
+        });
+        return await res.json();
+      } catch (e) { return { error: 'Network error' }; }
+    }
+
+    // ===== RENDER HERO =====
+    function renderHero() {
+      const items = state.products;
+      const total = items.length;
+      const onSale = items.filter(p => p.original_price && p.price && p.original_price > p.price);
+      const totalValue = items.reduce((s, p) => s + (p.price || 0), 0);
+      const savings = onSale.reduce((s, p) => s + ((p.original_price || 0) - (p.price || 0)), 0);
+
+      if (total === 0) {
+        $('hero-section').innerHTML = '';
+        return;
+      }
+
+      $('hero-section').innerHTML = `
         <div class="flex flex-wrap items-center justify-between gap-4 sm:gap-6">
           <div class="flex items-center gap-4 flex-1 min-w-0">
             <div class="w-14 h-14 rounded-2xl btn-brand flex items-center justify-center shrink-0 shadow-md">
@@ -205,167 +213,195 @@
             </div>
             <div class="min-w-0">
               <p class="text-[10px] font-bold uppercase tracking-widest" style="color: var(--text-muted);">Your Wishlist</p>
-              <h2 class="text-xl font-extrabold leading-tight truncate" style="color: var(--text-primary);">{{ total_count }} items saved for later</h2>
-              <p class="text-xs font-medium mt-0.5" style="color: var(--text-secondary);">{{ on_sale_count }} items on discount — you could save <span class="font-bold" style="color: var(--text-primary);">${{ savings|floatformat:2 }}</span> today</p>
+              <h2 class="text-xl font-extrabold leading-tight truncate" style="color: var(--text-primary);">${total} item${total !== 1 ? 's' : ''} saved for later</h2>
+              <p class="text-xs font-medium mt-0.5" style="color: var(--text-secondary);">${onSale.length} item${onSale.length !== 1 ? 's' : ''} on discount — you could save <span class="font-bold" style="color: var(--text-primary);">${fmt(savings)}</span> today</p>
             </div>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 shrink-0 w-full sm:w-auto">
             <div class="rounded-xl px-4 py-3 text-center min-w-[95px]" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
-              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">{{ total_count }}</p>
+              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">${total}</p>
               <span class="text-[9px] font-bold uppercase tracking-wider block mt-1.5" style="color: var(--text-muted);">Total</span>
             </div>
             <div class="rounded-xl px-4 py-3 text-center min-w-[95px]" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
-              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">${{ total_value|floatformat:0 }}</p>
+              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">${fmt(totalValue).replace(/\.00$/, '')}</p>
               <span class="text-[9px] font-bold uppercase tracking-wider block mt-1.5" style="color: var(--text-muted);">Value</span>
             </div>
             <div class="rounded-xl px-4 py-3 text-center min-w-[95px]" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
-              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">${{ savings|floatformat:0 }}</p>
+              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">${fmt(savings).replace(/\.00$/, '')}</p>
               <span class="text-[9px] font-bold uppercase tracking-wider block mt-1.5" style="color: var(--text-muted);">Savings</span>
             </div>
             <div class="rounded-xl px-4 py-3 text-center min-w-[95px]" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
-              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">{{ on_sale_count }}</p>
+              <p class="text-2xl font-extrabold leading-none" style="color: var(--text-primary);">${onSale.length}</p>
               <span class="text-[9px] font-bold uppercase tracking-wider block mt-1.5" style="color: var(--text-muted);">On Sale</span>
             </div>
           </div>
-        </div>
-        {% endif %}
-        <div class="flex items-center gap-2 mt-5 pt-4 border-t" style="border-color: var(--border-soft);">
-          <button class="btn-brand font-semibold px-5 py-2.5 rounded-full text-xs flex items-center gap-2 transition-all">
-            <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Buy All Discounted
-          </button>
-          <button class="btn-ghost font-semibold px-4 py-2.5 rounded-full text-xs flex items-center gap-2 border transition-all">
-            <i data-lucide="bell" class="w-3.5 h-3.5"></i> Notify on Drop
-          </button>
-          <button class="btn-ghost font-semibold px-4 py-2.5 rounded-full text-xs flex items-center gap-2 border transition-all">
-            <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share
-          </button>
-          <button class="btn-ghost p-2.5 rounded-full border transition-all ml-auto">
-            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-      </div>
+        </div>`;
+      lucide.createIcons();
+    }
 
-      <!-- TABS -->
-      <div class="flex items-center gap-1 px-1 overflow-x-auto shrink-0">
-        <button class="wl-tab active text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">All Items <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ total_count }}</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">On Sale <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ on_sale_count }}</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Games <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ games_count }}</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Merch & Figures <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ merch_count }}</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Bundles <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">{{ bundles_count }}</span></button>
-        <button class="wl-tab text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5">Pre-Order</button>
-        <div class="flex items-center gap-1.5 ml-auto shrink-0">
-          <div class="btn-ghost flex items-center gap-1.5 border rounded-full px-3 py-1.5 shadow-sm cursor-pointer transition-all">
-            <i data-lucide="arrow-down-up" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
-            <span class="text-[11px] font-semibold" style="color: var(--text-secondary);">Newest</span>
-            <i data-lucide="chevron-down" class="w-3 h-3" style="color: var(--text-muted);"></i>
-          </div>
-        </div>
-      </div>
+    // ===== TABS =====
+    const TABS = [
+      { id: 'all', label: 'All Items' },
+      { id: 'on-sale', label: 'On Sale' },
+      { id: 'games', label: 'Games' },
+      { id: 'merch', label: 'Merch & Figures' },
+    ];
 
-      <!-- WISHLIST GRID -->
-      {% if items %}
-      <div class="grid grid-cols-2 gap-4">
-        {% for item in items %}
-        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch">
-          <div class="w-[38%] shrink-0 relative overflow-hidden">
-            <img src="{{ item.image_url }}" alt="{{ item.category }}" class="wl-image w-full h-full object-cover transition-transform duration-500">
+    function renderTabs() {
+      const all = state.products;
+      const counts = {
+        'all': all.length,
+        'on-sale': all.filter(p => p.original_price && p.price && p.original_price > p.price).length,
+        'games': all.filter(p => p.category === 'games').length,
+        'merch': all.filter(p => p.category !== 'games').length,
+      };
+
+      $('tabs-bar').innerHTML = TABS.map(t => `
+        <button class="wl-tab ${state.activeTab === t.id ? 'active' : ''} text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center gap-1.5" data-tab="${t.id}">
+          ${t.label} <span class="tab-count text-[10px] px-1.5 py-0.5 rounded-full">${counts[t.id] || 0}</span>
+        </button>`).join('');
+
+      $('tabs-bar').querySelectorAll('.wl-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.activeTab = btn.dataset.tab;
+          renderTabs();
+          renderGrid();
+        });
+      });
+    }
+
+    // ===== FILTER =====
+    function getFiltered() {
+      let items = [...state.products];
+      if (state.activeTab === 'on-sale') items = items.filter(p => p.original_price && p.price && p.original_price > p.price);
+      else if (state.activeTab === 'games') items = items.filter(p => p.category === 'games');
+      else if (state.activeTab === 'merch') items = items.filter(p => p.category !== 'games');
+      if (state.searchQuery) {
+        const q = state.searchQuery.toLowerCase();
+        items = items.filter(p => p.name.toLowerCase().includes(q) || (p.brand || '').toLowerCase().includes(q) || (p.type || '').toLowerCase().includes(q));
+      }
+      return items;
+    }
+
+    // ===== RENDER GRID =====
+    function renderGrid() {
+      const filtered = getFiltered();
+      const grid = $('wishlist-grid');
+      const empty = $('empty-state');
+
+      if (state.products.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        renderHero();
+        renderTabs();
+        $('showing-text').textContent = '';
+        lucide.createIcons();
+        return;
+      }
+
+      empty.classList.add('hidden');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-2 surface-card rounded-2xl border shadow-sm p-10 text-center">
+          <p class="text-sm font-semibold" style="color: var(--text-secondary);">No items match your search.</p></div>`;
+        $('showing-text').textContent = `Showing 0 of ${state.products.length} items`;
+        lucide.createIcons();
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const discount = p.original_price && p.price && p.original_price > p.price ? Math.round((1 - p.price / p.original_price) * 100) : 0;
+        const badges = (p.badges || []).map(b => {
+          let cls = 'badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm';
+          if (b === 'New') cls = 'border text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm';
+          return `<span class="${cls}" ${b === 'New' ? 'style="border-color: var(--brand); color: var(--brand);"' : ''}>${b}</span>`;
+        }).join('');
+
+        return `
+        <div class="wl-card rounded-2xl border shadow-sm overflow-hidden flex items-stretch" data-id="${p.id}">
+          <div class="w-[38%] shrink-0 relative overflow-hidden" onclick="window.location.href='/shop/${p.id}/'">
+            <img src="${p.image}" alt="${p.name}" class="wl-image w-full h-full object-cover transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-r from-transparent to-black/5"></div>
-            {% if item.badge %}
-            <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
-              <span class="badge-brand text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">{{ item.badge }}</span>
-            </div>
-            {% endif %}
+            ${badges ? `<div class="absolute top-2.5 left-2.5 flex flex-col gap-1">${badges}</div>` : ''}
             <div class="absolute bottom-2.5 left-2.5">
-              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">{{ item.category }}</span>
+              <span class="text-[8px] font-bold backdrop-blur px-2 py-0.5 rounded-full uppercase" style="background: var(--bg-card); color: var(--text-secondary);">${p.category}</span>
             </div>
           </div>
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
+          <div class="flex-1 p-4 flex flex-col justify-between min-w-0" onclick="window.location.href='/shop/${p.id}/'">
             <div>
               <div class="flex justify-between items-start gap-2 mb-1">
-                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">{{ item.title }}</h4>
-                <button class="shrink-0 hover:opacity-70 transition-colors" style="color: var(--brand);"><i data-lucide="heart" class="w-4 h-4 fill-current"></i></button>
+                <h4 class="text-sm font-extrabold truncate" style="color: var(--text-primary);">${p.name}</h4>
               </div>
-              <p class="text-[10px] font-medium" style="color: var(--text-muted);">{{ item.description }}</p>
-              <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                {% for tag in item.tag_list %}
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">{{ tag }}</span>
-                {% endfor %}
-                {% if item.rating %}
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> {{ item.rating }}</span>
-                {% endif %}
-              </div>
+              <p class="text-[10px] font-medium" style="color: var(--text-muted);">${p.brand ? p.brand + ' · ' : ''}${p.type || p.category}</p>
+              ${p.rating ? `<div class="flex items-center gap-1 mt-1.5">
+                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5" style="background: var(--border-soft); color: var(--text-secondary);">
+                  <i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> ${p.rating} <span style="color: var(--text-muted);">(${(p.reviews || 0).toLocaleString()})</span>
+                </span>
+              </div>` : ''}
             </div>
             <div class="flex justify-between items-end mt-3">
               <div>
-                {% if item.list_price %}
-                <span class="text-[10px] line-through" style="color: var(--text-muted);">${{ item.list_price|floatformat:2 }}</span>
-                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">${{ item.price|floatformat:2 }}</p>
-                {% elif item.price %}
-                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">${{ item.price|floatformat:2 }}</p>
-                {% else %}
-                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">{{ item.price_label }}</p>
-                {% endif %}
+                ${discount ? `<span class="text-[10px] line-through" style="color: var(--text-muted);">${fmt(p.original_price)}</span>` : ''}
+                <p class="text-base font-extrabold leading-none" style="color: var(--text-primary);">${fmt(p.price)}</p>
               </div>
-              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5">
-                {% if item.action == "Get Free" %}
-                <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                {% elif "Notify" in item.action %}
-                <i data-lucide="bell" class="w-3.5 h-3.5"></i>
-                {% elif "Pre-Order" in item.action %}
-                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
-                {% else %}
-                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
-                {% endif %}
-                {{ item.action }}
+              <button class="wl-buy font-semibold px-4 py-2 rounded-full text-[11px] flex items-center gap-1.5" onclick="event.stopPropagation(); window.location.href='/shop/${p.id}/'">
+                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> View
               </button>
             </div>
           </div>
-          <button class="px-3 transition-colors shrink-0 flex items-center border-l" style="color: var(--text-muted); border-color: var(--border-soft);">
+          <button class="px-3 transition-colors shrink-0 flex items-center border-l remove-btn" style="color: var(--text-muted); border-color: var(--border-soft);" data-id="${p.id}" title="Remove from wishlist">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
-        </div>
-        {% endfor %}
-      </div>
-      {% else %}
-      <div class="surface-card rounded-2xl border shadow-sm p-10 text-center">
-        <p class="text-sm font-semibold" style="color: var(--text-secondary);">Your wishlist is empty.</p>
-      </div>
-      {% endif %}
+        </div>`;
+      }).join('');
 
-      <!-- FOOTER INFO -->
-      <div class="flex justify-between items-center px-2 pt-2 pb-2 shrink-0">
-        <span class="text-[10px] font-medium" style="color: var(--text-muted);">Showing {{ items|length }} of {{ total_count }} items · Last updated 2 hours ago</span>
-        <div class="flex items-center gap-2">
-          <button class="text-[11px] font-semibold flex items-center gap-1 transition-colors" style="color: var(--text-muted);">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Remove All
-          </button>
-          <span style="color: var(--border-soft);">|</span>
-          <button class="text-[11px] font-semibold flex items-center gap-1 transition-colors" style="color: var(--text-muted);">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i> Export List
-          </button>
-        </div>
-      </div>
-
-    </main>
-  </div>
-
-  <script>
-    // ===== LOAD THEME FROM LOCALSTORAGE =====
-    (function() {
-      const theme = localStorage.getItem('kaimono_theme');
-      if (theme) document.body.setAttribute('data-theme', theme);
-    })();
-
-    lucide.createIcons();
-
-    // ===== TABS LOGIC =====
-    const tabs = document.querySelectorAll('.wl-tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
+      // Attach remove events
+      grid.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const id = Number(btn.dataset.id);
+          const card = btn.closest('.wl-card');
+          const result = await apiToggle(id);
+          if (result.wished === false) {
+            card.classList.add('animate-fadeOut');
+            setTimeout(() => {
+              state.products = state.products.filter(p => p.id !== id);
+              renderAll();
+              showToast('Removed from wishlist', 'heart-off');
+            }, 280);
+          }
+        });
       });
+
+      $('showing-text').textContent = `Showing ${filtered.length} of ${state.products.length} items`;
+      lucide.createIcons();
+    }
+
+    function renderAll() {
+      renderHero();
+      renderTabs();
+      renderGrid();
+    }
+
+    // ===== SEARCH =====
+    $('search-input').addEventListener('input', (e) => {
+      state.searchQuery = e.target.value;
+      renderGrid();
     });
+
+    // ===== CLEAR ALL =====
+    $('btn-clear-all').addEventListener('click', async () => {
+      if (!confirm('Remove all items from your wishlist?')) return;
+      for (const p of [...state.products]) {
+        await apiToggle(p.id);
+      }
+      state.products = [];
+      renderAll();
+      showToast('Wishlist cleared', 'trash-2');
+    });
+
+    // ===== INIT =====
+    renderAll();
   </script>
 </body>
 </html>

@@ -1,10 +1,17 @@
 from django.contrib import admin
 from .models import (
-    WishlistItem, LibraryGame, ShopProduct,
+    WishlistItem, UserWishlistItem, LibraryGame, ShopProduct,
     CommunityStory, CommunityChannel, CommunityGame,
     CommunityPost, PostImage, PostTag, PostReaction,
     Poll, PollOption, CommunityMember, UserFollowedGame,
 )
+
+
+@admin.register(UserWishlistItem)
+class UserWishlistItemAdmin(admin.ModelAdmin):
+    list_display = ("user", "product", "created_at")
+    list_filter = ("created_at",)
+    raw_id_fields = ("user", "product")
 
 
 @admin.register(WishlistItem)
