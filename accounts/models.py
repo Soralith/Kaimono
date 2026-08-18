@@ -13,6 +13,24 @@ class User(AbstractUser):
         ('paper', 'Paper'),
         ('obsidian', 'Obsidian'),
     ]
+    LANGUAGE_CHOICES = [
+        ('en', 'English (US)'),
+        ('ja', 'Japanese'),
+        ('id', 'Indonesian'),
+    ]
+    CURRENCY_CHOICES = [
+        ('USD', 'USD ($)'),
+        ('JPY', 'JPY (¥)'),
+        ('IDR', 'IDR (Rp)'),
+    ]
+    TIMEZONE_CHOICES = [
+        ('Asia/Jakarta', 'Asia/Jakarta (WIB)'),
+        ('Asia/Tokyo', 'Asia/Tokyo (JST)'),
+        ('Asia/Singapore', 'Asia/Singapore (SGT)'),
+        ('America/New_York', 'New York (EST)'),
+        ('Europe/London', 'London (GMT)'),
+        ('UTC', 'UTC'),
+    ]
 
     display_name = models.CharField(max_length=60, blank=True)
     email = models.EmailField(unique=True)
@@ -27,6 +45,9 @@ class User(AbstractUser):
     banner_url = models.URLField(blank=True)
     banner_position = models.IntegerField(default=50)
     theme = models.CharField(max_length=20, choices=THEME_CHOICES, default='silver')
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES, default='en')
+    currency = models.CharField(max_length=10, choices=CURRENCY_CHOICES, default='USD')
+    timezone = models.CharField(max_length=40, choices=TIMEZONE_CHOICES, default='Asia/Jakarta')
     sidebar_expanded = models.BooleanField(default=False)
     reduce_animations = models.BooleanField(default=False)
     compact_mode = models.BooleanField(default=False)

@@ -256,9 +256,12 @@
 // Apply the user's saved preferences to <body> as soon as the page loads.
 (function () {
   if (document.body) {
-    document.body.setAttribute('data-theme', '{{ request.user.theme|default:"silver" }}');
-    document.body.setAttribute('data-motion', '{{ request.user.reduce_animations|yesno:"reduced," }}');
-    document.body.setAttribute('data-compact', '{{ request.user.compact_mode|yesno:"1," }}');
+    var theme = localStorage.getItem('kaimono_theme') || '{{ request.user.theme|default:"silver" }}';
+    var motion = localStorage.getItem('kaimono_motion') || '{{ request.user.reduce_animations|yesno:"reduced," }}';
+    var compact = localStorage.getItem('kaimono_compact') || '{{ request.user.compact_mode|yesno:"1," }}';
+    document.body.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-motion', motion);
+    document.body.setAttribute('data-compact', compact);
   }
 })();
 (function () {
@@ -297,8 +300,14 @@
     }
   });
   var expandedDefault = {{ request.user.sidebar_expanded|yesno:"true,false" }};
+  var prefExpanded = localStorage.getItem('kaimono_sidebar');
   var stored = localStorage.getItem('kaimono_sidebar_collapsed');
-  var isCollapsed = stored !== null ? stored !== 'false' : !expandedDefault;
+  var isCollapsed;
+  if (prefExpanded !== null) {
+    isCollapsed = prefExpanded !== '1';
+  } else {
+    isCollapsed = stored !== null ? stored !== 'false' : !expandedDefault;
+  }
 
   var path = window.location.pathname;
   sidebar.querySelectorAll('[data-path]').forEach(function (a) {
