@@ -42,14 +42,6 @@
     {% endif %}
 
     <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-      <div class="flex items-center gap-1.5">
-        <span class="flex items-center -space-x-1">
-          {% for r in post.reactions %}
-          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="{{ r.reaction_type }}" class="w-2.5 h-2.5 fill-current"></i></span>
-          {% endfor %}
-        </span>
-        <span class="reaction-count text-[10px] font-semibold" style="color: var(--text-muted);">{{ post.reaction_count }} reactions</span>
-      </div>
       <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);">
         <span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span>
       </div>
@@ -57,10 +49,6 @@
 
     <!-- Action Buttons -->
     <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold {% if post.is_liked %}btn-liked{% endif %}" style="color: {% if post.is_liked %}var(--brand){% else %}var(--text-secondary){% endif %}; {% if post.is_liked %}background: var(--brand-soft);{% endif %}">
-        <i data-lucide="thumbs-up" class="w-3.5 h-3.5 {% if post.is_liked %}fill-current{% endif %}"></i>
-        <span class="like-label">{% if post.is_liked %}Liked{% else %}Like{% endif %}</span>
-      </button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);">
         <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment
       </button>
@@ -119,22 +107,10 @@
     {% endif %}
 
     <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-      <div class="flex items-center gap-1.5">
-        <span class="flex items-center -space-x-1">
-          {% for r in post.reactions %}
-          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="{{ r.reaction_type }}" class="w-2.5 h-2.5 fill-current"></i></span>
-          {% endfor %}
-        </span>
-        <span class="reaction-count text-[10px] font-semibold" style="color: var(--text-muted);">{{ post.reaction_count }} reactions</span>
-      </div>
       <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
     </div>
 
     <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold {% if post.is_liked %}btn-liked{% endif %}" style="color: {% if post.is_liked %}var(--brand){% else %}var(--text-secondary){% endif %}; {% if post.is_liked %}background: var(--brand-soft);{% endif %}">
-        <i data-lucide="thumbs-up" class="w-3.5 h-3.5 {% if post.is_liked %}fill-current{% endif %}"></i>
-        <span class="like-label">{% if post.is_liked %}Liked{% else %}Like{% endif %}</span>
-      </button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
     </div>
@@ -217,7 +193,6 @@
       <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
     </div>
     <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
     </div>
@@ -278,20 +253,9 @@
     {% endif %}
 
     <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-      <div class="flex items-center gap-1.5">
-        <span class="flex items-center -space-x-1">
-          {% for r in post.reactions %}
-          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="{{ r.reaction_type }}" class="w-2.5 h-2.5"></i></span>
-          {% empty %}
-          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="thumbs-up" class="w-2.5 h-2.5"></i></span>
-          {% endfor %}
-        </span>
-        <span class="reaction-count text-[10px] font-semibold" style="color: var(--text-muted);">{{ post.reaction_count }} reactions</span>
-      </div>
       <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
     </div>
     <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
     </div>
@@ -362,18 +326,9 @@
     {% endif %}
 
     <div class="flex items-center justify-between pt-2 border-t" style="border-color: var(--border-soft);">
-      <div class="flex items-center gap-1.5">
-        <span class="flex items-center -space-x-1">
-          {% for r in post.reactions %}
-          <span class="w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-bold" style="background: var(--border-soft); border-color: var(--bg-card); color: var(--text-primary);"><i data-lucide="{{ r.reaction_type }}" class="w-2.5 h-2.5 fill-current"></i></span>
-          {% endfor %}
-        </span>
-        <span class="reaction-count text-[10px] font-semibold" style="color: var(--text-muted);">{{ post.reaction_count }} reactions</span>
-      </div>
       <div class="flex items-center gap-3 text-[10px] font-medium" style="color: var(--text-muted);"><span class="comment-count">{{ post.comment_count }} comments</span><span>·</span><span class="share-count">{{ post.share_count }} shares</span></div>
     </div>
     <div class="flex items-center gap-1 mt-3 pt-3 border-t" style="border-color: var(--border-soft);">
-      <button class="like-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> <span class="like-label">Like</span></button>
       <button class="comment-toggle-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Comment</button>
       <button class="share-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-colors text-[11px] font-semibold" style="color: var(--text-secondary);"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share</button>
     </div>

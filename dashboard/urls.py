@@ -20,7 +20,6 @@ urlpatterns = [
     path('settings/', login_required(auth.settings_view), name='settings'),
     path('settings/delete-account/', login_required(auth.delete_account_view), name='delete_account'),
     # Community AJAX endpoints
-    path('api/community/like/', views.community_toggle_like, name='community_toggle_like'),
     path('api/community/vote/', views.community_vote_poll, name='community_vote_poll'),
     path('api/community/post/', views.community_create_post, name='community_create_post'),
     path('api/community/post/edit/', views.community_edit_post, name='community_edit_post'),

@@ -534,36 +534,6 @@
       const postId = card.dataset.postId;
       if (!postId) return;
 
-      // LIKE
-      const likeBtn = card.querySelector('.like-btn');
-      if (likeBtn) {
-        likeBtn.addEventListener('click', () => {
-          const icon = likeBtn.querySelector('i');
-          const label = likeBtn.querySelector('.like-label');
-          const countEl = card.querySelector('.reaction-count');
-          // Optimistic UI
-          const wasLiked = likeBtn.classList.contains('btn-liked');
-          if (wasLiked) {
-            likeBtn.classList.remove('btn-liked');
-            likeBtn.style.color = 'var(--text-secondary)';
-            likeBtn.style.background = '';
-            icon.classList.remove('fill-current');
-            label.textContent = 'Like';
-            if (countEl) { const c = parseInt(countEl.textContent) - 1; countEl.textContent = Math.max(0, c) + ' reactions'; }
-          } else {
-            likeBtn.classList.add('btn-liked');
-            likeBtn.style.color = 'var(--brand)';
-            likeBtn.style.background = 'var(--brand-soft)';
-            icon.classList.add('fill-current');
-            label.textContent = 'Liked';
-          }
-          apiPost('{% url "community_toggle_like" %}', { post_id: parseInt(postId) }).then(data => {
-            if (data.error) { showToast(data.error); return; }
-            if (countEl) countEl.textContent = data.count + ' reactions';
-          });
-        });
-      }
-
       // POST MENU (dropdown: Edit / Delete) — only rendered for owner posts
       const menuBtn = card.querySelector('.post-menu-btn');
       const menu = card.querySelector('.post-menu');

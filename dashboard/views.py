@@ -13,7 +13,7 @@ from .models import (
     WishlistItem, LibraryGame,
     CommunityStory, CommunityChannel, CommunityGame, CommunityPost,
     PostImage, PostTag, PostReaction, Poll, PollOption, PollVote,
-    CommunityComment, UserLike, UserBookmark,
+    CommunityComment,
     CommunityMember, UserFollowedGame,
 )
 
@@ -53,13 +53,7 @@ def _poll_annotation(poll, username):
 def _annotate_posts(posts, request):
     """Add extra context to posts for the template."""
     username = _get_username(request)
-    liked_ids = set(
-        UserLike.objects.filter(user_name=username).values_list('post_id', flat=True)
-    )
     for post in posts:
-        post.reactions = list(post.reaction_types.all())
-        post.is_liked = post.id in liked_ids
-        post.is_bookmarked = False
         post.is_owner = post.author_name == username
         if post.post_type == 'poll' and hasattr(post, 'poll'):
             post.poll_obj = post.poll
@@ -216,34 +210,6 @@ def community(request):
     return render(request, 'dashboard/pages/community.html', ctx)
 
 
-# ── AJAX: Toggle Like ─────────────────────────────────────────────
-
-@require_POST
-def community_toggle_like(request):
-    try:
-        data = json.loads(request.body)
-        post_id = data.get('post_id')
-        post = CommunityPost.objects.get(id=post_id)
-        username = _get_username(request)
-
-        like, created = UserLike.objects.get_or_create(
-            user_name=username, post=post
-        )
-        if not created:
-            like.delete()
-            post.reaction_count = max(0, post.reaction_count - 1)
-            post.save(update_fields=['reaction_count'])
-            return JsonResponse({'liked': False, 'count': post.reaction_count})
-        else:
-            post.reaction_count += 1
-            post.save(update_fields=['reaction_count'])
-            return JsonResponse({'liked': True, 'count': post.reaction_count})
-    except CommunityPost.DoesNotExist:
-        return JsonResponse({'error': 'Post not found'}, status=404)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
-
-
 # ── AJAX: Vote Poll ───────────────────────────────────────────────
 
 @require_POST
@@ -341,9 +307,6 @@ def community_create_post(request):
                 PollOptionModel.objects.create(poll=poll, label=label, percentage=0, order=i)
 
         # Return the rendered post card
-        post.reactions = list(post.reaction_types.all())
-        post.is_liked = False
-        post.is_bookmarked = False
         if post.post_type == 'poll' and hasattr(post, 'poll'):
             post.poll_obj = post.poll
             post.poll_options, post.poll_voted, post.poll_selected_id, post.poll_total = _poll_annotation(post.poll, _get_username(request))
@@ -380,6 +343,9 @@ def community_edit_post(request):
             if not title:
                 return JsonResponse({'error': 'Poll question is required'}, status=400)
             post.title = title
+            if hasattr(post, 'poll'):
+                post.poll.question = title
+                post.poll.save(update_fields=['question'])
         else:
             post.title = title
             post.content = content
@@ -397,9 +363,6 @@ def community_edit_post(request):
             post.poll_selected_id = None
             post.poll_total = 0
 
-        post.reactions = list(post.reaction_types.all())
-        post.is_liked = False
-        post.is_bookmarked = False
         post.is_owner = post.author_name == username
 
         return JsonResponse({'success': True, 'post_html': _render_post_html(post, request)})
