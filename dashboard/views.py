@@ -1,5 +1,8 @@
 import json
 import math
+import os
+import re
+from django.conf import settings
 from django.shortcuts import render
 from django.utils import timezone
 from django.http import JsonResponse
@@ -66,9 +69,39 @@ def landing(request):
     return render(request, 'dashboard/pages/landing.html')
 
 
+def _load_products():
+    path = os.path.join(settings.BASE_DIR, 'dashboard', 'static', 'dashboard', 'js', 'products.js')
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            text = f.read()
+        match = re.search(r'window\.KAIMONO_PRODUCTS\s*=\s*(\[.*?\]);', text, re.DOTALL)
+        if not match:
+            return []
+        raw = match.group(1)
+        raw = re.sub(r'(?<=[\{,])\s*([A-Za-z_$][\w$]*)\s*:', r'"\1":', raw)
+        raw = re.sub(r',\s*([}\]])', r'\1', raw)
+        return json.loads(raw)
+    except (OSError, ValueError):
+        return []
+
+
 def dashboard(request):
+    products = _load_products()
+    featured = [p for p in products if p.get('category') == 'games'][:3]
+    discounts = sorted(
+        (p for p in products if p.get('originalPrice')),
+        key=lambda p: (p.get('originalPrice') or 0) - (p.get('price') or 0),
+        reverse=True,
+    )[:4]
+    game_of_day = next(
+        (p for p in products if p.get('category') == 'games' and p.get('originalPrice')),
+        (products[0] if products else None),
+    )
     context = {
-        'today': timezone.now()
+        'today': timezone.now(),
+        'featured': featured,
+        'discounts': discounts,
+        'game_of_day': game_of_day,
     }
     return render(request, 'dashboard/pages/dashboard.html', context)
 

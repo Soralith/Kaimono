@@ -303,50 +303,26 @@
           <!-- FEATURED CAROUSEL -->
           <div class="surface-card rounded-[2.2rem] p-7 relative overflow-hidden shadow-sm border flex-1 min-h-[220px]">
 
-            <!-- Slide 1 -->
-            <div class="carousel-slide active transition-opacity duration-500 h-full flex-col justify-between">
+            <!-- Carousel Slides (from products.js) -->
+            {% for p in featured %}
+            <div class="carousel-slide {% if forloop.first %}active{% endif %} transition-opacity duration-500 h-full flex-col justify-between">
               <div class="z-10 max-w-[320px] relative">
                 <span class="text-sm font-semibold tracking-wide" style="color: var(--text-secondary);">Featured & Recommendations</span>
-                <h2 class="text-2xl font-bold mt-2 leading-snug" style="color: var(--text-primary);">Project Sekai:<br>Colorful Stage! Collectibles</h2>
-                <button class="btn-brand mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
+                <h2 class="text-2xl font-bold mt-2 leading-snug" style="color: var(--text-primary);">{{ p.name }}</h2>
+                <a href="/shop/{{ p.id }}/" class="btn-brand mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
                   Explore Collection <i data-lucide="play-circle" class="w-4 h-4 fill-current"></i>
-                </button>
+                </a>
               </div>
-              <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80" alt="Featured 1" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
+              <img src="{{ p.image }}" alt="{{ p.name }}" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
               <div class="absolute right-0 top-0 h-full w-[58%] z-0" style="background: linear-gradient(to right, var(--bg-surface), color-mix(in srgb, var(--bg-surface) 80%, transparent) 60%, transparent);"></div>
             </div>
-
-            <!-- Slide 2 -->
-            <div class="carousel-slide transition-opacity duration-500 h-full flex-col justify-between">
-              <div class="z-10 max-w-[320px] relative">
-                <span class="text-sm font-semibold tracking-wide" style="color: var(--text-secondary);">Featured & Recommendations</span>
-                <h2 class="text-2xl font-bold mt-2 leading-snug" style="color: var(--text-primary);">Genshin Impact:<br>Exclusive Figure Drop</h2>
-                <button class="btn-brand mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
-                  Shop Pre-Order <i data-lucide="play-circle" class="w-4 h-4 fill-current"></i>
-                </button>
-              </div>
-              <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80" alt="Featured 2" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
-              <div class="absolute right-0 top-0 h-full w-[58%] z-0" style="background: linear-gradient(to right, var(--bg-surface), color-mix(in srgb, var(--bg-surface) 80%, transparent) 60%, transparent);"></div>
-            </div>
-
-            <!-- Slide 3 -->
-            <div class="carousel-slide transition-opacity duration-500 h-full flex-col justify-between">
-              <div class="z-10 max-w-[320px] relative">
-                <span class="text-sm font-semibold tracking-wide" style="color: var(--text-secondary);">Featured & Recommendations</span>
-                <h2 class="text-2xl font-bold mt-2 leading-snug" style="color: var(--text-primary);">Persona 5 Royal:<br>Digital OST & Game Bundle</h2>
-                <button class="btn-brand mt-6 font-semibold px-6 py-3 rounded-full text-xs flex items-center gap-2.5 shadow-sm transition-all">
-                  Buy Bundle <i data-lucide="play-circle" class="w-4 h-4 fill-current"></i>
-                </button>
-              </div>
-              <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80" alt="Featured 3" class="absolute right-0 top-0 h-full w-[58%] object-cover object-center rounded-r-[2.2rem]">
-              <div class="absolute right-0 top-0 h-full w-[58%] z-0" style="background: linear-gradient(to right, var(--bg-surface), color-mix(in srgb, var(--bg-surface) 80%, transparent) 60%, transparent);"></div>
-            </div>
+            {% endfor %}
 
             <!-- Carousel Dots -->
             <div class="absolute bottom-4 left-7 flex gap-1.5 z-20">
-              <span class="dot w-2.5 h-2.5 rounded-full transition-all" style="background: var(--brand);"></span>
-              <span class="dot w-2.5 h-2.5 rounded-full transition-all" style="background: var(--border-soft);"></span>
-              <span class="dot w-2.5 h-2.5 rounded-full transition-all" style="background: var(--border-soft);"></span>
+              {% for p in featured %}
+              <span class="dot w-2.5 h-2.5 rounded-full transition-all {% if forloop.first %}active{% endif %}" style="background: {% if forloop.first %}var(--brand){% else %}var(--border-soft){% endif %};"></span>
+              {% endfor %}
             </div>
           </div>
 
@@ -406,76 +382,27 @@
             </div>
 
             <div class="flex flex-col gap-2.5 overflow-y-auto">
-              <!-- Item 1 -->
-              <div class="surface-card p-3 rounded-[1.3rem] border shadow-sm flex items-center justify-between hover:opacity-90 transition-all shrink-0">
+              {% for p in discounts %}
+              <!-- Discount item (from products.js) -->
+              <a href="/shop/{{ p.id }}/" class="surface-card p-3 rounded-[1.3rem] border shadow-sm flex items-center justify-between hover:opacity-90 transition-all shrink-0 cursor-pointer">
                 <div class="flex items-center gap-3 overflow-hidden">
                   <div class="w-[52px] h-[52px] rounded-xl overflow-hidden shrink-0 shadow-sm" style="background: var(--bg-card);">
-                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=200&q=80" alt="Nier" class="w-full h-full object-cover">
+                    <img src="{{ p.image }}" alt="{{ p.name }}" class="w-full h-full object-cover">
                   </div>
                   <div class="truncate">
-                    <h5 class="text-xs font-bold truncate" style="color: var(--text-primary);">NieR:Automata™</h5>
-                    <p class="text-[10px] font-medium truncate mt-0.5" style="color: var(--text-muted);">Square Enix</p>
-                    <span class="inline-block text-[9px] font-bold px-2 py-0.5 rounded mt-1" style="color: var(--text-secondary); background: var(--bg-card);">50% OFF</span>
+                    <h5 class="text-xs font-bold truncate" style="color: var(--text-primary);">{{ p.name }}</h5>
+                    <p class="text-[10px] font-medium truncate mt-0.5" style="color: var(--text-muted);">{{ p.brand }}</p>
+                    {% if p.badges %}
+                    <span class="inline-block text-[9px] font-bold px-2 py-0.5 rounded mt-1" style="color: var(--text-secondary); background: var(--bg-card);">{{ p.badges.0 }}</span>
+                    {% endif %}
                   </div>
                 </div>
                 <div class="text-right shrink-0 ml-2">
-                  <span class="text-[10px] line-through block" style="color: var(--text-muted);">$39.99</span>
-                  <span class="text-sm font-bold" style="color: var(--text-primary);">$19.99</span>
+                  {% if p.originalPrice %}<span class="text-[10px] line-through block" style="color: var(--text-muted);">${{ p.originalPrice }}</span>{% endif %}
+                  <span class="text-sm font-bold" style="color: var(--text-primary);">${{ p.price }}</span>
                 </div>
-              </div>
-
-              <!-- Item 2 -->
-              <div class="surface-card p-3 rounded-[1.3rem] border shadow-sm flex items-center justify-between hover:opacity-90 transition-all shrink-0">
-                <div class="flex items-center gap-3 overflow-hidden">
-                  <div class="w-[52px] h-[52px] rounded-xl overflow-hidden shrink-0 shadow-sm" style="background: var(--bg-card);">
-                    <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=200&q=80" alt="Honkai" class="w-full h-full object-cover">
-                  </div>
-                  <div class="truncate">
-                    <h5 class="text-xs font-bold truncate" style="color: var(--text-primary);">Honkai: Star Rail</h5>
-                    <p class="text-[10px] font-medium truncate mt-0.5" style="color: var(--text-muted);">HoYoverse</p>
-                    <span class="inline-block text-[9px] font-bold px-2 py-0.5 rounded mt-1" style="color: var(--text-secondary); background: var(--bg-card);">Anniversary</span>
-                  </div>
-                </div>
-                <div class="text-right shrink-0 ml-2">
-                  <span class="text-xs font-bold px-2 py-1 rounded-lg" style="color: var(--text-primary); background: var(--bg-card);">Free Drops</span>
-                </div>
-              </div>
-
-              <!-- Item 3 -->
-              <div class="surface-card p-3 rounded-[1.3rem] border shadow-sm flex items-center justify-between hover:opacity-90 transition-all shrink-0">
-                <div class="flex items-center gap-3 overflow-hidden">
-                  <div class="w-[52px] h-[52px] rounded-xl overflow-hidden shrink-0 shadow-sm" style="background: var(--bg-card);">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="Monster Hunter" class="w-full h-full object-cover">
-                  </div>
-                  <div class="truncate">
-                    <h5 class="text-xs font-bold truncate" style="color: var(--text-primary);">Monster Hunter World</h5>
-                    <p class="text-[10px] font-medium truncate mt-0.5" style="color: var(--text-muted);">CAPCOM</p>
-                    <span class="inline-block text-[9px] font-bold px-2 py-0.5 rounded mt-1" style="color: var(--text-secondary); background: var(--bg-card);">67% OFF</span>
-                  </div>
-                </div>
-                <div class="text-right shrink-0 ml-2">
-                  <span class="text-[10px] line-through block" style="color: var(--text-muted);">$29.99</span>
-                  <span class="text-sm font-bold" style="color: var(--text-primary);">$9.89</span>
-                </div>
-              </div>
-
-              <!-- Item 4 -->
-              <div class="surface-card p-3 rounded-[1.3rem] border shadow-sm flex items-center justify-between hover:opacity-90 transition-all shrink-0">
-                <div class="flex items-center gap-3 overflow-hidden">
-                  <div class="w-[52px] h-[52px] rounded-xl overflow-hidden shrink-0 shadow-sm" style="background: var(--bg-card);">
-                    <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=200&q=80" alt="Persona 3 Reload" class="w-full h-full object-cover">
-                  </div>
-                  <div class="truncate">
-                    <h5 class="text-xs font-bold truncate" style="color: var(--text-primary);">Persona 3 Reload</h5>
-                    <p class="text-[10px] font-medium truncate mt-0.5" style="color: var(--text-muted);">ATLUS</p>
-                    <span class="inline-block text-[9px] font-bold px-2 py-0.5 rounded mt-1" style="color: var(--text-secondary); background: var(--bg-card);">30% OFF</span>
-                  </div>
-                </div>
-                <div class="text-right shrink-0 ml-2">
-                  <span class="text-[10px] line-through block" style="color: var(--text-muted);">$69.99</span>
-                  <span class="text-sm font-bold" style="color: var(--text-primary);">$48.99</span>
-                </div>
-              </div>
+              </a>
+              {% endfor %}
             </div>
           </div>
 
@@ -484,18 +411,19 @@
             <h3 class="text-base font-semibold mb-2 px-1 flex items-center gap-1.5 shrink-0" style="color: var(--text-primary);">
               <i data-lucide="trophy" class="w-4 h-4 icon-muted"></i> Game of the Day
             </h3>
-            <div class="surface-card p-4 rounded-[1.8rem] border shadow-sm flex flex-col justify-between relative overflow-hidden group flex-1">
+            {% if game_of_day %}
+            <a href="/shop/{{ game_of_day.id }}/" class="surface-card p-4 rounded-[1.8rem] border shadow-sm flex flex-col justify-between relative overflow-hidden group flex-1 cursor-pointer">
 
               <div class="relative h-32 rounded-2xl overflow-hidden mb-3 shrink-0">
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=80" alt="Featured Game" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <img src="{{ game_of_day.image }}" alt="{{ game_of_day.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/20 to-transparent"></div>
                 <span class="absolute top-2.5 left-2.5 font-extrabold text-[8px] px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm" style="background: var(--brand); color: var(--on-brand);">Editor's Choice</span>
                 <div class="absolute bottom-2.5 left-3 right-3 flex justify-between items-end text-white">
                   <div>
-                    <h4 class="font-extrabold text-sm leading-tight">Elden Ring: Shadow</h4>
-                    <p class="text-[10px] text-slate-300 font-medium">FromSoftware</p>
+                    <h4 class="font-extrabold text-sm leading-tight">{{ game_of_day.name }}</h4>
+                    <p class="text-[10px] text-slate-300 font-medium">{{ game_of_day.brand }}</p>
                   </div>
-                  <span class="font-bold text-xs bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20">$39.99</span>
+                  <span class="font-bold text-xs bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20">${{ game_of_day.price }}</span>
                 </div>
               </div>
 
@@ -506,7 +434,7 @@
                   </div>
                   <div>
                     <span class="text-[8px] font-bold block leading-none" style="color: var(--text-muted);">RATING</span>
-                    <span class="text-xs font-extrabold" style="color: var(--text-primary);">4.9 / 5.0</span>
+                    <span class="text-xs font-extrabold" style="color: var(--text-primary);">{{ game_of_day.rating }} / 5.0</span>
                   </div>
                 </div>
                 <div class="p-2.5 rounded-xl border flex items-center gap-2" style="background: var(--bg-card); border-color: var(--border-soft);">
@@ -523,7 +451,8 @@
               <button class="btn-brand w-full font-semibold py-2.5 rounded-full text-xs shadow-sm flex items-center justify-center gap-1.5 shrink-0 mt-2">
                 Get Game <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
               </button>
-            </div>
+            </a>
+            {% endif %}
           </div>
 
         </div>
