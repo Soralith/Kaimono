@@ -192,22 +192,6 @@
     }
     .toggle-track.active .toggle-knob { left: 18px; }
 
-    /* ===== EDIT TAB ===== */
-    .edit-tab { transition: all 200ms; position: relative; }
-    .edit-tab.active {
-      color: var(--brand);
-      background-color: var(--bg-card);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-    .edit-tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; left: 20%; right: 20%;
-      height: 2px;
-      background: var(--brand);
-      border-radius: 2px;
-    }
-
     /* ===== CARD HOVER ===== */
     .stat-card { transition: all 250ms ease; }
     .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -12px var(--shadow-color); border-color: var(--border-soft); }
@@ -694,120 +678,6 @@
         </div>
       </div>
 
-      <!-- EDIT TABBED PANEL -->
-      <div class="edit-only rounded-2xl border shadow-sm shrink-0 flex-col" style="background: var(--bg-surface); border-color: var(--border-color);">
-        <div class="flex items-center gap-1 p-2 border-b" style="border-color: var(--border-soft)">
-          <button class="edit-tab active text-xs font-bold px-4 py-2 rounded-full" data-tab="privacy">
-            <i data-lucide="shield" class="w-3.5 h-3.5 inline mr-1"></i> Privacy
-          </button>
-          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full" style="color: var(--text-secondary)" data-tab="appearance">
-            <i data-lucide="palette" class="w-3.5 h-3.5 inline mr-1"></i> Appearance
-          </button>
-          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full" style="color: var(--text-secondary)" data-tab="connections">
-            <i data-lucide="link" class="w-3.5 h-3.5 inline mr-1"></i> Connections
-          </button>
-          <button class="edit-tab text-xs font-bold px-4 py-2 rounded-full" style="color: var(--text-secondary)" data-tab="notifications">
-            <i data-lucide="bell" class="w-3.5 h-3.5 inline mr-1"></i> Notifications
-          </button>
-        </div>
-
-        <div class="edit-tab-content p-5 flex flex-col gap-3" data-content="privacy">
-          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
-            <div class="flex items-center gap-3">
-              <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted)"></i>
-              <div>
-                <p class="text-xs font-bold" style="color: var(--text-primary)">Public Profile</p>
-                <p class="text-[10px]" style="color: var(--text-muted)">Anyone can view your profile and activity</p>
-              </div>
-            </div>
-            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-          </div>
-          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
-            <div class="flex items-center gap-3">
-              <i data-lucide="activity" class="w-4 h-4" style="color: var(--text-muted)"></i>
-              <div>
-                <p class="text-xs font-bold" style="color: var(--text-primary)">Show Online Status</p>
-                <p class="text-[10px]" style="color: var(--text-muted)">Let friends see when you're online</p>
-              </div>
-            </div>
-            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-          </div>
-          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
-            <div class="flex items-center gap-3">
-              <i data-lucide="gamepad-2" class="w-4 h-4" style="color: var(--text-muted)"></i>
-              <div>
-                <p class="text-xs font-bold" style="color: var(--text-primary)">Show Game Activity</p>
-                <p class="text-[10px]" style="color: var(--text-muted)">Display your recently played games publicly</p>
-              </div>
-            </div>
-            <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-          </div>
-        </div>
-
-        <div class="edit-tab-content p-5 flex-col gap-4 hidden" data-content="appearance">
-          <div>
-            <p class="text-xs font-bold mb-2" style="color: var(--text-primary)">Profile Theme</p>
-            <div class="grid grid-cols-5 gap-2">
-              <button class="aspect-square rounded-xl border-2 border-brand bg-gradient-to-br from-slate-700 to-slate-900 relative">
-                <i data-lucide="check" class="w-4 h-4 text-white absolute top-1 right-1"></i>
-              </button>
-              <button class="aspect-square rounded-xl border-2 bg-gradient-to-br from-slate-200 to-slate-400" style="border-color: var(--border-soft)"></button>
-              <button class="aspect-square rounded-xl border-2 bg-gradient-to-br from-stone-50 to-stone-200" style="border-color: var(--border-soft)"></button>
-              <button class="aspect-square rounded-xl border-2 bg-gradient-to-br from-neutral-800 to-black" style="border-color: var(--border-soft)"></button>
-              <button class="aspect-square rounded-xl border-2 border-dashed flex items-center justify-center hover:border-brand transition-colors" style="border-color: var(--border-soft)">
-                <i data-lucide="plus" class="w-4 h-4" style="color: var(--text-muted)"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="edit-tab-content p-5 flex-col gap-3 hidden" data-content="connections">
-          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center"><svg viewBox="0 0 24 24" fill="#1DA1F2" aria-hidden="true" class="w-4 h-4" style="color: var(--text-secondary)"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></div>
-              <div class="flex-1 min-w-0">
-                <p class="text-xs font-bold" style="color: var(--text-primary)">Twitter</p>
-                <p class="text-[10px] truncate" style="color: var(--text-muted)">@hoshino_ichika</p>
-              </div>
-            </div>
-            <span class="text-[9px] font-bold bg-brand-soft px-2 py-1 rounded-full uppercase text-brand">Connected</span>
-          </div>
-          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-brand-soft flex items-center justify-center"><svg viewBox="0 0 24 24" fill="#FF0000" aria-hidden="true" class="w-4 h-4" style="color: var(--text-secondary)"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814Z"/><path fill="#fff" d="M9.75 15.02l5.75-3.02-5.75-3.02v6.04z"/></svg></div>
-              <div class="flex-1 min-w-0">
-                <p class="text-xs font-bold" style="color: var(--text-primary)">YouTube</p>
-                <p class="text-[10px]" style="color: var(--text-muted)">Not connected</p>
-              </div>
-            </div>
-            <button class="brand-btn text-[9px] font-bold bg-brand px-3 py-1 rounded-full uppercase hover:opacity-90 transition-colors">Connect</button>
-          </div>
-        </div>
-
-        <div class="edit-tab-content p-5 flex-col gap-3 hidden" data-content="notifications">
-          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
-            <div class="flex items-center gap-3">
-              <i data-lucide="shopping-bag" class="w-4 h-4" style="color: var(--text-muted)"></i>
-              <div>
-                <p class="text-xs font-bold" style="color: var(--text-primary)">Wishlist Price Drops</p>
-                <p class="text-[10px]" style="color: var(--text-muted)">Get notified when wishlist items go on sale</p>
-              </div>
-            </div>
-            <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-          </div>
-          <div class="flex items-center justify-between p-3 rounded-xl border" style="background: var(--bg-card); border-color: var(--border-soft)">
-            <div class="flex items-center gap-3">
-              <i data-lucide="mail" class="w-4 h-4" style="color: var(--text-muted)"></i>
-              <div>
-                <p class="text-xs font-bold" style="color: var(--text-primary)">Email Newsletter</p>
-                <p class="text-[10px]" style="color: var(--text-muted)">Weekly digest of activity and deals</p>
-              </div>
-            </div>
-            <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-          </div>
-        </div>
-      </div>
-
     </main>
   </div>
 
@@ -854,26 +724,6 @@
         lucide.createIcons();
         main.scrollTop = 0;
       }, 1000);
-    });
-
-    // ===== EDIT TABS =====
-    const editTabs = document.querySelectorAll('.edit-tab');
-    const editContents = document.querySelectorAll('.edit-tab-content');
-    editTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        editTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const target = tab.dataset.tab;
-        editContents.forEach(c => {
-          if (c.dataset.content === target) {
-            c.classList.remove('hidden');
-            c.classList.add('flex');
-          } else {
-            c.classList.add('hidden');
-            c.classList.remove('flex');
-          }
-        });
-      });
     });
 
     // ===== BANNER PREVIEW =====
