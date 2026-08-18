@@ -464,7 +464,7 @@
                     <label class="text-[9px] font-bold uppercase tracking-wider block mb-1.5" style="color: var(--text-muted)">Username</label>
                     <div class="flex rounded-[10px] overflow-hidden border focus-within:border-[var(--brand)] focus-within:ring-2 focus-within:ring-[var(--brand-soft)]" style="background: var(--bg-card); border-color: var(--border-soft);">
                       <span class="bg-brand-soft px-3 text-xs font-semibold flex items-center" style="color: var(--text-secondary)">@</span>
-                      <input type="text" name="username" form="profile-form" value="{{ form.username.value|default:'' }}" class="flex-1 bg-transparent px-2 py-2 text-xs font-semibold focus:outline-none" style="color: var(--text-primary)">
+                      <input type="text" name="username" form="profile-form" value="{{ form.username.value|default:'' }}" onkeydown="if(event.key===' ') event.preventDefault()" oninput="this.value=this.value.toLowerCase()" class="flex-1 bg-transparent px-2 py-2 text-xs font-semibold focus:outline-none" style="color: var(--text-primary)">
                     </div>
                     {% if form.username.errors %}<p class="text-[9px] font-bold text-red-500 mt-1">{{ form.username.errors.0 }}</p>{% endif %}
                   </div>

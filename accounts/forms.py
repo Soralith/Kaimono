@@ -3,6 +3,13 @@ from django import forms
 from .models import User
 
 
+def validate_username_format(value):
+    if ' ' in value:
+        raise forms.ValidationError('Username cannot contain spaces.')
+    if value != value.lower():
+        raise forms.ValidationError('Username must be all lowercase.')
+
+
 class RegisterForm(forms.ModelForm):
     display_name = forms.CharField(
         max_length=60,
@@ -11,6 +18,11 @@ class RegisterForm(forms.ModelForm):
         widget=forms.TextInput(),
     )
     email = forms.EmailField(required=True, label='Email address')
+    username = forms.CharField(
+        max_length=150,
+        required=True,
+        validators=[validate_username_format],
+    )
     password = forms.CharField(
         min_length=8,
         required=True,
@@ -48,6 +60,7 @@ class AccountSetupForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
+        validate_username_format(username)
         if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
             raise forms.ValidationError('This username is already taken.')
         return username
@@ -77,6 +90,7 @@ class ProfileForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
+        validate_username_format(username)
         if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
             raise forms.ValidationError('This username is already taken.')
         return username
