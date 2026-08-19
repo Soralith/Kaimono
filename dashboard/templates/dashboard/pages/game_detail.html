@@ -94,7 +94,7 @@
     .hide-scroll::-webkit-scrollbar { display: none; }
     .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* ===== BRAND REMAP (semantic classes -> theme brand) ===== */
+    /* ===== BRAND REMAP ===== */
     .bg-\[\#323446\] { background-color: var(--brand); }
     .text-\[\#323446\] { color: var(--brand); }
     .border-\[\#323446\] { border-color: var(--brand); }
@@ -118,7 +118,7 @@
 
     .bg-\[#F7F9FC\] { background-color: var(--bg-surface); }
 
-    /* ===== Fade animations ===== */
+    /* ===== Animations ===== */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -126,11 +126,6 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .animate-fadeInUp { animation: fadeInUp 450ms ease-out both; }
     .animate-fadeIn { animation: fadeIn 300ms ease-out both; }
-
-    /* ===== Hero capsule ===== */
-    .capsule-overlay {
-      background: linear-gradient(to top, rgba(20, 22, 32, 0.95) 0%, rgba(20, 22, 32, 0.5) 45%, rgba(20, 22, 32, 0.15) 100%);
-    }
 
     /* ===== Media gallery ===== */
     .gallery-stage { transition: opacity 250ms ease, transform 300ms ease; }
@@ -141,29 +136,29 @@
     .gallery-thumb:hover { opacity: 1; transform: translateY(-2px); }
     .gallery-thumb.active {
       opacity: 1;
-      border-color: #6366F1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-soft);
     }
 
     /* ===== Tag pills ===== */
     .tag-pill { transition: all 200ms ease; }
-    .tag-pill:hover { background-color: #323446; color: white; }
+    .tag-pill:hover { background-color: var(--brand); color: var(--on-brand); border-color: var(--brand); }
 
     /* ===== Purchase accent ===== */
     .btn-dark { transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1); }
-    .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -12px rgba(50, 52, 70, 0.5); }
+    .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -12px var(--shadow-color); }
 
     /* ===== Wishlist / follow state ===== */
     #gd-wish.active {
-      background-color: #323446;
-      color: white;
-      border-color: #323446;
+      background-color: var(--brand);
+      color: var(--on-brand);
+      border-color: var(--brand);
     }
     #gd-wish.active svg { fill: #ef4444; color: #fff; }
     .follow-btn.active {
-      background-color: #6366F1;
-      color: white;
-      border-color: #6366F1;
+      background-color: var(--brand);
+      color: var(--on-brand);
+      border-color: var(--brand);
     }
 
     /* ===== Toast ===== */
@@ -179,33 +174,27 @@
     }
     .toast { pointer-events: auto; min-width: 260px; }
 
-    /* ===== Checkout modal (payment section) ===== */
-    .co-progress { height: 5px; border-radius: 999px; background: #E2E8F0; overflow: hidden; width: 100%; max-width: 220px; margin-top: 14px; }
+    /* ===== Checkout modal ===== */
+    .co-progress { height: 5px; border-radius: 999px; background: var(--border-soft); overflow: hidden; width: 100%; max-width: 220px; margin-top: 14px; }
     .co-progress-bar { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, #6366F1, #8B5CF6); transition: width 400ms ease; }
-    .co-method-btn { border: 2px solid #E2E8F0; background: #fff; color: #64748B; transition: all 180ms ease; }
-    .co-method-btn:hover { border-color: #111827; color: #111827; }
-    .co-method-on { border-color: #111827 !important; background: rgba(17, 24, 39, 0.06) !important; color: #111827 !important; }
-    .co-wallet-chip { border: 2px solid #E2E8F0; background: #fff; transition: all 180ms ease; }
-    .co-wallet-chip:hover { border-color: #111827; }
-    .co-wallet-on { border-color: #111827 !important; background: rgba(17, 24, 39, 0.06) !important; }
+    .co-method-btn { border: 2px solid var(--border-soft); background: var(--bg-card); color: var(--text-secondary); transition: all 180ms ease; }
+    .co-method-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
+    .co-method-on { border-color: var(--brand) !important; background: var(--brand-soft) !important; color: var(--text-primary) !important; }
+    .co-wallet-chip { border: 2px solid var(--border-soft); background: var(--bg-card); transition: all 180ms ease; }
+    .co-wallet-chip:hover { border-color: var(--text-primary); }
+    .co-wallet-on { border-color: var(--brand) !important; background: var(--brand-soft) !important; }
 
     @keyframes popIn { 0% { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.12); } 100% { transform: scale(1); opacity: 1; } }
     .co-check { animation: popIn 550ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 
     /* ===== Game detail page polish ===== */
     .card-hover { transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease; }
-    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -16px rgba(50, 52, 70, 0.16); }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -16px var(--shadow-color); }
     .req-row { transition: background 150ms ease; }
-    .req-row:hover { background: #fff; }
+    .req-row:hover { background: var(--bg-surface); }
 
-    /* Media gallery full width - make the container fill the space */
-    .media-full {
-      width: 100%;
-    }
-    .media-full .gallery-container {
-      width: 100%;
-    }
-    /* Make the stage aspect ratio more generous */
+    /* Media gallery full width */
+    .media-full { width: 100%; }
     .media-stage-wrapper {
       position: relative;
       width: 100%;
@@ -213,6 +202,15 @@
       background: #0f172a;
       border-radius: 1rem;
       overflow: hidden;
+    }
+    
+    /* Custom Select Styling */
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      padding-right: 2rem;
     }
   </style>
 </head>
@@ -225,129 +223,175 @@
 
     {% include "dashboard/partials/sidebar.html" %}
 
-    <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4" id="main-content">
+    <main class="flex-1 flex flex-col gap-6 overflow-y-auto pr-1 pb-8" id="main-content">
 
       <!-- BREADCRUMB -->
       <div class="flex justify-between items-center px-2 pt-1 pb-1 shrink-0">
         <div class="flex items-baseline gap-1">
-          <a href="/shop/" class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--text-secondary)] hover:text-[#323446] transition-colors">
+          <a href="/shop/" class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--text-secondary)] hover:text-[var(--brand)] transition-colors">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Shop
           </a>
         </div>
         <span id="page-cat" class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider"></span>
       </div>
 
-      <!-- ============ STAGE 1 · HEADER & MAIN MEDIA ============ -->
-      <div class="shrink-0 relative rounded-[2rem] overflow-hidden shadow-xl shadow-slate-900/20">
-        <img id="gd-banner" src="" alt="header capsule" class="w-full h-[300px] lg:h-[360px] object-cover">
-        <div class="capsule-overlay absolute inset-0"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div class="max-w-2xl">
-            <div class="flex items-center gap-2 mb-3">
-              <span id="gd-badges" class="flex items-center gap-1.5"></span>
+      <!-- ============ MAIN GRID (3 COLUMNS LAYOUT) ============ -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mt-2">
+
+         <!-- LEFT COLUMN: MAIN CONTENT -->
+         <div class="lg:col-span-2 flex flex-col gap-6">
+
+            <!-- MEDIA GALLERY -->
+            <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-4 animate-fadeInUp media-full">
+               <div class="flex items-center justify-between mb-3">
+                 <h3 class="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                   <i data-lucide="monitor-play" class="w-4 h-4 text-[var(--brand)]"></i> Media Gallery
+                 </h3>
+                 <span id="media-counter" class="text-[10px] font-bold text-[var(--text-muted)] font-mono tracking-widest"></span>
+               </div>
+               <div class="media-stage-wrapper" id="media-stage">
+                 <div id="media-main" class="w-full h-full"></div>
+                 <button id="media-prev" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur text-white flex items-center justify-center transition-colors z-10">
+                   <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                 </button>
+                 <button id="media-next" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur text-white flex items-center justify-center transition-colors z-10">
+                   <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                 </button>
+                 <span id="media-tag" class="absolute bottom-3 left-3 bg-black/50 backdrop-blur border border-white/10 text-white text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider"></span>
+               </div>
+               <div id="media-thumbs" class="flex gap-2 mt-3 overflow-x-auto hide-scroll pb-1"></div>
             </div>
-            <h1 id="gd-title" class="text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight"></h1>
-            <div class="flex items-center gap-3 mt-3">
-              <span id="gd-stars" class="flex items-center gap-0.5"></span>
-              <span id="gd-rating" class="text-sm font-bold text-white"></span>
-              <span id="gd-reviews" class="text-sm text-white/70"></span>
+
+            <!-- ABOUT & FEATURES -->
+            <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6 animate-fadeInUp" style="animation-delay: 100ms;">
+               <h3 class="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2 mb-4">
+                 <i data-lucide="book-open" class="w-5 h-5 text-[var(--brand)]"></i> About the Game
+               </h3>
+               <div id="gd-desc" class="hidden"></div>
+               <div id="gd-about" class="text-[var(--text-secondary)] leading-relaxed text-[13px] space-y-3"></div>
+
+               <div id="gd-about-images" class="grid sm:grid-cols-2 gap-3 mt-5"></div>
+
+               <div class="mt-6" id="gd-keyfeatures-wrap">
+                  <p class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3">Key Features</p>
+                  <div id="gd-keyfeatures" class="grid sm:grid-cols-2 gap-2"></div>
+               </div>
             </div>
-          </div>
-          <div class="flex items-center gap-3 shrink-0">
-            <span id="gd-publisher-chip" class="bg-white/10 backdrop-blur border border-white/15 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider"></span>
-            <span id="gd-type-chip" class="bg-[#6366F1] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider"></span>
-          </div>
-        </div>
-      </div>
 
-      <!-- ============ STAGE 2: TRAILER & SCREENSHOTS (FULL WIDTH) ============ -->
-      <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-4 lg:p-5 animate-fadeInUp media-full">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2">
-            <i data-lucide="monitor-play" class="w-4 h-4 text-[#6366F1]"></i> Trailer & Screenshots
-          </h3>
-          <span id="media-counter" class="text-[10px] font-bold text-[var(--text-muted)] font-mono tracking-widest"></span>
-        </div>
-
-        <!-- Main stage -->
-        <div class="media-stage-wrapper" id="media-stage">
-          <div id="media-main" class="w-full h-full"></div>
-          <button id="media-prev" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur text-white flex items-center justify-center transition-colors z-10">
-            <i data-lucide="chevron-left" class="w-4 h-4"></i>
-          </button>
-          <button id="media-next" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur text-white flex items-center justify-center transition-colors z-10">
-            <i data-lucide="chevron-right" class="w-4 h-4"></i>
-          </button>
-          <span id="media-tag" class="absolute bottom-3 left-3 bg-white/15 backdrop-blur border border-white/15 text-white text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider"></span>
-        </div>
-
-        <!-- Thumbnails -->
-        <div id="media-thumbs" class="flex gap-2.5 mt-3 overflow-x-auto hide-scroll"></div>
-      </div>
-
-      <!-- ============ STAGE 3: ABOUT THIS PRODUCT (BELOW MEDIA) ============ -->
-      <div class="grid lg:grid-cols-2 gap-6 mt-2">
-        <!-- About This Product -->
-        <div class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 animate-fadeInUp" style="animation-delay: 80ms">
-          <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2 mb-4">
-            <i data-lucide="info" class="w-4 h-4 text-[#6366F1]"></i> About This Product
-          </h3>
-          <p id="gd-desc" class="text-[13px] text-[var(--text-secondary)] leading-relaxed"></p>
-
-          <div class="grid grid-cols-2 gap-3 mt-5">
-            <div class="bg-[#F7F9FC] rounded-xl p-3">
-              <p class="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> Release Date</p>
-              <p id="gd-release" class="text-xs font-bold text-[var(--text-primary)] mt-1"></p>
+            <!-- FEATURES & ACCOLADES -->
+            <div class="grid md:grid-cols-2 gap-6" id="gd-features-wrap">
+               <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6">
+                  <h3 class="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)] mb-4">Supported Features</h3>
+                  <div id="gd-features" class="grid grid-cols-1 gap-2"></div>
+               </div>
+               <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6" id="gd-accolade-wrap">
+                  <h3 class="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)] mb-4">Press & Accolades</h3>
+                  <div id="gd-metacritic" class="mb-3"></div>
+                  <div id="gd-accolades" class="flex flex-col gap-3"></div>
+               </div>
             </div>
-            <div class="bg-[#F7F9FC] rounded-xl p-3">
-              <p class="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider flex items-center gap-1"><i data-lucide="code-2" class="w-3 h-3"></i> Developer</p>
-              <p id="gd-developer" class="text-xs font-bold text-[var(--text-primary)] mt-1"></p>
+
+            <!-- SYSTEM REQUIREMENTS -->
+            <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6" id="gd-req-wrap">
+               <h3 class="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2 mb-5">
+                 <i data-lucide="cpu" class="w-5 h-5 text-[var(--brand)]"></i> System Requirements
+               </h3>
+               <div class="grid md:grid-cols-2 gap-8">
+                 <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-3 flex items-center gap-1.5">
+                       <span class="w-2 h-2 rounded-full bg-[var(--brand)]"></span> Minimum
+                    </h4>
+                    <table class="w-full text-sm border-collapse"><tbody id="gd-req-minimum"></tbody></table>
+                 </div>
+                 <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-3 flex items-center gap-1.5">
+                       <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Recommended
+                    </h4>
+                    <table class="w-full text-sm border-collapse"><tbody id="gd-req-recommended"></tbody></table>
+                 </div>
+               </div>
             </div>
-            <div class="bg-[#F7F9FC] rounded-xl p-3">
-              <p class="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider flex items-center gap-1"><i data-lucide="building-2" class="w-3 h-3"></i> Publisher</p>
-              <p id="gd-publisher" class="text-xs font-bold text-[var(--text-primary)] mt-1"></p>
+
+            <!-- REVIEWS -->
+            <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6 animate-fadeInUp">
+               <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                 <h3 class="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
+                   <i data-lucide="message-square" class="w-5 h-5 text-[var(--brand)]"></i> Player Reviews
+                 </h3>
+                 <div id="gd-review-summary" class="flex items-center gap-4"></div>
+               </div>
+
+               <div class="flex flex-wrap gap-3 mb-6 p-3 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-soft)]">
+                 <select id="gd-filter-lang" class="bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-lg px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)]"></select>
+                 <select id="gd-filter-time" class="bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-lg px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)]"></select>
+                 <select id="gd-filter-date" class="bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-lg px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)]"></select>
+                 <span id="gd-review-count" class="text-xs font-semibold text-[var(--text-muted)] ml-auto self-center"></span>
+               </div>
+
+               <div id="gd-reviews-list" class="flex flex-col gap-4"></div>
             </div>
-            <div class="bg-[#F7F9FC] rounded-xl p-3">
-              <p class="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider flex items-center gap-1"><i data-lucide="tag" class="w-3 h-3"></i> Category</p>
-              <p id="gd-type-box" class="text-xs font-bold text-[var(--text-primary)] mt-1"></p>
+
+         </div>
+
+         <!-- RIGHT COLUMN: STICKY SIDEBAR -->
+         <div class="lg:col-span-1">
+            <div class="lg:sticky lg:top-6 flex flex-col gap-6">
+
+               <!-- PURCHASE BOX -->
+               <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-xl shadow-black/5 p-6 animate-fadeInUp">
+                 <div class="flex items-baseline gap-3 mb-1">
+                   <span id="gd-price" class="text-3xl font-black text-[var(--text-primary)] tracking-tight"></span>
+                   <span id="gd-old-price" class="text-base text-[var(--text-muted)] line-through hidden"></span>
+                   <span id="gd-save" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded hidden"></span>
+                 </div>
+                 <p id="gd-price-note" class="text-[11px] text-[var(--text-muted)] font-medium mb-5"></p>
+
+                 <button id="gd-buy" class="w-full bg-[var(--brand)] hover:opacity-90 text-[var(--on-brand)] font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-[var(--brand)]/20 mb-3 btn-dark">
+                   <i data-lucide="shopping-cart" class="w-4 h-4"></i> <span id="gd-buy-label">Buy Now</span>
+                 </button>
+
+                 <div class="grid grid-cols-2 gap-3">
+                   <button id="gd-wish" class="bg-[var(--bg-surface)] hover:bg-[var(--border-soft)] text-[var(--text-secondary)] font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 border border-[var(--border-soft)] transition-colors">
+                     <i data-lucide="heart" class="w-3.5 h-3.5"></i> Wishlist
+                   </button>
+                   <button id="gd-follow" class="bg-[var(--bg-surface)] hover:bg-[var(--border-soft)] text-[var(--text-secondary)] font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 border border-[var(--border-soft)] transition-colors follow-btn">
+                     <i data-lucide="bell" class="w-3.5 h-3.5"></i> Follow
+                   </button>
+                 </div>
+
+                 <div class="grid grid-cols-3 gap-2 mt-5 pt-5 border-t border-[var(--border-soft)]">
+                   <div class="flex flex-col items-center text-center gap-1.5">
+                     <i data-lucide="shield-check" class="w-4 h-4 text-[var(--brand)]"></i>
+                     <span class="text-[9px] font-bold text-[var(--text-muted)] uppercase leading-tight">Authentic</span>
+                   </div>
+                   <div class="flex flex-col items-center text-center gap-1.5">
+                     <i data-lucide="zap" class="w-4 h-4 text-[var(--brand)]"></i>
+                     <span class="text-[9px] font-bold text-[var(--text-muted)] uppercase leading-tight">Instant</span>
+                   </div>
+                   <div class="flex flex-col items-center text-center gap-1.5">
+                     <i data-lucide="rotate-ccw" class="w-4 h-4 text-[var(--brand)]"></i>
+                     <span class="text-[9px] font-bold text-[var(--text-muted)] uppercase leading-tight">Returns</span>
+                   </div>
+                 </div>
+               </div>
+
+               <!-- GAME DETAILS -->
+               <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6 animate-fadeInUp" style="animation-delay: 100ms;">
+                 <h3 class="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)] mb-4">Game Details</h3>
+                 <div class="space-y-3 text-sm">
+                   <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Developer</span><span id="gd-developer" class="font-semibold text-[var(--text-primary)] text-right max-w-[60%] truncate"></span></div>
+                   <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Publisher</span><span id="gd-publisher" class="font-semibold text-[var(--text-primary)] text-right max-w-[60%] truncate"></span></div>
+                   <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Release</span><span id="gd-release" class="font-semibold text-[var(--text-primary)] text-right"></span></div>
+                   <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Category</span><span id="gd-type-box" class="font-semibold text-[var(--text-primary)] text-right"></span></div>
+                 </div>
+                 <div class="mt-4 pt-4 border-t border-[var(--border-soft)]">
+                   <p class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2">Tags</p>
+                   <div id="gd-tags" class="flex flex-wrap gap-1.5"></div>
+                 </div>
+               </div>
+
             </div>
-          </div>
-
-          <!-- Tags -->
-          <div class="mt-5">
-            <p class="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2.5">Tags</p>
-            <div id="gd-tags" class="flex flex-wrap gap-2"></div>
-          </div>
-        </div>
-
-        <!-- Purchase box (moved to the right side of About) -->
-        <div class="card-hover bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)]/70 shadow-sm p-6 h-fit animate-fadeInUp">
-          <h3 class="text-sm font-extrabold text-[var(--text-primary)] flex items-center gap-2 mb-4">
-            <i data-lucide="shopping-cart" class="w-4 h-4 text-[#6366F1]"></i> Purchase
-          </h3>
-
-          <div class="flex items-end gap-2.5 mb-2">
-            <span id="gd-price" class="text-4xl font-extrabold text-[var(--text-primary)] tracking-tight"></span>
-            <span id="gd-old-price" class="text-sm text-[var(--text-muted)] line-through mb-1 hidden"></span>
-            <span id="gd-save" class="bg-[#323446] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full mb-1.5 hidden"></span>
-          </div>
-
-          <p id="gd-price-note" class="text-[11px] text-[var(--text-muted)] font-medium mb-5"></p>
-
-          <button id="gd-buy" class="w-full bg-[#323446] hover:bg-slate-800 text-white font-bold py-3.5 rounded-full text-sm flex items-center justify-center gap-2 transition-all btn-dark">
-            <i data-lucide="zap" class="w-4 h-4"></i> <span id="gd-buy-label">Buy Now</span>
-          </button>
-          <br>
-          <button id="gd-wish" class="w-full bg-[#F7F9FC] hover:bg-[var(--border-soft)]/60 text-[var(--text-secondary)] font-bold py-3 rounded-full text-xs flex items-center justify-center gap-2 border border-[var(--border-soft)] transition-colors">
-            <i data-lucide="heart" class="w-3.5 h-3.5"></i> Wishlist
-          </button>
-
-          <div class="flex items-center gap-4 mt-4 pt-4 border-t border-[var(--border-soft)]">
-            <span class="flex items-center gap-1.5 text-[10px] font-semibold text-[var(--text-secondary)]"><i data-lucide="shield-check" class="w-3 h-3 text-[var(--text-muted)]"></i> Authentic keys</span>
-            <span class="flex items-center gap-1.5 text-[10px] font-semibold text-[var(--text-secondary)]"><i data-lucide="truck" class="w-3 h-3 text-[var(--text-muted)]"></i> Free ship $80+</span>
-            <span class="flex items-center gap-1.5 text-[10px] font-semibold text-[var(--text-secondary)]"><i data-lucide="rotate-ccw" class="w-3 h-3 text-[var(--text-muted)]"></i> 30-day returns</span>
-          </div>
-        </div>
+         </div>
       </div>
 
   <!-- TOAST CONTAINER -->
@@ -355,36 +399,35 @@
 
   <!-- CHECKOUT MODAL · DEBIT CARD PAYMENT -->
   <div id="checkout-overlay" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-[var(--bg-card)] rounded-3xl shadow-2xl w-full max-w-md max-h-[92vh] overflow-y-auto hide-scroll animate-fadeInUp">
+    <div class="bg-[var(--bg-card)] rounded-2xl shadow-2xl w-full max-w-md max-h-[92vh] overflow-y-auto hide-scroll animate-fadeInUp border border-[var(--border-soft)]">
 
       <!-- Header -->
       <div class="sticky top-0 z-10 bg-[var(--bg-card)] flex items-center justify-between px-6 pt-6 pb-4 border-b border-[var(--border-soft)]">
         <h3 class="text-base font-extrabold text-[var(--text-primary)] flex items-center gap-2">
-          <span class="w-8 h-8 rounded-xl bg-[#6366F1]/10 text-[#6366F1] flex items-center justify-center"><i data-lucide="credit-card" class="w-4 h-4"></i></span> Payment
+          <span class="w-8 h-8 rounded-xl bg-[var(--brand-soft)] text-[var(--brand)] flex items-center justify-center"><i data-lucide="credit-card" class="w-4 h-4"></i></span> Payment
         </h3>
-        <button id="co-close" class="w-8 h-8 rounded-full bg-[#F7F9FC] hover:bg-[var(--border-soft)]/70 text-[var(--text-secondary)] flex items-center justify-center transition-colors">
+        <button id="co-close" class="w-8 h-8 rounded-full bg-[var(--bg-surface)] hover:bg-[var(--border-soft)]/70 text-[var(--text-secondary)] flex items-center justify-center transition-colors">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
       <!-- Order summary -->
-      <div class="mx-6 mt-4 rounded-2xl bg-[#F7F9FC] border border-[var(--border-soft)] p-4 flex items-center gap-3">
+      <div class="mx-6 mt-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-soft)] p-4 flex items-center gap-3">
         <img id="co-img" src="" alt="" class="w-12 h-12 rounded-xl object-cover shrink-0">
         <div class="flex-1 min-w-0">
-          <p id="co-name" class="text-xs font-extrabold text-[var(--text-primary)] truncate"></p>
-          <p id="co-meta" class="text-[10px] font-bold text-[var(--text-muted)] mt-0.5"></p>
+          <p id="co-meta" class="text-[10px] font-bold text-[var(--text-muted)]"></p>
         </div>
         <div class="text-right shrink-0">
           <div class="flex items-baseline justify-end gap-1.5">
             <span id="co-old-price" class="hidden text-[10px] text-[var(--text-muted)] line-through"></span>
-            <span id="co-save" class="hidden bg-[#323446] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full"></span>
+            <span id="co-save" class="hidden bg-[var(--brand)] text-[var(--on-brand)] text-[9px] font-extrabold px-1.5 py-0.5 rounded-full"></span>
           </div>
           <p id="co-price" class="text-sm font-extrabold text-[var(--text-primary)]"></p>
           <p class="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider">incl. tax</p>
         </div>
       </div>
 
-      <p id="co-pre-note" class="hidden mx-6 mt-3 text-[11px] font-semibold text-[#6366F1] bg-[#6366F1]/5 border border-[#6366F1]/20 rounded-xl px-3.5 py-2.5 flex items-center gap-2">
+      <p id="co-pre-note" class="hidden mx-6 mt-3 text-[11px] font-semibold text-[var(--brand)] bg-[var(--brand-soft)] border border-[var(--brand)]/20 rounded-xl px-3.5 py-2.5 flex items-center gap-2">
         <i data-lucide="clock-3" class="w-3.5 h-3.5 shrink-0"></i><span id="co-pre-note-text"></span>
       </p>
 
@@ -406,32 +449,32 @@
         <div id="co-card-panel">
           <!-- Debit card mini steps -->
           <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[10px] font-bold text-[var(--text-secondary)] pb-3">
-            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[#6366F1] text-white text-[8px] flex items-center justify-center shrink-0">1</span> Enter details</span>
+            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[var(--brand)] text-[var(--on-brand)] text-[8px] flex items-center justify-center shrink-0">1</span> Enter details</span>
             <i data-lucide="arrow-right" class="w-3 h-3 text-[var(--text-muted)]"></i>
-            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[#6366F1] text-white text-[8px] flex items-center justify-center shrink-0">2</span> Bank OTP</span>
+            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[var(--brand)] text-[var(--on-brand)] text-[8px] flex items-center justify-center shrink-0">2</span> Bank OTP</span>
             <i data-lucide="arrow-right" class="w-3 h-3 text-[var(--text-muted)]"></i>
-            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[#6366F1] text-white text-[8px] flex items-center justify-center shrink-0">3</span> Confirmed</span>
+            <span class="flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-[var(--brand)] text-[var(--on-brand)] text-[8px] flex items-center justify-center shrink-0">3</span> Confirmed</span>
           </div>
           <div class="space-y-3">
             <div>
               <label class="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Cardholder name</label>
-              <input id="co-holder" type="text" placeholder="e.g. Jane Doe" class="mt-1 w-full bg-[#F7F9FC] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-black placeholder:text-[var(--text-muted)]">
+              <input id="co-holder" type="text" placeholder="e.g. Jane Doe" class="mt-1 w-full bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)] placeholder:text-[var(--text-muted)]">
             </div>
             <div>
               <div class="flex items-center justify-between">
                 <label class="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Card number</label>
-                <span id="co-brand" class="text-[9px] font-extrabold text-[#6366F1] uppercase tracking-wider">Debit Card</span>
+                <span id="co-brand" class="text-[9px] font-extrabold text-[var(--brand)] uppercase tracking-wider">Debit Card</span>
               </div>
-              <input id="co-number" inputmode="numeric" placeholder="1234 5678 9012 3456" class="mt-1 w-full bg-[#F7F9FC] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-black placeholder:text-[var(--text-muted)]">
+              <input id="co-number" inputmode="numeric" placeholder="1234 5678 9012 3456" class="mt-1 w-full bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)] placeholder:text-[var(--text-muted)]">
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Expiry (MM/YY)</label>
-                <input id="co-expiry" inputmode="numeric" placeholder="08/29" class="mt-1 w-full bg-[#F7F9FC] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-black placeholder:text-[var(--text-muted)]">
+                <input id="co-expiry" inputmode="numeric" placeholder="08/29" class="mt-1 w-full bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)] placeholder:text-[var(--text-muted)]">
               </div>
               <div>
                 <label class="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">CVV</label>
-                <input id="co-cvv" inputmode="numeric" placeholder="123" maxlength="4" class="mt-1 w-full bg-[#F7F9FC] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-black placeholder:text-[var(--text-muted)]">
+                <input id="co-cvv" inputmode="numeric" placeholder="123" maxlength="4" class="mt-1 w-full bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)] placeholder:text-[var(--text-muted)]">
               </div>
             </div>
           </div>
@@ -456,7 +499,7 @@
           <div id="co-phone-wrap">
             <div>
               <label class="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Phone number</label>
-              <input id="co-phone" inputmode="numeric" placeholder="0812 3456 7890" class="mt-1 w-full bg-[#F7F9FC] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-black placeholder:text-[var(--text-muted)]">
+              <input id="co-phone" inputmode="numeric" placeholder="0812 3456 7890" class="mt-1 w-full bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)] placeholder:text-[var(--text-muted)]">
             </div>
             <p class="text-[10px] font-medium text-[var(--text-secondary)] flex items-center gap-1.5 mt-3">
               <i data-lucide="smartphone" class="w-3 h-3 shrink-0"></i> We'll send an OTP to your OVO app to confirm the payment.
@@ -477,7 +520,7 @@
 
         <p id="co-error" class="hidden text-[11px] font-bold text-rose-500 bg-rose-50 border border-rose-200 rounded-xl px-3.5 py-2.5"></p>
 
-        <button type="submit" id="co-pay" class="w-full bg-[#323446] hover:bg-slate-800 text-white font-bold py-4 rounded-2xl text-sm flex items-center justify-between px-6 transition-all btn-dark">
+        <button type="submit" id="co-pay" class="w-full bg-[var(--brand)] hover:opacity-90 text-[var(--on-brand)] font-bold py-4 rounded-2xl text-sm flex items-center justify-between px-6 transition-all btn-dark">
           <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4"></i> <span id="co-pay-label">Pay Now</span></span>
           <span class="h-5 w-px bg-white/20"></span>
           <span id="co-pay-amount" class="font-extrabold"></span>
@@ -490,8 +533,8 @@
 
       <!-- Processing -->
       <div id="co-processing" class="hidden mx-6 my-8 flex flex-col items-center text-center">
-        <div class="w-14 h-14 rounded-full bg-[#6366F1]/10 flex items-center justify-center mb-4">
-          <div class="w-6 h-6 border-2 border-[#6366F1] border-t-transparent rounded-full animate-spin"></div>
+        <div class="w-14 h-14 rounded-full bg-[var(--brand-soft)] flex items-center justify-center mb-4">
+          <div class="w-6 h-6 border-2 border-[var(--brand)] border-t-transparent rounded-full animate-spin"></div>
         </div>
         <p class="text-sm font-extrabold text-[var(--text-primary)]">Contacting your bank…</p>
         <p id="co-processing-step" class="text-[11px] text-[var(--text-muted)] font-medium mt-1.5"></p>
@@ -505,11 +548,11 @@
         </div>
         <p class="text-base font-extrabold text-[var(--text-primary)]">Payment authorized</p>
         <p class="text-[12px] text-[var(--text-secondary)] mt-1.5 max-w-xs leading-relaxed" id="co-success-msg"></p>
-        <div class="mt-4 rounded-xl bg-[#F7F9FC] border border-[var(--border-soft)] px-4 py-2.5">
+        <div class="mt-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-soft)] px-4 py-2.5">
           <p class="text-[9px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Order number</p>
           <p id="co-order-no" class="text-xs font-extrabold text-[var(--text-primary)] font-mono mt-0.5"></p>
         </div>
-        <button id="co-done" class="mt-6 bg-[#323446] hover:bg-slate-800 text-white font-bold px-8 py-3 rounded-full text-xs flex items-center gap-2 transition-all btn-dark">
+        <button id="co-done" class="mt-6 bg-[var(--brand)] hover:opacity-90 text-[var(--on-brand)] font-bold px-8 py-3 rounded-full text-xs flex items-center gap-2 transition-all btn-dark">
           <i data-lucide="check" class="w-4 h-4"></i> Done
         </button>
       </div>
@@ -536,9 +579,6 @@
     var gallery = [];
     var mIdx = 0;
 
-    // Stage 3 & 4 metadata (declared up top so the render calls in the product
-    // branch below see them — var declarations lower in the script are hoisted
-    // but only assigned after that branch has already run).
     var FEATURE_META = {
       achievements: { icon: "trophy", label: "Steam Achievements" },
       cloud: { icon: "cloud", label: "Steam Cloud" },
@@ -596,36 +636,12 @@
         '<div class="w-20 h-20 rounded-full bg-[var(--border-soft)] flex items-center justify-center mb-4"><i data-lucide="package-x" class="w-10 h-10 text-[var(--text-muted)]"></i></div>' +
         '<h2 class="text-lg font-extrabold text-[var(--text-primary)]">Product not found</h2>' +
         '<p class="text-xs text-[var(--text-secondary)] mt-1">The item you are looking for does not exist.</p>' +
-        '<a href="/shop/" class="mt-5 bg-[#323446] hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-full text-xs flex items-center gap-2"><i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Shop</a>' +
+        '<a href="/shop/" class="mt-5 bg-[var(--brand)] hover:opacity-90 text-[var(--on-brand)] font-bold px-6 py-2.5 rounded-full text-xs flex items-center gap-2"><i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Shop</a>' +
         '</div>';
       lucide.createIcons();
     } else {
-      var banner = (p.media && p.media[0] && p.media[0].poster) || p.image;
-
-      $g("gd-banner").src = banner;
       document.title = p.name + " — Kaimono";
-      $g("gd-title").textContent = p.name;
       $g("page-cat").textContent = p.category;
-      $g("gd-rating").textContent = p.rating;
-      $g("gd-reviews").textContent = "(" + p.reviews.toLocaleString() + " reviews)";
-
-      var stars = "";
-      for (var s = 1; s <= 5; s++) {
-        stars += '<i data-lucide="star" class="w-3.5 h-3.5 ' + (s <= Math.round(p.rating) ? "text-amber-400 fill-amber-400" : "text-white/30") + '"></i>';
-      }
-      $g("gd-stars").innerHTML = stars;
-
-      $g("gd-badges").innerHTML = (p.badges || []).map(function (b) {
-        return '<span class="bg-[#323446] text-white text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md">' + b + '</span>';
-      }).join("");
-      $g("gd-publisher-chip").textContent = p.publisher || p.brand;
-      $g("gd-type-chip").textContent = p.type;
-
-      // stock line under title
-      var stockLine = document.createElement("p");
-      stockLine.className = "flex items-center gap-1.5 mt-3 text-sm font-semibold text-white/90";
-      stockLine.innerHTML = '<i data-lucide="package" class="w-3.5 h-3.5"></i><span>' + p.stock + '</span>';
-      $g("gd-reviews").parentNode.appendChild(stockLine);
 
       // Summary info
       $g("gd-desc").textContent = p.description || "";
@@ -634,7 +650,7 @@
       $g("gd-publisher").textContent = p.publisher || "—";
       $g("gd-type-box").textContent = p.type;
       $g("gd-tags").innerHTML = (p.tags || []).map(function (t) {
-        return '<span class="tag-pill bg-[#F7F9FC] border border-[var(--border-soft)] text-[var(--text-secondary)] text-[10px] font-bold px-2.5 py-1 rounded-full">' + t + '</span>';
+        return '<span class="tag-pill bg-[var(--bg-surface)] border border-[var(--border-soft)] text-[var(--text-secondary)] text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer">' + t + '</span>';
       }).join("");
 
       // Media gallery
@@ -650,13 +666,11 @@
         renderGallery();
       });
 
-      // Hide prev/next arrows when the gallery has a single media item
       if (gallery.length < 2) {
         $g("media-prev").style.display = "none";
         $g("media-next").style.display = "none";
       }
 
-      // Keyboard navigation for the media carousel (← / →)
       document.addEventListener("keydown", function (ev) {
         if (!$g("checkout-overlay").classList.contains("hidden")) return;
         var tag = (ev.target && ev.target.tagName) || "";
@@ -679,14 +693,13 @@
       $g("gd-price-note").textContent = isPre ? "Pre-purchase now and receive the key on release." : (p.originalPrice ? "Promotional price — limited time only." : "Price includes all platform fees.");
       var buyIcon = $g("gd-buy").querySelector("[data-lucide]");
       if (buyIcon) {
-        buyIcon.setAttribute("data-lucide", isPre ? "clock-3" : "zap");
+        buyIcon.setAttribute("data-lucide", isPre ? "clock-3" : "shopping-cart");
       }
 
       // Wishlist + follow (server-backed)
       var follow = readLS("kaimono_follows");
       if (follow.indexOf(p.id) > -1) $g("gd-follow").classList.add("active");
 
-      // Load wishlist state from server
       (function() {
         var csrfToken = document.getElementById('csrf-token').value;
         fetch('/api/wishlist/list/').then(function(r) { return r.json(); }).then(function(data) {
@@ -713,7 +726,6 @@
         if (i > -1) { f.splice(i, 1); $g("gd-follow").classList.remove("active"); openToast("Unfollowed — updates stopped", "bell-off"); following = false; }
         else { f.push(p.id); $g("gd-follow").classList.add("active"); openToast("Following — you'll get restock alerts", "bell-plus"); following = true; }
         writeLS("kaimono_follows", f);
-        // Sync with community "Games You Follow"
         if (p.category === "games") {
           try {
             var img = (p.media && p.media[0] && p.media[0].poster) || p.image || "";
@@ -736,64 +748,9 @@
         }, isPre);
       });
 
-      // Friends status
-      var friends = p.friends || [];
-      var ownList = friends.filter(function (f) { return f.status === "owns"; });
-      var wantList = friends.filter(function (f) { return f.status === "wants"; });
-      $g("gd-friends-own").innerHTML = ownList.length ? "" : '<span class="text-[11px] text-[var(--text-muted)] font-medium">No friends own it yet</span>';
-      $g("gd-friends-want").innerHTML = wantList.length ? "" : '<span class="text-[11px] text-[var(--text-muted)] font-medium">No friends on wishlist yet</span>';
-      ownList.forEach(function (f) { $g("gd-friends-own").appendChild(buildFriend(f)); });
-      wantList.forEach(function (f) { $g("gd-friends-want").appendChild(buildFriend(f)); });
-
-      // Bundles
-      var bundles = p.bundles || [];
-      $g("gd-bundle-count").textContent = bundles.length + " available";
-      $g("gd-bundles").innerHTML = "";
-      if (bundles.length === 0) {
-        $g("gd-bundles").innerHTML = '<div class="sm:col-span-2 rounded-xl border border-dashed border-[var(--border-soft)] py-8 text-center"><p class="text-xs text-[var(--text-muted)] font-medium">No bundles available for this item.</p></div>';
-      } else {
-        bundles.forEach(function (b, i) {
-          var typeBadge = b.type === "dlc" ? "DLC" : b.type === "edition" ? "Edition" : "Bundle";
-          var el = document.createElement("div");
-          el.className = "rounded-xl border border-[var(--border-soft)] bg-[#F7F9FC] p-4 flex flex-col";
-          el.innerHTML =
-            '<div class="flex items-center justify-between mb-2">' +
-              '<span class="text-[9px] font-extrabold uppercase tracking-wider ' + (b.type === "dlc" ? "text-[#6366F1]" : "text-[var(--text-muted)]") + '">' + typeBadge + '</span>' +
-              '<i data-lucide="check" class="w-3.5 h-3.5 text-[var(--text-muted)]"></i>' +
-            '</div>' +
-            '<h4 class="text-sm font-extrabold text-[var(--text-primary)] leading-snug">' + b.name + '</h4>' +
-            '<ul class="mt-2 mb-3 flex-1 space-y-1">' + (b.includes || []).map(function (inc) {
-              return '<li class="flex items-start gap-1.5 text-[11px] text-[var(--text-secondary)]"><i data-lucide="dot" class="w-2.5 h-2.5 mt-0.5 shrink-0"></i>' + inc + '</li>';
-            }).join("") + '</ul>' +
-            '<div class="flex items-center justify-between mt-1">' +
-              '<div class="flex items-baseline gap-1.5">' +
-                (b.originalPrice ? '<span class="text-[10px] text-[var(--text-muted)] line-through">' + fmt(b.originalPrice) + '</span>' : "") +
-                '<span class="text-sm font-extrabold text-[var(--text-primary)]">' + fmt(b.price) + '</span>' +
-              '</div>' +
-              '<button class="bundle-buy bg-[#323446] hover:bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors" data-index="' + i + '" data-name="' + b.name + '">Buy</button>' +
-            '</div>';
-          $g("gd-bundles").appendChild(el);
-        });
-        document.querySelectorAll(".bundle-buy").forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            var b = bundles[+btn.dataset.index];
-            openCheckout({
-              name: b.name,
-              image: (p.media && p.media[0] && p.media[0].poster) || p.image,
-              meta: (b.type === "dlc" ? "DLC" : b.type === "edition" ? "Edition" : "Bundle") + " · " + p.name,
-              price: b.price,
-              originalPrice: b.originalPrice || null
-            }, false);
-          });
-        });
-      }
-
-      // ===== Stage 3 · Details & features =====
       renderAbout();
-      renderDlc();
       renderFeatures();
 
-      // ===== Stage 4 · Technical & reviews =====
       renderRequirements();
       renderAccolades();
       renderReviewFilters();
@@ -805,15 +762,6 @@
       lucide.createIcons();
     }
 
-    function buildFriend(f) {
-      var d = document.createElement("div");
-      d.className = "flex items-center gap-2 bg-[var(--bg-card)] rounded-full pl-1 pr-3 py-1 border border-[var(--border-soft)] shadow-sm";
-      d.innerHTML = '<img src="' + f.avatar + '" alt="" class="w-6 h-6 rounded-full object-cover">' +
-                    '<span class="text-[11px] font-bold text-[var(--text-secondary)] truncate">' + f.name + '</span>';
-      return d;
-    }
-
-    // ===== Media gallery =====
     function buildGallery() {
       var gl = [];
       (p.media || []).forEach(function (m) { gl.push({ type: "video", src: m.src, poster: m.poster, label: m.label, youtube: !!(m.youtube || (m.src && /youtu\.?be/.test(m.src))) }); });
@@ -861,7 +809,7 @@
       thumbs.innerHTML = "";
       gallery.forEach(function (g, i) {
         var b = document.createElement("button");
-        b.className = "gallery-thumb relative w-24 h-14 rounded-lg overflow-hidden border-2 shrink-0 " + (i === mIdx ? "active border-[#6366F1]" : "border-transparent");
+        b.className = "gallery-thumb relative w-24 h-14 rounded-lg overflow-hidden border-2 shrink-0 " + (i === mIdx ? "active border-[var(--brand)]" : "border-transparent");
         if (g.type === "video") {
           b.innerHTML = '<img src="' + g.poster + '" alt="" class="w-full h-full object-cover">' +
             '<span class="absolute inset-0 bg-black/30 flex items-center justify-center"><i data-lucide="play" class="w-4 h-4 text-white"></i></span>';
@@ -874,9 +822,6 @@
       lucide.createIcons();
     }
 
-    // ==========================================================================
-    // STAGE 3 · About, DLC & Steam features
-    // ==========================================================================
     function renderAbout() {
       $g("gd-about").innerHTML = (p.about || [p.description]).map(function (para) {
         return "<p>" + para + "</p>";
@@ -888,61 +833,21 @@
         }).join("");
       }
       $g("gd-keyfeatures").innerHTML = (p.keyFeatures || []).map(function (f) {
-        return '<div class="flex items-start gap-2 text-[12px] text-[var(--text-secondary)] bg-[#F7F9FC] border border-[var(--border-soft)] rounded-xl px-3 py-2.5">' +
+        return '<div class="flex items-start gap-2 text-[12px] text-[var(--text-secondary)] bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3 py-2.5">' +
                '<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0"></i><span>' + f + "</span></div>";
       }).join("");
-    }
-
-    function renderDlc() {
-      var list = p.dlc;
-      if (!list) { $g("gd-dlc-wrap").classList.add("hidden"); return; }
-      if (!list.length) {
-        $g("gd-dlc").innerHTML = '<div class="rounded-xl border border-dashed border-[var(--border-soft)] py-8 text-center"><p class="text-xs text-[var(--text-muted)] font-medium">No additional downloadable content at this time.</p></div>';
-        return;
-      }
-      $g("gd-dlc").innerHTML = list.map(function (d, i) {
-        return '<div class="rounded-xl border border-[var(--border-soft)] bg-[#F7F9FC] p-4">' +
-          '<div class="flex items-center justify-between gap-2">' +
-            '<h4 class="text-xs font-extrabold text-[var(--text-primary)] leading-snug">' + d.name + "</h4>" +
-            '<div class="flex items-baseline gap-1.5 shrink-0">' +
-              (d.originalPrice ? '<span class="text-[10px] text-[var(--text-muted)] line-through">' + fmt(d.originalPrice) + "</span>" : "") +
-              '<span class="text-sm font-extrabold text-[var(--text-primary)]">' + fmt(d.price) + "</span>" +
-            "</div>" +
-          "</div>" +
-          '<p class="text-[11px] text-[var(--text-secondary)] mt-1.5 leading-relaxed">' + d.desc + "</p>" +
-          '<div class="flex items-center justify-between mt-3">' +
-            '<span class="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">' + d.date + "</span>" +
-            '<button class="dlc-buy bg-[#323446] hover:bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors" data-index="' + i + '" data-name="' + d.name + '">Buy</button>' +
-          "</div>" +
-        "</div>";
-      }).join("");
-      document.querySelectorAll(".dlc-buy").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          var d = list[+btn.dataset.index];
-          openCheckout({
-            name: d.name,
-            image: (p.media && p.media[0] && p.media[0].poster) || p.image,
-            meta: "DLC · " + p.name,
-            price: d.price,
-            originalPrice: d.originalPrice || null
-          }, false);
-        });
-      });
     }
 
     function renderFeatures() {
       if (!p.features || !p.features.length) { $g("gd-features-wrap").classList.add("hidden"); return; }
       $g("gd-features").innerHTML = p.features.map(function (k) {
         var m = FEATURE_META[k] || { icon: "sparkles", label: k };
-        return '<div class="flex items-center gap-2.5 bg-[#F7F9FC] border border-[var(--border-soft)] rounded-xl px-3 py-3">' +
-               '<i data-lucide="' + m.icon + '" class="w-4 h-4 text-[#6366F1] shrink-0"></i>' +
+        return '<div class="flex items-center gap-2.5 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3 py-3">' +
+               '<i data-lucide="' + m.icon + '" class="w-4 h-4 text-[var(--brand)] shrink-0"></i>' +
                '<span class="text-[11px] font-bold text-[var(--text-secondary)]">' + m.label + "</span></div>";
       }).join("");
     }
 
-    // ==========================================================================
-    // STAGE 4 · System requirements
-    // ==========================================================================
     function renderRequirements() {
       if (!p.requirements) { $g("gd-req-wrap").classList.add("hidden"); return; }
       ["minimum", "recommended"].forEach(function (key) {
@@ -956,16 +861,13 @@
       });
     }
 
-    // ==========================================================================
-    // STAGE 4 · Accolades & media reviews
-    // ==========================================================================
     function renderAccolades() {
       var acc = p.accolades || [];
-      if (!acc.length) { $g("gd-accolade-wrap").classList.add("hidden"); return; }
+      if (!acc.length && !p.metacritic) { $g("gd-accolade-wrap").classList.add("hidden"); return; }
       if (p.metacritic) {
         $g("gd-metacritic").innerHTML =
-          '<div class="flex items-center gap-2.5 bg-[#F7F9FC] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5">' +
-            '<span class="w-10 h-10 rounded-full bg-[#323446] text-white flex items-center justify-center text-sm font-extrabold">' + p.metacritic + "</span>" +
+          '<div class="flex items-center gap-2.5 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5">' +
+            '<span class="w-10 h-10 rounded-full bg-[var(--brand)] text-[var(--on-brand)] flex items-center justify-center text-sm font-extrabold">' + p.metacritic + "</span>" +
             '<div><p class="text-[9px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Metacritic</p>' +
             '<p class="text-[10px] font-bold text-[var(--text-secondary)]">' + (p.metacritic >= 90 ? "Must-Play" : "Generally Favorable") + "</p></div>" +
           "</div>";
@@ -974,23 +876,20 @@
         var num = parseFloat(a.score);
         var chip = (!isNaN(num) && num >= 85) || /^10$/.test(a.score)
           ? "bg-emerald-50 text-emerald-600"
-          : "bg-[#6366F1]/10 text-[#6366F1]";
-        return '<div class="card-hover rounded-2xl border border-[var(--border-soft)] bg-[#F7F9FC] p-4 flex flex-col">' +
+          : "bg-[var(--brand-soft)] text-[var(--brand)]";
+        return '<div class="card-hover rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-4 flex flex-col">' +
           '<div class="flex items-center justify-between mb-2.5">' +
             '<span class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">' + a.outlet + "</span>" +
             '<span class="' + chip + ' text-[10px] font-extrabold px-2 py-0.5 rounded-full">' + a.score + "</span>" +
           "</div>" +
           '<div class="flex gap-2">' +
-            '<i data-lucide="quote" class="w-3.5 h-3.5 text-[#6366F1] shrink-0 mt-0.5"></i>' +
+            '<i data-lucide="quote" class="w-3.5 h-3.5 text-[var(--brand)] shrink-0 mt-0.5"></i>' +
             '<p class="text-[11.5px] text-[var(--text-secondary)] italic leading-relaxed">' + a.quote + "</p>" +
           "</div>" +
         "</div>";
       }).join("");
     }
 
-    // ==========================================================================
-    // STAGE 4 · User reviews (filterable by language / play time / date)
-    // ==========================================================================
     function renderReviewFilters() {
       var seen = {};
       (p.userReviews || []).forEach(function (r) { if (r.lang) seen[r.lang] = true; });
@@ -1032,7 +931,7 @@
       var hours = r.hours != null
         ? '<span class="text-[9px] font-extrabold text-[var(--text-secondary)] bg-[var(--bg-card)] border border-[var(--border-soft)] px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1"><i data-lucide="clock" class="w-2.5 h-2.5"></i>' + r.hours.toFixed(1) + " hrs on record</span>"
         : "";
-      return '<div class="card-hover rounded-2xl border border-[var(--border-soft)] bg-[#F7F9FC] p-4 ' + (r.positive ? "border-l-4 border-l-emerald-400" : "border-l-4 border-l-rose-400") + '">' +
+      return '<div class="card-hover rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-4 ' + (r.positive ? "border-l-4 border-l-emerald-400" : "border-l-4 border-l-rose-400") + '">' +
         '<div class="flex items-start gap-3">' +
           '<img src="' + r.avatar + '" alt="" class="w-9 h-9 rounded-full object-cover shrink-0 ring-2 ring-white shadow-sm">' +
           '<div class="flex-1 min-w-0">' +
@@ -1046,7 +945,7 @@
               '<span class="ml-auto text-[10px] text-[var(--text-muted)] font-medium">' + dateStr + "</span>" +
             "</div>" +
             '<p class="text-[12px] text-[var(--text-secondary)] leading-relaxed mt-2">' + r.text + "</p>" +
-            '<button type="button" class="co-helpful flex items-center gap-1.5 mt-2.5 text-[10px] font-bold text-[var(--text-secondary)] hover:text-[#6366F1] transition-colors">' +
+            '<button type="button" class="co-helpful flex items-center gap-1.5 mt-2.5 text-[10px] font-bold text-[var(--text-secondary)] hover:text-[var(--brand)] transition-colors">' +
               '<i data-lucide="thumbs-up" class="w-3 h-3"></i><span>' + r.helpful + "</span> people found this helpful" +
             "</button>" +
           "</div>" +
@@ -1089,17 +988,13 @@
       lucide.createIcons();
     }
 
-    // ==========================================================================
-    // CHECKOUT · Debit card payment flow (dummy data, no real charge)
-    // ==========================================================================
     var coItem = null;
     var coIsPre = false;
     var coTimer = null;
-    var coMethod = "card"; // "card" | "wallet"
+    var coMethod = "card"; 
     var coWallet = "OVO";
 
     function renderQris() {
-      // deterministic pseudo-random QR-like grid (21x21) with corner finder patterns
       var n = 21, seed = 42, grid = [];
       function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
       for (var r = 0; r < n; r++) { grid[r] = []; for (var c = 0; c < n; c++) grid[r][c] = rnd() > 0.5 ? 1 : 0; }
@@ -1151,7 +1046,6 @@
       coIsPre = isPre;
       coItem = item;
       $g("co-img").src = item.image;
-      $g("co-name").textContent = item.name;
       $g("co-meta").textContent = item.meta;
       $g("co-price").textContent = fmt(item.price);
       $g("co-pay-amount").textContent = fmt(item.price);
@@ -1193,7 +1087,6 @@
       updateWalletUI();
       renderQris();
 
-      // reset progress bar
       $g("co-progress-bar").style.width = "0%";
 
       $g("checkout-overlay").classList.remove("hidden");
@@ -1300,7 +1193,6 @@
       $g("co-error").classList.add("hidden");
       $g("co-processing").classList.remove("hidden");
 
-      // progress bar
       var bar = $g("co-progress-bar");
       setTimeout(function () { bar.style.width = "45%"; }, 150);
       setTimeout(function () { bar.style.width = "85%"; }, 1300);
