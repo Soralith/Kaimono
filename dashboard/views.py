@@ -1,3 +1,4 @@
+import datetime
 import json
 import math
 import os
@@ -16,7 +17,7 @@ from collections import defaultdict
 from accounts.models import User
 from .models import (
     WishlistItem, UserWishlistItem, LibraryGame, ShopProduct,
-    GameSubmission,
+    GameSubmission, GameReview,
     CommunityStory, CommunityChannel, CommunityGame, CommunityPost,
     PostImage, PostTag, PostReaction, Poll, PollOption, PollVote,
     CommunityComment,
@@ -132,6 +133,163 @@ def shop(request):
     })
 
 
+def _enrich_product_reviews(data):
+    """Ensure every product has reviews, features, requirements, etc.
+
+    Products from the hardcoded products.js (ids 1-12) get enriched client-side
+    via the EXTRA map. This server-side helper fills in the same fields for
+    products that were added through the admin panel or developer submissions
+    so the game_detail page always has reviews to display.
+    """
+    import random as _random
+
+    # Don't overwrite data that already exists (e.g. from EXTRA enrichment).
+    if data.get('userReviews'):
+        return data
+
+    pid = data.get('id', 0)
+    rng = _random.Random(pid)  # deterministic per product
+
+    name = data.get('name', 'this game')
+    category = data.get('category', 'games')
+    is_game = category == 'games'
+
+    # -- Review authors pool --
+    authors = [
+        ('gamer_pro', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80'),
+        ('pixel_ninja', 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=80&q=80'),
+        ('cosmic_rider', 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=80&q=80'),
+        ('nova_star', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=80&q=80'),
+        ('zen_player', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80'),
+        ('arcadia_x', 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=80&q=80'),
+        ('blitz_runner', 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=80&q=80'),
+        ('echo_fox', 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=80&q=80'),
+        ('drift_wave', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=80&q=80'),
+        ('solar_knight', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80'),
+    ]
+
+    # -- Positive review templates --
+    pos_templates = [
+        "Absolutely loving {name}! The gameplay is smooth and the experience has been fantastic.",
+        "Picked up {name} on a whim and couldn't put it down. Highly recommend to anyone.",
+        "One of the best {cat} experiences I've had in a long time. {name} delivers on every front.",
+        "Bought {name} for a friend and they haven't stopped playing. Great value.",
+        "The quality of {name} really surprised me. Way above my expectations.",
+        "{name} has become one of my favorites. Great attention to detail and polish.",
+        "Can't say enough good things about {name}. It's well worth the price.",
+        "Finally got around to trying {name} — wish I had bought it sooner!",
+    ]
+
+    # -- Negative review templates --
+    neg_templates = [
+        "{name} has potential but the current state needs work. Waiting for patches.",
+        "Was excited for {name} but it didn't quite hit the mark for me. Still decent though.",
+        "{name} is okay — not bad, not amazing. It depends on what you're looking for.",
+        "I wanted to love {name} more than I did. Some design choices held it back.",
+        "Price feels a bit high for what {name} offers right now. Maybe wait for a sale.",
+    ]
+
+    langs = ['en', 'en', 'en', 'ja', 'es', 'de', 'fr', 'zh']
+    num_reviews = rng.randint(4, 8)
+    reviews = []
+    for i in range(num_reviews):
+        author_name, author_avatar = rng.choice(authors)
+        positive = rng.random() < (0.75 if is_game else 0.8)
+        templates = pos_templates if positive else neg_templates
+        text = rng.choice(templates).format(name=name, cat=category)
+        hours = round(rng.uniform(0.5, 200.0), 1) if is_game else None
+        days_ago = rng.randint(1, 90)
+        review_date = (datetime.date.today() - datetime.timedelta(days=days_ago)).isoformat()
+        reviews.append({
+            'author': author_name,
+            'avatar': author_avatar,
+            'date': review_date,
+            'hours': hours,
+            'lang': rng.choice(langs),
+            'positive': positive,
+            'text': text,
+            'helpful': rng.randint(5, 150),
+        })
+    data['userReviews'] = reviews
+
+    # reviewSummary
+    if not data.get('reviewSummary'):
+        pos_count = sum(1 for r in reviews if r['positive'])
+        pct = pos_count / len(reviews) * 100 if reviews else 50
+        if pct >= 95:
+            data['reviewSummary'] = 'Overwhelmingly Positive'
+        elif pct >= 80:
+            data['reviewSummary'] = 'Very Positive'
+        elif pct >= 60:
+            data['reviewSummary'] = 'Positive'
+        elif pct >= 40:
+            data['reviewSummary'] = 'Mixed'
+        else:
+            data['reviewSummary'] = 'Mostly Negative'
+
+    # metacritic
+    if not data.get('metacritic'):
+        data['metacritic'] = rng.randint(65, 96)
+
+    # accolades
+    if not data.get('accolades'):
+        outlets = [
+            ('IGN', '8.5'), ('GameSpot', '8/10'), ('PC Gamer', '85'),
+            ('Eurogamer', 'Recommended'), ('Famitsu', '35/40'),
+        ]
+        chosen = rng.sample(outlets, k=min(3, len(outlets)))
+        data['accolades'] = [
+            {'outlet': o, 'score': s, 'quote': 'A solid experience that delivers on its promises.'}
+            for o, s in chosen
+        ]
+
+    # about
+    if not data.get('about'):
+        desc = data.get('description', '') or f'{name} is a compelling {category} experience.'
+        data['about'] = [desc]
+
+    # keyFeatures
+    if not data.get('keyFeatures'):
+        tags = data.get('tags', [])
+        if tags:
+            data['keyFeatures'] = [f'{t} experience' for t in tags[:5]]
+        else:
+            data['keyFeatures'] = ['Engaging gameplay', 'High-quality production', 'Great value for money']
+
+    # features (Steam-style)
+    if not data.get('features'):
+        if is_game:
+            data['features'] = rng.sample(
+                ['achievements', 'cloud', 'controller', 'singleplayer', 'multiplayer'],
+                k=rng.randint(2, 4)
+            )
+        else:
+            data['features'] = []
+
+    # requirements (games only)
+    if is_game and not data.get('requirements'):
+        data['requirements'] = {
+            'minimum': {
+                'os': 'Windows 10 64-bit',
+                'cpu': 'Intel Core i5 / AMD Ryzen 5',
+                'ram': '8 GB RAM',
+                'gpu': 'NVIDIA GTX 1060 / AMD RX 580',
+                'directx': 'DirectX 12',
+                'storage': '50 GB available space',
+            },
+            'recommended': {
+                'os': 'Windows 11 64-bit',
+                'cpu': 'Intel Core i7 / AMD Ryzen 7',
+                'ram': '16 GB RAM',
+                'gpu': 'NVIDIA RTX 3060 / AMD RX 6600',
+                'directx': 'DirectX 12',
+                'storage': '50 GB SSD',
+            },
+        }
+
+    return data
+
+
 def game_detail(request, product_id):
     product = None
     try:
@@ -140,6 +298,8 @@ def game_detail(request, product_id):
             product = candidate.data
     except (ShopProduct.DoesNotExist, ValueError):
         product = None
+    if product:
+        product = _enrich_product_reviews(product)
     return render(request, 'dashboard/pages/game_detail.html', {
         'product_id': product_id,
         'product_json': json.dumps([product]) if product else '[]',
@@ -1125,6 +1285,76 @@ def api_wishlist_list(request):
         .values_list('product_id', flat=True)
     )
     return JsonResponse({'product_ids': ids, 'count': len(ids)})
+
+
+# ── AJAX: Game Reviews ─────────────────────────────────────────────
+
+@require_GET
+def api_game_reviews(request):
+    """Return user-submitted reviews for a product, plus the server-enriched reviews."""
+    product_id = request.GET.get('product_id')
+    if not product_id:
+        return JsonResponse({'error': 'product_id required'}, status=400)
+    try:
+        product = ShopProduct.objects.get(id=int(product_id))
+    except (ShopProduct.DoesNotExist, ValueError):
+        return JsonResponse({'error': 'Product not found'}, status=404)
+
+    # Server-enriched reviews from product data (seed data)
+    seed_reviews = (product.data or {}).get('userReviews', [])
+    # User-submitted reviews from DB
+    db_reviews = [r.to_dict() for r in product.reviews.all()]
+    # Combine: seed first, then user reviews (newest first)
+    all_reviews = seed_reviews + db_reviews
+    pos = sum(1 for r in all_reviews if r.get('positive'))
+    pct = round(pos / len(all_reviews) * 100) if all_reviews else 0
+    return JsonResponse({
+        'reviews': all_reviews,
+        'total': len(all_reviews),
+        'positive_pct': pct,
+        'summary': (product.data or {}).get('reviewSummary', ''),
+    })
+
+
+@require_POST
+def api_game_review_submit(request):
+    """Submit a user review for a product."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Login required'}, status=401)
+    try:
+        body = json.loads(request.body)
+    except (ValueError, TypeError):
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    product_id = body.get('product_id')
+    text = (body.get('text') or '').strip()
+    positive = body.get('positive')
+    lang = (body.get('lang') or 'en').strip()[:10]
+    hours = body.get('hours')
+
+    if not product_id:
+        return JsonResponse({'error': 'product_id required'}, status=400)
+    if not text:
+        return JsonResponse({'error': 'Review text is required'}, status=400)
+    if positive is None:
+        return JsonResponse({'error': 'Verdict (positive) is required'}, status=400)
+
+    try:
+        product = ShopProduct.objects.get(id=int(product_id))
+    except (ShopProduct.DoesNotExist, ValueError):
+        return JsonResponse({'error': 'Product not found'}, status=404)
+
+    review = GameReview.objects.create(
+        product=product,
+        author_name=request.user.display_name or request.user.username,
+        author_avatar=request.user.avatar_url or '',
+        positive=bool(positive),
+        text=text,
+        lang=lang,
+        hours=float(hours) if hours is not None else None,
+    )
+    return JsonResponse({'success': True, 'review': review.to_dict()})
+
 
 def library(request):
     if request.user.is_authenticated:

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     WishlistItem, UserWishlistItem, LibraryGame, ShopProduct,
-    GameSubmission,
+    GameSubmission, GameReview,
     CommunityStory, CommunityChannel, CommunityGame,
     CommunityPost, PostImage, PostTag, PostReaction,
     Poll, PollOption, CommunityMember, UserFollowedGame,
@@ -102,3 +102,10 @@ class PollAdmin(admin.ModelAdmin):
 @admin.register(PollOption)
 class PollOptionAdmin(admin.ModelAdmin):
     list_display = ("label", "poll", "percentage", "is_selected", "order")
+
+
+@admin.register(GameReview)
+class GameReviewAdmin(admin.ModelAdmin):
+    list_display = ("author_name", "product", "positive", "lang", "helpful", "created_at")
+    list_filter = ("positive", "lang")
+    search_fields = ("author_name", "text")

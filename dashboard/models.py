@@ -425,3 +425,39 @@ class CommunityMember(models.Model):
 
     def __str__(self):
         return self.display_name or self.username
+
+
+class GameReview(models.Model):
+    """User-submitted review for a shop product (game detail page)."""
+    product = models.ForeignKey(
+        'ShopProduct',
+        on_delete=models.CASCADE,
+        related_name='reviews',
+    )
+    author_name = models.CharField(max_length=80)
+    author_avatar = models.URLField(blank=True)
+    positive = models.BooleanField(default=True)
+    text = models.TextField(max_length=2000)
+    lang = models.CharField(max_length=10, default='en')
+    hours = models.FloatField(null=True, blank=True, help_text='Play hours (games only)')
+    helpful = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Review by {self.author_name} on {self.product}"
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'author': self.author_name,
+            'avatar': self.author_avatar,
+            'date': self.created_at.strftime('%Y-%m-%d'),
+            'hours': self.hours,
+            'lang': self.lang,
+            'positive': self.positive,
+            'text': self.text,
+            'helpful': self.helpful,
+        }

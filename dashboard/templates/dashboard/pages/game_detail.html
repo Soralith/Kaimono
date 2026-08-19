@@ -190,8 +190,6 @@
     /* ===== Game detail page polish ===== */
     .card-hover { transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease; }
     .card-hover:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -16px var(--shadow-color); }
-    .req-row { transition: background 150ms ease; }
-    .req-row:hover { background: var(--bg-surface); }
 
     /* Media gallery full width */
     .media-full { width: 100%; }
@@ -278,40 +276,6 @@
                </div>
             </div>
 
-            <!-- FEATURES & ACCOLADES -->
-            <div class="grid md:grid-cols-2 gap-6" id="gd-features-wrap">
-               <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6">
-                  <h3 class="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)] mb-4">Supported Features</h3>
-                  <div id="gd-features" class="grid grid-cols-1 gap-2"></div>
-               </div>
-               <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6" id="gd-accolade-wrap">
-                  <h3 class="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)] mb-4">Press & Accolades</h3>
-                  <div id="gd-metacritic" class="mb-3"></div>
-                  <div id="gd-accolades" class="flex flex-col gap-3"></div>
-               </div>
-            </div>
-
-            <!-- SYSTEM REQUIREMENTS -->
-            <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6" id="gd-req-wrap">
-               <h3 class="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2 mb-5">
-                 <i data-lucide="cpu" class="w-5 h-5 text-[var(--brand)]"></i> System Requirements
-               </h3>
-               <div class="grid md:grid-cols-2 gap-8">
-                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-3 flex items-center gap-1.5">
-                       <span class="w-2 h-2 rounded-full bg-[var(--brand)]"></span> Minimum
-                    </h4>
-                    <table class="w-full text-sm border-collapse"><tbody id="gd-req-minimum"></tbody></table>
-                 </div>
-                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-3 flex items-center gap-1.5">
-                       <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Recommended
-                    </h4>
-                    <table class="w-full text-sm border-collapse"><tbody id="gd-req-recommended"></tbody></table>
-                 </div>
-               </div>
-            </div>
-
             <!-- REVIEWS -->
             <div class="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-soft)] shadow-sm p-6 animate-fadeInUp">
                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -326,6 +290,42 @@
                  <select id="gd-filter-time" class="bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-lg px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)]"></select>
                  <select id="gd-filter-date" class="bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-lg px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)]"></select>
                  <span id="gd-review-count" class="text-xs font-semibold text-[var(--text-muted)] ml-auto self-center"></span>
+               </div>
+
+               <!-- WRITE A REVIEW FORM -->
+               <div id="gd-review-form-wrap" class="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-soft)] p-5 mb-6">
+                 <div class="flex items-center gap-2 mb-4">
+                   <i data-lucide="pencil-line" class="w-4 h-4 text-[var(--brand)]"></i>
+                   <h4 class="text-sm font-bold text-[var(--text-primary)]">Write a Review</h4>
+                 </div>
+                 <div id="gd-review-login-note" class="hidden text-center py-4">
+                   <p class="text-xs text-[var(--text-muted)]">Please <a href="/login/" class="text-[var(--brand)] font-bold hover:underline">log in</a> to write a review.</p>
+                 </div>
+                 <form id="gd-review-form" class="space-y-4">
+                   <div>
+                     <label class="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Your verdict</label>
+                     <div class="flex gap-3 mt-2">
+                       <button type="button" id="gd-rv-positive" class="gd-rv-verdict flex-1 rounded-xl border-2 border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-xs font-bold flex items-center justify-center gap-2 transition-all hover:border-emerald-400">
+                         <i data-lucide="thumbs-up" class="w-4 h-4"></i> Recommended
+                       </button>
+                       <button type="button" id="gd-rv-negative" class="gd-rv-verdict flex-1 rounded-xl border-2 border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-xs font-bold flex items-center justify-center gap-2 transition-all hover:border-rose-400">
+                         <i data-lucide="thumbs-down" class="w-4 h-4"></i> Not Recommended
+                       </button>
+                     </div>
+                   </div>
+                   <div>
+                     <label class="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Your review</label>
+                     <textarea id="gd-rv-text" rows="3" maxlength="2000" placeholder="What did you like or dislike? What should others know?" class="mt-2 w-full bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)] placeholder:text-[var(--text-muted)] resize-none"></textarea>
+                     <div class="flex justify-between items-center mt-1">
+                       <select id="gd-rv-lang" class="bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-lg px-3 py-1.5 text-[10px] font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--brand)]"></select>
+                       <span class="text-[10px] text-[var(--text-muted)]"><span id="gd-rv-charcount">0</span>/2000</span>
+                     </div>
+                   </div>
+                   <button type="submit" id="gd-rv-submit" class="w-full bg-[var(--brand)] hover:opacity-90 text-[var(--on-brand)] font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all btn-dark" disabled>
+                     <i data-lucide="send" class="w-3.5 h-3.5"></i> Submit Review
+                   </button>
+                   <p id="gd-rv-error" class="hidden text-[11px] font-bold text-rose-500 bg-rose-50 border border-rose-200 rounded-xl px-3.5 py-2.5"></p>
+                 </form>
                </div>
 
                <div id="gd-reviews-list" class="flex flex-col gap-4"></div>
@@ -591,10 +591,6 @@
       stats: { icon: "bar-chart-3", label: "Player Stats" },
       workshop: { icon: "hammer", label: "Workshop Support" }
     };
-    var REQ_ROWS = [
-      ["os", "OS"], ["cpu", "Processor"], ["ram", "Memory"],
-      ["gpu", "Graphics"], ["directx", "DirectX"], ["storage", "Storage"]
-    ];
     var LANG_LABELS = { en: "English", ja: "Japanese", zh: "Simplified Chinese", es: "Spanish", fr: "French", de: "German", ko: "Korean", ru: "Russian" };
     var TIME_FILTERS = [
       { value: "all", label: "Any play time" },
@@ -749,12 +745,11 @@
       });
 
       renderAbout();
-      renderFeatures();
 
-      renderRequirements();
-      renderAccolades();
+      // Fetch reviews from server + render
+      fetchServerReviews();
+      setupReviewForm();
       renderReviewFilters();
-      applyReviews();
       $g("gd-filter-lang").addEventListener("change", applyReviews);
       $g("gd-filter-time").addEventListener("change", applyReviews);
       $g("gd-filter-date").addEventListener("change", applyReviews);
@@ -838,56 +833,108 @@
       }).join("");
     }
 
-    function renderFeatures() {
-      if (!p.features || !p.features.length) { $g("gd-features-wrap").classList.add("hidden"); return; }
-      $g("gd-features").innerHTML = p.features.map(function (k) {
-        var m = FEATURE_META[k] || { icon: "sparkles", label: k };
-        return '<div class="flex items-center gap-2.5 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3 py-3">' +
-               '<i data-lucide="' + m.icon + '" class="w-4 h-4 text-[var(--brand)] shrink-0"></i>' +
-               '<span class="text-[11px] font-bold text-[var(--text-secondary)]">' + m.label + "</span></div>";
-      }).join("");
+    function fetchServerReviews() {
+      var csrfToken = document.getElementById('csrf-token').value;
+      fetch('/api/reviews/?product_id=' + PRODUCT_ID)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.reviews && data.reviews.length) {
+            p.userReviews = data.reviews;
+            p.reviews = data.total;
+            p.reviewSummary = data.summary || p.reviewSummary || '';
+          }
+          renderReviewFilters();
+          applyReviews();
+        })
+        .catch(function() {
+          renderReviewFilters();
+          applyReviews();
+        });
     }
 
-    function renderRequirements() {
-      if (!p.requirements) { $g("gd-req-wrap").classList.add("hidden"); return; }
-      ["minimum", "recommended"].forEach(function (key) {
-        var spec = p.requirements[key] || {};
-        $g("gd-req-" + key).innerHTML = REQ_ROWS.map(function (r) {
-          return '<tr class="req-row border-b border-[var(--border-soft)]/60 last:border-0">' +
-            '<td class="py-2.5 pr-3 text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider whitespace-nowrap align-top">' + r[1] + "</td>" +
-            '<td class="py-2.5 text-[11.5px] font-semibold text-[var(--text-secondary)] leading-snug">' + (spec[r[0]] || "—") + "</td>" +
-          "</tr>";
-        }).join("");
-      });
-    }
-
-    function renderAccolades() {
-      var acc = p.accolades || [];
-      if (!acc.length && !p.metacritic) { $g("gd-accolade-wrap").classList.add("hidden"); return; }
-      if (p.metacritic) {
-        $g("gd-metacritic").innerHTML =
-          '<div class="flex items-center gap-2.5 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-xl px-3.5 py-2.5">' +
-            '<span class="w-10 h-10 rounded-full bg-[var(--brand)] text-[var(--on-brand)] flex items-center justify-center text-sm font-extrabold">' + p.metacritic + "</span>" +
-            '<div><p class="text-[9px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Metacritic</p>' +
-            '<p class="text-[10px] font-bold text-[var(--text-secondary)]">' + (p.metacritic >= 90 ? "Must-Play" : "Generally Favorable") + "</p></div>" +
-          "</div>";
+    function setupReviewForm() {
+      var isLoggedIn = {{ request.user.is_authenticated|yesno:'true,false' }};
+      if (!isLoggedIn) {
+        $g('gd-review-login-note').classList.remove('hidden');
+        $g('gd-review-form').classList.add('hidden');
+        return;
       }
-      $g("gd-accolades").innerHTML = acc.map(function (a) {
-        var num = parseFloat(a.score);
-        var chip = (!isNaN(num) && num >= 85) || /^10$/.test(a.score)
-          ? "bg-emerald-50 text-emerald-600"
-          : "bg-[var(--brand-soft)] text-[var(--brand)]";
-        return '<div class="card-hover rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-4 flex flex-col">' +
-          '<div class="flex items-center justify-between mb-2.5">' +
-            '<span class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">' + a.outlet + "</span>" +
-            '<span class="' + chip + ' text-[10px] font-extrabold px-2 py-0.5 rounded-full">' + a.score + "</span>" +
-          "</div>" +
-          '<div class="flex gap-2">' +
-            '<i data-lucide="quote" class="w-3.5 h-3.5 text-[var(--brand)] shrink-0 mt-0.5"></i>' +
-            '<p class="text-[11.5px] text-[var(--text-secondary)] italic leading-relaxed">' + a.quote + "</p>" +
-          "</div>" +
-        "</div>";
-      }).join("");
+
+      var verdictVal = null; // true=positive, false=negative
+
+      $g('gd-rv-positive').addEventListener('click', function() {
+        verdictVal = true;
+        $g('gd-rv-positive').classList.add('border-emerald-400', 'bg-emerald-50', 'text-emerald-700');
+        $g('gd-rv-negative').classList.remove('border-rose-400', 'bg-rose-50', 'text-rose-700');
+        $g('gd-rv-submit').disabled = !$g('gd-rv-text').value.trim();
+      });
+      $g('gd-rv-negative').addEventListener('click', function() {
+        verdictVal = false;
+        $g('gd-rv-negative').classList.add('border-rose-400', 'bg-rose-50', 'text-rose-700');
+        $g('gd-rv-positive').classList.remove('border-emerald-400', 'bg-emerald-50', 'text-emerald-700');
+        $g('gd-rv-submit').disabled = !$g('gd-rv-text').value.trim();
+      });
+
+      $g('gd-rv-text').addEventListener('input', function() {
+        $g('gd-rv-charcount').textContent = this.value.length;
+        $g('gd-rv-submit').disabled = !verdictVal || !this.value.trim();
+      });
+
+      // Populate language dropdown
+      var langOpts = Object.keys(LANG_LABELS).map(function(k) {
+        return '<option value="' + k + '">' + LANG_LABELS[k] + '</option>';
+      }).join('');
+      $g('gd-rv-lang').innerHTML = langOpts;
+
+      $g('gd-review-form').addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        if (!verdictVal || !$g('gd-rv-text').value.trim()) return;
+        var submitBtn = $g('gd-rv-submit');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Submitting…';
+
+        var csrfToken = document.getElementById('csrf-token').value;
+        fetch('/api/reviews/submit/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+          body: JSON.stringify({
+            product_id: PRODUCT_ID,
+            text: $g('gd-rv-text').value.trim(),
+            positive: verdictVal,
+            lang: $g('gd-rv-lang').value,
+          }),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success && data.review) {
+            // Prepend the new review
+            if (!p.userReviews) p.userReviews = [];
+            p.userReviews.unshift(data.review);
+            p.reviews = (p.reviews || 0) + 1;
+            renderReviewFilters();
+            applyReviews();
+            // Reset form
+            $g('gd-rv-text').value = '';
+            $g('gd-rv-charcount').textContent = '0';
+            verdictVal = null;
+            $g('gd-rv-positive').classList.remove('border-emerald-400', 'bg-emerald-50', 'text-emerald-700');
+            $g('gd-rv-negative').classList.remove('border-rose-400', 'bg-rose-50', 'text-rose-700');
+            openToast('Review submitted! Thanks for your feedback.', 'check-circle');
+          } else {
+            $g('gd-rv-error').textContent = data.error || 'Failed to submit review.';
+            $g('gd-rv-error').classList.remove('hidden');
+          }
+        })
+        .catch(function() {
+          $g('gd-rv-error').textContent = 'Network error. Please try again.';
+          $g('gd-rv-error').classList.remove('hidden');
+        })
+        .finally(function() {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i data-lucide="send" class="w-3.5 h-3.5"></i> Submit Review';
+          lucide.createIcons();
+        });
+      });
     }
 
     function renderReviewFilters() {

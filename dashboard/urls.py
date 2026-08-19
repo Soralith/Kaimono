@@ -34,4 +34,6 @@ urlpatterns = [
     path('api/shop/checkout/', views.checkout_complete, name='checkout_complete'),
     path('api/wishlist/toggle/', views.api_wishlist_toggle, name='api_wishlist_toggle'),
     path('api/wishlist/list/', views.api_wishlist_list, name='api_wishlist_list'),
+    path('api/reviews/', views.api_game_reviews, name='api_game_reviews'),
+    path('api/reviews/submit/', views.api_game_review_submit, name='api_game_review_submit'),
 ]
