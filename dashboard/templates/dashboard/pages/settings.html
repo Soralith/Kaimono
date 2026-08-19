@@ -248,10 +248,18 @@
       background: var(--border-soft);
     }
 
-    /* FIX: Active session "Current" pulse dot */
-    .pulse-dot-brand { 
+    /* FIX: Active session "Current" pulse dot */    .pulse-dot-brand { 
       animation: pulse 2s ease-in-out infinite; 
-      background-color: currentColor;
+      background-color: currentColor; 
+    }
+
+    /* Search highlight flash */
+    .search-highlight {
+      animation: searchFlash 1.8s ease-out;
+    }
+    @keyframes searchFlash {
+      0%   { box-shadow: 0 0 0 3px var(--brand); background-color: var(--brand-soft); }
+      100% { box-shadow: none; background-color: transparent; }
     }
   </style>
 </head>
@@ -713,22 +721,58 @@
       });
     });
 
-    // ===== SETTINGS SEARCH =====
+    // ===== SETTINGS SEARCH (deep: tabs + inner rows) =====
     const settingsSearch = document.querySelector('.themed-input[placeholder="Search settings..."]');
     if (settingsSearch) {
       settingsSearch.addEventListener('input', function () {
         const q = this.value.toLowerCase().trim();
+
+        // 1. Filter sidebar tabs by name / description
         setTabs.forEach(tab => {
           const name = (tab.querySelector('.text-xs.font-bold') || {}).textContent || '';
           const desc = (tab.querySelector('.set-tab-desc') || {}).textContent || '';
           const match = !q || name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
           tab.style.display = match ? '' : 'none';
         });
-        // If the active tab gets hidden, show the first visible one
-        const activeTab = document.querySelector('.set-tab.active');
-        if (activeTab && activeTab.style.display === 'none') {
-          const firstVisible = document.querySelector('.set-tab:not([style*="display: none"])');
-          if (firstVisible) firstVisible.click();
+
+        // 2. Search INSIDE every panel for matching setting rows / headings
+        let bestPanel = null;
+        let bestRow = null;
+
+        setPanels.forEach(panel => {
+          panel.querySelectorAll('.setting-row, .surface-card > h3, .surface-card > div > h3').forEach(el => {
+            el.classList.remove('search-highlight');
+          });
+          if (!q) return;
+
+          const rows = panel.querySelectorAll('.setting-row');
+          rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            if (text.includes(q)) {
+              if (!bestPanel) { bestPanel = panel; bestRow = row; }
+            }
+          });
+        });
+
+        // 3. Auto-switch to the panel that has the first inner match
+        if (bestPanel) {
+          const targetPanel = bestPanel.dataset.panel;
+          setTabs.forEach(t => t.classList.remove('active'));
+          setPanels.forEach(p => p.classList.toggle('hidden', p.dataset.panel !== targetPanel));
+          const matchingTab = document.querySelector('.set-tab[data-set="' + targetPanel + '"]');
+          if (matchingTab) matchingTab.classList.add('active');
+          // Flash the matching row
+          if (bestRow) {
+            bestRow.classList.add('search-highlight');
+            bestRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } else if (q) {
+          // No inner match — fall back to showing the first visible tab
+          const activeTab = document.querySelector('.set-tab.active');
+          if (activeTab && activeTab.style.display === 'none') {
+            const firstVisible = document.querySelector('.set-tab:not([style*="display: none"])');
+            if (firstVisible) firstVisible.click();
+          }
         }
       });
     }
