@@ -713,6 +713,26 @@
       });
     });
 
+    // ===== SETTINGS SEARCH =====
+    const settingsSearch = document.querySelector('.themed-input[placeholder="Search settings..."]');
+    if (settingsSearch) {
+      settingsSearch.addEventListener('input', function () {
+        const q = this.value.toLowerCase().trim();
+        setTabs.forEach(tab => {
+          const name = (tab.querySelector('.text-xs.font-bold') || {}).textContent || '';
+          const desc = (tab.querySelector('.set-tab-desc') || {}).textContent || '';
+          const match = !q || name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
+          tab.style.display = match ? '' : 'none';
+        });
+        // If the active tab gets hidden, show the first visible one
+        const activeTab = document.querySelector('.set-tab.active');
+        if (activeTab && activeTab.style.display === 'none') {
+          const firstVisible = document.querySelector('.set-tab:not([style*="display: none"])');
+          if (firstVisible) firstVisible.click();
+        }
+      });
+    }
+
     // ===== THEME SWATCH =====
     function selectTheme(value, btn) {
       document.querySelectorAll('.theme-swatch').forEach(function (s) {
