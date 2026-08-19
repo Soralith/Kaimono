@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'kaimono.context_processors.site_images',
             ],
         },
     },
@@ -108,6 +109,9 @@ SUPABASE_S3_BUCKET = env('S3_BUCKET', default='accounts')
 SUPABASE_S3_ACCESS_KEY_ID = env('S3_ACCESS_KEY_ID', default='')
 SUPABASE_S3_SECRET_ACCESS_KEY = env('S3_SECRET_ACCESS_KEY', default='')
 SUPABASE_S3_ENDPOINT = f'{SUPABASE_URL}/storage/v1/s3'
+
+# Public URL prefix for site images stored in Supabase Storage
+SUPABASE_SITE_IMAGES_URL = f'{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_S3_BUCKET}/site'
 
 # Google Gemini API
 GEMINI_API_KEY = env('GEMINIAPI', default='')
