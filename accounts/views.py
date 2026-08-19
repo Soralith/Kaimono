@@ -86,7 +86,17 @@ def profile_view(request):
         messages.success(request, 'Profile saved.')
         return redirect('profile')
 
-    return render(request, 'dashboard/pages/profile.html', {'form': form})
+    from dashboard.models import UserWishlistItem, LibraryGame
+    wishlist_items = UserWishlistItem.objects.filter(user=request.user).select_related('product')
+    library_count = LibraryGame.objects.filter(user=request.user).count()
+    wishlist_count = wishlist_items.count()
+
+    return render(request, 'dashboard/pages/profile.html', {
+        'form': form,
+        'wishlist_items': wishlist_items,
+        'library_count': library_count,
+        'wishlist_count': wishlist_count,
+    })
 
 
 @never_cache
