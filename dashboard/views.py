@@ -106,22 +106,34 @@ def _load_products():
 
 
 def dashboard(request):
-    products = _load_products()
+    products = [p.data for p in ShopProduct.objects.order_by('id') if p.data.get('active', True)]
     featured = [p for p in products if p.get('category') == 'games'][:3]
-    discounts = sorted(
-        (p for p in products if p.get('originalPrice')),
-        key=lambda p: (p.get('originalPrice') or 0) - (p.get('price') or 0),
-        reverse=True,
-    )[:4]
+    # New Releases: 4 most recently added games
+    new_releases = [p for p in products if p.get('category') == 'games'][-4:][::-1]
     game_of_day = next(
         (p for p in products if p.get('category') == 'games' and p.get('originalPrice')),
         (products[0] if products else None),
     )
+    # Total spend: sum of prices of games in user's library
+    total_spend = 0.0
+    game_count = 0
+    if request.user.is_authenticated:
+        library_titles = list(
+            request.user.library_games.values_list('title', flat=True)
+        )
+        if library_titles:
+            prices = ShopProduct.objects.filter(
+                name__in=library_titles
+            ).values_list('price', flat=True)
+            total_spend = sum(float(p) for p in prices if p)
+            game_count = len(library_titles)
     context = {
         'today': timezone.now(),
         'featured': featured,
-        'discounts': discounts,
+        'new_releases': new_releases,
         'game_of_day': game_of_day,
+        'total_spend': total_spend,
+        'game_count': game_count,
     }
     return render(request, 'dashboard/pages/dashboard.html', context)
 
