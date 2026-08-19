@@ -3,6 +3,7 @@ import json
 import math
 import os
 import re
+import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -1396,3 +1397,189 @@ def library(request):
         "now_playing": now_playing,
     }
     return render(request, 'dashboard/pages/library.html', ctx)
+
+
+# ── AI Companion ───────────────────────────────────────────────────
+
+@login_required
+def ai_companion(request):
+    """AI Companion chat page."""
+    return render(request, 'dashboard/pages/ai_companion.html')
+
+
+def _build_game_context():
+    """Build context about all games in the store for the AI."""
+    products = ShopProduct.objects.filter(data__category='games').order_by('id')
+    games_info = []
+    for p in products:
+        d = p.data or {}
+        games_info.append({
+            'id': p.id,
+            'name': p.name,
+            'brand': d.get('brand', ''),
+            'type': d.get('type', ''),
+            'price': float(p.price) if p.price else 0,
+            'originalPrice': float(p.original_price) if p.original_price else None,
+            'description': d.get('description', ''),
+            'tags': d.get('tags', []),
+            'rating': d.get('rating', 0),
+            'reviews': d.get('reviews', 0),
+            'stock': d.get('stock', ''),
+            'badges': d.get('badges', []),
+            'developer': d.get('developer', ''),
+            'publisher': d.get('publisher', ''),
+            'releaseDate': d.get('releaseDate', ''),
+            'features': d.get('features', []),
+            'keyFeatures': d.get('keyFeatures', []),
+        })
+    return games_info
+
+
+def _build_user_context(user):
+    """Build context about the current user's library and wishlist."""
+    library_games = list(user.library_games.values('title', 'studio', 'status'))
+    wishlist_products = list(
+        UserWishlistItem.objects.filter(user=user)
+        .select_related('product')
+        .values('product__name', 'product__price')
+    )
+    return {
+        'username': user.display_name or user.username,
+        'library_count': len(library_games),
+        'library_games': library_games,
+        'wishlist_count': len(wishlist_products),
+        'wishlist': [{'name': w['product__name'], 'price': float(w['product__price']) if w['product__price'] else 0} for w in wishlist_products],
+    }
+
+
+@require_POST
+def ai_companion_chat(request):
+    """Handle chat messages to the AI companion."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Login required'}, status=401)
+
+    try:
+        body = json.loads(request.body)
+    except (ValueError, TypeError):
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    user_message = (body.get('message') or '').strip()
+    if not user_message:
+        return JsonResponse({'error': 'Message is required'}, status=400)
+
+    # Get conversation history (stored in session)
+    if 'ai_chat_history' not in request.session:
+        request.session['ai_chat_history'] = []
+    chat_history = request.session['ai_chat_history']
+
+    # Build context from database
+    games_context = _build_game_context()
+    user_context = _build_user_context(request.user)
+
+    # System prompt with MCP database access knowledge
+    system_prompt = f"""You are Kaimono's AI Companion — a friendly, knowledgeable gaming assistant.
+
+You have DIRECT ACCESS to the Kaimono store database. You can:
+- Browse and recommend all games in the store
+- Explain game features, tags, genres, and requirements
+- Compare prices and find deals
+- Look at the user's library and wishlist to give personalized recommendations
+- Answer questions about any game in the store
+
+## Kaimono Store Database (Live)
+Here is the current data from the database:
+
+### All Games Available:
+{json.dumps(games_context, indent=2)}
+
+### Current User Info:
+- Username: {user_context['username']}
+- Library ({user_context['library_count']} games): {json.dumps(user_context['library_games'])}
+- Wishlist ({user_context['wishlist_count']} items): {json.dumps(user_context['wishlist'])}
+
+## Your Personality:
+- Be enthusiastic about gaming but not over-the-top
+- Give honest, helpful recommendations
+- Use casual, friendly language (like a gaming buddy)
+- When recommending, explain WHY you think it's a good fit
+- If asked about a game not in the store, say so honestly
+- You can use markdown for formatting (bold, lists, etc.)
+- Keep responses concise but informative
+- Use emojis sparingly but naturally
+- If the user seems lost, guide them to explore the store
+
+Always respond in a helpful, conversational way. You're their personal gaming assistant!"""
+
+    # Build messages for API
+    messages_payload = [{'role': 'system', 'content': system_prompt}]
+
+    # Add chat history (last 10 messages for context)
+    for msg in chat_history[-10:]:
+        messages_payload.append(msg)
+
+    # Add current user message
+    messages_payload.append({'role': 'user', 'content': user_message})
+
+    # Call Gemini API
+    api_key = settings.GEMINI_API_KEY
+    if not api_key:
+        return JsonResponse({'error': 'AI API not configured'}, status=500)
+
+    # Convert messages to Gemini format
+    # Gemini uses 'contents' with role/user/model and 'parts' arrays
+    contents = []
+    for msg in messages_payload:
+        role = 'user' if msg['role'] == 'user' else 'model'
+        contents.append({
+            'role': role,
+            'parts': [{'text': msg['content']}],
+        })
+
+    try:
+        response = requests.post(
+            f'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}',
+            headers={
+                'Content-Type': 'application/json',
+            },
+            json={
+                'contents': contents,
+                'generationConfig': {
+                    'temperature': 0.7,
+                    'maxOutputTokens': 1024,
+                },
+            },
+            timeout=30,
+        )
+        response.raise_for_status()
+        result = response.json()
+        ai_reply = result['candidates'][0]['content']['parts'][0]['text']
+    except requests.exceptions.Timeout:
+        return JsonResponse({'error': 'AI is thinking too hard... try again!'}, status=504)
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({'error': f'AI service error: {str(e)}'}, status=502)
+    except (KeyError, IndexError):
+        return JsonResponse({'error': 'Invalid AI response format'}, status=500)
+
+    # Save to chat history
+    chat_history.append({'role': 'user', 'content': user_message})
+    chat_history.append({'role': 'assistant', 'content': ai_reply})
+
+    # Keep only last 20 messages
+    if len(chat_history) > 20:
+        request.session['ai_chat_history'] = chat_history[-20:]
+    else:
+        request.session['ai_chat_history'] = chat_history
+
+    return JsonResponse({
+        'success': True,
+        'reply': ai_reply,
+    })
+
+
+@require_POST
+def ai_companion_clear(request):
+    """Clear AI chat history."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Login required'}, status=401)
+    request.session['ai_chat_history'] = []
+    return JsonResponse({'success': True})

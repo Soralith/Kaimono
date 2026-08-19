@@ -18,6 +18,7 @@ urlpatterns = [
     path('wishlist/', views.wishlist, name='wishlist'),
     path('library/', views.library, name='library'),
     path('settings/', login_required(auth.settings_view), name='settings'),
+    path('settings/ai-companion/', login_required(views.ai_companion), name='ai_companion'),
     path('settings/delete-account/', login_required(auth.delete_account_view), name='delete_account'),
     path('settings/admin/', views.admin_panel, name='admin_panel'),
     path('settings/developer/', views.developer_panel, name='developer_panel'),
@@ -37,4 +38,6 @@ urlpatterns = [
     path('api/wishlist/list/', views.api_wishlist_list, name='api_wishlist_list'),
     path('api/reviews/', views.api_game_reviews, name='api_game_reviews'),
     path('api/reviews/submit/', views.api_game_review_submit, name='api_game_review_submit'),
+    path('api/ai/chat/', views.ai_companion_chat, name='ai_companion_chat'),
+    path('api/ai/clear/', views.ai_companion_clear, name='ai_companion_clear'),
 ]

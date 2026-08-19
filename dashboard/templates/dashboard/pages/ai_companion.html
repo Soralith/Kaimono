@@ -1,0 +1,429 @@
+{% load static %}
+{% static 'dashboard/images/accsetup.jpg' as default_avatar %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaimono AI Companion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #E2E7EE;
+      --bg-surface: #F7F9FC;
+      --bg-card: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border-color: #ffffff;
+      --border-soft: #e2e8f0;
+      --brand: #323446;
+      --on-brand: #ffffff;
+      --brand-soft: rgba(50, 52, 70, 0.12);
+      --hover-bg: rgba(255, 255, 255, 0.7);
+      --shadow-color: rgba(50, 52, 70, 0.1);
+    }
+    [data-theme="midnight"] {
+      --bg-primary: #0f172a;
+      --bg-surface: #1e293b;
+      --bg-card: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --border-soft: #475569;
+      --brand: #64748b;
+      --on-brand: #ffffff;
+      --brand-soft: rgba(148, 163, 184, 0.15);
+      --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+    }
+    [data-theme="paper"] {
+      --bg-primary: #F5F1E8;
+      --bg-surface: #FAF7F0;
+      --bg-card: #ffffff;
+      --text-primary: #1c1917;
+      --text-secondary: #57534e;
+      --text-muted: #a8a29e;
+      --border-color: #e7e5e4;
+      --border-soft: #d6d3d1;
+      --brand: #292524;
+      --on-brand: #ffffff;
+      --brand-soft: rgba(41, 37, 36, 0.1);
+      --hover-bg: rgba(255, 255, 255, 0.6);
+      --shadow-color: rgba(41, 37, 36, 0.08);
+    }
+    [data-theme="obsidian"] {
+      --bg-primary: #0a0a0a;
+      --bg-surface: #171717;
+      --bg-card: #1f1f1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a3a3a3;
+      --text-muted: #525252;
+      --border-color: #262626;
+      --border-soft: #404040;
+      --brand: #fafafa;
+      --on-brand: #0a0a0a;
+      --brand-soft: rgba(255, 255, 255, 0.08);
+      --hover-bg: rgba(255,255,255,0.03);
+      --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-secondary);
+      transition: background-color 300ms ease, color 300ms ease;
+    }
+    [data-theme] h1, [data-theme] h2, [data-theme] h3, [data-theme] h4 { color: var(--text-primary); }
+    .surface-card {
+      background-color: var(--bg-surface) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-secondary);
+    }
+    .dark-card {
+      background-color: var(--bg-card) !important;
+      color: var(--text-secondary);
+    }
+    .btn-brand {
+      background-color: var(--brand);
+      color: var(--on-brand);
+      transition: opacity 200ms ease;
+    }
+    .btn-brand:hover { opacity: 0.88; }
+    .btn-ghost {
+      background-color: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-soft);
+      transition: all 200ms ease;
+    }
+    .btn-ghost:hover {
+      background-color: var(--hover-bg);
+      color: var(--text-primary);
+    }
+    ::-webkit-scrollbar { width: 6px; background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-soft); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* Chat message animations */
+    .chat-msg { animation: msgIn 300ms ease-out; }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typing indicator */
+    .typing-dot { animation: typingBounce 1.4s infinite ease-in-out; }
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+      40% { transform: scale(1.2); opacity: 1; }
+    }
+
+    /* Quick suggestion chips */
+    .suggestion-chip {
+      transition: all 200ms ease;
+      cursor: pointer;
+    }
+    .suggestion-chip:hover {
+      transform: translateY(-1px);
+      opacity: 0.85;
+    }
+
+    /* Markdown styling in AI responses */
+    .ai-msg strong { color: var(--text-primary); font-weight: 700; }
+    .ai-msg ul { list-style: disc; padding-left: 1.25rem; margin: 0.5rem 0; }
+    .ai-msg ol { list-style: decimal; padding-left: 1.25rem; margin: 0.5rem 0; }
+    .ai-msg code {
+      background: var(--brand-soft);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .ai-msg pre {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 0.75rem;
+      overflow-x: auto;
+      margin: 0.5rem 0;
+    }
+    .ai-msg pre code {
+      background: transparent;
+      padding: 0;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-sm">
+
+  {% include "dashboard/partials/topbar.html" %}
+
+  <div class="flex flex-1 px-3 sm:px-6 pt-2 pb-4 sm:pb-6 gap-3 sm:gap-6 overflow-hidden max-w-[1920px] w-full mx-auto">
+
+    {% include "dashboard/partials/sidebar.html" %}
+
+    <main class="flex-1 flex flex-col gap-5 overflow-y-auto pr-1 pb-4">
+
+      <!-- BREADCRUMB -->
+      <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-2 pt-1 pb-1 shrink-0">
+        <div class="flex items-baseline gap-1">
+          <h1 class="text-base font-medium tracking-wide" style="color: var(--text-secondary);">SETTINGS / <span class="font-bold" style="color: var(--text-primary);">AI COMPANION</span></h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full" style="color: var(--text-muted); background: var(--bg-card); border: 1px solid var(--border-soft);">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Online
+          </span>
+          <button id="btn-clear" class="btn-ghost font-semibold px-4 py-2 rounded-full text-xs flex items-center gap-2">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- CHAT CONTAINER -->
+      <div class="flex-1 flex flex-col min-h-0 gap-4">
+        <!-- Chat messages area -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto surface-card rounded-2xl border shadow-sm p-4 flex flex-col gap-4">
+          <!-- Welcome message -->
+          <div class="chat-msg flex items-start gap-3 max-w-3xl">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style="background: var(--brand); color: var(--on-brand);">
+              <i data-lucide="bot" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold" style="color: var(--text-primary);">Kaimono AI</span>
+                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--brand-soft); color: var(--brand);">Gemini 2.5 Flash</span>
+              </div>
+              <div class="rounded-2xl rounded-tl-sm px-4 py-3 text-xs leading-relaxed ai-msg" style="background: var(--bg-card); border: 1px solid var(--border-soft); color: var(--text-secondary);">
+                Hey there! 👋 I'm your <strong>Kaimono AI Companion</strong>, powered by <strong>Gemini 2.5 Flash</strong>. I have direct access to the entire Kaimono store database, so I can help you:
+
+                <ul class="mt-2">
+                  <li><strong>Discover games</strong> — find exactly what you're looking for</li>
+                  <li><strong>Get recommendations</strong> — based on your library and preferences</li>
+                  <li><strong>Compare prices</strong> — find the best deals</li>
+                  <li><strong>Learn about games</strong> — features, tags, and what makes them special</li>
+                </ul>
+
+                <p class="mt-2">What can I help you with today? 🎮</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick suggestions -->
+        <div id="suggestions" class="flex flex-wrap gap-2 px-1 shrink-0">
+          <button class="suggestion-chip text-[10px] font-bold px-3 py-1.5 rounded-full" style="background: var(--bg-card); border: 1px solid var(--border-soft); color: var(--text-secondary);" onclick="sendSuggestion(this)">
+            What games are available?
+          </button>
+          <button class="suggestion-chip text-[10px] font-bold px-3 py-1.5 rounded-full" style="background: var(--bg-card); border: 1px solid var(--border-soft); color: var(--text-secondary);" onclick="sendSuggestion(this)">
+            Recommend me a game
+          </button>
+          <button class="suggestion-chip text-[10px] font-bold px-3 py-1.5 rounded-full" style="background: var(--bg-card); border: 1px solid var(--border-soft); color: var(--text-secondary);" onclick="sendSuggestion(this)">
+            What's on sale?
+          </button>
+          <button class="suggestion-chip text-[10px] font-bold px-3 py-1.5 rounded-full" style="background: var(--bg-card); border: 1px solid var(--border-soft); color: var(--text-secondary);" onclick="sendSuggestion(this)">
+            Tell me about my library
+          </button>
+        </div>
+
+        <!-- Input area -->
+        <div class="surface-card rounded-2xl border shadow-sm p-3 shrink-0">
+          <form id="chat-form" class="flex items-center gap-3">
+            <div class="flex-1 flex items-center rounded-xl px-4 py-2.5" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
+              <i data-lucide="message-circle" class="w-4 h-4 shrink-0" style="color: var(--text-muted);"></i>
+              <input type="text" id="chat-input" placeholder="Ask me anything about games..." class="flex-1 bg-transparent ml-3 text-xs font-medium focus:outline-none" style="color: var(--text-primary);">
+            </div>
+            <button type="submit" id="btn-send" class="btn-brand font-semibold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 shrink-0">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i> Send
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Apply theme
+    (function () {
+      var theme = localStorage.getItem('kaimono_theme') || '{{ request.user.theme|default:"silver" }}';
+      document.body.setAttribute('data-theme', theme);
+    })();
+
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatForm = document.getElementById('chat-form');
+    const btnSend = document.getElementById('btn-send');
+    const btnClear = document.getElementById('btn-clear');
+    const suggestions = document.getElementById('suggestions');
+    let isProcessing = false;
+
+    function scrollToBottom() {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addMessage(content, isUser) {
+      const div = document.createElement('div');
+      div.className = 'chat-msg flex items-start gap-3 max-w-3xl';
+      if (isUser) div.classList.add('ml-auto', 'flex-row-reverse');
+
+      if (isUser) {
+        div.innerHTML = `
+          <img src="{{ request.user.avatar_url|default:default_avatar }}" alt="" class="w-9 h-9 rounded-full object-cover shrink-0 border-2" style="border-color: var(--border-soft);">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1 justify-end">
+              <span class="text-xs font-bold" style="color: var(--text-primary);">{{ request.user.display_name|default:request.user.username }}</span>
+            </div>
+            <div class="rounded-2xl rounded-tr-sm px-4 py-3 text-xs leading-relaxed" style="background: var(--brand); color: var(--on-brand);">
+              ${escapeHtml(content)}
+            </div>
+          </div>
+        `;
+      } else {
+        div.innerHTML = `
+          <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style="background: var(--brand); color: var(--on-brand);">
+            <i data-lucide="bot" class="w-5 h-5"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold" style="color: var(--text-primary);">Kaimono AI</span>
+              <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--brand-soft); color: var(--brand);">Gemini 2.5 Flash</span>
+            </div>
+            <div class="rounded-2xl rounded-tl-sm px-4 py-3 text-xs leading-relaxed ai-msg" style="background: var(--bg-card); border: 1px solid var(--border-soft); color: var(--text-secondary);">
+              ${renderMarkdown(content)}
+            </div>
+          </div>
+        `;
+      }
+
+      chatMessages.appendChild(div);
+      lucide.createIcons();
+      scrollToBottom();
+    }
+
+    function addTypingIndicator() {
+      const div = document.createElement('div');
+      div.id = 'typing-indicator';
+      div.className = 'chat-msg flex items-start gap-3 max-w-3xl';
+      div.innerHTML = `
+        <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style="background: var(--brand); color: var(--on-brand);">
+          <i data-lucide="bot" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold" style="color: var(--text-primary);">Kaimono AI</span>
+            <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--brand-soft); color: var(--brand);">Gemini 2.5 Flash</span>
+          </div>
+          <div class="rounded-2xl rounded-tl-sm px-4 py-3 inline-flex items-center gap-1.5" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
+            <div class="typing-dot w-2 h-2 rounded-full" style="background: var(--text-muted);"></div>
+            <div class="typing-dot w-2 h-2 rounded-full" style="background: var(--text-muted);"></div>
+            <div class="typing-dot w-2 h-2 rounded-full" style="background: var(--text-muted);"></div>
+          </div>
+        </div>
+      `;
+      chatMessages.appendChild(div);
+      lucide.createIcons();
+      scrollToBottom();
+    }
+
+    function removeTypingIndicator() {
+      const el = document.getElementById('typing-indicator');
+      if (el) el.remove();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function renderMarkdown(text) {
+      let html = escapeHtml(text);
+      // Bold
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      // Inline code
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+      // Line breaks
+      html = html.replace(/\n/g, '<br>');
+      return html;
+    }
+
+    async function sendMessage(message) {
+      if (isProcessing || !message.trim()) return;
+      isProcessing = true;
+
+      addMessage(message, true);
+      chatInput.value = '';
+      suggestions.style.display = 'none';
+      addTypingIndicator();
+
+      try {
+        const response = await fetch('/api/ai/chat/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+          },
+          body: JSON.stringify({ message }),
+        });
+
+        const data = await response.json();
+        removeTypingIndicator();
+
+        if (data.success) {
+          addMessage(data.reply, false);
+        } else {
+          addMessage('Sorry, I encountered an error. Please try again! 😅', false);
+        }
+      } catch (error) {
+        removeTypingIndicator();
+        addMessage('Oops! Something went wrong. Please try again! 🔄', false);
+      }
+
+      isProcessing = false;
+    }
+
+    function sendSuggestion(btn) {
+      sendMessage(btn.textContent.trim());
+    }
+
+    function getCookie(name) {
+      const cookies = document.cookie.split(';');
+      for (let c of cookies) {
+        c = c.trim();
+        if (c.startsWith(name + '=')) {
+          return c.substring(name.length + 1);
+        }
+      }
+      return '';
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      sendMessage(chatInput.value);
+    });
+
+    btnClear.addEventListener('click', async () => {
+      if (!confirm('Clear chat history?')) return;
+      try {
+        await fetch('/api/ai/clear/', {
+          method: 'POST',
+          headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        });
+        // Reload to show fresh welcome
+        location.reload();
+      } catch (e) {
+        console.error('Failed to clear chat', e);
+      }
+    });
+
+    // Auto-focus input
+    chatInput.focus();
+  </script>
+</body>
+</html>

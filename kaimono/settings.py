@@ -109,6 +109,9 @@ SUPABASE_S3_ACCESS_KEY_ID = env('S3_ACCESS_KEY_ID', default='')
 SUPABASE_S3_SECRET_ACCESS_KEY = env('S3_SECRET_ACCESS_KEY', default='')
 SUPABASE_S3_ENDPOINT = f'{SUPABASE_URL}/storage/v1/s3'
 
+# Google Gemini API
+GEMINI_API_KEY = env('GEMINIAPI', default='')
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
