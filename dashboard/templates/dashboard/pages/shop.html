@@ -362,6 +362,9 @@
       background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0);
       background-size: 24px 24px;
     }
+    #hero-new-release {
+      background: linear-gradient(135deg, #1a1c2a 0%, #1e1b4b 30%, #312e81 60%, #1e1b4b 80%, #1a1c2a 100%);
+    }
 
     /* ===== Wishlist heart ===== */
     .heart-btn.active svg { fill: var(--brand); color: var(--brand); }
@@ -464,116 +467,190 @@
         </div>
       </div>
 
-      <!-- HERO BANNER -->
-      <div class="relative bg-gradient-to-br from-[#323446] via-slate-800 to-[#1a1c2a] rounded-[2rem] overflow-hidden shrink-0 shadow-xl shadow-slate-900/20">
-        <div class="absolute inset-0 hero-pattern pointer-events-none"></div>
-        <div class="absolute -top-32 -right-32 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+      <!-- HERO BANNER — NEW RELEASE (dynamic from DB) -->
+      {% if new_release %}
+      <div class="relative rounded-[2rem] overflow-hidden shrink-0 shadow-xl" style="background: var(--bg-surface); border: 1px solid var(--border-color);" id="hero-new-release">
+        <!-- Decorative blurs -->
+        <div class="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none" style="background: radial-gradient(circle, color-mix(in srgb, var(--brand) 20%, transparent), transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none" style="background: radial-gradient(circle, color-mix(in srgb, var(--brand) 10%, transparent), transparent 70%);"></div>
 
-        <div class="relative z-10 grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-6 md:gap-8 p-5 md:p-8 items-center">
-          <div class="flex flex-col gap-5">
-            <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-white pulse-dot"></span>
-              <span class="text-[10px] font-bold text-white/80 uppercase tracking-[0.2em]">Limited Event · Live Now</span>
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-0 items-stretch">
+          <!-- LEFT: Game Info -->
+          <div class="flex flex-col gap-4 p-5 md:p-8 justify-center">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2 h-2 rounded-full pulse-dot" style="background: var(--brand);"></span>
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em]" style="color: var(--text-muted);">New Release · Just Dropped</span>
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider" style="background: var(--brand-soft); color: var(--brand); border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent);">HOT</span>
             </div>
 
-            <h2 class="text-4xl md:text-5xl font-extrabold leading-[1.05] tracking-tight" style="color: #ffffff;">
-              Summer Anime<br>Festival <span class="italic font-serif">2026</span>
-            </h2>
+            <div>
+              <h2 class="text-3xl md:text-[2.75rem] font-extrabold leading-[1.05] tracking-tight" style="color: var(--text-primary);">
+                {{ new_release.name|truncatewords:4 }}
+              </h2>
+              <p class="text-xs font-semibold mt-1.5 tracking-wide" style="color: var(--text-muted);">
+                by <span style="color: var(--text-secondary);">{{ new_release.brand }}</span>
+                {% if new_release.type %} · {{ new_release.type }}{% endif %}
+                {% if new_release.releaseDate %} · {{ new_release.releaseDate }}{% endif %}
+              </p>
+            </div>
 
-            <p class="text-sm text-slate-300 leading-relaxed max-w-md">
-              Exclusive game drops, up to <span class="text-white font-bold">70% off</span> your favorite titles. Free worldwide shipping on orders above $80.
+            {% if new_release.description %}
+            <p class="text-[13px] leading-relaxed max-w-lg" style="color: var(--text-secondary);">
+              {{ new_release.description|truncatewords:30 }}
             </p>
+            {% endif %}
 
-            <div class="flex flex-wrap items-center gap-2.5 mt-1">
-              <span class="text-[10px] font-bold text-white/60 uppercase tracking-wider mr-1">Ends in</span>
-              <div class="bg-white/10 backdrop-blur rounded-xl px-3 py-2 text-center min-w-[52px] border border-white/10">
-                <p id="cd-days" class="text-xl font-extrabold text-white leading-none">03</p>
-                <p class="text-[8px] font-bold text-white/60 uppercase tracking-wider mt-1">Days</p>
+            <!-- Stats Row -->
+            <div class="flex flex-wrap items-center gap-3 mt-1">
+              <div class="flex items-center gap-1.5 rounded-xl px-3 py-2" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
+                <i data-lucide="star" class="w-3.5 h-3.5" style="color: var(--brand); fill: var(--brand);"></i>
+                <span class="text-xs font-extrabold" style="color: var(--text-primary);">{{ new_release.rating }}</span>
+                <span class="text-[10px] font-semibold" style="color: var(--text-muted);">({{ new_release.reviews|floatformat:0 }})</span>
               </div>
-              <span class="text-white/40 text-lg font-bold">:</span>
-              <div class="bg-white/10 backdrop-blur rounded-xl px-3 py-2 text-center min-w-[52px] border border-white/10">
-                <p id="cd-hours" class="text-xl font-extrabold text-white leading-none">14</p>
-                <p class="text-[8px] font-bold text-white/60 uppercase tracking-wider mt-1">Hours</p>
+              {% if new_release.releaseDate %}
+              <div class="flex items-center gap-1.5 rounded-xl px-3 py-2" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
+                <i data-lucide="calendar" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
+                <span class="text-[11px] font-bold" style="color: var(--text-secondary);">{{ new_release.releaseDate }}</span>
               </div>
-              <span class="text-white/40 text-lg font-bold">:</span>
-              <div class="bg-white/10 backdrop-blur rounded-xl px-3 py-2 text-center min-w-[52px] border border-white/10">
-                <p id="cd-mins" class="text-xl font-extrabold text-white leading-none">27</p>
-                <p class="text-[8px] font-bold text-white/60 uppercase tracking-wider mt-1">Mins</p>
+              {% endif %}
+              {% if new_release.type %}
+              <div class="flex items-center gap-1.5 rounded-xl px-3 py-2" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
+                <i data-lucide="gamepad-2" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
+                <span class="text-[11px] font-bold" style="color: var(--text-secondary);">{{ new_release.type }}</span>
               </div>
-              <span class="text-white/40 text-lg font-bold">:</span>
-              <div class="bg-white/10 backdrop-blur rounded-xl px-3 py-2 text-center min-w-[52px] border border-white/10">
-                <p id="cd-secs" class="text-xl font-extrabold text-white leading-none">45</p>
-                <p class="text-[8px] font-bold text-white/60 uppercase tracking-wider mt-1">Secs</p>
+              {% endif %}
+              {% if new_release.stock %}
+              <div class="flex items-center gap-1.5 rounded-xl px-3 py-2" style="background: var(--bg-card); border: 1px solid var(--border-soft);">
+                <i data-lucide="package" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
+                <span class="text-[11px] font-bold" style="color: var(--text-secondary);">{{ new_release.stock|truncatewords:2 }}</span>
               </div>
+              {% endif %}
             </div>
 
+            <!-- Price -->
+            <div class="flex items-baseline gap-3 mt-1">
+              <span class="text-3xl font-extrabold" style="color: var(--text-primary);">${{ new_release.price }}</span>
+              {% if new_release.originalPrice %}
+              <span class="text-sm line-through font-semibold" style="color: var(--text-muted);">${{ new_release.originalPrice }}</span>
+              <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider" style="background: var(--brand); color: var(--on-brand);">
+                Save {{ new_release.price|floatformat:0 }}%
+              </span>
+              {% endif %}
+            </div>
+
+            <!-- Tags -->
+            {% if new_release.tags %}
+            <div class="flex flex-wrap items-center gap-1.5 mt-0.5">
+              {% for tag in new_release.tags %}
+              <span class="text-[9px] font-bold px-2.5 py-1 rounded-full" style="background: var(--border-soft); color: var(--text-secondary);">{{ tag }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- CTA Buttons -->
             <div class="flex flex-wrap items-center gap-2.5 mt-2">
-              <button id="explore-btn" class="bg-white hover:bg-slate-100 text-[#1a1c2a] font-bold px-6 py-3 rounded-full text-xs flex items-center gap-2 shadow-lg transition-all hover:-translate-y-0.5">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Explore Collection
-              </button>
-              <button id="claim-coupon" class="bg-white/10 hover:bg-white/20 backdrop-blur text-white font-semibold px-5 py-3 rounded-full text-xs flex items-center gap-2 border border-white/20 transition-colors">
-                <i data-lucide="ticket" class="w-3.5 h-3.5"></i> Claim 20% Coupon
-              </button>
+              <a href="/shop/{{ new_release.id }}/" class="font-bold px-6 py-3 rounded-full text-xs flex items-center gap-2 shadow-lg transition-all hover:-translate-y-0.5 hover:opacity-90" style="background: var(--brand); color: var(--on-brand);">
+                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Get Now — ${{ new_release.price }}
+              </a>
+              <a href="/shop/{{ new_release.id }}/" class="font-semibold px-5 py-3 rounded-full text-xs flex items-center gap-2 transition-colors hover:opacity-80" style="background: var(--border-soft); color: var(--text-secondary);">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i> View Details
+              </a>
             </div>
 
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1 pt-4 border-t border-white/10">
+            <!-- Trust Row -->
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1 pt-4 border-t" style="border-color: var(--border-soft);">
               <div class="flex items-center gap-1.5">
-                <i data-lucide="truck" class="w-3.5 h-3.5 text-white/70"></i>
-                <span class="text-[10px] font-semibold text-white/70">Free shipping $80+</span>
+                <i data-lucide="truck" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
+                <span class="text-[10px] font-semibold" style="color: var(--text-muted);">Free shipping $80+</span>
               </div>
               <div class="flex items-center gap-1.5">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-white/70"></i>
-                <span class="text-[10px] font-semibold text-white/70">Authenticity guaranteed</span>
+                <i data-lucide="shield-check" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
+                <span class="text-[10px] font-semibold" style="color: var(--text-muted);">Authenticity guaranteed</span>
               </div>
               <div class="flex items-center gap-1.5">
-                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-white/70"></i>
-                <span class="text-[10px] font-semibold text-white/70">30-day returns</span>
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5" style="color: var(--text-muted);"></i>
+                <span class="text-[10px] font-semibold" style="color: var(--text-muted);">30-day returns</span>
               </div>
             </div>
           </div>
 
-          <div class="relative h-80 shrink-0">
-            <div class="absolute top-8 right-0 w-48 h-60 rounded-2xl overflow-hidden shadow-2xl transform rotate-6 hover:rotate-3 transition-transform duration-500">
-              <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80" alt="" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2.5 left-2.5 bg-white/15 backdrop-blur border border-white/20 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">Featured</div>
-            </div>
-            <div class="absolute top-4 right-20 w-48 h-60 rounded-2xl overflow-hidden shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-500">
-              <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-              <div class="absolute top-2.5 left-2.5 text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-md" style="background: var(--brand); color: var(--on-brand);">-50%</div>
-            </div>
-            <div class="absolute top-0 right-10 w-52 h-64 rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500 ring-4 ring-white/10">
-              <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80" alt="" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
-              <div class="absolute top-2.5 left-2.5 text-[9px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-md flex items-center gap-1" style="background: var(--brand); color: var(--on-brand);">
-                <i data-lucide="flame" class="w-3 h-3"></i> Hot Drop
-              </div>
-              <div class="absolute bottom-3 left-3 right-3">
-                <p class="text-[9px] font-bold text-white/70 uppercase tracking-wider mb-0.5">Limited Edition</p>
-                <p class="text-sm font-extrabold text-white leading-tight">Genshin Impact PVC Figure</p>
-                <div class="flex items-baseline gap-1.5 mt-1">
-                  <span class="text-xs text-white/60 line-through">$129.99</span>
-                  <span class="text-base font-extrabold text-white">$99.99</span>
-                </div>
-              </div>
+          <!-- RIGHT: Game Visual -->
+          <div class="relative flex items-center justify-center p-6 lg:p-8 min-h-[320px]">
+            <!-- Glow behind card -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div class="w-64 h-64 rounded-full blur-3xl" style="background: radial-gradient(circle, color-mix(in srgb, var(--brand) 15%, transparent), transparent 70%);"></div>
             </div>
 
-            <div class="absolute -bottom-2 left-0 rounded-2xl p-3 shadow-xl border flex items-center gap-2.5" style="background: var(--bg-card); border-color: var(--border-color);">
-              <div class="flex -space-x-2">
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
-                <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
-                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=40&q=80" class="w-7 h-7 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
+            <!-- Main Game Card -->
+            <div class="relative group">
+              <a href="/shop/{{ new_release.id }}/" class="block">
+                <div class="w-56 h-72 md:w-60 md:h-[300px] rounded-2xl overflow-hidden shadow-2xl ring-1 transition-transform duration-500 group-hover:scale-[1.02]" style="ring-color: var(--border-color);">
+                  <img src="{{ new_release.image }}" alt="{{ new_release.name }}" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
+                  <!-- Top badges -->
+                  <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                    <span class="text-[9px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 uppercase tracking-wider" style="background: var(--brand); color: var(--on-brand);">
+                      <i data-lucide="sparkles" class="w-2.5 h-2.5"></i> New Release
+                    </span>
+                    {% for badge in new_release.badges %}
+                    <span class="text-[9px] font-extrabold px-2.5 py-0.5 rounded-full backdrop-blur uppercase tracking-wider" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-soft);">
+                      {{ badge }}
+                    </span>
+                    {% endfor %}
+                  </div>
+                  <!-- Bottom info -->
+                  <div class="absolute bottom-3 left-3 right-3">
+                    <p class="text-[9px] font-bold uppercase tracking-wider mb-0.5" style="color: rgba(255,255,255,0.6);">{{ new_release.brand }}</p>
+                    <p class="text-sm font-extrabold text-white leading-tight">{{ new_release.name|truncatewords:5 }}</p>
+                    <div class="flex items-center gap-1.5 mt-1.5">
+                      <div class="flex items-center gap-0.5">
+                        {% for i in "12345" %}
+                        {% if forloop.counter <= new_release.rating|floatformat:0 %}
+                        <i data-lucide="star" class="w-2.5 h-2.5 text-amber-400 fill-amber-400"></i>
+                        {% else %}
+                        <i data-lucide="star" class="w-2.5 h-2.5" style="color: rgba(255,255,255,0.3);"></i>
+                        {% endif %}
+                        {% endfor %}
+                      </div>
+                      <span class="text-[10px] font-bold text-white">{{ new_release.rating }}</span>
+                    </div>
+                    <div class="flex items-baseline gap-1.5 mt-1">
+                      {% if new_release.originalPrice %}
+                      <span class="text-[11px] line-through" style="color: rgba(255,255,255,0.5);">${{ new_release.originalPrice }}</span>
+                      {% endif %}
+                      <span class="text-base font-extrabold text-white">${{ new_release.price }}</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              {% if new_release.originalPrice %}
+              <!-- Floating discount badge -->
+              <div class="absolute -top-3 -right-3 w-14 h-14 rounded-full flex flex-col items-center justify-center shadow-xl animate-bounce" style="animation-duration: 3s; background: var(--brand); box-shadow: 0 8px 24px -4px var(--shadow-color);">
+                <span class="text-[9px] font-bold uppercase" style="color: color-mix(in srgb, var(--on-brand) 80%, transparent);">Save</span>
+                <span class="text-sm font-extrabold leading-none" style="color: var(--on-brand);">{{ new_release.price|floatformat:0 }}%</span>
               </div>
-              <div class="flex flex-col">
-                <p class="text-[11px] font-extrabold leading-tight" style="color: var(--text-primary);">2.4k+ joined</p>
-                <p class="text-[9px] font-semibold" style="color: var(--text-muted);">Shopping this event</p>
+              {% endif %}
+
+              <!-- Social proof -->
+              <div class="absolute -bottom-2 -left-3 rounded-xl px-3 py-2 shadow-xl border flex items-center gap-2" style="background: var(--bg-card); border-color: var(--border-color);">
+                <div class="flex -space-x-1.5">
+                  <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=40&q=80" class="w-6 h-6 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
+                  <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=40&q=80" class="w-6 h-6 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
+                  <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=40&q=80" class="w-6 h-6 rounded-full border-2" style="border-color: var(--bg-card);" alt="">
+                </div>
+                <div class="flex flex-col">
+                  <p class="text-[10px] font-extrabold leading-tight" style="color: var(--text-primary);">{{ new_release.reviews|floatformat:0 }} reviews</p>
+                  <p class="text-[8px] font-semibold" style="color: var(--text-muted);">Very Positive</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      {% endif %}
+
+
 
       <!-- CATEGORY PILLS -->
       <div class="shrink-0 px-1">
@@ -1529,28 +1606,7 @@
       lucide.createIcons();
     };
 
-    const initCountdown = () => {
-      const target = new Date();
-      target.setDate(target.getDate() + 3);
-      target.setHours(target.getHours() + 14);
-      target.setMinutes(target.getMinutes() + 27);
-      target.setSeconds(target.getSeconds() + 45);
-
-      const update = () => {
-        const now = new Date();
-        const diff = Math.max(0, target - now);
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const mins = Math.floor((diff / (1000 * 60)) % 60);
-        const secs = Math.floor((diff / 1000) % 60);
-        $("cd-days").textContent = String(days).padStart(2, "0");
-        $("cd-hours").textContent = String(hours).padStart(2, "0");
-        $("cd-mins").textContent = String(mins).padStart(2, "0");
-        $("cd-secs").textContent = String(secs).padStart(2, "0");
-      };
-      update();
-      setInterval(update, 1000);
-    };
+    // Countdown removed — hero now shows New Release card
 
     const initEvents = () => {
       let searchDebounce;
@@ -1677,21 +1733,9 @@
         renderProducts();
       });
 
-      $("explore-btn").addEventListener("click", () => {
-        state.activeCategory = "all";
-        state.showWishlistOnly = false;
-        state.sortBy = "popular";
-        $("sort-label").textContent = "Popular";
-        renderCategories();
-        renderProducts();
-        renderActiveFilters();
-        updateClearFiltersButton();
-        showToast("Showing all products", "sparkles", "info");
-        $("main-content").scrollTo({ top: 0, behavior: "smooth" });
-      });
-
-      $("claim-coupon").addEventListener("click", () => {
-        showToast("Coupon SUMMER20 applied!", "ticket", "success");
+      // Explore / Pre-order buttons on the hero
+      document.querySelectorAll("a[href='/shop/2/']").forEach(btn => {
+        // no-op — handled by native link navigation
       });
 
       $("wishlist-btn").addEventListener("click", () => {
@@ -1743,7 +1787,6 @@
       renderActiveFilters();
       updateClearFiltersButton();
       initEvents();
-      initCountdown();
       lucide.createIcons();
     });
   </script>

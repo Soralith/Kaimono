@@ -140,9 +140,29 @@ def dashboard(request):
 
 
 def shop(request):
-    products = [p.data for p in ShopProduct.objects.order_by('id') if p.data.get('active', True)]
+    all_products = [
+        p.data for p in ShopProduct.objects.order_by('id')
+        if p.data.get('active', True)
+    ]
+    games = [p for p in all_products if p.get('category') == 'games']
+
+    # Newest game by date field (falls back to first game)
+    new_release = next(
+        (g for g in sorted(games, key=lambda x: x.get('date', ''), reverse=True)),
+        (games[0] if games else None),
+    )
+    if new_release:
+        new_release['rating_floor'] = int(new_release.get('rating', 0))
+        orig = new_release.get('originalPrice')
+        price = new_release.get('price', 0)
+        if orig and orig > 0:
+            new_release['discount_pct'] = int(round((orig - price) / orig * 100))
+        else:
+            new_release['discount_pct'] = 0
+
     return render(request, 'dashboard/pages/shop.html', {
-        'products_json': json.dumps(products),
+        'products_json': json.dumps(all_products),
+        'new_release': new_release,
     })
 
 
