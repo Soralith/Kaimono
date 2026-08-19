@@ -1,4 +1,4 @@
-{% load static %}
+
 
 <!doctype html>
 <html lang="en">
@@ -169,7 +169,7 @@
       <div class="relative rounded-[2rem] overflow-hidden" style="height:580px">
         <!-- Slide 1 -->
         <div class="hero-slide active" data-slide="0">
-          <img src="{% static 'dashboard/images/landing1.jpeg' %}" alt="Game keys" class="absolute inset-0 w-full h-full object-cover" />
+          <img src="{{ SITE_IMAGES_URL }}/landing1.jpeg" alt="Game keys" class="absolute inset-0 w-full h-full object-cover" />
           <div class="absolute inset-0 bg-gradient-to-r from-[#1a1c2a]/80 via-[#1a1c2a]/30 to-transparent"></div>
           <div class="absolute inset-0 flex flex-col justify-end px-10 lg:px-16 pb-14">
             <p class="eyebrow text-white/60">Game Keys & Bundles</p>
@@ -186,7 +186,7 @@
         </div>
         <!-- Slide 2 -->
         <div class="hero-slide" data-slide="1">
-          <img src="{% static 'dashboard/images/landing2.png' %}" alt="New releases" class="absolute inset-0 w-full h-full object-cover" />
+          <img src="{{ SITE_IMAGES_URL }}/landing2.png" alt="New releases" class="absolute inset-0 w-full h-full object-cover" />
           <div class="absolute inset-0 bg-gradient-to-r from-[#1a1c2a]/80 via-[#1a1c2a]/30 to-transparent"></div>
           <div class="absolute inset-0 flex flex-col justify-end px-10 lg:px-16 pb-14">
             <p class="eyebrow text-white/60">Pre-orders & New Releases</p>
@@ -203,7 +203,7 @@
         </div>
         <!-- Slide 3 -->
         <div class="hero-slide" data-slide="2">
-          <img src="{% static 'dashboard/images/landing3.jpg' %}" alt="DLC" class="absolute inset-0 w-full h-full object-cover" />
+          <img src="{{ SITE_IMAGES_URL }}/landing3.jpg" alt="DLC" class="absolute inset-0 w-full h-full object-cover" />
           <div class="absolute inset-0 bg-gradient-to-r from-[#1a1c2a]/80 via-[#1a1c2a]/30 to-transparent"></div>
           <div class="absolute inset-0 flex flex-col justify-end px-10 lg:px-16 pb-14">
             <p class="eyebrow text-white/60">DLC & Season Passes</p>
@@ -220,7 +220,7 @@
         </div>
         <!-- Slide 4 -->
         <div class="hero-slide" data-slide="3">
-          <img src="{% static 'dashboard/images/landing4.png' %}" alt="Gift cards" class="absolute inset-0 w-full h-full object-cover" />
+          <img src="{{ SITE_IMAGES_URL }}/landing4.png" alt="Gift cards" class="absolute inset-0 w-full h-full object-cover" />
           <div class="absolute inset-0 bg-gradient-to-r from-[#1a1c2a]/80 via-[#1a1c2a]/30 to-transparent"></div>
           <div class="absolute inset-0 flex flex-col justify-end px-10 lg:px-16 pb-14">
             <p class="eyebrow text-white/60">Digital Gift Cards</p>
@@ -320,7 +320,7 @@
         <!-- Right: stacked image collage -->
         <div class="relative hidden lg:block" style="height:400px">
           <div class="absolute inset-0 rounded-[1.6rem] overflow-hidden">
-            <img src="{% static 'dashboard/images/landing.png' %}" alt="collector" class="w-full h-full object-cover" />
+            <img src="{{ SITE_IMAGES_URL }}/landing.png" alt="collector" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#1a1c2a]/40 to-transparent"></div>
           </div>
         </div>
@@ -423,7 +423,7 @@
 
         <!-- Right: image -->
         <div class="reveal rounded-[1.6rem] overflow-hidden" style="height:560px">
-          <img src="{% static 'dashboard/images/landingg.png' %}" alt="collector" class="w-full h-full object-cover" />
+          <img src="{{ SITE_IMAGES_URL }}/landingg.png" alt="collector" class="w-full h-full object-cover" />
         </div>
       </div>
     </section>
@@ -446,7 +446,7 @@
           <!-- Card 1 -->
           <div class="game-card">
             <div class="relative overflow-hidden" style="height:200px">
-              <img src="{% static 'dashboard/images/clairobscur.jpg' %}" alt="33" class="w-full h-full object-cover" />
+              <img src="{{ SITE_IMAGES_URL }}/clairobscur.jpg" alt="33" class="w-full h-full object-cover" />
             </div>
             <div class="p-5">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sandfall Interactive</p>
@@ -460,7 +460,7 @@
           <!-- Card 2 -->
           <div class="game-card">
             <div class="relative overflow-hidden" style="height:200px">
-              <img src="{% static 'dashboard/images/silksong.jpg' %}" alt="Silksong" class="w-full h-full object-cover" />
+              <img src="{{ SITE_IMAGES_URL }}/silksong.jpg" alt="Silksong" class="w-full h-full object-cover" />
             </div>
             <div class="p-5">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Team Cherry</p>
@@ -474,7 +474,7 @@
           <!-- Card 3 -->
           <div class="game-card">
             <div class="relative overflow-hidden" style="height:200px">
-              <img src="{% static 'dashboard/images/baldursgate3.jpg' %}" alt="BG3" class="w-full h-full object-cover" />
+              <img src="{{ SITE_IMAGES_URL }}/baldursgate3.jpg" alt="BG3" class="w-full h-full object-cover" />
             </div>
             <div class="p-5">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Larian Studios</p>
@@ -488,7 +488,7 @@
           <!-- Card 4 -->
           <div class="game-card">
             <div class="relative overflow-hidden" style="height:200px">
-              <img src="{% static 'dashboard/images/spacefortheunbound.jpg' %}" alt="SpaceUnbound" class="w-full h-full object-cover" />
+              <img src="{{ SITE_IMAGES_URL }}/spacefortheunbound.jpg" alt="SpaceUnbound" class="w-full h-full object-cover" />
             </div>
             <div class="p-5">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Toge Productions</p>
@@ -502,7 +502,7 @@
           <!-- Card 5 -->
           <div class="game-card">
             <div class="relative overflow-hidden" style="height:200px">
-              <img src="{% static 'dashboard/images/ff16.jpeg' %}" alt="FF16" class="w-full h-full object-cover" />
+              <img src="{{ SITE_IMAGES_URL }}/ff16.jpeg" alt="FF16" class="w-full h-full object-cover" />
             </div>
             <div class="p-5">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Square Enix</p>
@@ -516,7 +516,7 @@
           <!-- Card 6 -->
           <div class="game-card">
             <div class="relative overflow-hidden" style="height:200px">
-              <img src="{% static 'dashboard/images/rerequiem.jpg' %}" alt="RE9" class="w-full h-full object-cover" />
+              <img src="{{ SITE_IMAGES_URL }}/rerequiem.jpg" alt="RE9" class="w-full h-full object-cover" />
             </div>
             <div class="p-5">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Capcom</p>
