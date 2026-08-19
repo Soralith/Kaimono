@@ -1350,6 +1350,22 @@ def api_game_review_submit(request):
     return JsonResponse({'success': True, 'review': review.to_dict()})
 
 
+@require_GET
+def api_check_ownership(request):
+    """Check if the authenticated user already owns a game."""
+    if not request.user.is_authenticated:
+        return JsonResponse({"owned": False})
+    product_id = request.GET.get('product_id')
+    if not product_id:
+        return JsonResponse({"error": "product_id required"}, status=400)
+    try:
+        product = ShopProduct.objects.get(id=int(product_id))
+    except (ShopProduct.DoesNotExist, ValueError):
+        return JsonResponse({"error": "Product not found"}, status=404)
+    owned = request.user.library_games.filter(title=product.name).exists()
+    return JsonResponse({"owned": owned})
+
+
 def library(request):
     if request.user.is_authenticated:
         games = list(request.user.library_games.all().order_by('created_at'))

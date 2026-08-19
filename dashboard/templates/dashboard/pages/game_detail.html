@@ -692,6 +692,28 @@
         buyIcon.setAttribute("data-lucide", isPre ? "clock-3" : "shopping-cart");
       }
 
+      // Check if user already owns this game
+      function markOwned() {
+        $g("gd-buy-label").textContent = "In Library";
+        $g("gd-buy").disabled = true;
+        $g("gd-buy").classList.add("opacity-60", "cursor-not-allowed");
+        var icon = $g("gd-buy").querySelector("[data-lucide]");
+        if (icon) {
+          icon.setAttribute("data-lucide", "check-circle-2");
+        }
+        lucide.createIcons();
+      }
+
+      (function() {
+        var csrfToken = document.getElementById('csrf-token').value;
+        fetch('/api/shop/check-ownership/?product_id=' + PRODUCT_ID)
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.owned) markOwned();
+          })
+          .catch(function() {});
+      })();
+
       // Wishlist + follow (server-backed)
       var follow = readLS("kaimono_follows");
       if (follow.indexOf(p.id) > -1) $g("gd-follow").classList.add("active");
@@ -736,6 +758,7 @@
 
       $g("gd-buy").addEventListener("click", function () {
         openCheckout({
+          id: p.id,
           name: p.name,
           image: (p.media && p.media[0] && p.media[0].poster) || p.image,
           meta: p.type + " · " + (p.brand || p.publisher || "Kaimono"),
@@ -1264,6 +1287,25 @@
         $g("co-progress-bar").style.width = "100%";
         $g("co-order-no").textContent = "KM-" + Math.random().toString(36).slice(2, 8).toUpperCase();
         $g("co-success-msg").textContent = successMsg;
+
+        // Add game to user's library via API
+        if (coItem && coItem.id) {
+          var csrfTok = document.getElementById('csrf-token').value;
+          fetch('{% url "checkout_complete" %}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfTok },
+            body: JSON.stringify({ product_ids: [coItem.id] })
+          }).then(function(r) { return r.json(); }).then(function(data) {
+            if (data.added > 0) {
+              openToast(coItem.name + ' added to your library!', 'library', 'success');
+            } else {
+              openToast(coItem.name + ' is already in your library.', 'info', 'info');
+            }
+            markOwned();
+          }).catch(function() {
+            openToast('Payment succeeded but library update failed. Check your library.', 'alert-triangle', 'error');
+          });
+        }
       }, 2400);
     });
 

@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/community/share/', views.community_share_post, name='community_share_post'),
     path('api/community/games/follow/', views.community_toggle_follow_game, name='community_toggle_follow_game'),
     path('api/shop/checkout/', views.checkout_complete, name='checkout_complete'),
+    path('api/shop/check-ownership/', views.api_check_ownership, name='api_check_ownership'),
     path('api/wishlist/toggle/', views.api_wishlist_toggle, name='api_wishlist_toggle'),
     path('api/wishlist/list/', views.api_wishlist_list, name='api_wishlist_list'),
     path('api/reviews/', views.api_game_reviews, name='api_game_reviews'),
