@@ -286,24 +286,8 @@
         <!-- Right: stacked image collage -->
         <div class="relative hidden lg:block" style="height:400px">
           <div class="absolute inset-0 rounded-[1.6rem] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=900&q=80" alt="collector" class="w-full h-full object-cover" />
+            <img src="{% static 'dashboard/images/landing.png' %}" alt="collector" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#1a1c2a]/40 to-transparent"></div>
-          </div>
-          <!-- floating chip -->
-          <div class="absolute top-6 left-6 bg-white rounded-2xl px-5 py-4 shadow-xl max-w-[220px]">
-            <div class="flex items-center gap-2 mb-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#323446] pulse-dot"></span>
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Price drop</span>
-            </div>
-            <p class="text-sm font-bold text-slate-900">Elden Ring bundle · -30%</p>
-          </div>
-          <!-- small verified badge -->
-          <div class="absolute bottom-6 right-6 bg-[#323446] rounded-2xl px-5 py-4 shadow-xl flex items-center gap-3">
-            <i data-lucide="badge-check" class="w-5 h-5 text-white"></i>
-            <div>
-              <p class="text-[11px] text-white/60 font-semibold">Key verified</p>
-              <p class="text-sm text-white font-bold">Persona 5 Royal</p>
-            </div>
           </div>
         </div>
       </div>
@@ -399,7 +383,7 @@
 
         <!-- Right: image -->
         <div class="reveal rounded-[1.6rem] overflow-hidden" style="height:560px">
-          <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1200&q=80" alt="collector" class="w-full h-full object-cover" />
+          <img src="{% static 'dashboard/images/landingg.png' %}" alt="collector" class="w-full h-full object-cover" />
         </div>
       </div>
     </section>
@@ -501,128 +485,6 @@
                 <span class="text-sm font-extrabold text-slate-900">$69.99</span>
                 <span class="text-xs font-semibold text-slate-400">Out</span>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════ COMMUNITY / CASE STUDIES ═══════════ -->
-    <section id="community" class="max-w-screen-2xl mx-auto px-6 lg:px-12 py-24">
-      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14 reveal">
-        <div>
-          <p class="eyebrow">Community stories</p>
-          <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.12] max-w-2xl">
-            <span class="text-slate-900">See how gamers</span><br/>
-            <span class="text-slate-400">use Kaimono</span>
-          </h2>
-        </div>
-        <div class="flex items-center gap-3">
-          <button id="cs-prev" class="w-11 h-11 rounded-full border border-slate-300 text-slate-600 flex items-center justify-center hover:bg-[#323446] hover:border-[#323446] hover:text-white transition-all">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i>
-          </button>
-          <button id="cs-next" class="w-11 h-11 rounded-full border border-slate-300 text-slate-600 flex items-center justify-center hover:bg-[#323446] hover:border-[#323446] hover:text-white transition-all">
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-          </button>
-          <span id="cs-counter" class="text-sm font-bold text-slate-400 font-mono tracking-widest ml-2">01 / 03</span>
-        </div>
-      </div>
-
-      <div class="grid lg:grid-cols-[380px_1fr] gap-6 items-start reveal">
-        <!-- Tabs -->
-        <div class="flex flex-col gap-3">
-          <button class="case-tab active" data-case="0">
-            <span class="ct-num">01</span>
-            <span class="flex-1 min-w-0">
-              <span class="ct-title block">Key & bundle hunters</span>
-              <span class="ct-desc block">Verified keys & price-drop alerts</span>
-            </span>
-            <i data-lucide="arrow-right" class="ct-arrow w-5 h-5"></i>
-          </button>
-          <button class="case-tab" data-case="1">
-            <span class="ct-num">02</span>
-            <span class="flex-1 min-w-0">
-              <span class="ct-title block">Rhythm gamers</span>
-              <span class="ct-desc block">Playtime & achievement journaling</span>
-            </span>
-            <i data-lucide="arrow-right" class="ct-arrow w-5 h-5"></i>
-          </button>
-          <button class="case-tab" data-case="2">
-            <span class="ct-num">03</span>
-            <span class="flex-1 min-w-0">
-              <span class="ct-title block">Pre-order chasers</span>
-              <span class="ct-desc block">Day-one launches, zero missed embargoes</span>
-            </span>
-            <i data-lucide="arrow-right" class="ct-arrow w-5 h-5"></i>
-          </button>
-
-          <!-- CTA card -->
-          <div class="mt-2 bg-[#323446] rounded-[18px] p-7 relative overflow-hidden">
-            <div class="absolute -top-8 -right-8 w-32 h-32 bg-white/5 rounded-full pointer-events-none"></div>
-            <div class="absolute -bottom-10 -left-8 w-32 h-32 bg-white/5 rounded-full pointer-events-none"></div>
-            <p class="text-lg font-bold text-white relative">Your shelf has a story too.</p>
-            <p class="text-sm text-slate-300 mt-2 leading-relaxed relative">Share how you collect — best story gets featured next month.</p>
-            <a href="/login/" class="relative inline-flex items-center gap-2 bg-white text-[#323446] text-sm font-bold px-5 py-2.5 rounded-full hover:-translate-y-px transition-all mt-5">
-              Share your story <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Panel -->
-        <div id="cs-panel" class="bg-white rounded-[1.8rem] border border-slate-200/70 shadow-xl shadow-slate-900/5 overflow-hidden">
-          <div class="grid lg:grid-cols-2">
-            <!-- Quote -->
-            <div class="p-10 lg:p-12 flex flex-col">
-              <div class="flex items-center justify-between">
-                <span id="cs-brand" class="text-base font-extrabold text-[#323446]">shiro_kun</span>
-                <i data-lucide="quote" class="w-9 h-9 text-slate-100 fill-slate-100"></i>
-              </div>
-              <p id="cs-quote" class="text-xl lg:text-[1.35rem] font-semibold text-slate-800 leading-snug mt-8">
-                "Kaimono caught two price drops I would have missed. Every key arrives verified and instant — my library has never been this organized."
-              </p>
-              <div class="flex items-center gap-4 mt-8">
-                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-slate-100 shrink-0">
-                  <img id="cs-avatar" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=150&q=80" alt="avatar" class="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <p class="flex items-center gap-1.5 text-sm font-bold text-slate-900">
-                    <span id="cs-name">shiro_kun</span>
-                    <i data-lucide="badge-check" class="w-4 h-4 text-[#323446] fill-[#323446]"></i>
-                  </p>
-                  <p id="cs-role" class="text-xs text-slate-500 mt-0.5">Key & bundle hunter · 2.4K followers</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-4 mt-auto pt-8">
-                <a href="/login/" class="inline-flex items-center gap-2 bg-[#323446] hover:bg-slate-800 text-white text-sm font-bold px-5 py-2.5 rounded-full transition-colors">View case study</a>
-                <a href="/login/" class="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1.5">Follow <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-              </div>
-            </div>
-            <!-- Image -->
-            <div class="relative min-h-[280px] lg:min-h-0">
-              <img id="cs-img" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80" alt="case" class="absolute inset-0 w-full h-full object-cover" />
-              <div class="absolute inset-0 bg-gradient-to-t from-[#1a1c2a]/40 to-transparent"></div>
-              <div class="absolute top-5 left-5 bg-white/95 backdrop-blur-md rounded-[16px] px-4 py-3.5 shadow-lg max-w-[220px]">
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#323446] pulse-dot"></span>
-                  <span id="cs-chip-label" class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Price drop</span>
-                </div>
-                <p id="cs-chip-value" class="text-[13px] font-bold text-slate-900">Elden Ring bundle · -30%</p>
-              </div>
-            </div>
-          </div>
-          <!-- Metrics -->
-          <div class="border-t border-slate-100 stat-bar bg-[#F7F9FC]">
-            <div class="stat-cell">
-              <p id="cs-m1v" class="text-3xl font-extrabold text-slate-900 tracking-tight">214</p>
-              <p id="cs-m1l" class="text-xs text-slate-500 font-medium mt-1.5">keys tracked</p>
-            </div>
-            <div class="stat-cell">
-              <p id="cs-m2v" class="text-3xl font-extrabold text-slate-900 tracking-tight">$1.2K</p>
-              <p id="cs-m2l" class="text-xs text-slate-500 font-medium mt-1.5">saved this year</p>
-            </div>
-            <div class="stat-cell">
-              <p id="cs-m3v" class="text-3xl font-extrabold text-slate-900 tracking-tight">38</p>
-              <p id="cs-m3l" class="text-xs text-slate-500 font-medium mt-1.5">price drops caught</p>
             </div>
           </div>
         </div>
@@ -746,43 +608,6 @@
           setTimeout(() => window.location.href = '/login/', 720);
         });
       });
-
-      /* ─── Case studies ─── */
-      var CASES = [
-        { brand:'shiro_kun', quote:'"Kaimono caught two price drops I would have missed. Every key arrives verified and instant — my library has never been this organized."', name:'shiro_kun', role:'Key & bundle hunter · 2.4K followers', avatar:'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=150&q=80', img:'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80', chipLabel:'Price drop', chipValue:'Elden Ring bundle · now -30%', metrics:[['214','keys tracked'],['$1.2K','saved this year'],['38','price drops caught']] },
-        { brand:'hana_illustrator', quote:'"The dashboard tracks every hour I spend in rhythm games and every yen I save. It feels like a journal of my hobby, not a store trying to sell me things."', name:'hana_illustrator', role:'Rhythm gamer · 5.1K followers', avatar:'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=150&q=80', img:'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80', chipLabel:'Session logged', chipValue:'Project Sekai · 2h 14m today', metrics:[['1,240','hours logged'],['482','songs cleared'],['87%','achievement rate']] },
-        { brand:'ren_dev', quote:'"I chase day-one launches across three platforms. One unified wishlist caught two pre-order bonuses in the first month — it paid for itself before I even checked out."', name:'ren_dev', role:'Pre-order chaser · 970 followers', avatar:'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=150&q=80', img:'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1200&q=80', chipLabel:'Launch alert', chipValue:'Final Fantasy VII Rebirth · pre-order bonus live', metrics:[['3','platforms synced'],['96','titles tracked'],['12','deals caught']] }
-      ];
-      var csCur = 0;
-      var csPanel = document.getElementById('cs-panel');
-      var csTabs = document.querySelectorAll('.case-tab');
-      function applyCase(i){
-        var c = CASES[i];
-        document.getElementById('cs-brand').textContent = c.brand;
-        document.getElementById('cs-quote').textContent = c.quote;
-        document.getElementById('cs-name').textContent = c.name;
-        document.getElementById('cs-role').textContent = c.role;
-        document.getElementById('cs-avatar').src = c.avatar;
-        document.getElementById('cs-img').src = c.img;
-        document.getElementById('cs-chip-label').textContent = c.chipLabel;
-        document.getElementById('cs-chip-value').textContent = c.chipValue;
-        document.getElementById('cs-m1v').textContent = c.metrics[0][0];
-        document.getElementById('cs-m1l').textContent = c.metrics[0][1];
-        document.getElementById('cs-m2v').textContent = c.metrics[1][0];
-        document.getElementById('cs-m2l').textContent = c.metrics[1][1];
-        document.getElementById('cs-m3v').textContent = c.metrics[2][0];
-        document.getElementById('cs-m3l').textContent = c.metrics[2][1];
-        document.getElementById('cs-counter').textContent = '0'+(i+1)+' / 0'+CASES.length;
-        csTabs.forEach((t,ti) => t.classList.toggle('active', ti===i));
-      }
-      function switchCase(i){
-        csCur = (i + CASES.length) % CASES.length;
-        csPanel.style.opacity='0'; csPanel.style.transform='translateY(12px)';
-        setTimeout(()=>{ applyCase(csCur); csPanel.style.opacity='1'; csPanel.style.transform='translateY(0)'; }, 230);
-      }
-      csTabs.forEach(t => t.addEventListener('click', () => switchCase(+t.dataset.case)));
-      document.getElementById('cs-prev').addEventListener('click', () => switchCase(csCur-1));
-      document.getElementById('cs-next').addEventListener('click', () => switchCase(csCur+1));
 
       /* ─── Smooth scroll ─── */
       document.querySelectorAll('a[href^="#"]').forEach(a => {
