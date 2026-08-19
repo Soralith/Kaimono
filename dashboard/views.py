@@ -298,8 +298,6 @@ def game_detail(request, product_id):
             product = candidate.data
     except (ShopProduct.DoesNotExist, ValueError):
         product = None
-    if product:
-        product = _enrich_product_reviews(product)
     return render(request, 'dashboard/pages/game_detail.html', {
         'product_id': product_id,
         'product_json': json.dumps([product]) if product else '[]',
@@ -1300,17 +1298,13 @@ def api_game_reviews(request):
     except (ShopProduct.DoesNotExist, ValueError):
         return JsonResponse({'error': 'Product not found'}, status=404)
 
-    # Server-enriched reviews from product data (seed data)
-    seed_reviews = (product.data or {}).get('userReviews', [])
-    # User-submitted reviews from DB
+    # Only user-submitted reviews from DB (no seed/dummy data)
     db_reviews = [r.to_dict() for r in product.reviews.all()]
-    # Combine: seed first, then user reviews (newest first)
-    all_reviews = seed_reviews + db_reviews
-    pos = sum(1 for r in all_reviews if r.get('positive'))
-    pct = round(pos / len(all_reviews) * 100) if all_reviews else 0
+    pos = sum(1 for r in db_reviews if r.get('positive'))
+    pct = round(pos / len(db_reviews) * 100) if db_reviews else 0
     return JsonResponse({
-        'reviews': all_reviews,
-        'total': len(all_reviews),
+        'reviews': db_reviews,
+        'total': len(db_reviews),
         'positive_pct': pct,
         'summary': (product.data or {}).get('reviewSummary', ''),
     })

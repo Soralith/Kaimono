@@ -838,11 +838,9 @@
       fetch('/api/reviews/?product_id=' + PRODUCT_ID)
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          if (data.reviews && data.reviews.length) {
-            p.userReviews = data.reviews;
-            p.reviews = data.total;
-            p.reviewSummary = data.summary || p.reviewSummary || '';
-          }
+          p.userReviews = data.reviews || [];
+          p.reviews = data.total || 0;
+          p.reviewSummary = data.summary || '';
           renderReviewFilters();
           applyReviews();
         })
@@ -877,7 +875,7 @@
 
       $g('gd-rv-text').addEventListener('input', function() {
         $g('gd-rv-charcount').textContent = this.value.length;
-        $g('gd-rv-submit').disabled = !verdictVal || !this.value.trim();
+        $g('gd-rv-submit').disabled = verdictVal === null || !this.value.trim();
       });
 
       // Populate language dropdown
@@ -888,7 +886,7 @@
 
       $g('gd-review-form').addEventListener('submit', function(ev) {
         ev.preventDefault();
-        if (!verdictVal || !$g('gd-rv-text').value.trim()) return;
+        if (verdictVal === null || !$g('gd-rv-text').value.trim()) return;
         var submitBtn = $g('gd-rv-submit');
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Submitting…';
@@ -1005,26 +1003,34 @@
       var pos = all.filter(function (r) { return r.positive; }).length;
       var pct = all.length ? Math.round((pos / all.length) * 100) : 0;
       var label = p.reviewSummary || (pct >= 80 ? "Very Positive" : pct >= 60 ? "Positive" : "Mixed");
-      $g("gd-review-summary").innerHTML =
-        '<div class="text-right">' +
-          '<p class="text-[9px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Overall rating</p>' +
-          '<p class="text-sm font-extrabold text-[var(--text-primary)] leading-tight">' + label + "</p>" +
-        "</div>" +
-        '<div class="w-44">' +
-          '<div class="flex items-center justify-between text-[10px] font-bold text-[var(--text-secondary)] mb-1">' +
-            '<span class="text-emerald-600">' + pct + "%</span><span>positive</span>" +
-          "</div>" +
-          '<div class="h-2 rounded-full bg-[var(--border-soft)] overflow-hidden"><div class="h-full rounded-full bg-emerald-500" style="width:' + pct + '%"></div></div>' +
-          '<p class="text-[10px] text-[var(--text-muted)] mt-1">Based on ' + (p.reviews || all.length).toLocaleString() + " reviews</p>" +
-        "</div>";
-
       var filtered = all.filter(reviewMatches);
-      $g("gd-review-count").textContent = filtered.length + " of " + all.length + " reviews";
-      $g("gd-reviews-list").innerHTML = filtered.length
-        ? filtered.map(reviewCard).join("")
-        : '<div class="rounded-2xl border border-dashed border-[var(--border-soft)] py-10 text-center">' +
-          '<p class="text-xs font-semibold text-[var(--text-muted)]">No reviews match these filters.</p>' +
-          '<p class="text-[11px] text-[var(--text-muted)] mt-1">Try adjusting your language, play time or date filters.</p></div>';
+      if (all.length === 0) {
+        $g("gd-review-count").textContent = "";
+        $g("gd-review-summary").innerHTML = '<p class="text-xs font-semibold text-[var(--text-muted)]">No reviews yet — be the first!</p>';
+        $g("gd-reviews-list").innerHTML =
+          '<div class="rounded-2xl border border-dashed border-[var(--border-soft)] py-10 text-center">' +
+          '<p class="text-xs font-semibold text-[var(--text-muted)]">No reviews yet.</p>' +
+          '<p class="text-[11px] text-[var(--text-muted)] mt-1">Be the first to share your thoughts!</p></div>';
+      } else {
+        $g("gd-review-summary").innerHTML =
+          '<div class="text-right">' +
+            '<p class="text-[9px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider">Overall rating</p>' +
+            '<p class="text-sm font-extrabold text-[var(--text-primary)] leading-tight">' + label + "</p>" +
+          "</div>" +
+          '<div class="w-44">' +
+            '<div class="flex items-center justify-between text-[10px] font-bold text-[var(--text-secondary)] mb-1">' +
+              '<span class="text-emerald-600">' + pct + "%</span><span>positive</span>" +
+            "</div>" +
+            '<div class="h-2 rounded-full bg-[var(--border-soft)] overflow-hidden"><div class="h-full rounded-full bg-emerald-500" style="width:' + pct + '%"></div></div>' +
+            '<p class="text-[10px] text-[var(--text-muted)] mt-1">Based on ' + (p.reviews || all.length).toLocaleString() + " reviews</p>" +
+          "</div>";
+        $g("gd-review-count").textContent = filtered.length + " of " + all.length + " reviews";
+        $g("gd-reviews-list").innerHTML = filtered.length
+          ? filtered.map(reviewCard).join("")
+          : '<div class="rounded-2xl border border-dashed border-[var(--border-soft)] py-10 text-center">' +
+            '<p class="text-xs font-semibold text-[var(--text-muted)]">No reviews match these filters.</p>' +
+            '<p class="text-[11px] text-[var(--text-muted)] mt-1">Try adjusting your language, play time or date filters.</p></div>';
+      }
       document.querySelectorAll(".co-helpful").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var span = btn.querySelector("span");
